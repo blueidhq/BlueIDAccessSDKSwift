@@ -1,0 +1,4 @@
+module CBlueIDAccess {
+    umbrella header "CBlueIDAccess.h"
+    export *
+}
