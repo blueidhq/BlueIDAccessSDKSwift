@@ -3,11 +3,6 @@
 
 #include "core/sp/BlueSP.h"
 
-#include "wolfssl/wolfcrypt/random.h"
-#include "wolfssl/wolfcrypt/sha256.h"
-#include "wolfssl/wolfcrypt/asn.h"
-#include "wolfssl/wolfcrypt/ecc.h"
-
 #define SP_HEADER_SIZE 6 // SIZE | CRC | STATUS
 
 typedef struct SPReceiveContext
