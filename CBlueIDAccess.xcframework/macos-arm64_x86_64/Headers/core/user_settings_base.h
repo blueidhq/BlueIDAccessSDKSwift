@@ -50,6 +50,8 @@
 #endif
 
 // Remove unnecessary or not available features
+#define NO_WOLFSSL_CLIENT
+#define NO_WOLFSSL_SERVER
 #define NO_FILESYSTEM
 #define NO_ERROR_STRINGS
 #define NO_DSA
@@ -75,6 +77,8 @@
 #define NO_OLD_TLS
 #define WOLFSSL_AEAD_ONLY
 #define WOLFSSL_NO_TLS12
+#define WOLFSSL_SP_NO_2048
+#define WOLFSSL_SP_NO_3072
 
 #define XTIME(t) NULL
 #endif
