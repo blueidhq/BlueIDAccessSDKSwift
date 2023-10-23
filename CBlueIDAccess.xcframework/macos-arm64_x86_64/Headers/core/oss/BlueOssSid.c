@@ -187,20 +187,16 @@ BlueReturnCode_t blueOssSid_GetStorageProfile(const BlueOssSidStorage_t *const p
 
 BlueReturnCode_t blueOssSid_GetStorageProfile_Ext(const BlueOssSidStorage_t *const pStorage, const uint8_t *const pConfigBuffer, uint16_t configBufferSize, uint8_t *const pProfileBuffer, uint16_t profileBufferSize)
 {
-    const BlueOssSidProvisioningConfiguration_t *pConfiguration = NULL;
+    BlueOssSidProvisioningConfiguration_t configuration = BLUEOSSSIDPROVISIONINGCONFIGURATION_INIT_ZERO;
 
     if (pConfigBuffer != NULL)
     {
-        BlueOssSidProvisioningConfiguration_t configuration = BLUEOSSSIDPROVISIONINGCONFIGURATION_INIT_ZERO;
-
         BLUE_ERROR_CHECK_DEBUG(blueUtils_DecodeData(&configuration, BLUEOSSSIDPROVISIONINGCONFIGURATION_FIELDS, pConfigBuffer, configBufferSize), "Decode Oss Sid provisioning configuration");
-
-        pConfiguration = &configuration;
     }
 
     BlueOssSidStorageProfile_t profile = BLUEOSSSIDSTORAGEPROFILE_INIT_ZERO;
 
-    BLUE_ERROR_CHECK(blueOssSid_GetStorageProfile(pStorage, pConfiguration, &profile));
+    BLUE_ERROR_CHECK(blueOssSid_GetStorageProfile(pStorage, pConfigBuffer != NULL ? &configuration : NULL, &profile));
 
     BLUE_ERROR_CHECK_DEBUG(blueUtils_EncodeData(&profile, BLUEOSSSIDSTORAGEPROFILE_FIELDS, pProfileBuffer, profileBufferSize), "Encode Oss Sid storage profile");
 

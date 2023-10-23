@@ -1623,20 +1623,16 @@ BlueReturnCode_t blueOssSo_GetStorageProfile(const BlueOssSoStorage_t *const pSt
 
 BlueReturnCode_t blueOssSo_GetStorageProfile_Ext(const BlueOssSoStorage_t *const pStorage, const uint8_t *const pConfigBuffer, uint16_t configBufferSize, uint8_t *const pProfileBuffer, uint16_t profileBufferSize)
 {
-    const BlueOssSoProvisioningConfiguration_t *pConfiguration = NULL;
+    BlueOssSoProvisioningConfiguration_t configuration = BLUEOSSSOPROVISIONINGCONFIGURATION_INIT_ZERO;
 
     if (pConfigBuffer != NULL)
     {
-        BlueOssSoProvisioningConfiguration_t configuration = BLUEOSSSOPROVISIONINGCONFIGURATION_INIT_ZERO;
-
         BLUE_ERROR_CHECK_DEBUG(blueUtils_DecodeData(&configuration, BLUEOSSSOPROVISIONINGCONFIGURATION_FIELDS, pConfigBuffer, configBufferSize), "Decode Oss So provisioning configuration");
-
-        pConfiguration = &configuration;
     }
 
     BlueOssSoStorageProfile_t profile = BLUEOSSSOSTORAGEPROFILE_INIT_ZERO;
 
-    BLUE_ERROR_CHECK(blueOssSo_GetStorageProfile(pStorage, pConfiguration, &profile));
+    BLUE_ERROR_CHECK(blueOssSo_GetStorageProfile(pStorage, pConfigBuffer != NULL ? &configuration : NULL, &profile));
 
     BLUE_ERROR_CHECK_DEBUG(blueUtils_EncodeData(&profile, BLUEOSSSOSTORAGEPROFILE_FIELDS, pProfileBuffer, profileBufferSize), "Encode Oss Os storage profile");
 

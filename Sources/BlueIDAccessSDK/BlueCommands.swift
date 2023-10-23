@@ -1,13 +1,15 @@
 import Foundation
+import SwiftProtobuf
 
 internal protocol BlueCommand {
-    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any?;
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any?
 }
 
 public struct BlueCommands {
     public let initialize = BlueInitializeCommand()
     public let release = BlueReleaseCommand()
     
+    public let test = BlueTestCommand()
     public let versionInfo = BlueVersionInfoCommand()
     
     public let bluetoothActivate = BlueBluetoothActivate()
@@ -41,21 +43,30 @@ public struct BlueCommands {
     fileprivate init() {}
 }
 
+public let blueCommands = BlueCommands()
+
 //
 // Plugin interface
 //
 
-public let blueCommands = BlueCommands()
+private var blueCommandsMap: [String: BlueCommand] = [:]
 
-private var blueCommandsMap: [String:BlueCommand] = [:]
+internal struct BlueCommandResult {
+    public let data: Any?
+    public let messageTypeName: String?
+    
+    internal init(data: Any? = nil, messageTypeName: String? = nil) {
+        self.data = data
+        self.messageTypeName = messageTypeName
+    }
+}
 
-internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil, completion: @escaping (Result<Any?, Error>) -> Void) {
+internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil, completion: @escaping (Result<BlueCommandResult, Error>) -> Void) {
     if (command != "initialize" && command != "release") {
         if (!blueIsInitialized) {
             return completion(.failure(BlueError(.unavailable)))
         }
     }
-    
     
     // Fill the map initially if first time call
     if (blueCommandsMap.isEmpty) {
@@ -72,13 +83,23 @@ internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Any? = n
             throw BlueError(.notFound)
         }
         
-        completion(.success(try commandInstance.run(arg0: arg0, arg1: arg1, arg2: arg2)))
+        let result = try commandInstance.run(arg0: arg0, arg1: arg1, arg2: arg2)
+        
+        var data: Any? = result
+        var messageTypeName: String? = nil
+        
+        if let result = result as? Message {
+            messageTypeName = String(describing: Mirror(reflecting: result).subjectType)
+            data = try blueEncodeMessage(result)
+        }
+        
+        completion(.success(BlueCommandResult(data: data, messageTypeName: messageTypeName)))
     } catch {
         completion(.failure(error))
     }
 }
 
-public func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Data? = nil, arg2: Data? = nil) async throws -> Any? {
+internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Data? = nil, arg2: Data? = nil) async throws -> BlueCommandResult {
     return try await withCheckedThrowingContinuation { continuation in
         blueRunCommand(command, arg0: arg0, arg1: arg1, arg2: arg2) { result in
             continuation.resume(with: result)

@@ -5,7 +5,7 @@ import XCTest
 final class OssSoTests: XCTestCase {
     func testGetStorageProfile() throws {
         // Test with default profile
-        let defaultProfile = try OssSoGetStorageProfileCommand().run(.mifareDesfire, nil)
+        let defaultProfile = try BlueOssSoGetStorageProfileCommand().run(.mifareDesfire, nil)
         
         XCTAssertEqual(defaultProfile.infoDataLength, 32)
         
@@ -32,7 +32,7 @@ final class OssSoTests: XCTestCase {
         provisioningConfig.numberOfBlacklistEntries = 0
         provisioningConfig.customerExtensionsSize = 16
         
-        let generalProfile = try OssSoGetStorageProfileCommand().run(.mifareDesfire, provisioningConfig)
+        let generalProfile = try BlueOssSoGetStorageProfileCommand().run(.mifareDesfire, provisioningConfig)
         
         XCTAssertEqual(generalProfile.infoDataLength, 32)
         XCTAssertEqual(generalProfile.infoFileSize, 32)

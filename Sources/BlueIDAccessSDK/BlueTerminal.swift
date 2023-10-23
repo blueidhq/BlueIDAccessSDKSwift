@@ -49,7 +49,7 @@ private func blueGetSpDataForAction(device: BlueDevice, action: String, data: Da
         }
         
         spData!.command.data = Data()
-            
+        
         if let commandData = data, !commandData.isEmpty {
             spData!.command.data.append(contentsOf: commandData)
         }
@@ -131,12 +131,8 @@ public func blueTerminalRequest<DataType: Message, ResultType: Message>(action: 
 }
 
 
-public func blueTerminalRun<HandlerResult>(deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, handler: @escaping () throws -> HandlerResult, completion: @escaping (Result<HandlerResult, Error>) -> Void) {
+public func blueTerminalRun<HandlerResult>(deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, handler: @escaping () throws -> HandlerResult, completion: @escaping (Result<HandlerResult, Error>) -> Void, isTest: Bool = false) {
     if (!blueIsInitialized) {
-        return completion(.failure(BlueError(.unavailable)))
-    }
-    
-    guard blueActiveDevice == nil else {
         return completion(.failure(BlueError(.unavailable)))
     }
     
@@ -146,6 +142,34 @@ public func blueTerminalRun<HandlerResult>(deviceID: String, timeoutSeconds: Dou
         } catch let error {
             return completion(.failure(error))
         }
+    }
+    
+    if (isTest) {
+        return DispatchQueue.global(qos: .background).async {
+            do {
+                var handlerResult: HandlerResult? = nil
+                
+                try blueExecuteWithTimeout({
+                    handlerResult = try handler()
+                }, timeoutSeconds: timeoutSeconds)
+                
+                guard let handlerResult = handlerResult else {
+                    throw BlueError(.invalidState)
+                }
+                
+                DispatchQueue.main.async {
+                    completion(.success(handlerResult))
+                }
+            } catch let error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
+    guard blueActiveDevice == nil else {
+        return completion(.failure(BlueError(.unavailable)))
     }
     
     guard let device = blueGetDevice(deviceID) else {
@@ -262,23 +286,41 @@ internal struct BlueTerminalResult {
     }
 }
 
-internal func blueTerminalRun(deviceID: String, timeoutSeconds: Double = 30.0, requests: [BlueTerminalRequest], completion: @escaping (Result<[BlueTerminalResult], Error>) -> Void) {
+internal func blueTerminalRun(deviceID: String, timeoutSeconds: Double = 30.0, requests: [BlueTerminalRequest], completion: @escaping (Result<[BlueTerminalResult], Error>) -> Void, isTest: Bool = false) {
     let handler: () throws -> [BlueTerminalResult] = {
         var results: [BlueTerminalResult] = []
         
         for request in requests {
+            var result: BlueTerminalResult? = nil
+            
             do {
-                let data: Data? = try blueTerminalRequest(action: request.action, data: request.data)
-                results.append(BlueTerminalResult(statusCode: .ok, data: data))
+                if (isTest) {
+                    if (request.action == "TEST_PING") {
+                        let versionInfo = try BlueVersionInfoCommand().run()
+                        let data = try blueEncodeMessage(versionInfo)
+                        result = BlueTerminalResult(statusCode: .ok, data: data)
+                    } else {
+                        throw BlueTerminalError(.notSupported)
+                    }
+                } else {
+                    let data: Data? = try blueTerminalRequest(action: request.action, data: request.data)
+                    result = BlueTerminalResult(statusCode: .ok, data: data)
+                }
             } catch let error as BlueTerminalError {
-                results.append(BlueTerminalResult(statusCode: error.terminalError.returnCode))
+                result = BlueTerminalResult(statusCode: error.terminalError.returnCode)
             } catch {
                 throw error
+            }
+            
+            if let result = result {
+                results.append(result)
+                
+                blueFireListeners(fireEvent: .terminalResult, data: result)
             }
         }
         
         return results
     }
     
-    blueTerminalRun(deviceID: deviceID, timeoutSeconds: timeoutSeconds, handler: handler, completion: completion)
+    blueTerminalRun(deviceID: deviceID, timeoutSeconds: timeoutSeconds, handler: handler, completion: completion, isTest: isTest)
 }

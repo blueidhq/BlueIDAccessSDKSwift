@@ -4,9 +4,13 @@ import XCTest
 
 final class CommandsTests: XCTestCase {
     func testRunCommand() async throws {
-        let versionInfoData = try await blueRunCommand("versionInfo")
+        _ = try await blueRunCommand("initialize")
         
-        guard let versionInfoData = versionInfoData as? Data else {
+        let commandResult: BlueCommandResult = try await blueRunCommand("versionInfo")
+        
+        XCTAssertEqual(commandResult.messageTypeName, "BlueVersionInfo")
+        
+        guard let versionInfoData = commandResult.data as? Data else {
             XCTAssert(false)
             return
         }

@@ -14,6 +14,8 @@ public enum BlueEventType: String, CaseIterable {
     case deviceNearByDetected
     // data = BlueDeviceInfo
     case deviceNearByLost
+    // data = BlueTerminalResult
+    case terminalResult
 }
 
 public protocol BlueEventListener: AnyObject {
@@ -25,11 +27,11 @@ public func blueAddEventListener(event: BlueEventType? = nil, listener: any Blue
 }
 
 public func blueRemoveEventListener(listener: any BlueEventListener) {
-    blueEventListeners = blueEventListeners.filter({ $0.1 === listener})
+    blueEventListeners = blueEventListeners.filter({ $0.1 !== listener})
 }
 
 internal func blueFireListeners(fireEvent: BlueEventType, data: Any?) {
-    DispatchQueue.main.async {
+    let handler: () -> Void = {
         for (event, listener) in blueEventListeners {
             if let event = event {
                 if event == fireEvent {
@@ -38,6 +40,14 @@ internal func blueFireListeners(fireEvent: BlueEventType, data: Any?) {
             } else {
                 listener.blueEvent(event: fireEvent, data: data)
             }
+        }
+    }
+    
+    if Thread.isMainThread {
+        handler()
+    } else {
+        DispatchQueue.main.async {
+            handler()
         }
     }
 }

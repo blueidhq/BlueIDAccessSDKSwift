@@ -5,8 +5,6 @@
 
 #include "core/user_settings_base.h"
 
-#define IPHONE
-
 #undef NO_MAIN_DRIVER
 #define NO_MAIN_DRIVER
 
