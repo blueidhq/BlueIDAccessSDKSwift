@@ -85,7 +85,7 @@ internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throw
             transponderType = .mifareDesfire
             
             if (transponderType == .unknownTransponder) {
-                throw BlueNativeSDKError(.invalidTransponder)
+                throw BlueError(.invalidTransponder)
             }
             
             let successMessage = try handler(transponderType)

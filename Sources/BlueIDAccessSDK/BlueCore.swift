@@ -49,3 +49,23 @@ public struct BlueVersionInfoCommand: BlueCommand {
         })
     }
 }
+
+public struct BlueTestCommand: BlueCommand {
+    private (set) var resultType: Any.Type? = _BlueTestEncodeDecode.self
+    
+    internal func run(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) throws -> Any? {
+        return try blueCastResult(try run(
+            try blueCastArg(String.self, arg0),
+            try blueCastArg(Int.self, arg1),
+            try blueCastArg(_BlueTestEncodeDecode.self, arg2)
+        ))
+    }
+    
+    public func run(_ hardwareName: String, _ hardwareVersion: Int, _ data: _BlueTestEncodeDecode) throws -> _BlueTestEncodeDecode {
+        var newData = data;
+        newData.hardwareName = hardwareName
+        newData.hardwareVersion = Int32(hardwareVersion)
+        return newData
+    }
+}
+

@@ -227,10 +227,6 @@ internal func blueCastResult<ResultType>(_ result: ResultType?) throws -> Any {
         throw BlueError(.invalidState)
     }
     
-    if let result = result as? Message {
-        return try blueEncodeMessage(result)
-    }
-    
     return result
 }
 
