@@ -39,7 +39,7 @@ private final class BlueLocationManagerListener: NSObject, CLLocationManagerDele
     public func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         // Try to find the closest beacon
         var closestBeacon: CLBeacon? = nil
-
+        
         for beacon in beacons {
             if (beacon.accuracy < 0) {
                 continue
@@ -115,22 +115,27 @@ private func blueUpdateLocationMonitoring() {
     }
 }
 
-public func blueLocation_didFinishLaunchingWithOptions(launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
-    // Check if the app was launched due to a location event
-    if launchOptions?[UIApplication.LaunchOptionsKey.location] is CLRegion {
-        print("Started with region launch option")
+internal func blueNearbyAppLaunched() {
+    print("Started with region launch option")
+    
+    do {
+        try blueCommands.nearByActivate.run()
         
-        do {
-            try blueCommands.nearByActivate.run()
-            
-            if let blueLocationManager = blueLocationManager {
-                blueLocationManager.startRangingBeacons(satisfying: CLBeaconIdentityConstraint(uuid: blueBeaconRegion.uuid))
-                blueLogDebug("Launched with region, started ranging beacons")
-            }
-        } catch {
-            blueLogError(error.localizedDescription)
+        if blueLocationManager != nil {
+            blueUpdateLocationMonitoring()
+            blueLogDebug("Launched with region, started ranging beacons")
         }
+    } catch {
+        blueLogError(error.localizedDescription)
     }
+}
+
+internal func blueNearbyAppEnterBackground() {
+    blueUpdateLocationMonitoring()
+}
+
+internal func blueNearbyAppBecameActive() {
+    blueUpdateLocationMonitoring()
 }
 
 public struct BlueNearByActivate: BlueCommand {

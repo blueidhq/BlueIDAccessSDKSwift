@@ -535,7 +535,6 @@ extension BlueDeviceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if self._deviceType == nil {return false}
     if self._deviceID == nil {return false}
     if self._distanceMeters == nil {return false}
-    if self._manufacturerInfo == nil {return false}
     if let v = self._manufacturerInfo, !v.isInitialized {return false}
     if let v = self.details, !v.isInitialized {return false}
     return true

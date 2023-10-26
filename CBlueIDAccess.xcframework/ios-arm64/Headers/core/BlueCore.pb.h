@@ -122,7 +122,7 @@ typedef enum BlueAccessType {
     /* Access with toggle function */
     BlueAccessType_Toggle = 4,
     /* Access and close the lock */
-    BlueAccessType_CloseLock = 5,
+    BlueAccessType_Close = 5,
     /* No access */
     BlueAccessType_NoAccess = 6,
     /* No access due validity */

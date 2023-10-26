@@ -323,7 +323,7 @@ internal class BlueDeviceBluetooth: BlueDevice, CBPeripheralDelegate {
             let mfDataPtr = bytes.bindMemory(to: UInt8.self).baseAddress
             
             do {
-                info.manufacturerInfo = try blueClibFunctionOut({ (dataPtr, dataSize) in
+                self.info.manufacturerInfo = try blueClibFunctionOut({ (dataPtr, dataSize) in
                     return blueBle_ReadManufacturerData_Ext(mfDataPtr, UInt8(mfData.count), true, dataPtr, dataSize)
                 })
                 

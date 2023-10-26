@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "BlueIDAccessSDK",
   platforms: [
-    .macOS(.v13),
+    .macOS(.v10_13),
     .iOS(.v14),
     .watchOS(.v8),
   ],
@@ -16,7 +16,7 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.21.0")
+    .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.24.0")
   ],
   targets: [
     .target(

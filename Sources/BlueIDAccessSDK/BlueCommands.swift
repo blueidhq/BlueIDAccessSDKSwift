@@ -55,7 +55,7 @@ internal struct BlueCommandResult {
     public let data: Any?
     public let messageTypeName: String?
     
-    internal init(data: Any? = nil, messageTypeName: String? = nil) {
+    fileprivate init(data: Any? = nil, messageTypeName: String? = nil) {
         self.data = data
         self.messageTypeName = messageTypeName
     }
@@ -99,10 +99,66 @@ internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Any? = n
     }
 }
 
+@available(macOS 10.15, *)
 internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Data? = nil, arg2: Data? = nil) async throws -> BlueCommandResult {
     return try await withCheckedThrowingContinuation { continuation in
         blueRunCommand(command, arg0: arg0, arg1: arg1, arg2: arg2) { result in
             continuation.resume(with: result)
         }
+    }
+}
+
+//
+// Objective-C interface
+//
+
+@objc(BlueCommandResult)
+public final class ObjC_BlueCommandResult: NSObject {
+    @objc public let error: Error?
+    @objc public let data: AnyObject?
+    @objc public let messageTypeName: String?
+    
+    fileprivate init(error: Error? = nil, data: AnyObject? = nil, messageTypeName: String? = nil) {
+        self.error = error
+        self.data = data
+        self.messageTypeName = messageTypeName
+    }
+}
+
+@objc(BlueCommands)
+public final class ObjC_BlueCommands: NSObject {
+    private override init() {}
+    
+    @objc public static func run(_ command: String, arg0: AnyObject?, arg1: AnyObject?, arg2: AnyObject?, completion: ( (ObjC_BlueCommandResult) -> Void)?) -> Void {
+        blueRunCommand(command, arg0: arg0, arg1: arg1, arg2: arg2) { result in
+            guard let completion = completion else {
+                return
+            }
+            
+            switch result {
+            case .success(let commandResult):
+                var objcData: AnyObject? = nil
+                if let data = commandResult.data as? Data {
+                    objcData = NSData(data: data)
+                } else if let data = commandResult.data as? AnyObject {
+                    objcData = data
+                }
+                completion(ObjC_BlueCommandResult(error: nil, data: objcData, messageTypeName: commandResult.messageTypeName))
+            case .failure(let error):
+                completion(ObjC_BlueCommandResult(error: error))
+            }
+        }
+    }
+    
+    @objc public static func run(_ command: String, arg0: AnyObject, arg1: AnyObject, completion: ( (ObjC_BlueCommandResult) -> Void)?) -> Void {
+        run(command, arg0: arg0, arg1: arg1, arg2: nil, completion: completion)
+    }
+    
+    @objc public static func run(_ command: String, arg0: AnyObject, completion: ( (ObjC_BlueCommandResult) -> Void)?) -> Void {
+        run(command, arg0: arg0, arg1: nil, arg2: nil, completion: completion)
+    }
+    
+    @objc public static func run(_ command: String, completion: ( (ObjC_BlueCommandResult) -> Void)?) -> Void {
+        run(command, arg0: nil, arg1: nil, arg2: nil, completion: completion)
     }
 }
