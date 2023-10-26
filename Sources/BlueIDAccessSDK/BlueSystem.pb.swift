@@ -422,6 +422,16 @@ public struct BlueSystemConfig {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
+  public var version: UInt32 {
+    get {return _storage._version ?? 0}
+    set {_uniqueStorage()._version = newValue}
+  }
+  /// Returns true if `version` has been explicitly set.
+  public var hasVersion: Bool {return _storage._version != nil}
+  /// Clears the value of `version`. Subsequent reads from it will return its default value.
+  public mutating func clearVersion() {_uniqueStorage()._version = nil}
+
+  /// -- Base
   public var base: BlueBaseConfig {
     get {return _storage._base ?? BlueBaseConfig()}
     set {_uniqueStorage()._base = newValue}
@@ -482,6 +492,58 @@ public struct BlueSystemConfig {
   public init() {}
 
   fileprivate var _storage = _StorageClass.defaultInstance
+}
+
+public struct BlueSystemTimeUnix {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var epoch: UInt32 {
+    get {return _epoch ?? 0}
+    set {_epoch = newValue}
+  }
+  /// Returns true if `epoch` has been explicitly set.
+  public var hasEpoch: Bool {return self._epoch != nil}
+  /// Clears the value of `epoch`. Subsequent reads from it will return its default value.
+  public mutating func clearEpoch() {self._epoch = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _epoch: UInt32? = nil
+}
+
+public struct BlueSystemUpdate {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var config: BlueSystemConfig {
+    get {return _config ?? BlueSystemConfig()}
+    set {_config = newValue}
+  }
+  /// Returns true if `config` has been explicitly set.
+  public var hasConfig: Bool {return self._config != nil}
+  /// Clears the value of `config`. Subsequent reads from it will return its default value.
+  public mutating func clearConfig() {self._config = nil}
+
+  public var timeUnix: BlueSystemTimeUnix {
+    get {return _timeUnix ?? BlueSystemTimeUnix()}
+    set {_timeUnix = newValue}
+  }
+  /// Returns true if `timeUnix` has been explicitly set.
+  public var hasTimeUnix: Bool {return self._timeUnix != nil}
+  /// Clears the value of `timeUnix`. Subsequent reads from it will return its default value.
+  public mutating func clearTimeUnix() {self._timeUnix = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _config: BlueSystemConfig? = nil
+  fileprivate var _timeUnix: BlueSystemTimeUnix? = nil
 }
 
 public struct BlueSystemSettings {
@@ -687,6 +749,15 @@ public struct BlueSystemStatus {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
+
+  public var configVersion: UInt32 {
+    get {return _storage._configVersion ?? 0}
+    set {_uniqueStorage()._configVersion = newValue}
+  }
+  /// Returns true if `configVersion` has been explicitly set.
+  public var hasConfigVersion: Bool {return _storage._configVersion != nil}
+  /// Clears the value of `configVersion`. Subsequent reads from it will return its default value.
+  public mutating func clearConfigVersion() {_uniqueStorage()._configVersion = nil}
 
   public var deviceID: String {
     get {return _storage._deviceID ?? String()}
@@ -1059,6 +1130,8 @@ extension BlueOnlineConfig: @unchecked Sendable {}
 extension BlueAccessConfig: @unchecked Sendable {}
 extension BlueOssConfig: @unchecked Sendable {}
 extension BlueSystemConfig: @unchecked Sendable {}
+extension BlueSystemTimeUnix: @unchecked Sendable {}
+extension BlueSystemUpdate: @unchecked Sendable {}
 extension BlueSystemSettings: @unchecked Sendable {}
 extension BlueSystemProvisioning: @unchecked Sendable {}
 extension BlueSystemStatus: @unchecked Sendable {}
@@ -1484,15 +1557,17 @@ extension BlueOssConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
 extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueSystemConfig"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "base"),
-    2: .same(proto: "ble"),
-    3: .same(proto: "online"),
-    4: .same(proto: "access"),
-    5: .same(proto: "oss"),
-    6: .same(proto: "lock"),
+    1: .same(proto: "version"),
+    2: .same(proto: "base"),
+    3: .same(proto: "ble"),
+    4: .same(proto: "online"),
+    5: .same(proto: "access"),
+    6: .same(proto: "oss"),
+    7: .same(proto: "lock"),
   ]
 
   fileprivate class _StorageClass {
+    var _version: UInt32? = nil
     var _base: BlueBaseConfig? = nil
     var _ble: BlueBleConfig? = nil
     var _online: BlueOnlineConfig? = nil
@@ -1505,6 +1580,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     private init() {}
 
     init(copying source: _StorageClass) {
+      _version = source._version
       _base = source._base
       _ble = source._ble
       _online = source._online
@@ -1523,6 +1599,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
   public var isInitialized: Bool {
     return withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      if _storage._version == nil {return false}
       if _storage._base == nil {return false}
       if _storage._ble == nil {return false}
       if _storage._online == nil {return false}
@@ -1546,12 +1623,13 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         // allocates stack space for every case branch when no optimizations are
         // enabled. https://github.com/apple/swift-protobuf/issues/1034
         switch fieldNumber {
-        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._base) }()
-        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._ble) }()
-        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._online) }()
-        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._access) }()
-        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._oss) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
+        case 1: try { try decoder.decodeSingularUInt32Field(value: &_storage._version) }()
+        case 2: try { try decoder.decodeSingularMessageField(value: &_storage._base) }()
+        case 3: try { try decoder.decodeSingularMessageField(value: &_storage._ble) }()
+        case 4: try { try decoder.decodeSingularMessageField(value: &_storage._online) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._access) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._oss) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
         default: break
         }
       }
@@ -1564,23 +1642,26 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every if/case branch local when no optimizations
       // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
       // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._base {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      try { if let v = _storage._version {
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
       } }()
-      try { if let v = _storage._ble {
+      try { if let v = _storage._base {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
       } }()
-      try { if let v = _storage._online {
+      try { if let v = _storage._ble {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
       } }()
-      try { if let v = _storage._access {
+      try { if let v = _storage._online {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
       } }()
-      try { if let v = _storage._oss {
+      try { if let v = _storage._access {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
       } }()
-      try { if let v = _storage._lock {
+      try { if let v = _storage._oss {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._lock {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -1591,6 +1672,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
         let rhs_storage = _args.1
+        if _storage._version != rhs_storage._version {return false}
         if _storage._base != rhs_storage._base {return false}
         if _storage._ble != rhs_storage._ble {return false}
         if _storage._online != rhs_storage._online {return false}
@@ -1601,6 +1683,95 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       }
       if !storagesAreEqual {return false}
     }
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueSystemTimeUnix: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueSystemTimeUnix"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "epoch"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._epoch == nil {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self._epoch) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._epoch {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueSystemTimeUnix, rhs: BlueSystemTimeUnix) -> Bool {
+    if lhs._epoch != rhs._epoch {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueSystemUpdate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueSystemUpdate"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "config"),
+    2: .same(proto: "timeUnix"),
+  ]
+
+  public var isInitialized: Bool {
+    if let v = self._config, !v.isInitialized {return false}
+    if let v = self._timeUnix, !v.isInitialized {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._config) }()
+      case 2: try { try decoder.decodeSingularMessageField(value: &self._timeUnix) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._config {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._timeUnix {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueSystemUpdate, rhs: BlueSystemUpdate) -> Bool {
+    if lhs._config != rhs._config {return false}
+    if lhs._timeUnix != rhs._timeUnix {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1796,22 +1967,24 @@ extension BlueSystemProvisioning: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueSystemStatus"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "deviceId"),
-    2: .same(proto: "serialNumber"),
-    3: .same(proto: "hardwareType"),
-    4: .same(proto: "batteryLevel"),
-    5: .same(proto: "applicationVersion"),
-    6: .same(proto: "localTime"),
-    7: .same(proto: "settings"),
-    8: .same(proto: "blacklistEntriesCount"),
-    9: .same(proto: "eventLogEntriesCount"),
-    10: .same(proto: "eventLogSequenceId"),
-    11: .same(proto: "systemLogEntriesCount"),
-    12: .same(proto: "systemLogSequenceId"),
-    13: .same(proto: "lock"),
+    1: .same(proto: "configVersion"),
+    2: .same(proto: "deviceId"),
+    3: .same(proto: "serialNumber"),
+    4: .same(proto: "hardwareType"),
+    5: .same(proto: "batteryLevel"),
+    6: .same(proto: "applicationVersion"),
+    7: .same(proto: "localTime"),
+    8: .same(proto: "settings"),
+    9: .same(proto: "blacklistEntriesCount"),
+    10: .same(proto: "eventLogEntriesCount"),
+    11: .same(proto: "eventLogSequenceId"),
+    12: .same(proto: "systemLogEntriesCount"),
+    13: .same(proto: "systemLogSequenceId"),
+    14: .same(proto: "lock"),
   ]
 
   fileprivate class _StorageClass {
+    var _configVersion: UInt32? = nil
     var _deviceID: String? = nil
     var _serialNumber: String? = nil
     var _hardwareType: BlueHardwareType? = nil
@@ -1831,6 +2004,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     private init() {}
 
     init(copying source: _StorageClass) {
+      _configVersion = source._configVersion
       _deviceID = source._deviceID
       _serialNumber = source._serialNumber
       _hardwareType = source._hardwareType
@@ -1856,6 +2030,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
   public var isInitialized: Bool {
     return withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      if _storage._configVersion == nil {return false}
       if _storage._deviceID == nil {return false}
       if _storage._serialNumber == nil {return false}
       if _storage._hardwareType == nil {return false}
@@ -1883,19 +2058,20 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         // allocates stack space for every case branch when no optimizations are
         // enabled. https://github.com/apple/swift-protobuf/issues/1034
         switch fieldNumber {
-        case 1: try { try decoder.decodeSingularStringField(value: &_storage._deviceID) }()
-        case 2: try { try decoder.decodeSingularStringField(value: &_storage._serialNumber) }()
-        case 3: try { try decoder.decodeSingularEnumField(value: &_storage._hardwareType) }()
-        case 4: try { try decoder.decodeSingularEnumField(value: &_storage._batteryLevel) }()
-        case 5: try { try decoder.decodeSingularUInt32Field(value: &_storage._applicationVersion) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._localTime) }()
-        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._settings) }()
-        case 8: try { try decoder.decodeSingularUInt32Field(value: &_storage._blacklistEntriesCount) }()
-        case 9: try { try decoder.decodeSingularUInt32Field(value: &_storage._eventLogEntriesCount) }()
-        case 10: try { try decoder.decodeSingularUInt32Field(value: &_storage._eventLogSequenceID) }()
-        case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._systemLogEntriesCount) }()
-        case 12: try { try decoder.decodeSingularUInt32Field(value: &_storage._systemLogSequenceID) }()
-        case 13: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
+        case 1: try { try decoder.decodeSingularUInt32Field(value: &_storage._configVersion) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._deviceID) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._serialNumber) }()
+        case 4: try { try decoder.decodeSingularEnumField(value: &_storage._hardwareType) }()
+        case 5: try { try decoder.decodeSingularEnumField(value: &_storage._batteryLevel) }()
+        case 6: try { try decoder.decodeSingularUInt32Field(value: &_storage._applicationVersion) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._localTime) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._settings) }()
+        case 9: try { try decoder.decodeSingularUInt32Field(value: &_storage._blacklistEntriesCount) }()
+        case 10: try { try decoder.decodeSingularUInt32Field(value: &_storage._eventLogEntriesCount) }()
+        case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._eventLogSequenceID) }()
+        case 12: try { try decoder.decodeSingularUInt32Field(value: &_storage._systemLogEntriesCount) }()
+        case 13: try { try decoder.decodeSingularUInt32Field(value: &_storage._systemLogSequenceID) }()
+        case 14: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
         default: break
         }
       }
@@ -1908,44 +2084,47 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every if/case branch local when no optimizations
       // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
       // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._deviceID {
-        try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+      try { if let v = _storage._configVersion {
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
       } }()
-      try { if let v = _storage._serialNumber {
+      try { if let v = _storage._deviceID {
         try visitor.visitSingularStringField(value: v, fieldNumber: 2)
       } }()
-      try { if let v = _storage._hardwareType {
-        try visitor.visitSingularEnumField(value: v, fieldNumber: 3)
+      try { if let v = _storage._serialNumber {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 3)
       } }()
-      try { if let v = _storage._batteryLevel {
+      try { if let v = _storage._hardwareType {
         try visitor.visitSingularEnumField(value: v, fieldNumber: 4)
       } }()
+      try { if let v = _storage._batteryLevel {
+        try visitor.visitSingularEnumField(value: v, fieldNumber: 5)
+      } }()
       try { if let v = _storage._applicationVersion {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 5)
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 6)
       } }()
       try { if let v = _storage._localTime {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-      } }()
-      try { if let v = _storage._settings {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
       } }()
-      try { if let v = _storage._blacklistEntriesCount {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 8)
+      try { if let v = _storage._settings {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
       } }()
-      try { if let v = _storage._eventLogEntriesCount {
+      try { if let v = _storage._blacklistEntriesCount {
         try visitor.visitSingularUInt32Field(value: v, fieldNumber: 9)
       } }()
-      try { if let v = _storage._eventLogSequenceID {
+      try { if let v = _storage._eventLogEntriesCount {
         try visitor.visitSingularUInt32Field(value: v, fieldNumber: 10)
       } }()
-      try { if let v = _storage._systemLogEntriesCount {
+      try { if let v = _storage._eventLogSequenceID {
         try visitor.visitSingularUInt32Field(value: v, fieldNumber: 11)
       } }()
-      try { if let v = _storage._systemLogSequenceID {
+      try { if let v = _storage._systemLogEntriesCount {
         try visitor.visitSingularUInt32Field(value: v, fieldNumber: 12)
       } }()
+      try { if let v = _storage._systemLogSequenceID {
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 13)
+      } }()
       try { if let v = _storage._lock {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -1956,6 +2135,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
         let rhs_storage = _args.1
+        if _storage._configVersion != rhs_storage._configVersion {return false}
         if _storage._deviceID != rhs_storage._deviceID {return false}
         if _storage._serialNumber != rhs_storage._serialNumber {return false}
         if _storage._hardwareType != rhs_storage._hardwareType {return false}

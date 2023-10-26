@@ -236,6 +236,7 @@ public func blueTerminalRun<HandlerResult>(deviceID: String, timeoutSeconds: Dou
     }
 }
 
+@available(macOS 10.15, *)
 public func blueTerminalRun<HandlerResult>(deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, _ handler: @escaping () throws -> HandlerResult) async throws -> HandlerResult {
     return try await withCheckedThrowingContinuation { continuation in
         blueTerminalRun(deviceID: deviceID, timeoutSeconds: timeoutSeconds, handler: handler) { result in
@@ -244,18 +245,21 @@ public func blueTerminalRun<HandlerResult>(deviceID: String, timeoutSeconds: Dou
     }
 }
 
+@available(macOS 10.15, *)
 public func blueTerminalRun(deviceID: String, timeoutSeconds: Double = 30.0, action: String) async throws -> Void {
     try await blueTerminalRun(deviceID: deviceID, {
         try blueTerminalRequest(action: action)
     })
 }
 
+@available(macOS 10.15, *)
 public func blueTerminalRun<ResultType: Message>(deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, action: String) async throws -> ResultType {
     return try await blueTerminalRun(deviceID: deviceID, {
         return try blueTerminalRequest(action: action)
     })
 }
 
+@available(macOS 10.15, *)
 public func blueTerminalRun<DataType: Message, ResultType: Message>(deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, action: String, data: DataType) async throws -> ResultType {
     return try await blueTerminalRun(deviceID: deviceID, {
         return try blueTerminalRequest(action: action, data: data)
@@ -324,3 +328,60 @@ internal func blueTerminalRun(deviceID: String, timeoutSeconds: Double = 30.0, r
     
     blueTerminalRun(deviceID: deviceID, timeoutSeconds: timeoutSeconds, handler: handler, completion: completion, isTest: isTest)
 }
+
+//
+// Objective-C interface
+//
+
+@objc(BlueTerminalRequest)
+public final class ObjC_BlueTerminalRequest: NSObject {
+    @objc public let action: String
+    @objc public let data: NSData?
+    
+    fileprivate init(action: String, data: NSData? = nil) {
+        self.action = action
+        self.data = data
+    }
+}
+
+@objc(BlueTerminalResult)
+public final class ObjC_BlueTerminalResult: NSObject {
+    @objc public let error: Error?
+    @objc public let statusCode: Int
+    @objc public let data: NSData?
+    
+    internal init(error: Error? = nil, statusCode: Int, data: NSData? = nil) {
+        self.error = error
+        self.statusCode = statusCode
+        self.data = data
+    }
+}
+
+@objc(BlueTerminal)
+public final class ObjC_BlueTerminal: NSObject {
+    private override init() {}
+    
+    @objc public static func run(_ deviceID: String, timeoutSeconds: Double = 30.0, requests: [ObjC_BlueTerminalRequest], completion: ( ([ObjC_BlueTerminalResult]) -> Void)?) -> Void {
+        let objcRequests: [BlueTerminalRequest] = requests.map { request in
+            return BlueTerminalRequest(action: request.action, data: request.data != nil ? Data(referencing: request.data!) : nil)
+        }
+        
+        blueTerminalRun(deviceID: deviceID, timeoutSeconds: timeoutSeconds, requests: objcRequests) { result in
+            guard let completion = completion else {
+                return
+            }
+            
+            switch result {
+            case .success(let terminalResults):
+                completion(terminalResults.map({ terminalResult in
+                    return ObjC_BlueTerminalResult(error: nil, statusCode: terminalResult.statusCode.rawValue, data: terminalResult.data != nil ? NSData(data: terminalResult.data!) : nil)
+                }))
+            case .failure(let error):
+                completion(requests.map({ request in
+                    return ObjC_BlueTerminalResult(error: error, statusCode: BlueReturnCode.error.rawValue)
+                }))
+            }
+        }
+    }
+}
+

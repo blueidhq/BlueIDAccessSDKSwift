@@ -397,7 +397,7 @@ public enum BlueAccessType: SwiftProtobuf.Enum {
   case toggle // = 4
 
   /// Access and close the lock 
-  case closeLock // = 5
+  case close // = 5
 
   /// No access 
   case noAccess // = 6
@@ -418,7 +418,7 @@ public enum BlueAccessType: SwiftProtobuf.Enum {
     case 2: self = .extendedTime
     case 3: self = .customTime
     case 4: self = .toggle
-    case 5: self = .closeLock
+    case 5: self = .close
     case 6: self = .noAccess
     case 7: self = .noAccessValidity
     case 8: self = .noAccessBlacklisted
@@ -432,7 +432,7 @@ public enum BlueAccessType: SwiftProtobuf.Enum {
     case .extendedTime: return 2
     case .customTime: return 3
     case .toggle: return 4
-    case .closeLock: return 5
+    case .close: return 5
     case .noAccess: return 6
     case .noAccessValidity: return 7
     case .noAccessBlacklisted: return 8
@@ -3539,7 +3539,7 @@ extension BlueAccessType: SwiftProtobuf._ProtoNameProviding {
     2: .same(proto: "ExtendedTime"),
     3: .same(proto: "CustomTime"),
     4: .same(proto: "Toggle"),
-    5: .same(proto: "CloseLock"),
+    5: .same(proto: "Close"),
     6: .same(proto: "NoAccess"),
     7: .same(proto: "NoAccessValidity"),
     8: .same(proto: "NoAccessBlacklisted"),

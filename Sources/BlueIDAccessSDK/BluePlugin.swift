@@ -46,18 +46,17 @@ internal class BluePlugin: BlueEventListener {
     
     internal init(delegate: BluePluginDelegate? = nil) {
         self.delegate = delegate
+        blueAddEventListener(listener: self)
+    }
+    
+    deinit {
+        blueRemoveEventListener(listener: self)
     }
     
     internal func runCommand(command: String, arg0: Any?, arg1: Any?, arg2: Any?, resolve: @escaping BluePluginResolve, reject: @escaping BluePluginReject) {
         let convertedArg0 = convertArg(arg0)
         let convertedArg1 = convertArg(arg1)
         let convertedArg2 = convertArg(arg2)
-        
-        if (command == "initialize") {
-            blueAddEventListener(listener: self)
-        } else if (command == "release") {
-            blueRemoveEventListener(listener: self)
-        }
         
         blueRunCommand(command, arg0: convertedArg0, arg1: convertedArg1, arg2: convertedArg2) { result in
             switch result {
@@ -181,7 +180,7 @@ internal class BluePlugin: BlueEventListener {
                 
                 eventData = ["data": resultData, "messageTypeName": messageTypeName]
             } catch {
-                eventData = ["data": "<error>"]
+                eventData = ["error": error.localizedDescription];
                 print(error.localizedDescription)
             }
         } else if let data = data {
