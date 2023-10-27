@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'BlueIDAccessSDK'
-  s.version = '0.14.0'
+  s.version = '0.15.0'
   s.license = { :type => 'MIT' }
   s.summary = 'BlueID Access SDK for Swift'
   s.homepage = 'https://www.blue-id.com'
