@@ -9,7 +9,7 @@ typedef struct BlueSPConnection BlueSPConnection_t;
 
 typedef void BlueSPConnectionContext_t;
 
-typedef BlueReturnCode_t (*BlueSPDataAvailableFunc_t)(const BlueSPConnection_t *const pConnection);
+typedef BlueReturnCode_t (*BlueSPTokenAvailableFunc_t)(const BlueSPConnection_t *const pConnection);
 typedef BlueReturnCode_t (*BlueSPReceivedFunc_t)(void);
 typedef BlueReturnCode_t (*BlueSPReceiveFinishFunc_t)(void);
 
@@ -41,11 +41,11 @@ extern "C"
     BlueReturnCode_t blueSP_Transmit(const BlueSPConnection_t *const pConnection, int16_t statusCode, const uint8_t *const pData, uint16_t dataSize);
 
     // If returns BlueReturnCode_Pending then callback is called, otherwise if returns BlueReturnCode_Ok the callback is never called and the data is available after the return
-    BlueReturnCode_t blueSP_Receive(const BlueSPConnection_t *const pConnection, uint8_t *const pData, uint16_t availableDataSize, uint16_t *const pReturnedDataSize, int16_t *const pStatusCode, BlueSPDataAvailableFunc_t availableCallback);
+    BlueReturnCode_t blueSP_Receive(const BlueSPConnection_t *const pConnection, uint8_t *const pData, uint16_t availableDataSize, uint16_t *const pReturnedDataSize, int16_t *const pStatusCode, BlueSPTokenAvailableFunc_t availableCallback);
 
-    BlueReturnCode_t blueSP_SignData(BlueSPData_t *const pData, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize);
+    BlueReturnCode_t blueSP_SignToken(BlueSPToken_t *const pToken, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize);
 
-    BlueReturnCode_t blueSP_SignData_Ext(const uint8_t *const pSpData, uint16_t spDataSize, uint8_t *const pSignedSpData, uint16_t signedSpDataSize, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize);
+    BlueReturnCode_t blueSP_SignToken_Ext(const uint8_t *const pTokenData, uint16_t tokenDataSize, uint8_t *const pSignedTokenData, uint16_t signedTokenDataSize, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize);
 
 #ifdef BLUE_TEST
     void blueSP_SwapTemporaryReceiveContext(void);

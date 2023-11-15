@@ -31,8 +31,8 @@ extern "C"
     BlueReturnCode_t blueSPTransponder_Init(const BlueSPTransponderConfiguration_t *const pConfiguration);
     BlueReturnCode_t blueSPTransponder_Release(void);
 
-    BlueReturnCode_t blueSPTransponder_SendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPData_t *const pData, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
-    BlueReturnCode_t blueSPTransponder_SendRequest_Ext(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const uint8_t *const pDataBuffer, uint16_t dataBufferSize, uint8_t *const pResultBuffer, uint16_t resultBufferSize, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
+    BlueReturnCode_t blueSPTransponder_SendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPToken_t *const pToken, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
+    BlueReturnCode_t blueSPTransponder_SendRequest_Ext(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const uint8_t *const pTokenBuffer, uint16_t tokenBufferSize, uint8_t *const pResultBuffer, uint16_t resultBufferSize, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
 
 #ifdef BLUE_TEST
     void blueSPTransponder_GetSessionSalt(uint8_t *const pTransponderSalt);

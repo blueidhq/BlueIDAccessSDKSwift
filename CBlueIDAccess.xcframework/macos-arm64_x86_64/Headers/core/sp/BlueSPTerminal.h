@@ -8,7 +8,8 @@ typedef void BlueSPTerminalHandlerContext_t;
 typedef struct BlueSPTerminalHandlerVtable
 {
     BlueReturnCode_t (*getCurrentTime)(BlueSPTerminalHandlerContext_t *pContext, BlueLocalTimestamp_t *const pTime);
-    BlueReturnCode_t (*handleCommand)(BlueSPTerminalHandlerContext_t *pContext, const BlueSPDataCommand_t *const pCommand, BlueSPResult_t *const pResult);
+    BlueReturnCode_t (*getCommandGroup)(BlueSPTerminalHandlerContext_t *pContext, const char *const pCommand, char *const pCommandGroup);
+    BlueReturnCode_t (*handleCommand)(BlueSPTerminalHandlerContext_t *pContext, const BlueSPTokenCommand_t *const pCommand, BlueSPResult_t *const pResult);
     BlueReturnCode_t (*handleOssSo)(BlueSPTerminalHandlerContext_t *pContext, const BlueLocalTimestamp_t *const pTimestamp, const BlueOssSoMobile_t *const pOssSo, BlueSPResult_t *const pResult);
     BlueReturnCode_t (*handleOssSid)(BlueSPTerminalHandlerContext_t *pContext, const BlueLocalTimestamp_t *const pTimestamp, const BlueOssSidMobile_t *const pOssSid, BlueSPResult_t *const pResult);
     BlueReturnCode_t (*storeEvent)(BlueSPTerminalHandlerContext_t *pContext, const BlueEvent_t *const pEvent);
