@@ -47,7 +47,7 @@ static BlueReturnCode_t handleReceiveHandshake(const BlueSPConnection_t *const p
 static BlueReturnCode_t handleReceiveData_Defer(const BlueSPConnection_t *const pConnection);
 static BlueReturnCode_t handleReceiveData(const BlueSPConnection_t *const pConnection);
 
-static BlueReturnCode_t handleCommand(const BlueLocalTimestamp_t *const pTimestamp, const BlueSPDataCommand_t *const pCommand, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult);
+static BlueReturnCode_t handleCommand(const BlueLocalTimestamp_t *const pTimestamp, const BlueSPTokenCommand_t *const pCommand, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult);
 static BlueReturnCode_t handleOssSo(const BlueLocalTimestamp_t *const pTimestamp, const BlueOssSoMobile_t *const pOssSo, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult);
 static BlueReturnCode_t handleOssSid(const BlueLocalTimestamp_t *const pTimestamp, const BlueOssSidMobile_t *const pOssSid, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult);
 
@@ -331,7 +331,7 @@ static BlueReturnCode_t handleReceiveData(const BlueSPConnection_t *const pConne
     uint8_t buffer[sizeof(sessionContext.receiveData)];
 
     //
-    // Decrypt and decode data
+    // Decrypt and decode token
     //
 
     uint16_t dataSize = sizeof(buffer);
@@ -341,8 +341,8 @@ static BlueReturnCode_t handleReceiveData(const BlueSPConnection_t *const pConne
         TRANSMIT_RETURN_ERROR(pConnection, BlueReturnCode_SPFailedDecrypt);
     }
 
-    BlueSPData_t data = BLUESPDATA_INIT_ZERO;
-    returnCode = blueUtils_DecodeData(&data, BLUESPDATA_FIELDS, buffer, dataSize);
+    BlueSPToken_t token = BLUESPTOKEN_INIT_ZERO;
+    returnCode = blueUtils_DecodeData(&token, BLUESPTOKEN_FIELDS, buffer, dataSize);
     if (returnCode != BlueReturnCode_Ok)
     {
         TRANSMIT_RETURN_ERROR(pConnection, returnCode);
@@ -367,16 +367,16 @@ static BlueReturnCode_t handleReceiveData(const BlueSPConnection_t *const pConne
 
     BlueSPResult_t result = BLUESPRESULT_INIT_ZERO;
 
-    switch (data.which_payload)
+    switch (token.which_payload)
     {
-    case BLUESPDATA_COMMAND_TAG:
-        returnCode = handleCommand(&currentTime, &data.payload.command, data.signature.bytes, data.signature.size, &result);
+    case BLUESPTOKEN_COMMAND_TAG:
+        returnCode = handleCommand(&currentTime, &token.payload.command, token.signature.bytes, token.signature.size, &result);
         break;
-    case BLUESPDATA_OSSSO_TAG:
-        returnCode = handleOssSo(&currentTime, &data.payload.ossSo, data.signature.bytes, data.signature.size, &result);
+    case BLUESPTOKEN_OSSSO_TAG:
+        returnCode = handleOssSo(&currentTime, &token.payload.ossSo, token.signature.bytes, token.signature.size, &result);
         break;
-    case BLUESPDATA_OSSSID_TAG:
-        returnCode = handleOssSid(&currentTime, &data.payload.ossSid, data.signature.bytes, data.signature.size, &result);
+    case BLUESPTOKEN_OSSSID_TAG:
+        returnCode = handleOssSid(&currentTime, &token.payload.ossSid, token.signature.bytes, token.signature.size, &result);
         break;
     default:
         returnCode = BlueReturnCode_NotSupported;
@@ -422,7 +422,21 @@ static BlueReturnCode_t handleReceiveData(const BlueSPConnection_t *const pConne
     return BlueReturnCode_Ok;
 }
 
-static BlueReturnCode_t handleCommand(const BlueLocalTimestamp_t *const pTimestamp, const BlueSPDataCommand_t *const pCommand, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult)
+static BlueReturnCode_t createCommandSignatureMessage(const BlueSPTokenCommand_t *const pCommand, const char *const pCommandGroup, uint8_t *const pMessage, int *const pMessageLength)
+{
+    *pMessageLength = snprintf((char *const)pMessage, *pMessageLength, "%.10s:%.8s:%d%d%d%d%d:%d%d%d%d%d", pCommand->credentialId.id, pCommandGroup != NULL ? pCommandGroup : pCommand->command,
+                               (int)pCommand->validityStart.year, (int)pCommand->validityStart.month, (int)pCommand->validityStart.date, (int)pCommand->validityStart.hours, (int)pCommand->validityStart.minutes,
+                               (int)pCommand->validityEnd.year, (int)pCommand->validityEnd.month, (int)pCommand->validityEnd.date, (int)pCommand->validityEnd.hours, (int)pCommand->validityEnd.minutes);
+
+    if (*pMessageLength <= 0 || (unsigned int)*pMessageLength >= 64)
+    {
+        return BlueReturnCode_SPFailedSignature;
+    }
+
+    return BlueReturnCode_Ok;
+}
+
+static BlueReturnCode_t handleCommand(const BlueLocalTimestamp_t *const pTimestamp, const BlueSPTokenCommand_t *const pCommand, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult)
 {
 #define STORE_COMMAND_EVENT(EVENT_INFO)                                                       \
     {                                                                                         \
@@ -442,23 +456,31 @@ static BlueReturnCode_t handleCommand(const BlueLocalTimestamp_t *const pTimesta
     // Check Signature of command, first
     //
 
-    uint8_t signatureTemplate[64];
+    uint8_t signatureMessage[64];
+    int signatureMessageLength = sizeof(signatureMessage);
 
-    int signatureTemplateLen = snprintf((char *)signatureTemplate, sizeof(signatureTemplate), "%.10s:%.8s:%d%d%d%d%d:%d%d%d%d%d", pCommand->credentialId.id, pCommand->command,
-                                        (int)pCommand->validityStart.year, (int)pCommand->validityStart.month, (int)pCommand->validityStart.date, (int)pCommand->validityStart.hours, (int)pCommand->validityStart.minutes,
-                                        (int)pCommand->validityEnd.year, (int)pCommand->validityEnd.month, (int)pCommand->validityEnd.date, (int)pCommand->validityEnd.hours, (int)pCommand->validityEnd.minutes);
+    BLUE_ERROR_CHECK(createCommandSignatureMessage(pCommand, NULL, signatureMessage, &signatureMessageLength));
 
-    if (signatureTemplateLen <= 0 || (unsigned int)signatureTemplateLen >= 64)
-    {
-        return BlueReturnCode_SPFailedSignature;
-    }
-
-    BlueReturnCode_t returnCode = blueUtils_VerifySignature(signatureTemplate, signatureTemplateLen, pSignature, signatureLen, &terminalContext.signaturePublicKey);
+    BlueReturnCode_t returnCode = blueUtils_VerifySignature(signatureMessage, signatureMessageLength, pSignature, signatureLen, &terminalContext.signaturePublicKey);
     if (returnCode != BlueReturnCode_Ok)
     {
-        BLUE_LOG_DEBUG("Invalid signature for command %s", signatureTemplate);
-        STORE_COMMAND_EVENT(BlueReturnCode_InvalidSignature);
-        return returnCode;
+        // If verification of signature has failed it might be a signature for a command group so try to gather a command
+        // group if any and try to verify the signature again with the group, otherwise fail.
+        char commandGroup[10];
+
+        if (terminalContext.handler.pFuncs->getCommandGroup(terminalContext.handler.pContext, pCommand->command, commandGroup) == BlueReturnCode_Ok)
+        {
+            signatureMessageLength = sizeof(signatureMessage);
+            BLUE_ERROR_CHECK(createCommandSignatureMessage(pCommand, commandGroup, signatureMessage, &signatureMessageLength));
+            returnCode = blueUtils_VerifySignature(signatureMessage, signatureMessageLength, pSignature, signatureLen, &terminalContext.signaturePublicKey);
+        }
+
+        if (returnCode != BlueReturnCode_Ok)
+        {
+            BLUE_LOG_DEBUG("Invalid signature for command %s", signatureMessage);
+            STORE_COMMAND_EVENT(BlueReturnCode_InvalidSignature);
+            return returnCode;
+        }
     }
 
     //

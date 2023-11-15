@@ -1029,6 +1029,8 @@ BlueReturnCode_t blueOssSo_WriteDataFile(const BlueOssSoStorage_t *const pStorag
     blueOss_EncodeBinaryNumber(dtsBits, 3, 2, pDataFile->numberOfDayIdsPerDTSchedule - 1);
     blueOss_EncodeBinaryNumber(dtsBits, 1, 0, pDataFile->numberOfTimePeriodsPerDayId - 1);
 
+    buffer[8] = 0; // not used
+
     buffer[9] = blueOss_EncodeBits(dtsBits);
 
     // Number of door entries
@@ -1056,7 +1058,7 @@ BlueReturnCode_t blueOssSo_WriteDataFile(const BlueOssSoStorage_t *const pStorag
         for (uint8_t doorIndex = 0; doorIndex < pDataFile->doorInfoEntries_count; doorIndex += 1)
         {
             const uint16_t offset = headerSize + (doorIndex * doorInfoSize);
-            BLUE_ERROR_CHECK_DEBUG(blueOssSo_WriteDoorInfo(&buffer[offset], &pDataFile->doorInfoEntries[doorIndex], pDataFile->dtSchedules_count), "Read data file DoorInfo");
+            BLUE_ERROR_CHECK_DEBUG(blueOssSo_WriteDoorInfo(&buffer[offset], &pDataFile->doorInfoEntries[doorIndex], pDataFile->dtSchedules_count), "Write data file DoorInfo");
         }
     }
 
@@ -1352,6 +1354,9 @@ BlueReturnCode_t blueOssSo_EvaluateAccess(const BlueLocalTimestamp_t *const pTim
 {
     BlueOssAccessResult_t result = BlueOssAccessResult_Default;
 
+    const uint8_t maxGroupSchedules = 4;
+    BlueLocalTimeSchedule_t groupSchedules[maxGroupSchedules];
+
     //
     // Iterate all door infos now then evaluate each if it allows access. If it does and we got multiple
     // ones we simply need to order the access-type by priority as set by oss specification
@@ -1366,6 +1371,8 @@ BlueReturnCode_t blueOssSo_EvaluateAccess(const BlueLocalTimestamp_t *const pTim
             break;
         }
 
+        uint8_t groupSchedulesCount = 0;
+
         //
         // Test if maps against door id or any door group id otherwise leave early
         //
@@ -1378,11 +1385,12 @@ BlueReturnCode_t blueOssSo_EvaluateAccess(const BlueLocalTimestamp_t *const pTim
         }
         else if (doorInfo->accessBy == BlueOssSoDoorInfoAccessBy_DoorGroupId)
         {
-            int32_t groupIdIndex = -1;
+            if (!pConfig->getGroupSchedules)
+            {
+                continue;
+            }
 
-            BLUE_BINARY_SEARCH(pConfig->doorGroupIds, pConfig->doorGroupIdsCount, doorInfo->id, BLUE_BINARY_SEARCH_CMP, groupIdIndex);
-
-            if (groupIdIndex == -1)
+            if (pConfig->getGroupSchedules(doorInfo->id, groupSchedules, &groupSchedulesCount, maxGroupSchedules) != BlueReturnCode_Ok)
             {
                 continue;
             }
@@ -1420,6 +1428,19 @@ BlueReturnCode_t blueOssSo_EvaluateAccess(const BlueLocalTimestamp_t *const pTim
             // No schedule set so has access all-time
             hasAccess = true;
             result.scheduleMissmatch = false;
+        }
+
+        if (hasAccess)
+        {
+            // If we have group schedules check against them here as they have the last saying
+            if (groupSchedulesCount > 0)
+            {
+                if (!blueUtils_TimeScheduleMatches(pTimestamp, groupSchedules, groupSchedulesCount))
+                {
+                    hasAccess = false;
+                    result.scheduleMissmatch = true;
+                }
+            }
         }
 
         if (hasAccess)

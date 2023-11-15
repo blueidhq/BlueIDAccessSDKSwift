@@ -32,10 +32,11 @@ BlueReturnCode_t blueBle_ReadManufacturerData(const uint8_t *const pMfData, uint
         offset = BLUE_BLE_COMPANY_IDENTIFIER_SIZE;
     }
 
-    pMfInfo->hardwareType = pMfData[offset];
-    pMfInfo->batteryLevel = pMfData[offset + 1];
-    pMfInfo->applicationVersion = BLUE_UINT16_READ_LE(&pMfData[offset + 3]);
-    pMfInfo->localMidnightTimeEpoch = BLUE_UINT32_READ_LE(&pMfData[offset + 5]);
+    pMfInfo->isFactory = pMfData[offset];
+    pMfInfo->hardwareType = pMfData[offset + 1];
+    pMfInfo->batteryLevel = pMfData[offset + 2];
+    pMfInfo->applicationVersion = BLUE_UINT16_READ_LE(&pMfData[offset + 4]);
+    pMfInfo->localMidnightTimeEpoch = BLUE_UINT32_READ_LE(&pMfData[offset + 6]);
 
     return BlueReturnCode_Ok;
 }
@@ -68,10 +69,11 @@ BlueReturnCode_t blueBle_WriteManufacturerData(uint8_t *const pMfData, uint8_t m
         offset = BLUE_BLE_COMPANY_IDENTIFIER_SIZE;
     }
 
-    pMfData[offset] = (uint8_t)pMfInfo->hardwareType;
-    pMfData[offset + 1] = (uint8_t)pMfInfo->batteryLevel;
-    BLUE_UINT16_WRITE_LE(&pMfData[offset + 3], pMfInfo->applicationVersion);
-    BLUE_UINT32_WRITE_LE(&pMfData[offset + 5], pMfInfo->localMidnightTimeEpoch);
+    pMfData[offset] = (uint8_t)pMfInfo->isFactory;
+    pMfData[offset + 1] = (uint8_t)pMfInfo->hardwareType;
+    pMfData[offset + 2] = (uint8_t)pMfInfo->batteryLevel;
+    BLUE_UINT16_WRITE_LE(&pMfData[offset + 4], pMfInfo->applicationVersion);
+    BLUE_UINT32_WRITE_LE(&pMfData[offset + 6], pMfInfo->localMidnightTimeEpoch);
 
     return BlueReturnCode_Ok;
 }

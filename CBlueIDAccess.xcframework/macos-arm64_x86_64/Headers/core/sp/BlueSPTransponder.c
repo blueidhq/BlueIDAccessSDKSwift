@@ -22,7 +22,7 @@ typedef enum SPTransponderSessionStatus
 typedef struct SPTransponderSessionContext
 {
     SPTransponderSessionStatus_t status;
-    const BlueSPData_t *pData;
+    const BlueSPToken_t *pToken;
     BlueSPResult_t *pResult;
     int16_t *pStatusCode;
     BlueSPTransponderFinishedCallbackFunc_t callback;
@@ -41,8 +41,8 @@ static bool transponderInitialized = false;
 static SPTerminalContext_t transponderContext;
 static SPTransponderSessionContext_t sessionContext;
 
-static BlueReturnCode_t handleSendRequest_Defer(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPData_t *const pData, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
-static BlueReturnCode_t handleSendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPData_t *const pData, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
+static BlueReturnCode_t handleSendRequest_Defer(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPToken_t *const pToken, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
+static BlueReturnCode_t handleSendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPToken_t *const pToken, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback);
 static BlueReturnCode_t handleReceiveHandshakeReply_Defer(const BlueSPConnection_t *const pConnection);
 static BlueReturnCode_t handleReceiveHandshakeReply(const BlueSPConnection_t *const pConnection);
 static BlueReturnCode_t handleReceiveResult_Defer(const BlueSPConnection_t *const pConnection);
@@ -116,32 +116,32 @@ BlueReturnCode_t blueSPTransponder_Release(void)
     return BlueReturnCode_Ok;
 }
 
-BlueReturnCode_t blueSPTransponder_SendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPData_t *const pData, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
+BlueReturnCode_t blueSPTransponder_SendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPToken_t *const pToken, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
 {
-    return handleSendRequest_Defer(pDeviceId, pConnection, pData, pResult, pStatusCode, callback);
+    return handleSendRequest_Defer(pDeviceId, pConnection, pToken, pResult, pStatusCode, callback);
 }
 
-BlueReturnCode_t blueSPTransponder_SendRequest_Ext(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const uint8_t *const pDataBuffer, uint16_t dataBufferSize, uint8_t *const pResultBuffer, uint16_t resultBufferSize, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
+BlueReturnCode_t blueSPTransponder_SendRequest_Ext(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const uint8_t *const pTokenBuffer, uint16_t tokenBufferSize, uint8_t *const pResultBuffer, uint16_t resultBufferSize, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
 {
-    BlueSPData_t data = BLUESPDATA_INIT_ZERO;
+    BlueSPToken_t token = BLUESPTOKEN_INIT_ZERO;
 
-    BLUE_ERROR_CHECK_DEBUG(blueUtils_DecodeData(&data, BLUESPDATA_FIELDS, pDataBuffer, dataBufferSize), "Decode SP data buffer");
+    BLUE_ERROR_CHECK_DEBUG(blueUtils_DecodeData(&token, BLUESPTOKEN_FIELDS, pTokenBuffer, tokenBufferSize), "Decode SP token buffer");
 
     BlueSPResult_t result = BLUESPRESULT_INIT_ZERO;
 
-    BLUE_ERROR_CHECK(blueSPTransponder_SendRequest(pDeviceId, pConnection, &data, &result, pStatusCode, callback));
+    BLUE_ERROR_CHECK(blueSPTransponder_SendRequest(pDeviceId, pConnection, &token, &result, pStatusCode, callback));
 
-    BLUE_ERROR_CHECK_DEBUG(blueUtils_EncodeData(&result, BLUESPRESULT_FIELDS, pResultBuffer, resultBufferSize), "Encode SP Result buffer");
+    BLUE_ERROR_CHECK_DEBUG(blueUtils_EncodeData(&result, BLUESPRESULT_FIELDS, pResultBuffer, resultBufferSize), "Encode SP result buffer");
 
     return BlueReturnCode_Ok;
 }
 
-static BlueReturnCode_t handleSendRequest_Defer(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPData_t *const pData, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
+static BlueReturnCode_t handleSendRequest_Defer(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPToken_t *const pToken, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
 {
-    DEFER_SESSION_BODY(handleSendRequest(pDeviceId, pConnection, pData, pResult, pStatusCode, callback));
+    DEFER_SESSION_BODY(handleSendRequest(pDeviceId, pConnection, pToken, pResult, pStatusCode, callback));
 }
 
-static BlueReturnCode_t handleSendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPData_t *const pData, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
+static BlueReturnCode_t handleSendRequest(const char *const pDeviceId, const BlueSPConnection_t *const pConnection, const BlueSPToken_t *const pToken, BlueSPResult_t *const pResult, int16_t *const pStatusCode, BlueSPTransponderFinishedCallbackFunc_t callback)
 {
     //
     // Reset session first to leave any previous status
@@ -153,7 +153,7 @@ static BlueReturnCode_t handleSendRequest(const char *const pDeviceId, const Blu
     // Assign our data for sending later in the process
     //
 
-    sessionContext.pData = pData;
+    sessionContext.pToken = pToken;
     sessionContext.pResult = pResult;
     sessionContext.pStatusCode = pStatusCode;
     sessionContext.callback = callback;
@@ -303,11 +303,11 @@ static BlueReturnCode_t handleReceiveHandshakeReply(const BlueSPConnection_t *co
     BLUE_LOG_DEBUG("Secure connection established, sending command now.");
 
     //
-    // Encode our data, then encrypt and transmit it
+    // Encode our token, then encrypt and transmit it
     //
 
     uint8_t dataBuffer[sizeof(sessionContext.transmitData)];
-    int encodedDataSize = blueUtils_EncodeData(sessionContext.pData, BLUESPDATA_FIELDS, dataBuffer, sizeof(dataBuffer));
+    int encodedDataSize = blueUtils_EncodeData(sessionContext.pToken, BLUESPTOKEN_FIELDS, dataBuffer, sizeof(dataBuffer));
     if (encodedDataSize < 0)
     {
         BLUE_ERROR_CHECK_DEBUG(encodedDataSize, "Serialize command");

@@ -44,7 +44,6 @@ extern "C"
 
     // Generate crc checksums for a given data and size
     uint16_t blueUtils_Crc16(uint16_t crc, const void *pData, uint16_t size);
-    uint32_t blueUtils_Crc32(uint32_t crc, const void *pData, uint32_t size);
 
     // Pad the given buffer if necessary with zeros to full-fill the given block size
     BlueReturnCode_t blueUtils_Pad(uint8_t *const pData, uint32_t *const pSize, uint32_t blockSize, uint32_t maxDataSize);
@@ -95,6 +94,9 @@ extern "C"
 
     // Validates a time schedule
     bool blueUtils_TimeScheduleIsValid(const BlueLocalTimeSchedule_t *const pTimeSchedule, bool noEndTime);
+
+    // Checks if a given timestamp matches any of the given schedules
+    bool blueUtils_TimeScheduleMatches(const BlueLocalTimestamp_t *const pTimestamp, const BlueLocalTimeSchedule_t *const pTimeSchedules, uint16_t timeSchedulesCount);
 
     // Returns a calculated next timestamp based on a set of given time schedules and current time. If filterDay is provided then this callback is called to check if a day should be considered or not.
     BlueReturnCode_t blueUtils_TimeScheduleCalculateNext(const BlueLocalTimestamp_t *const pTime, const BlueLocalTimeSchedule_t *const pTimeSchedules, uint16_t timeSchedulesCount,

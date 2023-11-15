@@ -106,6 +106,11 @@ void blueCore_logVersionInfo(void)
     BLUE_LOG_INFO("Blue Version: %s", buffer);
 }
 
+int blueCore_qSortUInt8Cmp(const void *a, const void *b)
+{
+    return (*(uint8_t *)a - *(uint8_t *)b);
+}
+
 int blueCore_qSortUInt32Cmp(const void *a, const void *b)
 {
     return (*(uint32_t *)a - *(uint32_t *)b);

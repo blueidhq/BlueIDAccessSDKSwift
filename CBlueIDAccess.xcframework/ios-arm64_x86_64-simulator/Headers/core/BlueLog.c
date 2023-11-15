@@ -73,21 +73,26 @@ void blueLog_LogMsg(int severity, const char *const pFile, int line, const char 
 
 void blueLog_LogHexdump(int severity, const char *const pFile, int line, const void *const pData, size_t size)
 {
-    char output[4096] =
-        {
-            0,
-        };
+    const size_t chars = 32;
 
-    size_t i;
+    blueLog_Log(severity, pFile, line, "-- Hex dump (%d bytes) --", size);
+
+    char buffer[chars + 1];
     size_t written = 0;
-    size_t outputSize = sizeof(output);
 
-    for (i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
-        written += snprintf(output + written, outputSize - written, "0x%02X, ", ((uint8_t *)pData)[i] & 0xFF);
+        written += snprintf(buffer + written, sizeof(buffer) - written, "%02X", ((uint8_t *)pData)[i] & 0xFF);
+
+        if (written == chars)
+        {
+            written = 0;
+            blueLog_LogMsg(severity, pFile, line, buffer);
+        }
     }
 
-    output[written] = '\0';
-
-    blueLog_Log(severity, pFile, line, "hex (%d bytes): %s", size, output);
+    if (written > 0)
+    {
+        blueLog_LogMsg(severity, pFile, line, buffer);
+    }
 }

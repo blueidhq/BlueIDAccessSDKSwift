@@ -218,65 +218,17 @@ uint32_t blueUtils_UniqueByteCount(const uint8_t *const pData, uint32_t dataSize
 
 uint16_t blueUtils_Crc16(uint16_t crc, const void *pData, uint16_t size)
 {
-    static const uint16_t rtable[16] =
-        {
-            0x0000,
-            0x1021,
-            0x2042,
-            0x3063,
-            0x4084,
-            0x50a5,
-            0x60c6,
-            0x70e7,
-            0x8108,
-            0x9129,
-            0xa14a,
-            0xb16b,
-            0xc18c,
-            0xd1ad,
-            0xe1ce,
-            0xf1ef,
-        };
-
-    const uint8_t *data = pData;
-
-    for (uint16_t i = 0; i < size; i++)
-    {
-        crc = (crc << 4) ^ rtable[(crc >> 12) ^ (data[i] >> 4)];
-        crc = (crc << 4) ^ rtable[(crc >> 12) ^ (data[i] & 0x0F)];
-    }
-
-    return crc;
-}
-
-uint32_t blueUtils_Crc32(uint32_t crc, const void *pData, uint32_t size)
-{
-    static const uint32_t rtable[16] =
-        {
-            0x00000000,
-            0x1db71064,
-            0x3b6e20c8,
-            0x26d930ac,
-            0x76dc4190,
-            0x6b6b51f4,
-            0x4db26158,
-            0x5005713c,
-            0xedb88320,
-            0xf00f9344,
-            0xd6d6a3e8,
-            0xcb61b38c,
-            0x9b64c2b0,
-            0x86d3d2d4,
-            0xa00ae278,
-            0xbdbdf21c,
-        };
+    // CRC-16-CCITT (XModem)
+    static const uint16_t crcTable[256] = {
+        0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
+        0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef};
 
     const uint8_t *data = pData;
 
     for (size_t i = 0; i < size; i++)
     {
-        crc = (crc >> 4) ^ rtable[(crc ^ (data[i] >> 0)) & 0xf];
-        crc = (crc >> 4) ^ rtable[(crc ^ (data[i] >> 4)) & 0xf];
+        crc = (crc << 4) ^ crcTable[((crc >> 12) ^ data[i]) & 0x0F];
+        crc = (crc << 4) ^ crcTable[((crc >> 12) ^ (data[i] >> 4)) & 0x0F];
     }
 
     return crc;
@@ -700,14 +652,6 @@ bool blueUtils_TimeScheduleIsValid(const BlueLocalTimeSchedule_t *const pTimeSch
         return false;
     }
 
-    for (uint8_t i = 0; i < 7; i += 1)
-    {
-        if (pTimeSchedule->weekdays[i] != 0 && pTimeSchedule->weekdays[i] != 1)
-        {
-            return false;
-        }
-    }
-
     if (pTimeSchedule->timePeriod.hoursFrom > 23 || pTimeSchedule->timePeriod.minutesFrom > 59)
     {
         return false;
@@ -732,6 +676,33 @@ bool blueUtils_TimeScheduleIsValid(const BlueLocalTimeSchedule_t *const pTimeSch
     }
 
     return true;
+}
+
+bool blueUtils_TimeScheduleMatches(const BlueLocalTimestamp_t *const pTimestamp, const BlueLocalTimeSchedule_t *const pTimeSchedules, uint16_t timeSchedulesCount)
+{
+    uint16_t dayOfYear = blueUtils_TimestampGetDayOfYear(pTimestamp, true);
+    BlueWeekday_t weekday = blueUtils_TimestampGetWeekday(pTimestamp);
+    const uint16_t timeMinutes = pTimestamp->hours * 60 + pTimestamp->minutes;
+
+    for (uint16_t scheduleIndex = 0; scheduleIndex < timeSchedulesCount; scheduleIndex += 1)
+    {
+        const BlueLocalTimeSchedule_t *schedule = &pTimeSchedules[scheduleIndex];
+        if (dayOfYear >= schedule->dayOfYearStart && dayOfYear <= schedule->dayOfYearEnd)
+        {
+            if (schedule->weekdays[weekday])
+            {
+                const uint16_t scheduleMinsStart = schedule->timePeriod.hoursFrom * 60 + schedule->timePeriod.minutesFrom;
+                const uint16_t scheduleMinsEnd = schedule->timePeriod.hoursTo * 60 + schedule->timePeriod.minutesTo;
+
+                if (timeMinutes >= scheduleMinsStart && timeMinutes <= scheduleMinsEnd)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
 }
 
 BlueReturnCode_t blueUtils_TimeScheduleCalculateNext(const BlueLocalTimestamp_t *const pTime, const BlueLocalTimeSchedule_t *const pTimeSchedules, uint16_t timeSchedulesCount, BlueLocalTimestamp_t *const pStartTime, BlueLocalTimestamp_t *const pEndTime, BlueUtilsFilterDayOfYearFunc_t filterDay)
@@ -759,7 +730,7 @@ BlueReturnCode_t blueUtils_TimeScheduleCalculateNext(const BlueLocalTimestamp_t 
             {
                 const BlueLocalTimeSchedule_t *const schedule = &pTimeSchedules[i];
 
-                if (schedule->weekdays[weekday] != 1)
+                if (!schedule->weekdays[weekday])
                 {
                     continue;
                 }

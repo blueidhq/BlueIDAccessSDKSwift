@@ -1164,14 +1164,7 @@ public struct BlueLocalTimeSchedule {
   public mutating func clearDayOfYearEnd() {self._dayOfYearEnd = nil}
 
   /// See BlueWeekday -> byte 0 = Monday, etc.
-  public var weekdays: Data {
-    get {return _weekdays ?? Data()}
-    set {_weekdays = newValue}
-  }
-  /// Returns true if `weekdays` has been explicitly set.
-  public var hasWeekdays: Bool {return self._weekdays != nil}
-  /// Clears the value of `weekdays`. Subsequent reads from it will return its default value.
-  public mutating func clearWeekdays() {self._weekdays = nil}
+  public var weekdays: [Bool] = []
 
   public var timePeriod: BlueLocalTimeperiod {
     get {return _timePeriod ?? BlueLocalTimeperiod()}
@@ -1188,7 +1181,6 @@ public struct BlueLocalTimeSchedule {
 
   fileprivate var _dayOfYearStart: UInt32? = nil
   fileprivate var _dayOfYearEnd: UInt32? = nil
-  fileprivate var _weekdays: Data? = nil
   fileprivate var _timePeriod: BlueLocalTimeperiod? = nil
 }
 
@@ -1285,6 +1277,15 @@ public struct BlueBleManufacturerInfo {
   /// Clears the value of `localMidnightTimeEpoch`. Subsequent reads from it will return its default value.
   public mutating func clearLocalMidnightTimeEpoch() {self._localMidnightTimeEpoch = nil}
 
+  public var isFactory: Bool {
+    get {return _isFactory ?? false}
+    set {_isFactory = newValue}
+  }
+  /// Returns true if `isFactory` has been explicitly set.
+  public var hasIsFactory: Bool {return self._isFactory != nil}
+  /// Clears the value of `isFactory`. Subsequent reads from it will return its default value.
+  public mutating func clearIsFactory() {self._isFactory = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1293,6 +1294,7 @@ public struct BlueBleManufacturerInfo {
   fileprivate var _batteryLevel: BlueBatteryLevel? = nil
   fileprivate var _applicationVersion: UInt32? = nil
   fileprivate var _localMidnightTimeEpoch: UInt32? = nil
+  fileprivate var _isFactory: Bool? = nil
 }
 
 public struct BlueBleAdvertisementInfo {
@@ -1475,7 +1477,7 @@ public struct BlueSPHandshakeReply {
   fileprivate var _terminalSignature: Data? = nil
 }
 
-public struct BlueSPDataCommand {
+public struct BlueSPTokenCommand {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1537,7 +1539,7 @@ public struct BlueSPDataCommand {
   fileprivate var _data: Data? = nil
 }
 
-public struct BlueSPData {
+public struct BlueSPToken {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -1551,12 +1553,12 @@ public struct BlueSPData {
   /// Clears the value of `signature`. Subsequent reads from it will return its default value.
   public mutating func clearSignature() {self._signature = nil}
 
-  public var payload: BlueSPData.OneOf_Payload? = nil
+  public var payload: BlueSPToken.OneOf_Payload? = nil
 
-  public var command: BlueSPDataCommand {
+  public var command: BlueSPTokenCommand {
     get {
       if case .command(let v)? = payload {return v}
-      return BlueSPDataCommand()
+      return BlueSPTokenCommand()
     }
     set {payload = .command(newValue)}
   }
@@ -1580,7 +1582,7 @@ public struct BlueSPData {
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public enum OneOf_Payload: Equatable {
-    case command(BlueSPDataCommand)
+    case command(BlueSPTokenCommand)
     case ossSo(BlueOssSoMobile)
     case ossSid(BlueOssSidMobile)
 
@@ -1605,7 +1607,7 @@ public struct BlueSPData {
     }
 
   #if !swift(>=4.1)
-    public static func ==(lhs: BlueSPData.OneOf_Payload, rhs: BlueSPData.OneOf_Payload) -> Bool {
+    public static func ==(lhs: BlueSPToken.OneOf_Payload, rhs: BlueSPToken.OneOf_Payload) -> Bool {
       // The use of inline closures is to circumvent an issue where the compiler
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
@@ -2271,7 +2273,7 @@ public struct BlueOssSoDTScheduleDay {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// 0  = Monday -> 6 = Sunday (Matches BlueWeekday)
+  /// See BlueWeekday -> byte 0 = Monday, etc.
   public var weekdays: [Bool] = []
 
   public var timePeriods: [BlueLocalTimeperiod] = []
@@ -3382,9 +3384,9 @@ extension BlueBleAdvertisementInfo: @unchecked Sendable {}
 extension BlueEvent: @unchecked Sendable {}
 extension BlueSPHandshake: @unchecked Sendable {}
 extension BlueSPHandshakeReply: @unchecked Sendable {}
-extension BlueSPDataCommand: @unchecked Sendable {}
-extension BlueSPData: @unchecked Sendable {}
-extension BlueSPData.OneOf_Payload: @unchecked Sendable {}
+extension BlueSPTokenCommand: @unchecked Sendable {}
+extension BlueSPToken: @unchecked Sendable {}
+extension BlueSPToken.OneOf_Payload: @unchecked Sendable {}
 extension BlueSPResult: @unchecked Sendable {}
 extension BlueOssAccessResult: @unchecked Sendable {}
 extension BlueOssSidVersion: @unchecked Sendable {}
@@ -3917,7 +3919,6 @@ extension BlueLocalTimeSchedule: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   public var isInitialized: Bool {
     if self._dayOfYearStart == nil {return false}
     if self._dayOfYearEnd == nil {return false}
-    if self._weekdays == nil {return false}
     if self._timePeriod == nil {return false}
     if let v = self._timePeriod, !v.isInitialized {return false}
     return true
@@ -3931,7 +3932,7 @@ extension BlueLocalTimeSchedule: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self._dayOfYearStart) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self._dayOfYearEnd) }()
-      case 3: try { try decoder.decodeSingularBytesField(value: &self._weekdays) }()
+      case 3: try { try decoder.decodeRepeatedBoolField(value: &self.weekdays) }()
       case 4: try { try decoder.decodeSingularMessageField(value: &self._timePeriod) }()
       default: break
       }
@@ -3949,9 +3950,9 @@ extension BlueLocalTimeSchedule: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
     try { if let v = self._dayOfYearEnd {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 2)
     } }()
-    try { if let v = self._weekdays {
-      try visitor.visitSingularBytesField(value: v, fieldNumber: 3)
-    } }()
+    if !self.weekdays.isEmpty {
+      try visitor.visitRepeatedBoolField(value: self.weekdays, fieldNumber: 3)
+    }
     try { if let v = self._timePeriod {
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
@@ -3961,7 +3962,7 @@ extension BlueLocalTimeSchedule: SwiftProtobuf.Message, SwiftProtobuf._MessageIm
   public static func ==(lhs: BlueLocalTimeSchedule, rhs: BlueLocalTimeSchedule) -> Bool {
     if lhs._dayOfYearStart != rhs._dayOfYearStart {return false}
     if lhs._dayOfYearEnd != rhs._dayOfYearEnd {return false}
-    if lhs._weekdays != rhs._weekdays {return false}
+    if lhs.weekdays != rhs.weekdays {return false}
     if lhs._timePeriod != rhs._timePeriod {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -4066,6 +4067,7 @@ extension BlueBleManufacturerInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     2: .same(proto: "batteryLevel"),
     3: .same(proto: "applicationVersion"),
     4: .same(proto: "localMidnightTimeEpoch"),
+    5: .same(proto: "isFactory"),
   ]
 
   public var isInitialized: Bool {
@@ -4073,6 +4075,7 @@ extension BlueBleManufacturerInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     if self._batteryLevel == nil {return false}
     if self._applicationVersion == nil {return false}
     if self._localMidnightTimeEpoch == nil {return false}
+    if self._isFactory == nil {return false}
     return true
   }
 
@@ -4086,6 +4089,7 @@ extension BlueBleManufacturerInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
       case 2: try { try decoder.decodeSingularEnumField(value: &self._batteryLevel) }()
       case 3: try { try decoder.decodeSingularUInt32Field(value: &self._applicationVersion) }()
       case 4: try { try decoder.decodeSingularUInt32Field(value: &self._localMidnightTimeEpoch) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self._isFactory) }()
       default: break
       }
     }
@@ -4108,6 +4112,9 @@ extension BlueBleManufacturerInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     try { if let v = self._localMidnightTimeEpoch {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 4)
     } }()
+    try { if let v = self._isFactory {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 5)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -4116,6 +4123,7 @@ extension BlueBleManufacturerInfo: SwiftProtobuf.Message, SwiftProtobuf._Message
     if lhs._batteryLevel != rhs._batteryLevel {return false}
     if lhs._applicationVersion != rhs._applicationVersion {return false}
     if lhs._localMidnightTimeEpoch != rhs._localMidnightTimeEpoch {return false}
+    if lhs._isFactory != rhs._isFactory {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -4348,8 +4356,8 @@ extension BlueSPHandshakeReply: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   }
 }
 
-extension BlueSPDataCommand: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = "BlueSPDataCommand"
+extension BlueSPTokenCommand: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueSPTokenCommand"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "credentialId"),
     2: .same(proto: "validityStart"),
@@ -4409,7 +4417,7 @@ extension BlueSPDataCommand: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: BlueSPDataCommand, rhs: BlueSPDataCommand) -> Bool {
+  public static func ==(lhs: BlueSPTokenCommand, rhs: BlueSPTokenCommand) -> Bool {
     if lhs._credentialID != rhs._credentialID {return false}
     if lhs._validityStart != rhs._validityStart {return false}
     if lhs._validityEnd != rhs._validityEnd {return false}
@@ -4420,8 +4428,8 @@ extension BlueSPDataCommand: SwiftProtobuf.Message, SwiftProtobuf._MessageImplem
   }
 }
 
-extension BlueSPData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = "BlueSPData"
+extension BlueSPToken: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueSPToken"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "signature"),
     2: .same(proto: "command"),
@@ -4443,7 +4451,7 @@ extension BlueSPData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBytesField(value: &self._signature) }()
       case 2: try {
-        var v: BlueSPDataCommand?
+        var v: BlueSPTokenCommand?
         var hadOneofValue = false
         if let current = self.payload {
           hadOneofValue = true
@@ -4512,7 +4520,7 @@ extension BlueSPData: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  public static func ==(lhs: BlueSPData, rhs: BlueSPData) -> Bool {
+  public static func ==(lhs: BlueSPToken, rhs: BlueSPToken) -> Bool {
     if lhs._signature != rhs._signature {return false}
     if lhs.payload != rhs.payload {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -5455,7 +5463,7 @@ extension BlueOssSoCredentialType: SwiftProtobuf.Message, SwiftProtobuf._Message
 extension BlueOssSoDTScheduleDay: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueOssSoDTScheduleDay"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "weekdays"),
+    3: .same(proto: "weekdays"),
     8: .same(proto: "timePeriods"),
   ]
 
@@ -5470,7 +5478,7 @@ extension BlueOssSoDTScheduleDay: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedBoolField(value: &self.weekdays) }()
+      case 3: try { try decoder.decodeRepeatedBoolField(value: &self.weekdays) }()
       case 8: try { try decoder.decodeRepeatedMessageField(value: &self.timePeriods) }()
       default: break
       }
@@ -5479,7 +5487,7 @@ extension BlueOssSoDTScheduleDay: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.weekdays.isEmpty {
-      try visitor.visitRepeatedBoolField(value: self.weekdays, fieldNumber: 1)
+      try visitor.visitRepeatedBoolField(value: self.weekdays, fieldNumber: 3)
     }
     if !self.timePeriods.isEmpty {
       try visitor.visitRepeatedMessageField(value: self.timePeriods, fieldNumber: 8)

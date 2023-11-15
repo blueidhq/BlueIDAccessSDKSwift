@@ -9,7 +9,7 @@ typedef struct SPReceiveContext
 {
     uint8_t *pData;
     uint16_t availableDataSize;
-    BlueSPDataAvailableFunc_t availableCallback;
+    BlueSPTokenAvailableFunc_t availableCallback;
     BlueSPReceiveFinishFunc_t finishCallback;
     const BlueSPConnection_t *pConnection;
     // --
@@ -83,7 +83,7 @@ BlueReturnCode_t blueSP_Transmit(const BlueSPConnection_t *const pConnection, in
     return BlueReturnCode_Ok;
 }
 
-BlueReturnCode_t blueSP_Receive(const BlueSPConnection_t *const pConnection, uint8_t *const pData, uint16_t availableDataSize, uint16_t *const pReturnedDataSize, int16_t *const pStatusCode, BlueSPDataAvailableFunc_t availableCallback)
+BlueReturnCode_t blueSP_Receive(const BlueSPConnection_t *const pConnection, uint8_t *const pData, uint16_t availableDataSize, uint16_t *const pReturnedDataSize, int16_t *const pStatusCode, BlueSPTokenAvailableFunc_t availableCallback)
 {
     *pReturnedDataSize = 0;
     *pStatusCode = 0;
@@ -141,11 +141,11 @@ BlueReturnCode_t blueSP_Receive(const BlueSPConnection_t *const pConnection, uin
     return returnCode;
 }
 
-BlueReturnCode_t blueSP_SignData(BlueSPData_t *const pData, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize)
+BlueReturnCode_t blueSP_SignToken(BlueSPToken_t *const pToken, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize)
 {
-    if (pData->which_payload == BLUESPDATA_COMMAND_TAG)
+    if (pToken->which_payload == BLUESPTOKEN_COMMAND_TAG)
     {
-        const BlueSPDataCommand_t *const command = &pData->payload.command;
+        const BlueSPTokenCommand_t *const command = &pToken->payload.command;
 
         char commandSignatureTemplate[64];
 
@@ -154,14 +154,14 @@ BlueReturnCode_t blueSP_SignData(BlueSPData_t *const pData, const uint8_t *const
                                             (int)command->validityEnd.year, (int)command->validityEnd.month, (int)command->validityEnd.date, (int)command->validityEnd.hours, (int)command->validityEnd.minutes);
 
         uint16_t signatureSize = 0;
-        BLUE_ERROR_CHECK(blueUtils_CreateSignature_Ext((uint8_t *)commandSignatureTemplate, signatureTemplateLen, pData->signature.bytes, sizeof(pData->signature.bytes), &signatureSize, pPrivateKeyBuffer, privateKeyBufferSize));
-        pData->signature.size = signatureSize;
+        BLUE_ERROR_CHECK(blueUtils_CreateSignature_Ext((uint8_t *)commandSignatureTemplate, signatureTemplateLen, pToken->signature.bytes, sizeof(pToken->signature.bytes), &signatureSize, pPrivateKeyBuffer, privateKeyBufferSize));
+        pToken->signature.size = signatureSize;
 
         return BlueReturnCode_Ok;
     }
-    else if (pData->which_payload == BLUESPDATA_OSSSO_TAG)
+    else if (pToken->which_payload == BLUESPTOKEN_OSSSO_TAG)
     {
-        const BlueOssSoMobile_t *const ossSo = &pData->payload.ossSo;
+        const BlueOssSoMobile_t *const ossSo = &pToken->payload.ossSo;
 
         const uint16_t bufferMaxSize = sizeof(ossSo->infoFile.bytes) + sizeof(ossSo->dataFile.bytes) + sizeof(ossSo->blacklistFile.bytes);
         uint8_t buffer[bufferMaxSize];
@@ -177,18 +177,18 @@ BlueReturnCode_t blueSP_SignData(BlueSPData_t *const pData, const uint8_t *const
         bufferSize += ossSo->blacklistFile.size;
 
         uint16_t signatureSize = 0;
-        BLUE_ERROR_CHECK(blueUtils_CreateSignature_Ext((uint8_t *)buffer, bufferSize, pData->signature.bytes, sizeof(pData->signature.bytes), &signatureSize, pPrivateKeyBuffer, privateKeyBufferSize));
-        pData->signature.size = signatureSize;
+        BLUE_ERROR_CHECK(blueUtils_CreateSignature_Ext((uint8_t *)buffer, bufferSize, pToken->signature.bytes, sizeof(pToken->signature.bytes), &signatureSize, pPrivateKeyBuffer, privateKeyBufferSize));
+        pToken->signature.size = signatureSize;
 
         return BlueReturnCode_Ok;
     }
-    else if (pData->which_payload == BLUESPDATA_OSSSID_TAG)
+    else if (pToken->which_payload == BLUESPTOKEN_OSSSID_TAG)
     {
-        const BlueOssSidMobile_t *const ossSid = &pData->payload.ossSid;
+        const BlueOssSidMobile_t *const ossSid = &pToken->payload.ossSid;
 
         uint16_t signatureSize = 0;
-        BLUE_ERROR_CHECK(blueUtils_CreateSignature_Ext((uint8_t *)ossSid->infoFile.bytes, ossSid->infoFile.size, pData->signature.bytes, sizeof(pData->signature.bytes), &signatureSize, pPrivateKeyBuffer, privateKeyBufferSize));
-        pData->signature.size = signatureSize;
+        BLUE_ERROR_CHECK(blueUtils_CreateSignature_Ext((uint8_t *)ossSid->infoFile.bytes, ossSid->infoFile.size, pToken->signature.bytes, sizeof(pToken->signature.bytes), &signatureSize, pPrivateKeyBuffer, privateKeyBufferSize));
+        pToken->signature.size = signatureSize;
 
         return BlueReturnCode_Ok;
     }
@@ -196,15 +196,15 @@ BlueReturnCode_t blueSP_SignData(BlueSPData_t *const pData, const uint8_t *const
     return BlueReturnCode_NotSupported;
 }
 
-BlueReturnCode_t blueSP_SignData_Ext(const uint8_t *const pSpData, uint16_t spDataSize, uint8_t *const pSignedSpData, uint16_t signedSpDataSize, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize)
+BlueReturnCode_t blueSP_SignToken_Ext(const uint8_t *const pTokenData, uint16_t tokenDataSize, uint8_t *const pSignedTokenData, uint16_t signedTokenDataSize, const uint8_t *const pPrivateKeyBuffer, uint16_t privateKeyBufferSize)
 {
-    BlueSPData_t spData = BLUESPDATA_INIT_ZERO;
+    BlueSPToken_t token = BLUESPTOKEN_INIT_ZERO;
 
-    BLUE_ERROR_CHECK_DEBUG(blueUtils_DecodeData((void *)&spData, BLUESPDATA_FIELDS, pSpData, spDataSize), "Decode unsigned sp data");
+    BLUE_ERROR_CHECK_DEBUG(blueUtils_DecodeData((void *)&token, BLUESPTOKEN_FIELDS, pTokenData, tokenDataSize), "Decode unsigned sp token");
 
-    BLUE_ERROR_CHECK_DEBUG(blueSP_SignData(&spData, pPrivateKeyBuffer, privateKeyBufferSize), "Sign sp data");
+    BLUE_ERROR_CHECK_DEBUG(blueSP_SignToken(&token, pPrivateKeyBuffer, privateKeyBufferSize), "Sign sp token");
 
-    BLUE_ERROR_CHECK_DEBUG(blueUtils_EncodeData((void *)&spData, BLUESPDATA_FIELDS, pSignedSpData, signedSpDataSize), "Encode signed sp data");
+    BLUE_ERROR_CHECK_DEBUG(blueUtils_EncodeData((void *)&token, BLUESPTOKEN_FIELDS, pSignedTokenData, signedTokenDataSize), "Encode signed sp token");
 
     return BlueReturnCode_Ok;
 }
@@ -300,7 +300,7 @@ static BlueReturnCode_t handleReceiveFinish(void)
     // We're done here so call our callback if any and return
     //
     const BlueSPConnection_t *const pConnection = receiveContext.pConnection;
-    BlueSPDataAvailableFunc_t availableCallback = receiveContext.availableCallback;
+    BlueSPTokenAvailableFunc_t availableCallback = receiveContext.availableCallback;
 
     // Clear first
     memset(&receiveContext, 0, sizeof(SPReceiveContext_t));

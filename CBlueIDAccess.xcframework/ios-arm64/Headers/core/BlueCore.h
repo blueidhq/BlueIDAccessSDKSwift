@@ -155,6 +155,7 @@ extern "C"
     uint8_t blueCore_printVersionInfo(char *const pOutput, uint8_t outputSize);
     void blueCore_logVersionInfo(void);
 
+    int blueCore_qSortUInt8Cmp(const void *a, const void *b);
     int blueCore_qSortUInt32Cmp(const void *a, const void *b);
 
     static inline int32_t blueCore_floor(float x)
