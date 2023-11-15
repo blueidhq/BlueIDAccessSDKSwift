@@ -68,12 +68,13 @@ typedef struct BlueOssSoProcessVTable_t
     BlueOssDenyAccessFunc_t denyAccess;
 } BlueOssSoProcessVTable_t;
 
+typedef BlueReturnCode_t (*BlueOssSoGetGroupSchedulesFunc_t)(uint8_t groupId, BlueLocalTimeSchedule_t *pSchedules, uint8_t *pSchedulesCount, uint8_t maxSchedulesCount);
+
 typedef struct BlueOssSoProcessConfig
 {
     uint16_t siteId;
-    const uint32_t *const doorGroupIds; // ugly but required to map proto files
-    uint16_t doorGroupIdsCount;
     uint16_t doorId;
+    BlueOssSoGetGroupSchedulesFunc_t getGroupSchedules;
     bool writePendingEvents;
     bool updateFromBlacklist;
     bool timestampIsInvalid;

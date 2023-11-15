@@ -246,31 +246,32 @@ typedef struct BlueSharedDemoData {
 
 typedef struct BlueVersionInfo {
     uint32_t buildTime;
-    uint32_t version;
+    uint16_t version;
 } BlueVersionInfo_t;
 
 typedef struct BlueLocalTimestamp {
-    uint32_t year;
-    uint32_t month;
-    uint32_t date;
-    uint32_t hours;
-    uint32_t minutes;
-    uint32_t seconds;
+    uint16_t year;
+    uint8_t month;
+    uint8_t date;
+    uint8_t hours;
+    uint8_t minutes;
+    uint8_t seconds;
 } BlueLocalTimestamp_t;
 
 typedef struct BlueLocalTimeperiod {
-    uint32_t hoursFrom;
-    uint32_t minutesFrom;
-    uint32_t hoursTo;
-    uint32_t minutesTo;
+    uint8_t hoursFrom;
+    uint8_t minutesFrom;
+    uint8_t hoursTo;
+    uint8_t minutesTo;
 } BlueLocalTimeperiod_t;
 
 typedef struct BlueLocalTimeSchedule {
     /* Day of year is always 1-366, to spawn whole year make 1->366 */
-    uint32_t dayOfYearStart;
-    uint32_t dayOfYearEnd;
+    uint16_t dayOfYearStart;
+    uint16_t dayOfYearEnd;
     /* See BlueWeekday -> byte 0 = Monday, etc. */
-    pb_byte_t weekdays[7];
+    pb_size_t weekdays_count;
+    bool weekdays[7];
     BlueLocalTimeperiod_t timePeriod;
 } BlueLocalTimeSchedule_t;
 
@@ -286,15 +287,16 @@ typedef struct BlueBlacklistEntry {
 typedef struct BlueBleManufacturerInfo {
     BlueHardwareType_t hardwareType;
     BlueBatteryLevel_t batteryLevel;
-    uint32_t applicationVersion;
+    uint16_t applicationVersion;
     uint32_t localMidnightTimeEpoch;
+    bool isFactory;
 } BlueBleManufacturerInfo_t;
 
 typedef struct BlueBleAdvertisementInfo {
     /* Unique device id becomes the local name */
     char deviceId[9];
     /* The advertised tx power level at 1 meter in decibel (-XX - +XX) */
-    int32_t txPower1Meter;
+    int8_t txPower1Meter;
     /* If set generates iBeacon format otherwise generates regular ble adv data */
     bool isIBeacon;
     /* The manufacturer information */
@@ -324,14 +326,14 @@ typedef struct BlueSPHandshakeReply {
     BlueSPHandshakeReply_terminalSignature_t terminalSignature;
 } BlueSPHandshakeReply_t;
 
-typedef PB_BYTES_ARRAY_T(1792) BlueSPDataCommand_data_t;
-typedef struct BlueSPDataCommand {
+typedef PB_BYTES_ARRAY_T(1792) BlueSPTokenCommand_data_t;
+typedef struct BlueSPTokenCommand {
     BlueCredentialId_t credentialId;
     BlueLocalTimestamp_t validityStart;
     BlueLocalTimestamp_t validityEnd;
     char command[9];
-    BlueSPDataCommand_data_t data; /* we'll add 256b for add. data */
-} BlueSPDataCommand_t;
+    BlueSPTokenCommand_data_t data; /* we'll add 256b for add. data */
+} BlueSPTokenCommand_t;
 
 typedef PB_BYTES_ARRAY_T(1792) BlueSPResult_data_t;
 typedef struct BlueSPResult {
@@ -465,7 +467,8 @@ typedef struct BlueOssSoCredentialType {
 } BlueOssSoCredentialType_t;
 
 typedef struct BlueOssSoDTScheduleDay {
-    /* 0  = Monday -> 6 = Sunday (Matches BlueWeekday) */
+    /* See BlueWeekday -> byte 0 = Monday, etc. */
+    pb_size_t weekdays_count;
     bool weekdays[7];
     pb_size_t timePeriods_count;
     BlueLocalTimeperiod_t timePeriods[4];
@@ -605,16 +608,16 @@ typedef struct BlueOssSoMobile {
     BlueOssSoMobile_customerExtensionsFile_t customerExtensionsFile;
 } BlueOssSoMobile_t;
 
-typedef PB_BYTES_ARRAY_T(74) BlueSPData_signature_t;
-typedef struct BlueSPData {
-    BlueSPData_signature_t signature;
+typedef PB_BYTES_ARRAY_T(74) BlueSPToken_signature_t;
+typedef struct BlueSPToken {
+    BlueSPToken_signature_t signature;
     pb_size_t which_payload;
     union {
-        BlueSPDataCommand_t command;
+        BlueSPTokenCommand_t command;
         BlueOssSoMobile_t ossSo;
         BlueOssSidMobile_t ossSid;
     } payload;
-} BlueSPData_t;
+} BlueSPToken_t;
 
 typedef struct BlueOssSoMobileProvisioningConfiguration {
     uint32_t numberOfDoors;
@@ -801,16 +804,16 @@ extern "C" {
 #define BLUEVERSIONINFO_INIT_DEFAULT             {0, 0}
 #define BLUELOCALTIMESTAMP_INIT_DEFAULT          {0, 0, 0, 0, 0, 0u}
 #define BLUELOCALTIMEPERIOD_INIT_DEFAULT         {0, 0, 0, 0}
-#define BLUELOCALTIMESCHEDULE_INIT_DEFAULT       {0, 0, {0}, BLUELOCALTIMEPERIOD_INIT_DEFAULT}
+#define BLUELOCALTIMESCHEDULE_INIT_DEFAULT       {0, 0, 0, {0, 0, 0, 0, 0, 0, 0}, BLUELOCALTIMEPERIOD_INIT_DEFAULT}
 #define BLUECREDENTIALID_INIT_DEFAULT            {""}
 #define BLUEBLACKLISTENTRY_INIT_DEFAULT          {BLUECREDENTIALID_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT}
-#define BLUEBLEMANUFACTURERINFO_INIT_DEFAULT     {_BLUEHARDWARETYPE_MIN, _BLUEBATTERYLEVEL_MIN, 0, 0}
+#define BLUEBLEMANUFACTURERINFO_INIT_DEFAULT     {_BLUEHARDWARETYPE_MIN, _BLUEBATTERYLEVEL_MIN, 0, 0, 0}
 #define BLUEBLEADVERTISEMENTINFO_INIT_DEFAULT    {"", 0, 0, BLUEBLEMANUFACTURERINFO_INIT_DEFAULT}
 #define BLUEEVENT_INIT_DEFAULT                   {0, BLUELOCALTIMESTAMP_INIT_DEFAULT, _BLUEEVENTID_MIN, 0, false, "", false, ""}
 #define BLUESPHANDSHAKE_INIT_DEFAULT             {{0}}
 #define BLUESPHANDSHAKEREPLY_INIT_DEFAULT        {{0}, {0, {0}}}
-#define BLUESPDATACOMMAND_INIT_DEFAULT           {BLUECREDENTIALID_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, "", {0, {0}}}
-#define BLUESPDATA_INIT_DEFAULT                  {{0, {0}}, 0, {BLUESPDATACOMMAND_INIT_DEFAULT}}
+#define BLUESPTOKENCOMMAND_INIT_DEFAULT          {BLUECREDENTIALID_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, "", {0, {0}}}
+#define BLUESPTOKEN_INIT_DEFAULT                 {{0, {0}}, 0, {BLUESPTOKENCOMMAND_INIT_DEFAULT}}
 #define BLUESPRESULT_INIT_DEFAULT                {{0, {0}}}
 #define BLUEOSSACCESSRESULT_INIT_DEFAULT         {0, _BLUEACCESSTYPE_MIN, BLUELOCALTIMESTAMP_INIT_DEFAULT, 0}
 #define BLUEOSSSIDVERSION_INIT_DEFAULT           {false, 1u, false, 0u}
@@ -831,7 +834,7 @@ extern "C" {
 #define BLUEOSSSOCREDENTIALTYPEOSS_INIT_DEFAULT  {_BLUEOSSSOCREDENTIALTYPEOSSCREDENTIAL_MIN}
 #define BLUEOSSSOCREDENTIALTYPEPROPRIETARY_INIT_DEFAULT {{0}}
 #define BLUEOSSSOCREDENTIALTYPE_INIT_DEFAULT     {_BLUEOSSCREDENTIALTYPESOURCE_MIN, false, BLUEOSSSOCREDENTIALTYPEOSS_INIT_DEFAULT, false, BLUEOSSSOCREDENTIALTYPEPROPRIETARY_INIT_DEFAULT}
-#define BLUEOSSSODTSCHEDULEDAY_INIT_DEFAULT      {{0, 0, 0, 0, 0, 0, 0}, 0, {BLUELOCALTIMEPERIOD_INIT_DEFAULT, BLUELOCALTIMEPERIOD_INIT_DEFAULT, BLUELOCALTIMEPERIOD_INIT_DEFAULT, BLUELOCALTIMEPERIOD_INIT_DEFAULT}}
+#define BLUEOSSSODTSCHEDULEDAY_INIT_DEFAULT      {0, {0, 0, 0, 0, 0, 0, 0}, 0, {BLUELOCALTIMEPERIOD_INIT_DEFAULT, BLUELOCALTIMEPERIOD_INIT_DEFAULT, BLUELOCALTIMEPERIOD_INIT_DEFAULT, BLUELOCALTIMEPERIOD_INIT_DEFAULT}}
 #define BLUEOSSSODTSCHEDULE_INIT_DEFAULT         {0, {BLUEOSSSODTSCHEDULEDAY_INIT_DEFAULT, BLUEOSSSODTSCHEDULEDAY_INIT_DEFAULT, BLUEOSSSODTSCHEDULEDAY_INIT_DEFAULT, BLUEOSSSODTSCHEDULEDAY_INIT_DEFAULT}}
 #define BLUEOSSSODOORINFO_INIT_DEFAULT           {0, _BLUEOSSSODOORINFOACCESSBY_MIN, 0, _BLUEACCESSTYPE_MIN}
 #define BLUEOSSSOEVENT_INIT_DEFAULT              {BLUELOCALTIMESTAMP_INIT_DEFAULT, 0, _BLUEEVENTID_MIN, 0}
@@ -856,16 +859,16 @@ extern "C" {
 #define BLUEVERSIONINFO_INIT_ZERO                {0, 0}
 #define BLUELOCALTIMESTAMP_INIT_ZERO             {0, 0, 0, 0, 0, 0}
 #define BLUELOCALTIMEPERIOD_INIT_ZERO            {0, 0, 0, 0}
-#define BLUELOCALTIMESCHEDULE_INIT_ZERO          {0, 0, {0}, BLUELOCALTIMEPERIOD_INIT_ZERO}
+#define BLUELOCALTIMESCHEDULE_INIT_ZERO          {0, 0, 0, {0, 0, 0, 0, 0, 0, 0}, BLUELOCALTIMEPERIOD_INIT_ZERO}
 #define BLUECREDENTIALID_INIT_ZERO               {""}
 #define BLUEBLACKLISTENTRY_INIT_ZERO             {BLUECREDENTIALID_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO}
-#define BLUEBLEMANUFACTURERINFO_INIT_ZERO        {_BLUEHARDWARETYPE_MIN, _BLUEBATTERYLEVEL_MIN, 0, 0}
+#define BLUEBLEMANUFACTURERINFO_INIT_ZERO        {_BLUEHARDWARETYPE_MIN, _BLUEBATTERYLEVEL_MIN, 0, 0, 0}
 #define BLUEBLEADVERTISEMENTINFO_INIT_ZERO       {"", 0, 0, BLUEBLEMANUFACTURERINFO_INIT_ZERO}
 #define BLUEEVENT_INIT_ZERO                      {0, BLUELOCALTIMESTAMP_INIT_ZERO, _BLUEEVENTID_MIN, 0, false, "", false, ""}
 #define BLUESPHANDSHAKE_INIT_ZERO                {{0}}
 #define BLUESPHANDSHAKEREPLY_INIT_ZERO           {{0}, {0, {0}}}
-#define BLUESPDATACOMMAND_INIT_ZERO              {BLUECREDENTIALID_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, "", {0, {0}}}
-#define BLUESPDATA_INIT_ZERO                     {{0, {0}}, 0, {BLUESPDATACOMMAND_INIT_ZERO}}
+#define BLUESPTOKENCOMMAND_INIT_ZERO             {BLUECREDENTIALID_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, "", {0, {0}}}
+#define BLUESPTOKEN_INIT_ZERO                    {{0, {0}}, 0, {BLUESPTOKENCOMMAND_INIT_ZERO}}
 #define BLUESPRESULT_INIT_ZERO                   {{0, {0}}}
 #define BLUEOSSACCESSRESULT_INIT_ZERO            {0, _BLUEACCESSTYPE_MIN, BLUELOCALTIMESTAMP_INIT_ZERO, 0}
 #define BLUEOSSSIDVERSION_INIT_ZERO              {false, 0, false, 0}
@@ -886,7 +889,7 @@ extern "C" {
 #define BLUEOSSSOCREDENTIALTYPEOSS_INIT_ZERO     {_BLUEOSSSOCREDENTIALTYPEOSSCREDENTIAL_MIN}
 #define BLUEOSSSOCREDENTIALTYPEPROPRIETARY_INIT_ZERO {{0}}
 #define BLUEOSSSOCREDENTIALTYPE_INIT_ZERO        {_BLUEOSSCREDENTIALTYPESOURCE_MIN, false, BLUEOSSSOCREDENTIALTYPEOSS_INIT_ZERO, false, BLUEOSSSOCREDENTIALTYPEPROPRIETARY_INIT_ZERO}
-#define BLUEOSSSODTSCHEDULEDAY_INIT_ZERO         {{0, 0, 0, 0, 0, 0, 0}, 0, {BLUELOCALTIMEPERIOD_INIT_ZERO, BLUELOCALTIMEPERIOD_INIT_ZERO, BLUELOCALTIMEPERIOD_INIT_ZERO, BLUELOCALTIMEPERIOD_INIT_ZERO}}
+#define BLUEOSSSODTSCHEDULEDAY_INIT_ZERO         {0, {0, 0, 0, 0, 0, 0, 0}, 0, {BLUELOCALTIMEPERIOD_INIT_ZERO, BLUELOCALTIMEPERIOD_INIT_ZERO, BLUELOCALTIMEPERIOD_INIT_ZERO, BLUELOCALTIMEPERIOD_INIT_ZERO}}
 #define BLUEOSSSODTSCHEDULE_INIT_ZERO            {0, {BLUEOSSSODTSCHEDULEDAY_INIT_ZERO, BLUEOSSSODTSCHEDULEDAY_INIT_ZERO, BLUEOSSSODTSCHEDULEDAY_INIT_ZERO, BLUEOSSSODTSCHEDULEDAY_INIT_ZERO}}
 #define BLUEOSSSODOORINFO_INIT_ZERO              {0, _BLUEOSSSODOORINFOACCESSBY_MIN, 0, _BLUEACCESSTYPE_MIN}
 #define BLUEOSSSOEVENT_INIT_ZERO                 {BLUELOCALTIMESTAMP_INIT_ZERO, 0, _BLUEEVENTID_MIN, 0}
@@ -937,6 +940,7 @@ extern "C" {
 #define BLUEBLEMANUFACTURERINFO_BATTERYLEVEL_TAG 2
 #define BLUEBLEMANUFACTURERINFO_APPLICATIONVERSION_TAG 3
 #define BLUEBLEMANUFACTURERINFO_LOCALMIDNIGHTTIMEEPOCH_TAG 4
+#define BLUEBLEMANUFACTURERINFO_ISFACTORY_TAG    5
 #define BLUEBLEADVERTISEMENTINFO_DEVICEID_TAG    1
 #define BLUEBLEADVERTISEMENTINFO_TXPOWER1METER_TAG 2
 #define BLUEBLEADVERTISEMENTINFO_ISIBEACON_TAG   3
@@ -950,11 +954,11 @@ extern "C" {
 #define BLUESPHANDSHAKE_TRANSPONDERSALT_TAG      1
 #define BLUESPHANDSHAKEREPLY_TERMINALSALT_TAG    1
 #define BLUESPHANDSHAKEREPLY_TERMINALSIGNATURE_TAG 2
-#define BLUESPDATACOMMAND_CREDENTIALID_TAG       1
-#define BLUESPDATACOMMAND_VALIDITYSTART_TAG      2
-#define BLUESPDATACOMMAND_VALIDITYEND_TAG        3
-#define BLUESPDATACOMMAND_COMMAND_TAG            4
-#define BLUESPDATACOMMAND_DATA_TAG               5
+#define BLUESPTOKENCOMMAND_CREDENTIALID_TAG      1
+#define BLUESPTOKENCOMMAND_VALIDITYSTART_TAG     2
+#define BLUESPTOKENCOMMAND_VALIDITYEND_TAG       3
+#define BLUESPTOKENCOMMAND_COMMAND_TAG           4
+#define BLUESPTOKENCOMMAND_DATA_TAG              5
 #define BLUESPRESULT_DATA_TAG                    1
 #define BLUEOSSACCESSRESULT_ACCESSGRANTED_TAG    1
 #define BLUEOSSACCESSRESULT_ACCESSTYPE_TAG       2
@@ -995,7 +999,7 @@ extern "C" {
 #define BLUEOSSSOCREDENTIALTYPE_TYPESOURCE_TAG   1
 #define BLUEOSSSOCREDENTIALTYPE_OSS_TAG          2
 #define BLUEOSSSOCREDENTIALTYPE_PROPRIETARY_TAG  3
-#define BLUEOSSSODTSCHEDULEDAY_WEEKDAYS_TAG      1
+#define BLUEOSSSODTSCHEDULEDAY_WEEKDAYS_TAG      3
 #define BLUEOSSSODTSCHEDULEDAY_TIMEPERIODS_TAG   8
 #define BLUEOSSSODTSCHEDULE_DAYS_TAG             1
 #define BLUEOSSSODOORINFO_ID_TAG                 1
@@ -1061,10 +1065,10 @@ extern "C" {
 #define BLUEOSSSOMOBILE_DATAFILE_TAG             2
 #define BLUEOSSSOMOBILE_BLACKLISTFILE_TAG        3
 #define BLUEOSSSOMOBILE_CUSTOMEREXTENSIONSFILE_TAG 4
-#define BLUESPDATA_SIGNATURE_TAG                 1
-#define BLUESPDATA_COMMAND_TAG                   2
-#define BLUESPDATA_OSSSO_TAG                     3
-#define BLUESPDATA_OSSSID_TAG                    4
+#define BLUESPTOKEN_SIGNATURE_TAG                1
+#define BLUESPTOKEN_COMMAND_TAG                  2
+#define BLUESPTOKEN_OSSSO_TAG                    3
+#define BLUESPTOKEN_OSSSID_TAG                   4
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_NUMBEROFDOORS_TAG 1
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_NUMBEROFDTSCHEDULES_TAG 2
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_NUMBEROFDAYIDSPERDTSCHEDULE_TAG 3
@@ -1128,7 +1132,7 @@ X(a, STATIC,   REQUIRED, UINT32,   minutesTo,         4)
 #define BLUELOCALTIMESCHEDULE_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, UINT32,   dayOfYearStart,    1) \
 X(a, STATIC,   REQUIRED, UINT32,   dayOfYearEnd,      2) \
-X(a, STATIC,   REQUIRED, FIXED_LENGTH_BYTES, weekdays,          3) \
+X(a, STATIC,   REPEATED, BOOL,     weekdays,          3) \
 X(a, STATIC,   REQUIRED, MESSAGE,  timePeriod,        4)
 #define BLUELOCALTIMESCHEDULE_CALLBACK NULL
 #define BLUELOCALTIMESCHEDULE_DEFAULT NULL
@@ -1151,7 +1155,8 @@ X(a, STATIC,   REQUIRED, MESSAGE,  expiresAt,         2)
 X(a, STATIC,   REQUIRED, UENUM,    hardwareType,      1) \
 X(a, STATIC,   REQUIRED, UENUM,    batteryLevel,      2) \
 X(a, STATIC,   REQUIRED, UINT32,   applicationVersion,   3) \
-X(a, STATIC,   REQUIRED, UINT32,   localMidnightTimeEpoch,   4)
+X(a, STATIC,   REQUIRED, UINT32,   localMidnightTimeEpoch,   4) \
+X(a, STATIC,   REQUIRED, BOOL,     isFactory,         5)
 #define BLUEBLEMANUFACTURERINFO_CALLBACK NULL
 #define BLUEBLEMANUFACTURERINFO_DEFAULT NULL
 
@@ -1186,28 +1191,28 @@ X(a, STATIC,   REQUIRED, BYTES,    terminalSignature,   2)
 #define BLUESPHANDSHAKEREPLY_CALLBACK NULL
 #define BLUESPHANDSHAKEREPLY_DEFAULT NULL
 
-#define BLUESPDATACOMMAND_FIELDLIST(X, a) \
+#define BLUESPTOKENCOMMAND_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, MESSAGE,  credentialId,      1) \
 X(a, STATIC,   REQUIRED, MESSAGE,  validityStart,     2) \
 X(a, STATIC,   REQUIRED, MESSAGE,  validityEnd,       3) \
 X(a, STATIC,   REQUIRED, STRING,   command,           4) \
 X(a, STATIC,   REQUIRED, BYTES,    data,              5)
-#define BLUESPDATACOMMAND_CALLBACK NULL
-#define BLUESPDATACOMMAND_DEFAULT NULL
-#define BlueSPDataCommand_t_credentialId_MSGTYPE BlueCredentialId_t
-#define BlueSPDataCommand_t_validityStart_MSGTYPE BlueLocalTimestamp_t
-#define BlueSPDataCommand_t_validityEnd_MSGTYPE BlueLocalTimestamp_t
+#define BLUESPTOKENCOMMAND_CALLBACK NULL
+#define BLUESPTOKENCOMMAND_DEFAULT NULL
+#define BlueSPTokenCommand_t_credentialId_MSGTYPE BlueCredentialId_t
+#define BlueSPTokenCommand_t_validityStart_MSGTYPE BlueLocalTimestamp_t
+#define BlueSPTokenCommand_t_validityEnd_MSGTYPE BlueLocalTimestamp_t
 
-#define BLUESPDATA_FIELDLIST(X, a) \
+#define BLUESPTOKEN_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, BYTES,    signature,         1) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,command,payload.command),   2) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ossSo,payload.ossSo),   3) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,ossSid,payload.ossSid),   4)
-#define BLUESPDATA_CALLBACK NULL
-#define BLUESPDATA_DEFAULT NULL
-#define BlueSPData_t_payload_command_MSGTYPE BlueSPDataCommand_t
-#define BlueSPData_t_payload_ossSo_MSGTYPE BlueOssSoMobile_t
-#define BlueSPData_t_payload_ossSid_MSGTYPE BlueOssSidMobile_t
+#define BLUESPTOKEN_CALLBACK NULL
+#define BLUESPTOKEN_DEFAULT NULL
+#define BlueSPToken_t_payload_command_MSGTYPE BlueSPTokenCommand_t
+#define BlueSPToken_t_payload_ossSo_MSGTYPE BlueOssSoMobile_t
+#define BlueSPToken_t_payload_ossSid_MSGTYPE BlueOssSidMobile_t
 
 #define BLUESPRESULT_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, BYTES,    data,              1)
@@ -1342,7 +1347,7 @@ X(a, STATIC,   OPTIONAL, MESSAGE,  proprietary,       3)
 #define BlueOssSoCredentialType_t_proprietary_MSGTYPE BlueOssSoCredentialTypeProprietary_t
 
 #define BLUEOSSSODTSCHEDULEDAY_FIELDLIST(X, a) \
-X(a, STATIC,   FIXARRAY, BOOL,     weekdays,          1) \
+X(a, STATIC,   REPEATED, BOOL,     weekdays,          3) \
 X(a, STATIC,   REPEATED, MESSAGE,  timePeriods,       8)
 #define BLUEOSSSODTSCHEDULEDAY_CALLBACK NULL
 #define BLUEOSSSODTSCHEDULEDAY_DEFAULT NULL
@@ -1550,8 +1555,8 @@ extern const pb_msgdesc_t BlueBleAdvertisementInfo_t_msg;
 extern const pb_msgdesc_t BlueEvent_t_msg;
 extern const pb_msgdesc_t BlueSPHandshake_t_msg;
 extern const pb_msgdesc_t BlueSPHandshakeReply_t_msg;
-extern const pb_msgdesc_t BlueSPDataCommand_t_msg;
-extern const pb_msgdesc_t BlueSPData_t_msg;
+extern const pb_msgdesc_t BlueSPTokenCommand_t_msg;
+extern const pb_msgdesc_t BlueSPToken_t_msg;
 extern const pb_msgdesc_t BlueSPResult_t_msg;
 extern const pb_msgdesc_t BlueOssAccessResult_t_msg;
 extern const pb_msgdesc_t BlueOssSidVersion_t_msg;
@@ -1607,8 +1612,8 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUEEVENT_FIELDS &BlueEvent_t_msg
 #define BLUESPHANDSHAKE_FIELDS &BlueSPHandshake_t_msg
 #define BLUESPHANDSHAKEREPLY_FIELDS &BlueSPHandshakeReply_t_msg
-#define BLUESPDATACOMMAND_FIELDS &BlueSPDataCommand_t_msg
-#define BLUESPDATA_FIELDS &BlueSPData_t_msg
+#define BLUESPTOKENCOMMAND_FIELDS &BlueSPTokenCommand_t_msg
+#define BLUESPTOKEN_FIELDS &BlueSPToken_t_msg
 #define BLUESPRESULT_FIELDS &BlueSPResult_t_msg
 #define BLUEOSSACCESSRESULT_FIELDS &BlueOssAccessResult_t_msg
 #define BLUEOSSSIDVERSION_FIELDS &BlueOssSidVersion_t_msg
@@ -1652,15 +1657,15 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define _BLUETESTENCODEDECODE_FIELDS &_BlueTestEncodeDecode_t_msg
 
 /* Maximum encoded size of messages (where known) */
-#define BLUEBLACKLISTENTRY_SIZE                  52
+#define BLUEBLACKLISTENTRY_SIZE                  35
 #define BLUEBLEADVERTISEMENTINFO_SIZE            42
 #define BLUEBLEMANUFACTURERINFO_SIZE             17
 #define BLUECREDENTIALID_SIZE                    12
-#define BLUEEVENT_SIZE                           79
-#define BLUELOCALTIMEPERIOD_SIZE                 24
-#define BLUELOCALTIMESCHEDULE_SIZE               47
-#define BLUELOCALTIMESTAMP_SIZE                  36
-#define BLUEOSSACCESSRESULT_SIZE                 44
+#define BLUEEVENT_SIZE                           62
+#define BLUELOCALTIMEPERIOD_SIZE                 12
+#define BLUELOCALTIMESCHEDULE_SIZE               36
+#define BLUELOCALTIMESTAMP_SIZE                  19
+#define BLUEOSSACCESSRESULT_SIZE                 27
 #define BLUEOSSSIDCONFIGURATION_SIZE             47
 #define BLUEOSSSIDCREDENTIALTYPEOSS_SIZE         2
 #define BLUEOSSSIDCREDENTIALTYPEPROPRIETARY_SIZE 9
@@ -1675,20 +1680,20 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUEOSSSIDSETTINGS_SIZE                  62
 #define BLUEOSSSIDSTORAGEPROFILE_SIZE            24
 #define BLUEOSSSIDVERSION_SIZE                   12
-#define BLUEOSSSOCONFIGURATION_SIZE              40152
+#define BLUEOSSSOCONFIGURATION_SIZE              28568
 #define BLUEOSSSOCREDENTIALTYPEOSS_SIZE          2
 #define BLUEOSSSOCREDENTIALTYPEPROPRIETARY_SIZE  9
 #define BLUEOSSSOCREDENTIALTYPE_SIZE             17
 #define BLUEOSSSODOORINFO_SIZE                   16
-#define BLUEOSSSODTSCHEDULEDAY_SIZE              118
-#define BLUEOSSSODTSCHEDULE_SIZE                 480
-#define BLUEOSSSOEVENT_SIZE                      52
+#define BLUEOSSSODTSCHEDULEDAY_SIZE              70
+#define BLUEOSSSODTSCHEDULE_SIZE                 288
+#define BLUEOSSSOEVENT_SIZE                      35
 #define BLUEOSSSOEXTFEATURE_SIZE                 72
-#define BLUEOSSSOEXTFEATURE_VALIDITYSTART_SIZE   40
-#define BLUEOSSSOFILEBLACKLIST_SIZE              13770
-#define BLUEOSSSOFILECUSTOMEREXTENSIONS_SIZE     634
-#define BLUEOSSSOFILEDATA_SIZE                   11893
-#define BLUEOSSSOFILEEVENT_SIZE                  13784
+#define BLUEOSSSOEXTFEATURE_VALIDITYSTART_SIZE   23
+#define BLUEOSSSOFILEBLACKLIST_SIZE              9435
+#define BLUEOSSSOFILECUSTOMEREXTENSIONS_SIZE     617
+#define BLUEOSSSOFILEDATA_SIZE                   8996
+#define BLUEOSSSOFILEEVENT_SIZE                  9449
 #define BLUEOSSSOFILEINFO_SIZE                   57
 #define BLUEOSSSOMIFAREDESFIRECONFIGURATION_SIZE 60
 #define BLUEOSSSOMIFAREDESFIREPROVISIONINGCONFIGURATION_SIZE 56
@@ -1700,12 +1705,12 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUEOSSSOSTORAGEPROFILE_SIZE             72
 #define BLUEOSSSOVERSION_SIZE                    12
 #define BLUESHAREDDEMODATA_SIZE                  540
-#define BLUESPDATACOMMAND_SIZE                   1895
-#define BLUESPDATA_SIZE                          1974
 #define BLUESPHANDSHAKEREPLY_SIZE                94
 #define BLUESPHANDSHAKE_SIZE                     18
 #define BLUESPRESULT_SIZE                        1795
-#define BLUEVERSIONINFO_SIZE                     12
+#define BLUESPTOKENCOMMAND_SIZE                  1861
+#define BLUESPTOKEN_SIZE                         1940
+#define BLUEVERSIONINFO_SIZE                     10
 #define _BLUETESTENCODEDECODE_SIZE               90
 
 #ifdef __cplusplus

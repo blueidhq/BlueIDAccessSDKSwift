@@ -20,94 +20,37 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-public enum BlueOnlineMode: SwiftProtobuf.Enum {
-  public typealias RawValue = Int
-
-  /// Offline mode
-  case offlineMode // = 0
-
-  /// Wifi is manually re-connected whenever required
-  case manualWifi // = 1
-
-  /// Wifi is always connected and re-connects automatically
-  case alwaysOnWifi // = 2
-
-  /// A LAN connection is available that shall be used
-  case useLan // = 3
-
-  public init() {
-    self = .offlineMode
-  }
-
-  public init?(rawValue: Int) {
-    switch rawValue {
-    case 0: self = .offlineMode
-    case 1: self = .manualWifi
-    case 2: self = .alwaysOnWifi
-    case 3: self = .useLan
-    default: return nil
-    }
-  }
-
-  public var rawValue: Int {
-    switch self {
-    case .offlineMode: return 0
-    case .manualWifi: return 1
-    case .alwaysOnWifi: return 2
-    case .useLan: return 3
-    }
-  }
-
-}
-
-#if swift(>=4.2)
-
-extension BlueOnlineMode: CaseIterable {
-  // Support synthesized by the compiler.
-}
-
-#endif  // swift(>=4.2)
-
-public struct BlueTimeOffsetPeriod {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  /// UTC-epoch when this shift occurs
-  public var epoch: UInt32 {
-    get {return _epoch ?? 0}
-    set {_epoch = newValue}
-  }
-  /// Returns true if `epoch` has been explicitly set.
-  public var hasEpoch: Bool {return self._epoch != nil}
-  /// Clears the value of `epoch`. Subsequent reads from it will return its default value.
-  public mutating func clearEpoch() {self._epoch = nil}
-
-  /// The time offset in minutes, negative or positive
-  public var offset: Int32 {
-    get {return _offset ?? 0}
-    set {_offset = newValue}
-  }
-  /// Returns true if `offset` has been explicitly set.
-  public var hasOffset: Bool {return self._offset != nil}
-  /// Clears the value of `offset`. Subsequent reads from it will return its default value.
-  public mutating func clearOffset() {self._offset = nil}
-
-  public var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  public init() {}
-
-  fileprivate var _epoch: UInt32? = nil
-  fileprivate var _offset: Int32? = nil
-}
-
 public struct BlueBaseConfig {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The time offsets that get shifted automatically
-  public var timeOffsetPeriods: [BlueTimeOffsetPeriod] = []
+  public var isoCountry: String {
+    get {return _isoCountry ?? String()}
+    set {_isoCountry = newValue}
+  }
+  /// Returns true if `isoCountry` has been explicitly set.
+  public var hasIsoCountry: Bool {return self._isoCountry != nil}
+  /// Clears the value of `isoCountry`. Subsequent reads from it will return its default value.
+  public mutating func clearIsoCountry() {self._isoCountry = nil}
+
+  public var isoState: String {
+    get {return _isoState ?? String()}
+    set {_isoState = newValue}
+  }
+  /// Returns true if `isoState` has been explicitly set.
+  public var hasIsoState: Bool {return self._isoState != nil}
+  /// Clears the value of `isoState`. Subsequent reads from it will return its default value.
+  public mutating func clearIsoState() {self._isoState = nil}
+
+  public var utcOffsetMinutes: Int32 {
+    get {return _utcOffsetMinutes ?? 0}
+    set {_utcOffsetMinutes = newValue}
+  }
+  /// Returns true if `utcOffsetMinutes` has been explicitly set.
+  public var hasUtcOffsetMinutes: Bool {return self._utcOffsetMinutes != nil}
+  /// Clears the value of `utcOffsetMinutes`. Subsequent reads from it will return its default value.
+  public mutating func clearUtcOffsetMinutes() {self._utcOffsetMinutes = nil}
 
   /// If enabled this will check the system-status every 24-hours and
   /// react accordingly ie like when battery is running low opening the lock
@@ -125,6 +68,9 @@ public struct BlueBaseConfig {
 
   public init() {}
 
+  fileprivate var _isoCountry: String? = nil
+  fileprivate var _isoState: String? = nil
+  fileprivate var _utcOffsetMinutes: Int32? = nil
   fileprivate var _autoCheckSystemStatus: Bool? = nil
 }
 
@@ -219,18 +165,9 @@ public struct BlueOnlineConfig {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  /// The online mode
-  public var mode: BlueOnlineMode {
-    get {return _mode ?? .offlineMode}
-    set {_mode = newValue}
-  }
-  /// Returns true if `mode` has been explicitly set.
-  public var hasMode: Bool {return self._mode != nil}
-  /// Clears the value of `mode`. Subsequent reads from it will return its default value.
-  public mutating func clearMode() {self._mode = nil}
-
-  /// Schedules when it should go online for updating. Only takes effect if
-  /// online mode is set to manual wifi. The end time is not used.
+  /// Schedules when it should go online for updating. Only applies to
+  /// battery-powered devices with wifi or gsm module. If no schedule is set will
+  /// never go online. The end time is not used.
   public var connectSchedules: [BlueLocalTimeSchedule] = []
 
   /// The SSID of the wifi network
@@ -267,10 +204,32 @@ public struct BlueOnlineConfig {
 
   public init() {}
 
-  fileprivate var _mode: BlueOnlineMode? = nil
   fileprivate var _wifiSsid: String? = nil
   fileprivate var _wifiPassword: String? = nil
   fileprivate var _timeoutSec: UInt32? = nil
+}
+
+public struct BlueAccessConfigGroup {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var groupID: UInt32 {
+    get {return _groupID ?? 0}
+    set {_groupID = newValue}
+  }
+  /// Returns true if `groupID` has been explicitly set.
+  public var hasGroupID: Bool {return self._groupID != nil}
+  /// Clears the value of `groupID`. Subsequent reads from it will return its default value.
+  public mutating func clearGroupID() {self._groupID = nil}
+
+  public var schedules: [BlueLocalTimeSchedule] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _groupID: UInt32? = nil
 }
 
 public struct BlueAccessConfig {
@@ -299,7 +258,7 @@ public struct BlueAccessConfig {
   public mutating func clearSiteID() {self._siteID = nil}
 
   /// The access groups this device is part of
-  public var groupIds: [UInt32] = []
+  public var groups: [BlueAccessConfigGroup] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -422,14 +381,14 @@ public struct BlueSystemConfig {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var version: UInt32 {
-    get {return _storage._version ?? 0}
-    set {_uniqueStorage()._version = newValue}
+  public var configID: String {
+    get {return _storage._configID ?? String()}
+    set {_uniqueStorage()._configID = newValue}
   }
-  /// Returns true if `version` has been explicitly set.
-  public var hasVersion: Bool {return _storage._version != nil}
-  /// Clears the value of `version`. Subsequent reads from it will return its default value.
-  public mutating func clearVersion() {_uniqueStorage()._version = nil}
+  /// Returns true if `configID` has been explicitly set.
+  public var hasConfigID: Bool {return _storage._configID != nil}
+  /// Clears the value of `configID`. Subsequent reads from it will return its default value.
+  public mutating func clearConfigID() {_uniqueStorage()._configID = nil}
 
   /// -- Base
   public var base: BlueBaseConfig {
@@ -750,14 +709,14 @@ public struct BlueSystemStatus {
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  public var configVersion: UInt32 {
-    get {return _storage._configVersion ?? 0}
-    set {_uniqueStorage()._configVersion = newValue}
+  public var configID: String {
+    get {return _storage._configID ?? String()}
+    set {_uniqueStorage()._configID = newValue}
   }
-  /// Returns true if `configVersion` has been explicitly set.
-  public var hasConfigVersion: Bool {return _storage._configVersion != nil}
-  /// Clears the value of `configVersion`. Subsequent reads from it will return its default value.
-  public mutating func clearConfigVersion() {_uniqueStorage()._configVersion = nil}
+  /// Returns true if `configID` has been explicitly set.
+  public var hasConfigID: Bool {return _storage._configID != nil}
+  /// Clears the value of `configID`. Subsequent reads from it will return its default value.
+  public mutating func clearConfigID() {_uniqueStorage()._configID = nil}
 
   public var deviceID: String {
     get {return _storage._deviceID ?? String()}
@@ -1122,11 +1081,10 @@ public struct BlueBlacklistEntries {
 }
 
 #if swift(>=5.5) && canImport(_Concurrency)
-extension BlueOnlineMode: @unchecked Sendable {}
-extension BlueTimeOffsetPeriod: @unchecked Sendable {}
 extension BlueBaseConfig: @unchecked Sendable {}
 extension BlueBleConfig: @unchecked Sendable {}
 extension BlueOnlineConfig: @unchecked Sendable {}
+extension BlueAccessConfigGroup: @unchecked Sendable {}
 extension BlueAccessConfig: @unchecked Sendable {}
 extension BlueOssConfig: @unchecked Sendable {}
 extension BlueSystemConfig: @unchecked Sendable {}
@@ -1147,73 +1105,20 @@ extension BlueBlacklistEntries: @unchecked Sendable {}
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-extension BlueOnlineMode: SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "OfflineMode"),
-    1: .same(proto: "ManualWifi"),
-    2: .same(proto: "AlwaysOnWifi"),
-    3: .same(proto: "UseLan"),
-  ]
-}
-
-extension BlueTimeOffsetPeriod: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: String = "BlueTimeOffsetPeriod"
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "epoch"),
-    2: .same(proto: "offset"),
-  ]
-
-  public var isInitialized: Bool {
-    if self._epoch == nil {return false}
-    if self._offset == nil {return false}
-    return true
-  }
-
-  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularUInt32Field(value: &self._epoch) }()
-      case 2: try { try decoder.decodeSingularInt32Field(value: &self._offset) }()
-      default: break
-      }
-    }
-  }
-
-  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._epoch {
-      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._offset {
-      try visitor.visitSingularInt32Field(value: v, fieldNumber: 2)
-    } }()
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  public static func ==(lhs: BlueTimeOffsetPeriod, rhs: BlueTimeOffsetPeriod) -> Bool {
-    if lhs._epoch != rhs._epoch {return false}
-    if lhs._offset != rhs._offset {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
 extension BlueBaseConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueBaseConfig"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "timeOffsetPeriods"),
-    2: .same(proto: "autoCheckSystemStatus"),
+    1: .same(proto: "isoCountry"),
+    2: .same(proto: "isoState"),
+    3: .same(proto: "utcOffsetMinutes"),
+    4: .same(proto: "autoCheckSystemStatus"),
   ]
 
   public var isInitialized: Bool {
+    if self._isoCountry == nil {return false}
+    if self._isoState == nil {return false}
+    if self._utcOffsetMinutes == nil {return false}
     if self._autoCheckSystemStatus == nil {return false}
-    if !SwiftProtobuf.Internal.areAllInitialized(self.timeOffsetPeriods) {return false}
     return true
   }
 
@@ -1223,8 +1128,10 @@ extension BlueBaseConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.timeOffsetPeriods) }()
-      case 2: try { try decoder.decodeSingularBoolField(value: &self._autoCheckSystemStatus) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self._isoCountry) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self._isoState) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self._utcOffsetMinutes) }()
+      case 4: try { try decoder.decodeSingularBoolField(value: &self._autoCheckSystemStatus) }()
       default: break
       }
     }
@@ -1235,17 +1142,25 @@ extension BlueBaseConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
-    if !self.timeOffsetPeriods.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.timeOffsetPeriods, fieldNumber: 1)
-    }
+    try { if let v = self._isoCountry {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._isoState {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._utcOffsetMinutes {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 3)
+    } }()
     try { if let v = self._autoCheckSystemStatus {
-      try visitor.visitSingularBoolField(value: v, fieldNumber: 2)
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 4)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BlueBaseConfig, rhs: BlueBaseConfig) -> Bool {
-    if lhs.timeOffsetPeriods != rhs.timeOffsetPeriods {return false}
+    if lhs._isoCountry != rhs._isoCountry {return false}
+    if lhs._isoState != rhs._isoState {return false}
+    if lhs._utcOffsetMinutes != rhs._utcOffsetMinutes {return false}
     if lhs._autoCheckSystemStatus != rhs._autoCheckSystemStatus {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
@@ -1344,15 +1259,13 @@ extension BlueBleConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
 extension BlueOnlineConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueOnlineConfig"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "mode"),
-    2: .same(proto: "connectSchedules"),
-    3: .same(proto: "wifiSSID"),
-    4: .same(proto: "wifiPassword"),
-    5: .same(proto: "timeoutSec"),
+    1: .same(proto: "connectSchedules"),
+    2: .same(proto: "wifiSSID"),
+    3: .same(proto: "wifiPassword"),
+    4: .same(proto: "timeoutSec"),
   ]
 
   public var isInitialized: Bool {
-    if self._mode == nil {return false}
     if self._wifiSsid == nil {return false}
     if self._wifiPassword == nil {return false}
     if self._timeoutSec == nil {return false}
@@ -1366,11 +1279,10 @@ extension BlueOnlineConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularEnumField(value: &self._mode) }()
-      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.connectSchedules) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self._wifiSsid) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self._wifiPassword) }()
-      case 5: try { try decoder.decodeSingularUInt32Field(value: &self._timeoutSec) }()
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.connectSchedules) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self._wifiSsid) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._wifiPassword) }()
+      case 4: try { try decoder.decodeSingularUInt32Field(value: &self._timeoutSec) }()
       default: break
       }
     }
@@ -1381,30 +1293,74 @@ extension BlueOnlineConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     // allocates stack space for every if/case branch local when no optimizations
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._mode {
-      try visitor.visitSingularEnumField(value: v, fieldNumber: 1)
-    } }()
     if !self.connectSchedules.isEmpty {
-      try visitor.visitRepeatedMessageField(value: self.connectSchedules, fieldNumber: 2)
+      try visitor.visitRepeatedMessageField(value: self.connectSchedules, fieldNumber: 1)
     }
     try { if let v = self._wifiSsid {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     } }()
     try { if let v = self._wifiPassword {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
     } }()
     try { if let v = self._timeoutSec {
-      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 5)
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 4)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BlueOnlineConfig, rhs: BlueOnlineConfig) -> Bool {
-    if lhs._mode != rhs._mode {return false}
     if lhs.connectSchedules != rhs.connectSchedules {return false}
     if lhs._wifiSsid != rhs._wifiSsid {return false}
     if lhs._wifiPassword != rhs._wifiPassword {return false}
     if lhs._timeoutSec != rhs._timeoutSec {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessConfigGroup: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessConfigGroup"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "groupId"),
+    2: .same(proto: "schedules"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._groupID == nil {return false}
+    if !SwiftProtobuf.Internal.areAllInitialized(self.schedules) {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularUInt32Field(value: &self._groupID) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.schedules) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._groupID {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
+    } }()
+    if !self.schedules.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.schedules, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessConfigGroup, rhs: BlueAccessConfigGroup) -> Bool {
+    if lhs._groupID != rhs._groupID {return false}
+    if lhs.schedules != rhs.schedules {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1415,12 +1371,13 @@ extension BlueAccessConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .same(proto: "siteId"),
-    3: .same(proto: "groupIds"),
+    3: .same(proto: "groups"),
   ]
 
   public var isInitialized: Bool {
     if self._id == nil {return false}
     if self._siteID == nil {return false}
+    if !SwiftProtobuf.Internal.areAllInitialized(self.groups) {return false}
     return true
   }
 
@@ -1432,7 +1389,7 @@ extension BlueAccessConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self._id) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self._siteID) }()
-      case 3: try { try decoder.decodeRepeatedUInt32Field(value: &self.groupIds) }()
+      case 3: try { try decoder.decodeRepeatedMessageField(value: &self.groups) }()
       default: break
       }
     }
@@ -1449,8 +1406,8 @@ extension BlueAccessConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._siteID {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 2)
     } }()
-    if !self.groupIds.isEmpty {
-      try visitor.visitRepeatedUInt32Field(value: self.groupIds, fieldNumber: 3)
+    if !self.groups.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.groups, fieldNumber: 3)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1458,7 +1415,7 @@ extension BlueAccessConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static func ==(lhs: BlueAccessConfig, rhs: BlueAccessConfig) -> Bool {
     if lhs._id != rhs._id {return false}
     if lhs._siteID != rhs._siteID {return false}
-    if lhs.groupIds != rhs.groupIds {return false}
+    if lhs.groups != rhs.groups {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1557,7 +1514,7 @@ extension BlueOssConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementa
 extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueSystemConfig"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "version"),
+    1: .same(proto: "configId"),
     2: .same(proto: "base"),
     3: .same(proto: "ble"),
     4: .same(proto: "online"),
@@ -1567,7 +1524,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   ]
 
   fileprivate class _StorageClass {
-    var _version: UInt32? = nil
+    var _configID: String? = nil
     var _base: BlueBaseConfig? = nil
     var _ble: BlueBleConfig? = nil
     var _online: BlueOnlineConfig? = nil
@@ -1580,7 +1537,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     private init() {}
 
     init(copying source: _StorageClass) {
-      _version = source._version
+      _configID = source._configID
       _base = source._base
       _ble = source._ble
       _online = source._online
@@ -1599,7 +1556,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
   public var isInitialized: Bool {
     return withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      if _storage._version == nil {return false}
+      if _storage._configID == nil {return false}
       if _storage._base == nil {return false}
       if _storage._ble == nil {return false}
       if _storage._online == nil {return false}
@@ -1623,7 +1580,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         // allocates stack space for every case branch when no optimizations are
         // enabled. https://github.com/apple/swift-protobuf/issues/1034
         switch fieldNumber {
-        case 1: try { try decoder.decodeSingularUInt32Field(value: &_storage._version) }()
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._configID) }()
         case 2: try { try decoder.decodeSingularMessageField(value: &_storage._base) }()
         case 3: try { try decoder.decodeSingularMessageField(value: &_storage._ble) }()
         case 4: try { try decoder.decodeSingularMessageField(value: &_storage._online) }()
@@ -1642,8 +1599,8 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every if/case branch local when no optimizations
       // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
       // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._version {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
+      try { if let v = _storage._configID {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 1)
       } }()
       try { if let v = _storage._base {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
@@ -1672,7 +1629,7 @@ extension BlueSystemConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
         let rhs_storage = _args.1
-        if _storage._version != rhs_storage._version {return false}
+        if _storage._configID != rhs_storage._configID {return false}
         if _storage._base != rhs_storage._base {return false}
         if _storage._ble != rhs_storage._ble {return false}
         if _storage._online != rhs_storage._online {return false}
@@ -1967,7 +1924,7 @@ extension BlueSystemProvisioning: SwiftProtobuf.Message, SwiftProtobuf._MessageI
 extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: String = "BlueSystemStatus"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "configVersion"),
+    1: .same(proto: "configId"),
     2: .same(proto: "deviceId"),
     3: .same(proto: "serialNumber"),
     4: .same(proto: "hardwareType"),
@@ -1984,7 +1941,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   ]
 
   fileprivate class _StorageClass {
-    var _configVersion: UInt32? = nil
+    var _configID: String? = nil
     var _deviceID: String? = nil
     var _serialNumber: String? = nil
     var _hardwareType: BlueHardwareType? = nil
@@ -2004,7 +1961,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     private init() {}
 
     init(copying source: _StorageClass) {
-      _configVersion = source._configVersion
+      _configID = source._configID
       _deviceID = source._deviceID
       _serialNumber = source._serialNumber
       _hardwareType = source._hardwareType
@@ -2030,7 +1987,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
   public var isInitialized: Bool {
     return withExtendedLifetime(_storage) { (_storage: _StorageClass) in
-      if _storage._configVersion == nil {return false}
+      if _storage._configID == nil {return false}
       if _storage._deviceID == nil {return false}
       if _storage._serialNumber == nil {return false}
       if _storage._hardwareType == nil {return false}
@@ -2058,7 +2015,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         // allocates stack space for every case branch when no optimizations are
         // enabled. https://github.com/apple/swift-protobuf/issues/1034
         switch fieldNumber {
-        case 1: try { try decoder.decodeSingularUInt32Field(value: &_storage._configVersion) }()
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._configID) }()
         case 2: try { try decoder.decodeSingularStringField(value: &_storage._deviceID) }()
         case 3: try { try decoder.decodeSingularStringField(value: &_storage._serialNumber) }()
         case 4: try { try decoder.decodeSingularEnumField(value: &_storage._hardwareType) }()
@@ -2084,8 +2041,8 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // allocates stack space for every if/case branch local when no optimizations
       // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
       // https://github.com/apple/swift-protobuf/issues/1182
-      try { if let v = _storage._configVersion {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 1)
+      try { if let v = _storage._configID {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 1)
       } }()
       try { if let v = _storage._deviceID {
         try visitor.visitSingularStringField(value: v, fieldNumber: 2)
@@ -2135,7 +2092,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
         let rhs_storage = _args.1
-        if _storage._configVersion != rhs_storage._configVersion {return false}
+        if _storage._configID != rhs_storage._configID {return false}
         if _storage._deviceID != rhs_storage._deviceID {return false}
         if _storage._serialNumber != rhs_storage._serialNumber {return false}
         if _storage._hardwareType != rhs_storage._hardwareType {return false}
