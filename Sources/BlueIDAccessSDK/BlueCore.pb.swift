@@ -1393,15 +1393,15 @@ public struct BlueEvent {
   /// Clears the value of `eventInfo`. Subsequent reads from it will return its default value.
   public mutating func clearEventInfo() {self._eventInfo = nil}
 
-  /// Set if identity related
-  public var identity: String {
-    get {return _identity ?? String()}
-    set {_identity = newValue}
+  /// Set if credential related
+  public var credentialID: BlueCredentialId {
+    get {return _credentialID ?? BlueCredentialId()}
+    set {_credentialID = newValue}
   }
-  /// Returns true if `identity` has been explicitly set.
-  public var hasIdentity: Bool {return self._identity != nil}
-  /// Clears the value of `identity`. Subsequent reads from it will return its default value.
-  public mutating func clearIdentity() {self._identity = nil}
+  /// Returns true if `credentialID` has been explicitly set.
+  public var hasCredentialID: Bool {return self._credentialID != nil}
+  /// Clears the value of `credentialID`. Subsequent reads from it will return its default value.
+  public mutating func clearCredentialID() {self._credentialID = nil}
 
   /// Set if eventId =
   public var command: String {
@@ -1421,7 +1421,7 @@ public struct BlueEvent {
   fileprivate var _eventTime: BlueLocalTimestamp? = nil
   fileprivate var _eventID: BlueEventId? = nil
   fileprivate var _eventInfo: Int32? = nil
-  fileprivate var _identity: String? = nil
+  fileprivate var _credentialID: BlueCredentialId? = nil
   fileprivate var _command: String? = nil
 }
 
@@ -4199,7 +4199,7 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
     2: .same(proto: "eventTime"),
     4: .same(proto: "eventId"),
     5: .same(proto: "eventInfo"),
-    6: .same(proto: "identity"),
+    6: .same(proto: "credentialId"),
     7: .same(proto: "command"),
   ]
 
@@ -4209,6 +4209,7 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
     if self._eventID == nil {return false}
     if self._eventInfo == nil {return false}
     if let v = self._eventTime, !v.isInitialized {return false}
+    if let v = self._credentialID, !v.isInitialized {return false}
     return true
   }
 
@@ -4222,7 +4223,7 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
       case 2: try { try decoder.decodeSingularMessageField(value: &self._eventTime) }()
       case 4: try { try decoder.decodeSingularEnumField(value: &self._eventID) }()
       case 5: try { try decoder.decodeSingularInt32Field(value: &self._eventInfo) }()
-      case 6: try { try decoder.decodeSingularStringField(value: &self._identity) }()
+      case 6: try { try decoder.decodeSingularMessageField(value: &self._credentialID) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self._command) }()
       default: break
       }
@@ -4246,8 +4247,8 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
     try { if let v = self._eventInfo {
       try visitor.visitSingularInt32Field(value: v, fieldNumber: 5)
     } }()
-    try { if let v = self._identity {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
+    try { if let v = self._credentialID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     } }()
     try { if let v = self._command {
       try visitor.visitSingularStringField(value: v, fieldNumber: 7)
@@ -4260,7 +4261,7 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
     if lhs._eventTime != rhs._eventTime {return false}
     if lhs._eventID != rhs._eventID {return false}
     if lhs._eventInfo != rhs._eventInfo {return false}
-    if lhs._identity != rhs._identity {return false}
+    if lhs._credentialID != rhs._credentialID {return false}
     if lhs._command != rhs._command {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

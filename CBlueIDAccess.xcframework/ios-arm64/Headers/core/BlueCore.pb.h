@@ -308,9 +308,9 @@ typedef struct BlueEvent {
     BlueLocalTimestamp_t eventTime;
     BlueEventId_t eventId;
     int32_t eventInfo;
-    /* Set if identity related */
-    bool has_identity;
-    char identity[11];
+    /* Set if credential related */
+    bool has_credentialId;
+    BlueCredentialId_t credentialId;
     /* Set if eventId = */
     bool has_command;
     char command[9];
@@ -809,7 +809,7 @@ extern "C" {
 #define BLUEBLACKLISTENTRY_INIT_DEFAULT          {BLUECREDENTIALID_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT}
 #define BLUEBLEMANUFACTURERINFO_INIT_DEFAULT     {_BLUEHARDWARETYPE_MIN, _BLUEBATTERYLEVEL_MIN, 0, 0, 0}
 #define BLUEBLEADVERTISEMENTINFO_INIT_DEFAULT    {"", 0, 0, BLUEBLEMANUFACTURERINFO_INIT_DEFAULT}
-#define BLUEEVENT_INIT_DEFAULT                   {0, BLUELOCALTIMESTAMP_INIT_DEFAULT, _BLUEEVENTID_MIN, 0, false, "", false, ""}
+#define BLUEEVENT_INIT_DEFAULT                   {0, BLUELOCALTIMESTAMP_INIT_DEFAULT, _BLUEEVENTID_MIN, 0, false, BLUECREDENTIALID_INIT_DEFAULT, false, ""}
 #define BLUESPHANDSHAKE_INIT_DEFAULT             {{0}}
 #define BLUESPHANDSHAKEREPLY_INIT_DEFAULT        {{0}, {0, {0}}}
 #define BLUESPTOKENCOMMAND_INIT_DEFAULT          {BLUECREDENTIALID_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, "", {0, {0}}}
@@ -864,7 +864,7 @@ extern "C" {
 #define BLUEBLACKLISTENTRY_INIT_ZERO             {BLUECREDENTIALID_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO}
 #define BLUEBLEMANUFACTURERINFO_INIT_ZERO        {_BLUEHARDWARETYPE_MIN, _BLUEBATTERYLEVEL_MIN, 0, 0, 0}
 #define BLUEBLEADVERTISEMENTINFO_INIT_ZERO       {"", 0, 0, BLUEBLEMANUFACTURERINFO_INIT_ZERO}
-#define BLUEEVENT_INIT_ZERO                      {0, BLUELOCALTIMESTAMP_INIT_ZERO, _BLUEEVENTID_MIN, 0, false, "", false, ""}
+#define BLUEEVENT_INIT_ZERO                      {0, BLUELOCALTIMESTAMP_INIT_ZERO, _BLUEEVENTID_MIN, 0, false, BLUECREDENTIALID_INIT_ZERO, false, ""}
 #define BLUESPHANDSHAKE_INIT_ZERO                {{0}}
 #define BLUESPHANDSHAKEREPLY_INIT_ZERO           {{0}, {0, {0}}}
 #define BLUESPTOKENCOMMAND_INIT_ZERO             {BLUECREDENTIALID_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, "", {0, {0}}}
@@ -949,7 +949,7 @@ extern "C" {
 #define BLUEEVENT_EVENTTIME_TAG                  2
 #define BLUEEVENT_EVENTID_TAG                    4
 #define BLUEEVENT_EVENTINFO_TAG                  5
-#define BLUEEVENT_IDENTITY_TAG                   6
+#define BLUEEVENT_CREDENTIALID_TAG               6
 #define BLUEEVENT_COMMAND_TAG                    7
 #define BLUESPHANDSHAKE_TRANSPONDERSALT_TAG      1
 #define BLUESPHANDSHAKEREPLY_TERMINALSALT_TAG    1
@@ -1174,11 +1174,12 @@ X(a, STATIC,   REQUIRED, UINT32,   sequenceId,        1) \
 X(a, STATIC,   REQUIRED, MESSAGE,  eventTime,         2) \
 X(a, STATIC,   REQUIRED, UENUM,    eventId,           4) \
 X(a, STATIC,   REQUIRED, INT32,    eventInfo,         5) \
-X(a, STATIC,   OPTIONAL, STRING,   identity,          6) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  credentialId,      6) \
 X(a, STATIC,   OPTIONAL, STRING,   command,           7)
 #define BLUEEVENT_CALLBACK NULL
 #define BLUEEVENT_DEFAULT (const pb_byte_t*)"\x20\x01\x00"
 #define BlueEvent_t_eventTime_MSGTYPE BlueLocalTimestamp_t
+#define BlueEvent_t_credentialId_MSGTYPE BlueCredentialId_t
 
 #define BLUESPHANDSHAKE_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, FIXED_LENGTH_BYTES, transponderSalt,   1)
@@ -1661,7 +1662,7 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUEBLEADVERTISEMENTINFO_SIZE            42
 #define BLUEBLEMANUFACTURERINFO_SIZE             17
 #define BLUECREDENTIALID_SIZE                    12
-#define BLUEEVENT_SIZE                           62
+#define BLUEEVENT_SIZE                           64
 #define BLUELOCALTIMEPERIOD_SIZE                 12
 #define BLUELOCALTIMESCHEDULE_SIZE               36
 #define BLUELOCALTIMESTAMP_SIZE                  19
