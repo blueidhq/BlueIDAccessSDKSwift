@@ -438,18 +438,18 @@ static BlueReturnCode_t createCommandSignatureMessage(const BlueSPTokenCommand_t
 
 static BlueReturnCode_t handleCommand(const BlueLocalTimestamp_t *const pTimestamp, const BlueSPTokenCommand_t *const pCommand, const uint8_t *const pSignature, uint16_t signatureLen, BlueSPResult_t *const pResult)
 {
-#define STORE_COMMAND_EVENT(EVENT_INFO)                                                       \
-    {                                                                                         \
-        BlueEvent_t event = BLUEEVENT_INIT_ZERO;                                              \
-        event.eventTime = *pTimestamp;                                                        \
-        event.eventId = BlueEventId_TerminalCommand;                                          \
-        event.eventInfo = EVENT_INFO;                                                         \
-        event.has_identity = true;                                                            \
-        event.has_command = true;                                                             \
-        memcpy(event.identity, pCommand->credentialId.id, sizeof(event.identity));            \
-        memcpy(event.command, pCommand->command, sizeof(pCommand->command));                  \
-                                                                                              \
-        terminalContext.handler.pFuncs->storeEvent(terminalContext.handler.pContext, &event); \
+#define STORE_COMMAND_EVENT(EVENT_INFO)                                                          \
+    {                                                                                            \
+        BlueEvent_t event = BLUEEVENT_INIT_ZERO;                                                 \
+        event.eventTime = *pTimestamp;                                                           \
+        event.eventId = BlueEventId_TerminalCommand;                                             \
+        event.eventInfo = EVENT_INFO;                                                            \
+        event.has_credentialId = true;                                                           \
+        event.has_command = true;                                                                \
+        memcpy(event.credentialId.id, pCommand->credentialId.id, sizeof(event.credentialId.id)); \
+        memcpy(event.command, pCommand->command, sizeof(pCommand->command));                     \
+                                                                                                 \
+        terminalContext.handler.pFuncs->storeEvent(terminalContext.handler.pContext, &event);    \
     }
 
     //

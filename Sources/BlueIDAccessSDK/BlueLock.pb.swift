@@ -79,8 +79,15 @@ public struct BlueLockConfig {
   /// Clears the value of `openScheduleByUser`. Subsequent reads from it will return its default value.
   public mutating func clearOpenScheduleByUser() {self._openScheduleByUser = nil}
 
-  /// Days of year (1-366) the open schedule is ignored (ie vacation days)
-  public var closedDays: [UInt32] = []
+  /// If set keeps the lock closed on federal vacation days
+  public var keepClosedOnHolidays: Bool {
+    get {return _keepClosedOnHolidays ?? false}
+    set {_keepClosedOnHolidays = newValue}
+  }
+  /// Returns true if `keepClosedOnHolidays` has been explicitly set.
+  public var hasKeepClosedOnHolidays: Bool {return self._keepClosedOnHolidays != nil}
+  /// Clears the value of `keepClosedOnHolidays`. Subsequent reads from it will return its default value.
+  public mutating func clearKeepClosedOnHolidays() {self._keepClosedOnHolidays = nil}
 
   /// Default time in seconds to keep the lock open
   public var defaultOpenTimeSec: UInt32 {
@@ -107,6 +114,7 @@ public struct BlueLockConfig {
   public init() {}
 
   fileprivate var _openScheduleByUser: Bool? = nil
+  fileprivate var _keepClosedOnHolidays: Bool? = nil
   fileprivate var _defaultOpenTimeSec: UInt32? = nil
   fileprivate var _extendedOpenTimeSec: UInt32? = nil
 }
@@ -164,13 +172,14 @@ extension BlueLockConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "openSchedules"),
     2: .same(proto: "openScheduleByUser"),
-    20: .same(proto: "closedDays"),
+    20: .same(proto: "keepClosedOnHolidays"),
     21: .same(proto: "defaultOpenTimeSec"),
     22: .same(proto: "extendedOpenTimeSec"),
   ]
 
   public var isInitialized: Bool {
     if self._openScheduleByUser == nil {return false}
+    if self._keepClosedOnHolidays == nil {return false}
     if self._defaultOpenTimeSec == nil {return false}
     if self._extendedOpenTimeSec == nil {return false}
     if !SwiftProtobuf.Internal.areAllInitialized(self.openSchedules) {return false}
@@ -185,7 +194,7 @@ extension BlueLockConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
       switch fieldNumber {
       case 1: try { try decoder.decodeRepeatedMessageField(value: &self.openSchedules) }()
       case 2: try { try decoder.decodeSingularBoolField(value: &self._openScheduleByUser) }()
-      case 20: try { try decoder.decodeRepeatedUInt32Field(value: &self.closedDays) }()
+      case 20: try { try decoder.decodeSingularBoolField(value: &self._keepClosedOnHolidays) }()
       case 21: try { try decoder.decodeSingularUInt32Field(value: &self._defaultOpenTimeSec) }()
       case 22: try { try decoder.decodeSingularUInt32Field(value: &self._extendedOpenTimeSec) }()
       default: break
@@ -204,9 +213,9 @@ extension BlueLockConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     try { if let v = self._openScheduleByUser {
       try visitor.visitSingularBoolField(value: v, fieldNumber: 2)
     } }()
-    if !self.closedDays.isEmpty {
-      try visitor.visitRepeatedUInt32Field(value: self.closedDays, fieldNumber: 20)
-    }
+    try { if let v = self._keepClosedOnHolidays {
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 20)
+    } }()
     try { if let v = self._defaultOpenTimeSec {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 21)
     } }()
@@ -219,7 +228,7 @@ extension BlueLockConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
   public static func ==(lhs: BlueLockConfig, rhs: BlueLockConfig) -> Bool {
     if lhs.openSchedules != rhs.openSchedules {return false}
     if lhs._openScheduleByUser != rhs._openScheduleByUser {return false}
-    if lhs.closedDays != rhs.closedDays {return false}
+    if lhs._keepClosedOnHolidays != rhs._keepClosedOnHolidays {return false}
     if lhs._defaultOpenTimeSec != rhs._defaultOpenTimeSec {return false}
     if lhs._extendedOpenTimeSec != rhs._extendedOpenTimeSec {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

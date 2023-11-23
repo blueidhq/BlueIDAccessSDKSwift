@@ -781,51 +781,6 @@ public struct BlueSystemStatus {
   /// Clears the value of `settings`. Subsequent reads from it will return its default value.
   public mutating func clearSettings() {_uniqueStorage()._settings = nil}
 
-  public var blacklistEntriesCount: UInt32 {
-    get {return _storage._blacklistEntriesCount ?? 0}
-    set {_uniqueStorage()._blacklistEntriesCount = newValue}
-  }
-  /// Returns true if `blacklistEntriesCount` has been explicitly set.
-  public var hasBlacklistEntriesCount: Bool {return _storage._blacklistEntriesCount != nil}
-  /// Clears the value of `blacklistEntriesCount`. Subsequent reads from it will return its default value.
-  public mutating func clearBlacklistEntriesCount() {_uniqueStorage()._blacklistEntriesCount = nil}
-
-  public var eventLogEntriesCount: UInt32 {
-    get {return _storage._eventLogEntriesCount ?? 0}
-    set {_uniqueStorage()._eventLogEntriesCount = newValue}
-  }
-  /// Returns true if `eventLogEntriesCount` has been explicitly set.
-  public var hasEventLogEntriesCount: Bool {return _storage._eventLogEntriesCount != nil}
-  /// Clears the value of `eventLogEntriesCount`. Subsequent reads from it will return its default value.
-  public mutating func clearEventLogEntriesCount() {_uniqueStorage()._eventLogEntriesCount = nil}
-
-  public var eventLogSequenceID: UInt32 {
-    get {return _storage._eventLogSequenceID ?? 0}
-    set {_uniqueStorage()._eventLogSequenceID = newValue}
-  }
-  /// Returns true if `eventLogSequenceID` has been explicitly set.
-  public var hasEventLogSequenceID: Bool {return _storage._eventLogSequenceID != nil}
-  /// Clears the value of `eventLogSequenceID`. Subsequent reads from it will return its default value.
-  public mutating func clearEventLogSequenceID() {_uniqueStorage()._eventLogSequenceID = nil}
-
-  public var systemLogEntriesCount: UInt32 {
-    get {return _storage._systemLogEntriesCount ?? 0}
-    set {_uniqueStorage()._systemLogEntriesCount = newValue}
-  }
-  /// Returns true if `systemLogEntriesCount` has been explicitly set.
-  public var hasSystemLogEntriesCount: Bool {return _storage._systemLogEntriesCount != nil}
-  /// Clears the value of `systemLogEntriesCount`. Subsequent reads from it will return its default value.
-  public mutating func clearSystemLogEntriesCount() {_uniqueStorage()._systemLogEntriesCount = nil}
-
-  public var systemLogSequenceID: UInt32 {
-    get {return _storage._systemLogSequenceID ?? 0}
-    set {_uniqueStorage()._systemLogSequenceID = newValue}
-  }
-  /// Returns true if `systemLogSequenceID` has been explicitly set.
-  public var hasSystemLogSequenceID: Bool {return _storage._systemLogSequenceID != nil}
-  /// Clears the value of `systemLogSequenceID`. Subsequent reads from it will return its default value.
-  public mutating func clearSystemLogSequenceID() {_uniqueStorage()._systemLogSequenceID = nil}
-
   /// -- Custom
   public var lock: BlueLockStatus {
     get {return _storage._lock ?? BlueLockStatus()}
@@ -1932,12 +1887,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     6: .same(proto: "applicationVersion"),
     7: .same(proto: "localTime"),
     8: .same(proto: "settings"),
-    9: .same(proto: "blacklistEntriesCount"),
-    10: .same(proto: "eventLogEntriesCount"),
-    11: .same(proto: "eventLogSequenceId"),
-    12: .same(proto: "systemLogEntriesCount"),
-    13: .same(proto: "systemLogSequenceId"),
-    14: .same(proto: "lock"),
+    9: .same(proto: "lock"),
   ]
 
   fileprivate class _StorageClass {
@@ -1949,11 +1899,6 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _applicationVersion: UInt32? = nil
     var _localTime: BlueLocalTimestamp? = nil
     var _settings: BlueSystemSettings? = nil
-    var _blacklistEntriesCount: UInt32? = nil
-    var _eventLogEntriesCount: UInt32? = nil
-    var _eventLogSequenceID: UInt32? = nil
-    var _systemLogEntriesCount: UInt32? = nil
-    var _systemLogSequenceID: UInt32? = nil
     var _lock: BlueLockStatus? = nil
 
     static let defaultInstance = _StorageClass()
@@ -1969,11 +1914,6 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _applicationVersion = source._applicationVersion
       _localTime = source._localTime
       _settings = source._settings
-      _blacklistEntriesCount = source._blacklistEntriesCount
-      _eventLogEntriesCount = source._eventLogEntriesCount
-      _eventLogSequenceID = source._eventLogSequenceID
-      _systemLogEntriesCount = source._systemLogEntriesCount
-      _systemLogSequenceID = source._systemLogSequenceID
       _lock = source._lock
     }
   }
@@ -1995,11 +1935,6 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       if _storage._applicationVersion == nil {return false}
       if _storage._localTime == nil {return false}
       if _storage._settings == nil {return false}
-      if _storage._blacklistEntriesCount == nil {return false}
-      if _storage._eventLogEntriesCount == nil {return false}
-      if _storage._eventLogSequenceID == nil {return false}
-      if _storage._systemLogEntriesCount == nil {return false}
-      if _storage._systemLogSequenceID == nil {return false}
       if let v = _storage._localTime, !v.isInitialized {return false}
       if let v = _storage._settings, !v.isInitialized {return false}
       if let v = _storage._lock, !v.isInitialized {return false}
@@ -2023,12 +1958,7 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 6: try { try decoder.decodeSingularUInt32Field(value: &_storage._applicationVersion) }()
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._localTime) }()
         case 8: try { try decoder.decodeSingularMessageField(value: &_storage._settings) }()
-        case 9: try { try decoder.decodeSingularUInt32Field(value: &_storage._blacklistEntriesCount) }()
-        case 10: try { try decoder.decodeSingularUInt32Field(value: &_storage._eventLogEntriesCount) }()
-        case 11: try { try decoder.decodeSingularUInt32Field(value: &_storage._eventLogSequenceID) }()
-        case 12: try { try decoder.decodeSingularUInt32Field(value: &_storage._systemLogEntriesCount) }()
-        case 13: try { try decoder.decodeSingularUInt32Field(value: &_storage._systemLogSequenceID) }()
-        case 14: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
+        case 9: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
         default: break
         }
       }
@@ -2065,23 +1995,8 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._settings {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
       } }()
-      try { if let v = _storage._blacklistEntriesCount {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 9)
-      } }()
-      try { if let v = _storage._eventLogEntriesCount {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 10)
-      } }()
-      try { if let v = _storage._eventLogSequenceID {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 11)
-      } }()
-      try { if let v = _storage._systemLogEntriesCount {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 12)
-      } }()
-      try { if let v = _storage._systemLogSequenceID {
-        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 13)
-      } }()
       try { if let v = _storage._lock {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -2100,11 +2015,6 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._applicationVersion != rhs_storage._applicationVersion {return false}
         if _storage._localTime != rhs_storage._localTime {return false}
         if _storage._settings != rhs_storage._settings {return false}
-        if _storage._blacklistEntriesCount != rhs_storage._blacklistEntriesCount {return false}
-        if _storage._eventLogEntriesCount != rhs_storage._eventLogEntriesCount {return false}
-        if _storage._eventLogSequenceID != rhs_storage._eventLogSequenceID {return false}
-        if _storage._systemLogEntriesCount != rhs_storage._systemLogEntriesCount {return false}
-        if _storage._systemLogSequenceID != rhs_storage._systemLogSequenceID {return false}
         if _storage._lock != rhs_storage._lock {return false}
         return true
       }
