@@ -112,6 +112,17 @@ typedef enum BlueWeekday {
     BlueWeekday_Sunday = 6
 } BlueWeekday_t;
 
+typedef enum BlueCredentialType {
+    /* Regular credential can only open / enter */
+    BlueCredentialType_Regular = 1,
+    /* Maintenance can open and update all locks within the site */
+    BlueCredentialType_Maintenance = 2,
+    /* Master can open all locks within the given site and requires no refresh */
+    BlueCredentialType_Master = 3,
+    /* Nfc writer allows to write any credential within this site on cards & fobs */
+    BlueCredentialType_NfcWriter = 4
+} BlueCredentialType_t;
+
 typedef enum BlueAccessType {
     /* Access with default unlock time */
     BlueAccessType_DefaultTime = 1,
@@ -688,6 +699,10 @@ extern "C" {
 #define _BLUEWEEKDAY_MIN BlueWeekday_Monday
 #define _BLUEWEEKDAY_MAX BlueWeekday_Sunday
 #define _BLUEWEEKDAY_ARRAYSIZE ((BlueWeekday_t)(BlueWeekday_Sunday+1))
+
+#define _BLUECREDENTIALTYPE_MIN BlueCredentialType_Regular
+#define _BLUECREDENTIALTYPE_MAX BlueCredentialType_NfcWriter
+#define _BLUECREDENTIALTYPE_ARRAYSIZE ((BlueCredentialType_t)(BlueCredentialType_NfcWriter+1))
 
 #define _BLUEACCESSTYPE_MIN BlueAccessType_DefaultTime
 #define _BLUEACCESSTYPE_MAX BlueAccessType_NoAccessBlacklisted

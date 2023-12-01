@@ -1,8 +1,14 @@
 import Foundation
 import SwiftProtobuf
 
-internal protocol BlueCommand {
+protocol Command {}
+
+internal protocol BlueCommand: Command {
     func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any?
+}
+
+protocol BlueAsyncCommand: Command {
+    func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any?
 }
 
 public struct BlueCommands {
@@ -40,6 +46,10 @@ public struct BlueCommands {
     public let ossSidUnprovision = BlueOssSidUnprovisionCommand()
     public let ossSidReadConfiguration = BlueOssSidReadConfigurationCommand()
     
+    public let addAccessCredential = BlueAddAccessCredentialCommand()
+    public let synchronizeMobileAccess = BlueSynchronizeMobileAccessCommand()
+    public let getAccessDevices = BlueGetAccessDevices()
+    
     fileprivate init() {}
 }
 
@@ -49,7 +59,7 @@ public let blueCommands = BlueCommands()
 // Plugin interface
 //
 
-private var blueCommandsMap: [String: BlueCommand] = [:]
+private var blueCommandsMap: [String: Command] = [:]
 
 internal struct BlueCommandResult {
     public let data: Any?
@@ -72,7 +82,7 @@ internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Any? = n
     if (blueCommandsMap.isEmpty) {
         let mirror = Mirror(reflecting: blueCommands)
         for case let (commandName?, value) in mirror.children {
-            if let value = value as? BlueCommand {
+            if let value = value as? Command {
                 blueCommandsMap[commandName] = value
             }
         }
@@ -83,19 +93,61 @@ internal func blueRunCommand(_ command: String, arg0: Any? = nil, arg1: Any? = n
             throw BlueError(.notFound)
         }
         
-        let result = try commandInstance.run(arg0: arg0, arg1: arg1, arg2: arg2)
-        
-        var data: Any? = result
-        var messageTypeName: String? = nil
-        
-        if let result = result as? Message {
-            messageTypeName = String(describing: Mirror(reflecting: result).subjectType)
-            data = try blueEncodeMessage(result)
+        let handleCommandResult: (Any?) -> Void = { result in
+            do {
+                var data: Any? = result
+                var messageTypeName: String? = nil
+                
+                if let result = result as? Message {
+                    messageTypeName = String(describing: Mirror(reflecting: result).subjectType)
+                    data = try blueEncodeMessage(result)
+                }
+                
+                completion(.success(BlueCommandResult(data: data, messageTypeName: messageTypeName)))
+            } catch {
+                completion(.failure(error))
+            }
         }
         
-        completion(.success(BlueCommandResult(data: data, messageTypeName: messageTypeName)))
+        if let asyncBlueCommandInstance = commandInstance as? BlueAsyncCommand {
+            blueRunAsyncCommand(command: asyncBlueCommandInstance, arg0: arg0, arg1: arg1, arg2: arg2) { result in
+                switch(result) {
+                case .success(let commandResult):
+                    handleCommandResult(commandResult)
+                    break
+                case .failure(let error):
+                    completion(.failure(error))
+                    break
+                }
+            }
+        } else if let blueCommandInstance = commandInstance as? BlueCommand {
+            let result = try blueCommandInstance.run(arg0: arg0, arg1: arg1, arg2: arg2)
+            
+            handleCommandResult(result)
+        } else {
+            throw BlueError(.notSupported)
+        }
     } catch {
         completion(.failure(error))
+    }
+}
+
+internal func blueRunAsyncCommand(command: BlueAsyncCommand, arg0: Any?, arg1: Any?, arg2: Any?, completion: @escaping (Result<Any?, Error>) -> Void) {
+    if #available(macOS 10.15, *) {
+        DispatchQueue.global().async {
+            Task {
+                do {
+                    let result = try await command.runAsync(arg0: arg0, arg1: arg1, arg2: arg2)
+                    
+                    completion(.success(result))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+            
+        }
+    } else {
+        completion(.failure(BlueError(.unavailable)))
     }
 }
 
