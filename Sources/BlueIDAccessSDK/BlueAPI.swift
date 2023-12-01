@@ -1,6 +1,7 @@
 import Foundation
 
 // TODO: implement .xconfig files
+// private let baseURL = "http://localhost:3000"
 private let baseURL = "https://api.dev.blue-id.com"
 
 /*

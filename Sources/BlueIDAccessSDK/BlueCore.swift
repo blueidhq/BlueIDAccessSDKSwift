@@ -17,6 +17,7 @@ public struct BlueInitializeCommand: BlueCommand {
         }
         
         _ = try blueClibErrorCheck(blueCore_Init())
+        
         blueIsInitialized = true
     }
 }
@@ -33,6 +34,7 @@ public struct BlueReleaseCommand: BlueCommand {
         }
         
         _ = try blueClibErrorCheck(blueCore_Release())
+        
         blueIsInitialized = false
     }
 }

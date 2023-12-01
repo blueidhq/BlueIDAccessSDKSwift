@@ -28,13 +28,13 @@ class BlueFetch {
     }
     
     static func fetch<T>(with request: URLRequest) async throws -> T where T: Decodable {
-        blueLogDebug("[\(BlueFetch.self)] \(request.httpMethod ?? "") \(String(describing: request.url))")
+        blueLogDebug("\(request.httpMethod ?? "") \(String(describing: request.url))")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
         if let httpResponse = response as? HTTPURLResponse {
-            blueLogDebug("[\(BlueFetch.self)] Status code: \(httpResponse.statusCode)")
-            blueLogDebug("[\(BlueFetch.self)] Data: \(String(describing: String(data: data, encoding: .utf8)))")
+            blueLogDebug("Status code: \(httpResponse.statusCode)")
+            blueLogDebug("Data: \(String(describing: String(data: data, encoding: .utf8)))")
         }
         
         let decodedData = try JSONDecoder().decode(T.self, from: data)

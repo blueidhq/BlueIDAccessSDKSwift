@@ -22,6 +22,10 @@ internal class BlueKeychain {
         return try BlueKeychain.getEntry(attrService: attrService, attrAccessible: attrAccessible, id: id)
     }
     
+    func getAllEntries() throws -> [Data]? {
+        return try BlueKeychain.getAllEntries(attrService: attrService, attrAccessible: attrAccessible)
+    }
+    
     func getCodableEntry<T>(id: String) throws -> T? where T: Codable {
         if let entry = try self.getEntry(id: id) {
             return try JSONDecoder().decode(T.self, from: entry)
@@ -126,6 +130,12 @@ internal class BlueKeychain {
         }
         
         return nil
+    }
+    
+    static func getAllEntries(attrService: String, attrAccessible: String) throws -> [Data] {
+        let entryIds = try getEntryIds(attrService: attrService)
+        
+        return try entryIds.compactMap{ try getEntry(attrService: attrService, attrAccessible: attrAccessible, id: $0) }
     }
     
     static func storeEntry(attrService: String, attrAccessible: String, id: String, data: Data) throws {

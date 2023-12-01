@@ -17,18 +17,7 @@ private struct BlueAPIMock: BlueAPIProtocol {
     }
 }
 
-final class BlueAddAccessCredentialTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        
-        setUpCommandTests()
-    }
-
-    override func tearDown() {
-        tearDownCommandTests()
-        
-        super.tearDown()
-    }
+final class BlueAddAccessCredentialTests: BlueXCTestCase {
     
     func testBlueAddAccessCredentialCommand() async throws {
         let credential = blueCreateAccessCredentialDemo()

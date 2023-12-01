@@ -16,6 +16,12 @@ public enum BlueEventType: String, CaseIterable {
     case deviceNearByLost
     // data = BlueTerminalResult
     case terminalResult
+    // data = nil
+    case accessCredentialAdded
+    // data = nil
+    case tokenSyncStarted
+    // data = nil
+    case tokenSyncFinished
 }
 
 public protocol BlueEventListener: AnyObject {

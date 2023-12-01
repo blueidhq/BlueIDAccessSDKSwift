@@ -19,6 +19,10 @@ internal class BlueStorage {
         return nil
     }
     
+    func deleteAllEntries() {
+        BlueStorage.deleteAllEntries(collection: self.collection)
+    }
+    
     func storeEntry(key: String, data: Data) {
         BlueStorage.storeEntry(collection: self.collection, key: key, data: data)
     }
@@ -33,5 +37,13 @@ internal class BlueStorage {
     
     static func getEntry(collection: String, key: String) -> Data? {
         return UserDefaults.standard.data(forKey: "\(collection).\(key)")
+    }
+    
+    static func deleteAllEntries(collection: String) {
+        for (key, _) in UserDefaults.standard.dictionaryRepresentation() {
+            if key.hasPrefix(collection) {
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+        }
     }
 }

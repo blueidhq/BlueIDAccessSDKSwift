@@ -2,18 +2,7 @@ import XCTest
 
 @testable import BlueIDAccessSDK
 
-final class BlueSignatureTests: XCTestCase {
-    override func setUp() {
-        super.setUp()
-        
-        setUpCommandTests()
-    }
-
-    override func tearDown() {
-        tearDownCommandTests()
-        
-        super.tearDown()
-    }
+final class BlueSignatureTests: BlueXCTestCase {
     
     func testCreateSignature() async throws {
         let inputData = "token".data(using: .utf8)!

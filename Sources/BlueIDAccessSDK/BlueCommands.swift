@@ -47,6 +47,7 @@ public struct BlueCommands {
     public let ossSidReadConfiguration = BlueOssSidReadConfigurationCommand()
     
     public let addAccessCredential = BlueAddAccessCredentialCommand()
+    public let getAccessCredentials = BlueGetAccessCredentialsCommand()
     public let synchronizeMobileAccess = BlueSynchronizeMobileAccessCommand()
     public let getAccessDevices = BlueGetAccessDevices()
     
