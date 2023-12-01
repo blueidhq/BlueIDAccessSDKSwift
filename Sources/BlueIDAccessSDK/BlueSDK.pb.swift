@@ -322,59 +322,82 @@ public struct BlueAccessCredential {
   // methods supported on all messages.
 
   public var credentialID: BlueCredentialId {
-    get {return _credentialID ?? BlueCredentialId()}
-    set {_credentialID = newValue}
+    get {return _storage._credentialID ?? BlueCredentialId()}
+    set {_uniqueStorage()._credentialID = newValue}
   }
   /// Returns true if `credentialID` has been explicitly set.
-  public var hasCredentialID: Bool {return self._credentialID != nil}
+  public var hasCredentialID: Bool {return _storage._credentialID != nil}
   /// Clears the value of `credentialID`. Subsequent reads from it will return its default value.
-  public mutating func clearCredentialID() {self._credentialID = nil}
+  public mutating func clearCredentialID() {_uniqueStorage()._credentialID = nil}
 
   public var credentialType: BlueCredentialType {
-    get {return _credentialType ?? .regular}
-    set {_credentialType = newValue}
+    get {return _storage._credentialType ?? .regular}
+    set {_uniqueStorage()._credentialType = newValue}
   }
   /// Returns true if `credentialType` has been explicitly set.
-  public var hasCredentialType: Bool {return self._credentialType != nil}
+  public var hasCredentialType: Bool {return _storage._credentialType != nil}
   /// Clears the value of `credentialType`. Subsequent reads from it will return its default value.
-  public mutating func clearCredentialType() {self._credentialType = nil}
+  public mutating func clearCredentialType() {_uniqueStorage()._credentialType = nil}
+
+  public var name: String {
+    get {return _storage._name ?? String()}
+    set {_uniqueStorage()._name = newValue}
+  }
+  /// Returns true if `name` has been explicitly set.
+  public var hasName: Bool {return _storage._name != nil}
+  /// Clears the value of `name`. Subsequent reads from it will return its default value.
+  public mutating func clearName() {_uniqueStorage()._name = nil}
+
+  public var siteName: String {
+    get {return _storage._siteName ?? String()}
+    set {_uniqueStorage()._siteName = newValue}
+  }
+  /// Returns true if `siteName` has been explicitly set.
+  public var hasSiteName: Bool {return _storage._siteName != nil}
+  /// Clears the value of `siteName`. Subsequent reads from it will return its default value.
+  public mutating func clearSiteName() {_uniqueStorage()._siteName = nil}
 
   public var validFrom: BlueLocalTimestamp {
-    get {return _validFrom ?? BlueLocalTimestamp()}
-    set {_validFrom = newValue}
+    get {return _storage._validFrom ?? BlueLocalTimestamp()}
+    set {_uniqueStorage()._validFrom = newValue}
   }
   /// Returns true if `validFrom` has been explicitly set.
-  public var hasValidFrom: Bool {return self._validFrom != nil}
+  public var hasValidFrom: Bool {return _storage._validFrom != nil}
   /// Clears the value of `validFrom`. Subsequent reads from it will return its default value.
-  public mutating func clearValidFrom() {self._validFrom = nil}
+  public mutating func clearValidFrom() {_uniqueStorage()._validFrom = nil}
 
   public var validTo: BlueLocalTimestamp {
-    get {return _validTo ?? BlueLocalTimestamp()}
-    set {_validTo = newValue}
+    get {return _storage._validTo ?? BlueLocalTimestamp()}
+    set {_uniqueStorage()._validTo = newValue}
   }
   /// Returns true if `validTo` has been explicitly set.
-  public var hasValidTo: Bool {return self._validTo != nil}
+  public var hasValidTo: Bool {return _storage._validTo != nil}
   /// Clears the value of `validTo`. Subsequent reads from it will return its default value.
-  public mutating func clearValidTo() {self._validTo = nil}
+  public mutating func clearValidTo() {_uniqueStorage()._validTo = nil}
+
+  public var validity: BlueLocalTimestamp {
+    get {return _storage._validity ?? BlueLocalTimestamp()}
+    set {_uniqueStorage()._validity = newValue}
+  }
+  /// Returns true if `validity` has been explicitly set.
+  public var hasValidity: Bool {return _storage._validity != nil}
+  /// Clears the value of `validity`. Subsequent reads from it will return its default value.
+  public mutating func clearValidity() {_uniqueStorage()._validity = nil}
 
   public var privateKey: Data {
-    get {return _privateKey ?? Data()}
-    set {_privateKey = newValue}
+    get {return _storage._privateKey ?? Data()}
+    set {_uniqueStorage()._privateKey = newValue}
   }
   /// Returns true if `privateKey` has been explicitly set.
-  public var hasPrivateKey: Bool {return self._privateKey != nil}
+  public var hasPrivateKey: Bool {return _storage._privateKey != nil}
   /// Clears the value of `privateKey`. Subsequent reads from it will return its default value.
-  public mutating func clearPrivateKey() {self._privateKey = nil}
+  public mutating func clearPrivateKey() {_uniqueStorage()._privateKey = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _credentialID: BlueCredentialId? = nil
-  fileprivate var _credentialType: BlueCredentialType? = nil
-  fileprivate var _validFrom: BlueLocalTimestamp? = nil
-  fileprivate var _validTo: BlueLocalTimestamp? = nil
-  fileprivate var _privateKey: Data? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct BlueAccessCredentialList {
@@ -403,21 +426,21 @@ public struct BlueAccessDevice {
   /// Clears the value of `deviceID`. Subsequent reads from it will return its default value.
   public mutating func clearDeviceID() {self._deviceID = nil}
 
-  public var name: String {
-    get {return _name ?? String()}
-    set {_name = newValue}
+  public var objectName: String {
+    get {return _objectName ?? String()}
+    set {_objectName = newValue}
   }
-  /// Returns true if `name` has been explicitly set.
-  public var hasName: Bool {return self._name != nil}
-  /// Clears the value of `name`. Subsequent reads from it will return its default value.
-  public mutating func clearName() {self._name = nil}
+  /// Returns true if `objectName` has been explicitly set.
+  public var hasObjectName: Bool {return self._objectName != nil}
+  /// Clears the value of `objectName`. Subsequent reads from it will return its default value.
+  public mutating func clearObjectName() {self._objectName = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _deviceID: String? = nil
-  fileprivate var _name: String? = nil
+  fileprivate var _objectName: String? = nil
 }
 
 public struct BlueAccessDeviceList {
@@ -748,65 +771,132 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "credentialId"),
     2: .same(proto: "credentialType"),
-    3: .same(proto: "validFrom"),
-    4: .same(proto: "validTo"),
-    5: .same(proto: "privateKey"),
+    3: .same(proto: "name"),
+    4: .same(proto: "siteName"),
+    5: .same(proto: "validFrom"),
+    6: .same(proto: "validTo"),
+    7: .same(proto: "validity"),
+    8: .same(proto: "privateKey"),
   ]
 
+  fileprivate class _StorageClass {
+    var _credentialID: BlueCredentialId? = nil
+    var _credentialType: BlueCredentialType? = nil
+    var _name: String? = nil
+    var _siteName: String? = nil
+    var _validFrom: BlueLocalTimestamp? = nil
+    var _validTo: BlueLocalTimestamp? = nil
+    var _validity: BlueLocalTimestamp? = nil
+    var _privateKey: Data? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _credentialID = source._credentialID
+      _credentialType = source._credentialType
+      _name = source._name
+      _siteName = source._siteName
+      _validFrom = source._validFrom
+      _validTo = source._validTo
+      _validity = source._validity
+      _privateKey = source._privateKey
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public var isInitialized: Bool {
-    if self._credentialID == nil {return false}
-    if self._credentialType == nil {return false}
-    if let v = self._credentialID, !v.isInitialized {return false}
-    if let v = self._validFrom, !v.isInitialized {return false}
-    if let v = self._validTo, !v.isInitialized {return false}
-    return true
+    return withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      if _storage._credentialID == nil {return false}
+      if _storage._credentialType == nil {return false}
+      if let v = _storage._credentialID, !v.isInitialized {return false}
+      if let v = _storage._validFrom, !v.isInitialized {return false}
+      if let v = _storage._validTo, !v.isInitialized {return false}
+      if let v = _storage._validity, !v.isInitialized {return false}
+      return true
+    }
   }
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularMessageField(value: &self._credentialID) }()
-      case 2: try { try decoder.decodeSingularEnumField(value: &self._credentialType) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._validFrom) }()
-      case 4: try { try decoder.decodeSingularMessageField(value: &self._validTo) }()
-      case 5: try { try decoder.decodeSingularBytesField(value: &self._privateKey) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularMessageField(value: &_storage._credentialID) }()
+        case 2: try { try decoder.decodeSingularEnumField(value: &_storage._credentialType) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
+        case 4: try { try decoder.decodeSingularStringField(value: &_storage._siteName) }()
+        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._validFrom) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._validTo) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._validity) }()
+        case 8: try { try decoder.decodeSingularBytesField(value: &_storage._privateKey) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._credentialID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._credentialType {
-      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
-    } }()
-    try { if let v = self._validFrom {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    } }()
-    try { if let v = self._validTo {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    } }()
-    try { if let v = self._privateKey {
-      try visitor.visitSingularBytesField(value: v, fieldNumber: 5)
-    } }()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._credentialID {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._credentialType {
+        try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+      } }()
+      try { if let v = _storage._name {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._siteName {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._validFrom {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._validTo {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._validity {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._privateKey {
+        try visitor.visitSingularBytesField(value: v, fieldNumber: 8)
+      } }()
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BlueAccessCredential, rhs: BlueAccessCredential) -> Bool {
-    if lhs._credentialID != rhs._credentialID {return false}
-    if lhs._credentialType != rhs._credentialType {return false}
-    if lhs._validFrom != rhs._validFrom {return false}
-    if lhs._validTo != rhs._validTo {return false}
-    if lhs._privateKey != rhs._privateKey {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._credentialID != rhs_storage._credentialID {return false}
+        if _storage._credentialType != rhs_storage._credentialType {return false}
+        if _storage._name != rhs_storage._name {return false}
+        if _storage._siteName != rhs_storage._siteName {return false}
+        if _storage._validFrom != rhs_storage._validFrom {return false}
+        if _storage._validTo != rhs_storage._validTo {return false}
+        if _storage._validity != rhs_storage._validity {return false}
+        if _storage._privateKey != rhs_storage._privateKey {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -853,7 +943,7 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static let protoMessageName: String = "BlueAccessDevice"
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "deviceId"),
-    2: .same(proto: "name"),
+    2: .same(proto: "objectName"),
   ]
 
   public var isInitialized: Bool {
@@ -868,7 +958,7 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self._deviceID) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self._name) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self._objectName) }()
       default: break
       }
     }
@@ -882,7 +972,7 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._deviceID {
       try visitor.visitSingularStringField(value: v, fieldNumber: 1)
     } }()
-    try { if let v = self._name {
+    try { if let v = self._objectName {
       try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     } }()
     try unknownFields.traverse(visitor: &visitor)
@@ -890,7 +980,7 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
 
   public static func ==(lhs: BlueAccessDevice, rhs: BlueAccessDevice) -> Bool {
     if lhs._deviceID != rhs._deviceID {return false}
-    if lhs._name != rhs._name {return false}
+    if lhs._objectName != rhs._objectName {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
