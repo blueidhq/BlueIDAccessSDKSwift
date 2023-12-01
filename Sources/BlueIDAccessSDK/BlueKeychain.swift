@@ -22,8 +22,19 @@ internal class BlueKeychain {
         return try BlueKeychain.getEntry(attrService: attrService, attrAccessible: attrAccessible, id: id)
     }
     
+    func getCodableEntry<T>(id: String) throws -> T? where T: Codable {
+        if let entry = try self.getEntry(id: id) {
+            return try JSONDecoder().decode(T.self, from: entry)
+        }
+        return nil
+    }
+    
     func storeEntry(id: String, data: Data) throws {
         return try BlueKeychain.storeEntry(attrService: attrService, attrAccessible: attrAccessible, id: id, data: data)
+    }
+    
+    func storeCodableEntry(id: String, data: Codable) throws {
+        try self.storeEntry(id: id, data: try JSONEncoder().encode(data))
     }
     
     func deleteEntry(id: String) throws -> Bool {

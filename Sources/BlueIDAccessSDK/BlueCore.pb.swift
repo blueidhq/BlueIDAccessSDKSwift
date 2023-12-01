@@ -381,6 +381,54 @@ extension BlueWeekday: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum BlueCredentialType: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+
+  /// Regular credential can only open / enter 
+  case regular // = 1
+
+  /// Maintenance can open and update all locks within the site 
+  case maintenance // = 2
+
+  /// Master can open all locks within the given site and requires no refresh 
+  case master // = 3
+
+  /// Nfc writer allows to write any credential within this site on cards & fobs 
+  case nfcWriter // = 4
+
+  public init() {
+    self = .regular
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 1: self = .regular
+    case 2: self = .maintenance
+    case 3: self = .master
+    case 4: self = .nfcWriter
+    default: return nil
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .regular: return 1
+    case .maintenance: return 2
+    case .master: return 3
+    case .nfcWriter: return 4
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension BlueCredentialType: CaseIterable {
+  // Support synthesized by the compiler.
+}
+
+#endif  // swift(>=4.2)
+
 public enum BlueAccessType: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -3361,6 +3409,7 @@ public struct _BlueTestEncodeDecode {
 extension BlueReturnCode: @unchecked Sendable {}
 extension BlueTimeUnit: @unchecked Sendable {}
 extension BlueWeekday: @unchecked Sendable {}
+extension BlueCredentialType: @unchecked Sendable {}
 extension BlueAccessType: @unchecked Sendable {}
 extension BlueTransponderType: @unchecked Sendable {}
 extension BlueHardwareType: @unchecked Sendable {}
@@ -3532,6 +3581,15 @@ extension BlueWeekday: SwiftProtobuf._ProtoNameProviding {
     4: .same(proto: "Friday"),
     5: .same(proto: "Saturday"),
     6: .same(proto: "Sunday"),
+  ]
+}
+
+extension BlueCredentialType: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "Regular"),
+    2: .same(proto: "Maintenance"),
+    3: .same(proto: "Master"),
+    4: .same(proto: "NfcWriter"),
   ]
 }
 

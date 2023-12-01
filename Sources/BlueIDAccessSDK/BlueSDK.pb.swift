@@ -316,6 +316,110 @@ public struct BlueDeviceInfo {
   fileprivate var _manufacturerInfo: BlueBleManufacturerInfo? = nil
 }
 
+public struct BlueAccessCredential {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var credentialID: BlueCredentialId {
+    get {return _credentialID ?? BlueCredentialId()}
+    set {_credentialID = newValue}
+  }
+  /// Returns true if `credentialID` has been explicitly set.
+  public var hasCredentialID: Bool {return self._credentialID != nil}
+  /// Clears the value of `credentialID`. Subsequent reads from it will return its default value.
+  public mutating func clearCredentialID() {self._credentialID = nil}
+
+  public var credentialType: BlueCredentialType {
+    get {return _credentialType ?? .regular}
+    set {_credentialType = newValue}
+  }
+  /// Returns true if `credentialType` has been explicitly set.
+  public var hasCredentialType: Bool {return self._credentialType != nil}
+  /// Clears the value of `credentialType`. Subsequent reads from it will return its default value.
+  public mutating func clearCredentialType() {self._credentialType = nil}
+
+  public var validFrom: BlueLocalTimestamp {
+    get {return _validFrom ?? BlueLocalTimestamp()}
+    set {_validFrom = newValue}
+  }
+  /// Returns true if `validFrom` has been explicitly set.
+  public var hasValidFrom: Bool {return self._validFrom != nil}
+  /// Clears the value of `validFrom`. Subsequent reads from it will return its default value.
+  public mutating func clearValidFrom() {self._validFrom = nil}
+
+  public var validTo: BlueLocalTimestamp {
+    get {return _validTo ?? BlueLocalTimestamp()}
+    set {_validTo = newValue}
+  }
+  /// Returns true if `validTo` has been explicitly set.
+  public var hasValidTo: Bool {return self._validTo != nil}
+  /// Clears the value of `validTo`. Subsequent reads from it will return its default value.
+  public mutating func clearValidTo() {self._validTo = nil}
+
+  public var privateKey: Data {
+    get {return _privateKey ?? Data()}
+    set {_privateKey = newValue}
+  }
+  /// Returns true if `privateKey` has been explicitly set.
+  public var hasPrivateKey: Bool {return self._privateKey != nil}
+  /// Clears the value of `privateKey`. Subsequent reads from it will return its default value.
+  public mutating func clearPrivateKey() {self._privateKey = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _credentialID: BlueCredentialId? = nil
+  fileprivate var _credentialType: BlueCredentialType? = nil
+  fileprivate var _validFrom: BlueLocalTimestamp? = nil
+  fileprivate var _validTo: BlueLocalTimestamp? = nil
+  fileprivate var _privateKey: Data? = nil
+}
+
+public struct BlueAccessDevice {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var deviceID: String {
+    get {return _deviceID ?? String()}
+    set {_deviceID = newValue}
+  }
+  /// Returns true if `deviceID` has been explicitly set.
+  public var hasDeviceID: Bool {return self._deviceID != nil}
+  /// Clears the value of `deviceID`. Subsequent reads from it will return its default value.
+  public mutating func clearDeviceID() {self._deviceID = nil}
+
+  public var name: String {
+    get {return _name ?? String()}
+    set {_name = newValue}
+  }
+  /// Returns true if `name` has been explicitly set.
+  public var hasName: Bool {return self._name != nil}
+  /// Clears the value of `name`. Subsequent reads from it will return its default value.
+  public mutating func clearName() {self._name = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _deviceID: String? = nil
+  fileprivate var _name: String? = nil
+}
+
+public struct BlueAccessDeviceList {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var devices: [BlueAccessDevice] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension BlueDeviceType: @unchecked Sendable {}
 extension BlueI18n: @unchecked Sendable {}
@@ -323,6 +427,9 @@ extension BlueDeviceDetailsBluetooth: @unchecked Sendable {}
 extension BlueDeviceDetailsUWB: @unchecked Sendable {}
 extension BlueDeviceInfo: @unchecked Sendable {}
 extension BlueDeviceInfo.OneOf_Details: @unchecked Sendable {}
+extension BlueAccessCredential: @unchecked Sendable {}
+extension BlueAccessDevice: @unchecked Sendable {}
+extension BlueAccessDeviceList: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -618,6 +725,160 @@ extension BlueDeviceInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplement
     if lhs._distanceMeters != rhs._distanceMeters {return false}
     if lhs._manufacturerInfo != rhs._manufacturerInfo {return false}
     if lhs.details != rhs.details {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessCredential"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "credentialId"),
+    2: .same(proto: "credentialType"),
+    3: .same(proto: "validFrom"),
+    4: .same(proto: "validTo"),
+    5: .same(proto: "privateKey"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._credentialID == nil {return false}
+    if self._credentialType == nil {return false}
+    if self._privateKey == nil {return false}
+    if let v = self._credentialID, !v.isInitialized {return false}
+    if let v = self._validFrom, !v.isInitialized {return false}
+    if let v = self._validTo, !v.isInitialized {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._credentialID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._credentialType) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._validFrom) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._validTo) }()
+      case 5: try { try decoder.decodeSingularBytesField(value: &self._privateKey) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._credentialID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._credentialType {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._validFrom {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._validTo {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
+    } }()
+    try { if let v = self._privateKey {
+      try visitor.visitSingularBytesField(value: v, fieldNumber: 5)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessCredential, rhs: BlueAccessCredential) -> Bool {
+    if lhs._credentialID != rhs._credentialID {return false}
+    if lhs._credentialType != rhs._credentialType {return false}
+    if lhs._validFrom != rhs._validFrom {return false}
+    if lhs._validTo != rhs._validTo {return false}
+    if lhs._privateKey != rhs._privateKey {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessDevice"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "deviceId"),
+    2: .same(proto: "name"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._deviceID == nil {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._deviceID) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self._name) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._deviceID {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._name {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessDevice, rhs: BlueAccessDevice) -> Bool {
+    if lhs._deviceID != rhs._deviceID {return false}
+    if lhs._name != rhs._name {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessDeviceList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessDeviceList"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "devices"),
+  ]
+
+  public var isInitialized: Bool {
+    if !SwiftProtobuf.Internal.areAllInitialized(self.devices) {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.devices) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.devices.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.devices, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessDeviceList, rhs: BlueAccessDeviceList) -> Bool {
+    if lhs.devices != rhs.devices {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

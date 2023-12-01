@@ -26,4 +26,3 @@ extension BlueLocalTimestamp {
         self.seconds = UInt32(seconds)
     }
 }
-

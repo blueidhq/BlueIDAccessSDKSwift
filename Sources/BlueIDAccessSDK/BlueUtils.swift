@@ -229,5 +229,3 @@ internal func blueCastResult<ResultType>(_ result: ResultType?) throws -> Any {
     
     return result
 }
-
-
