@@ -25,4 +25,21 @@ extension BlueLocalTimestamp {
         self.minutes = UInt32(minutes)
         self.seconds = UInt32(seconds)
     }
+    
+    public func toDate() -> Date? {
+        var dateComponents = DateComponents()
+        dateComponents.year = Int(year)
+        dateComponents.month = Int(month)
+        dateComponents.day = Int(date)
+        dateComponents.hour = Int(hours)
+        dateComponents.minute = Int(minutes)
+        dateComponents.second = Int(seconds)
+        
+        let date = Calendar.current.date(from: dateComponents)
+        if (date?.timeIntervalSince1970 ?? 0 <= 0) {
+            return nil
+        }
+        
+        return date
+    }
 }

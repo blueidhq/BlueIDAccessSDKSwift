@@ -85,6 +85,15 @@ public struct BlueSynchronizeMobileAccessCommand: BlueAsyncCommand {
             return
         }
         
+        var updatedCredential = credential
+        updatedCredential.siteName = synchronizationResult.siteName ?? ""
+        
+        if let validity = synchronizationResult.validity {
+            updatedCredential.validity = BlueLocalTimestamp(Date(timeIntervalSince1970: TimeInterval(validity/1000)))
+        }
+        
+        try blueAccessCredentialsKeyChain.storeEntry(id: updatedCredential.credentialID.id, data: updatedCredential.jsonUTF8Data())
+        
         let deviceList = synchronizationResult.getAccessDeviceList()
         try blueAccessDevicesStorage.storeEntry(key: credential.credentialID.id, data: deviceList.jsonUTF8Data())
         
