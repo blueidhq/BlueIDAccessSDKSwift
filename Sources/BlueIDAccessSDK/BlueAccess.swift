@@ -27,7 +27,35 @@ public struct BlueAddAccessCredentialCommand: BlueAsyncCommand {
         
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: credential.jsonUTF8Data())
         
-        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credential: credential)
+        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credential: credential, refreshToken: true)
+        
+        blueFireListeners(fireEvent: .accessCredentialAdded, data: nil)
+    }
+}
+
+public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
+    internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync(includePrivateKey: false)
+    }
+    
+    public func runAsync(includePrivateKey: Bool) async throws -> BlueAccessCredentialList {
+        var credentialList = BlueAccessCredentialList()
+
+        if let entries = try blueAccessCredentialsKeyChain.getAllEntries() {
+            credentialList.credentials = entries.compactMap { entry in
+                if var credential = try? BlueAccessCredential(jsonUTF8Data: entry) {
+                    if (!includePrivateKey) {
+                        credential.clearPrivateKey()
+                    }
+                    
+                    return credential
+                }
+                
+                return nil
+            }
+        }
+        
+        return credentialList
     }
 }
 

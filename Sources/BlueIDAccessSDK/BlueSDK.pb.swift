@@ -377,6 +377,18 @@ public struct BlueAccessCredential {
   fileprivate var _privateKey: Data? = nil
 }
 
+public struct BlueAccessCredentialList {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var credentials: [BlueAccessCredential] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 public struct BlueAccessDevice {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -428,6 +440,7 @@ extension BlueDeviceDetailsUWB: @unchecked Sendable {}
 extension BlueDeviceInfo: @unchecked Sendable {}
 extension BlueDeviceInfo.OneOf_Details: @unchecked Sendable {}
 extension BlueAccessCredential: @unchecked Sendable {}
+extension BlueAccessCredentialList: @unchecked Sendable {}
 extension BlueAccessDevice: @unchecked Sendable {}
 extension BlueAccessDeviceList: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
@@ -743,7 +756,6 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
   public var isInitialized: Bool {
     if self._credentialID == nil {return false}
     if self._credentialType == nil {return false}
-    if self._privateKey == nil {return false}
     if let v = self._credentialID, !v.isInitialized {return false}
     if let v = self._validFrom, !v.isInitialized {return false}
     if let v = self._validTo, !v.isInitialized {return false}
@@ -795,6 +807,43 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     if lhs._validFrom != rhs._validFrom {return false}
     if lhs._validTo != rhs._validTo {return false}
     if lhs._privateKey != rhs._privateKey {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessCredentialList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessCredentialList"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "credentials"),
+  ]
+
+  public var isInitialized: Bool {
+    if !SwiftProtobuf.Internal.areAllInitialized(self.credentials) {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.credentials) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.credentials.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.credentials, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessCredentialList, rhs: BlueAccessCredentialList) -> Bool {
+    if lhs.credentials != rhs.credentials {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

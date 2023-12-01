@@ -17,6 +17,8 @@ public final class BlueAppDelegate: NSObject {
             blueNearbyAppLaunched()
         }
 #endif
+        
+        BlueTokenSyncScheduler.shared.didFinishLaunching()
     }
     
 #if os(iOS) || os(watchOS)
@@ -29,25 +31,37 @@ public final class BlueAppDelegate: NSObject {
         let startedByRegion = launchOptions.object(forKey: UIApplication.LaunchOptionsKey.location) != nil
         didFinishLaunchingWithOptions(startedByRegion: startedByRegion)
     }
+#else
+    @objc public static func didFinishLaunching() {
+        didFinishLaunchingWithOptions(startedByRegion: false)
+    }
 #endif
+
+    @objc public static func willResignActive() {
+        BlueTokenSyncScheduler.shared.willResignActive()
+    }
+
+    @objc public static func didBecomeActive() {
+#if os(iOS) || os(watchOS)
+        blueNearbyAppBecameActive()
+#endif
+        
+        BlueTokenSyncScheduler.shared.didBecomeActive()
+    }
     
-    @objc public static func applicationWillTerminate() {
+    @objc public static func didEnterBackground() {
+#if os(iOS) || os(watchOS)
+        blueNearbyAppEnterBackground()
+#endif
+    }
+    
+    @objc public static func willTerminate() {
         do {
             try blueCommands.release.run()
         } catch {
             fatalError(error.localizedDescription)
         }
-    }
-    
-    @objc public static func applicationDidEnterBackground() {
-#if os(iOS) || os(watchOS)
-        blueNearbyAppEnterBackground()
-#endif
-    }
-
-    @objc public static func applicationDidBecomeActive() {
-#if os(iOS) || os(watchOS)
-        blueNearbyAppBecameActive()
-#endif
+        
+        BlueTokenSyncScheduler.shared.willTerminate()
     }
 }
