@@ -5,6 +5,8 @@ internal let blueDemoData = BlueSharedDemoData()
 
 public func blueCreateAccessCredentialDemo() -> BlueAccessCredential {
     var credential = BlueAccessCredential()
+    credential.name = "Someone's iPhone"
+    credential.siteName = "Somwehere"
     credential.credentialID.id = "8M-1xA3oze"
     credential.credentialType = BlueCredentialType.regular
     credential.privateKey = Data([
