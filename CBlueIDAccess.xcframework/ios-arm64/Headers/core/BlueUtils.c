@@ -23,6 +23,20 @@ int blueUtils_GetEncodedDataSize(const void *pDataObject, const pb_msgdesc_t *pF
     return stream.bytes_written;
 }
 
+int blueUtils_GetEncodedDataTotalSize(uint8_t *pBuffer, size_t size)
+{
+    pb_istream_t stream = pb_istream_from_buffer(pBuffer, size);
+    uint32_t totalSize;
+
+    if (!pb_decode_varint32(&stream, &totalSize))
+    {
+        BLUE_LOG_ERROR("Getting decoded data size failed");
+        return -1;
+    }
+
+    return (int)totalSize + (int)size - (int)stream.bytes_left;
+}
+
 int blueUtils_EncodeData(const void *pDataObject, const pb_msgdesc_t *pFields, uint8_t *pBuffer, size_t size)
 {
     pb_ostream_t stream = pb_ostream_from_buffer(pBuffer, size);
