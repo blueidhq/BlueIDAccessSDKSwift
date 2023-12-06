@@ -17,6 +17,9 @@ extern "C"
     // Returns required size in bytes if the given data object would be serialized
     int blueUtils_GetEncodedDataSize(const void *pDataObject, const pb_msgdesc_t *pFields);
 
+    // Retuns the total size of the encoded data given a partial buffer
+    int blueUtils_GetEncodedDataTotalSize(uint8_t *pBuffer, size_t size);
+
     // Convert given data object into binary protobuf serialized buffer, if positive returns size otherwise returns error return code
     int blueUtils_EncodeData(const void *pDataObject, const pb_msgdesc_t *pFields, uint8_t *pBuffer, size_t size);
 
