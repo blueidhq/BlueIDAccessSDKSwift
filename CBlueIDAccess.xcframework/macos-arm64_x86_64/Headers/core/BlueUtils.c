@@ -679,14 +679,19 @@ bool blueUtils_TimeScheduleIsValid(const BlueLocalTimeSchedule_t *const pTimeSch
     const uint32_t startMins = pTimeSchedule->timePeriod.hoursFrom * 60 + pTimeSchedule->timePeriod.minutesFrom;
     const uint32_t endMins = pTimeSchedule->timePeriod.hoursTo * 60 + pTimeSchedule->timePeriod.minutesTo;
 
-    if (endMins <= startMins)
+    if (noEndTime) 
     {
-        return false;
-    }
-
-    if (noEndTime && endMins != startMins)
+        if (endMins != startMins)
+        {
+            return false;
+        }
+    } 
+    else 
     {
-        return false;
+        if (endMins <= startMins)
+        {
+            return false;
+        }
     }
 
     return true;
