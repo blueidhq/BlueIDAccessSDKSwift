@@ -160,7 +160,7 @@ internal func blueIBeaconMajorMinorToId(major: Int16, minor: Int16) -> String {
 }
 
 internal func blueCastArg<ArgumentType>(_ type: ArgumentType.Type, _ value: Any?, isOptional: Bool = false, result: inout ArgumentType?) throws {
-    if value == nil {
+    if value == nil || value is NSNull {
         guard isOptional else {
             throw BlueError(.invalidArguments)
         }
