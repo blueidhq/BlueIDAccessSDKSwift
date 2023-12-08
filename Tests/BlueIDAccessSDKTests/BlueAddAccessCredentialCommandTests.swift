@@ -3,6 +3,12 @@ import XCTest
 @testable import BlueIDAccessSDK
 
 private struct BlueAPIMock: BlueAPIProtocol {
+    func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueCreateDeviceConfigurationResult {
+        return BlueCreateDeviceConfigurationResult(
+            systemConfiguration: "dummy"
+        )
+    }
+    
     func getAccessToken(credentialId: String) async throws -> BlueAccessToken {
         return BlueAccessToken(token: "dummy", expiresAt: 0)
     }

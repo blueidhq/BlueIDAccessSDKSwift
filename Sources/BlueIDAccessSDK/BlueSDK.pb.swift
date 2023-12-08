@@ -348,6 +348,15 @@ public struct BlueAccessCredential {
   /// Clears the value of `name`. Subsequent reads from it will return its default value.
   public mutating func clearName() {_uniqueStorage()._name = nil}
 
+  public var siteID: Int32 {
+    get {return _storage._siteID ?? 0}
+    set {_uniqueStorage()._siteID = newValue}
+  }
+  /// Returns true if `siteID` has been explicitly set.
+  public var hasSiteID: Bool {return _storage._siteID != nil}
+  /// Clears the value of `siteID`. Subsequent reads from it will return its default value.
+  public mutating func clearSiteID() {_uniqueStorage()._siteID = nil}
+
   public var siteName: String {
     get {return _storage._siteName ?? String()}
     set {_uniqueStorage()._siteName = newValue}
@@ -772,17 +781,19 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
     1: .same(proto: "credentialId"),
     2: .same(proto: "credentialType"),
     3: .same(proto: "name"),
-    4: .same(proto: "siteName"),
-    5: .same(proto: "validFrom"),
-    6: .same(proto: "validTo"),
-    7: .same(proto: "validity"),
-    8: .same(proto: "privateKey"),
+    4: .same(proto: "siteId"),
+    5: .same(proto: "siteName"),
+    6: .same(proto: "validFrom"),
+    7: .same(proto: "validTo"),
+    8: .same(proto: "validity"),
+    9: .same(proto: "privateKey"),
   ]
 
   fileprivate class _StorageClass {
     var _credentialID: BlueCredentialId? = nil
     var _credentialType: BlueCredentialType? = nil
     var _name: String? = nil
+    var _siteID: Int32? = nil
     var _siteName: String? = nil
     var _validFrom: BlueLocalTimestamp? = nil
     var _validTo: BlueLocalTimestamp? = nil
@@ -797,6 +808,7 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       _credentialID = source._credentialID
       _credentialType = source._credentialType
       _name = source._name
+      _siteID = source._siteID
       _siteName = source._siteName
       _validFrom = source._validFrom
       _validTo = source._validTo
@@ -835,11 +847,12 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         case 1: try { try decoder.decodeSingularMessageField(value: &_storage._credentialID) }()
         case 2: try { try decoder.decodeSingularEnumField(value: &_storage._credentialType) }()
         case 3: try { try decoder.decodeSingularStringField(value: &_storage._name) }()
-        case 4: try { try decoder.decodeSingularStringField(value: &_storage._siteName) }()
-        case 5: try { try decoder.decodeSingularMessageField(value: &_storage._validFrom) }()
-        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._validTo) }()
-        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._validity) }()
-        case 8: try { try decoder.decodeSingularBytesField(value: &_storage._privateKey) }()
+        case 4: try { try decoder.decodeSingularInt32Field(value: &_storage._siteID) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._siteName) }()
+        case 6: try { try decoder.decodeSingularMessageField(value: &_storage._validFrom) }()
+        case 7: try { try decoder.decodeSingularMessageField(value: &_storage._validTo) }()
+        case 8: try { try decoder.decodeSingularMessageField(value: &_storage._validity) }()
+        case 9: try { try decoder.decodeSingularBytesField(value: &_storage._privateKey) }()
         default: break
         }
       }
@@ -861,20 +874,23 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       try { if let v = _storage._name {
         try visitor.visitSingularStringField(value: v, fieldNumber: 3)
       } }()
+      try { if let v = _storage._siteID {
+        try visitor.visitSingularInt32Field(value: v, fieldNumber: 4)
+      } }()
       try { if let v = _storage._siteName {
-        try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+        try visitor.visitSingularStringField(value: v, fieldNumber: 5)
       } }()
       try { if let v = _storage._validFrom {
-        try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-      } }()
-      try { if let v = _storage._validTo {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
       } }()
-      try { if let v = _storage._validity {
+      try { if let v = _storage._validTo {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
       } }()
+      try { if let v = _storage._validity {
+        try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
+      } }()
       try { if let v = _storage._privateKey {
-        try visitor.visitSingularBytesField(value: v, fieldNumber: 8)
+        try visitor.visitSingularBytesField(value: v, fieldNumber: 9)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -888,6 +904,7 @@ extension BlueAccessCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
         if _storage._credentialID != rhs_storage._credentialID {return false}
         if _storage._credentialType != rhs_storage._credentialType {return false}
         if _storage._name != rhs_storage._name {return false}
+        if _storage._siteID != rhs_storage._siteID {return false}
         if _storage._siteName != rhs_storage._siteName {return false}
         if _storage._validFrom != rhs_storage._validFrom {return false}
         if _storage._validTo != rhs_storage._validTo {return false}

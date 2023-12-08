@@ -22,7 +22,7 @@ private final class BlueCentralManagerListener: NSObject, CBCentralManagerDelega
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         dispatchPrecondition(condition: .onQueue(blueDeviceQueue))
         
-        let deviceID = peripheral.name ?? advertisementData[CBAdvertisementDataLocalNameKey] as? String
+        let deviceID = advertisementData[CBAdvertisementDataLocalNameKey] as? String ?? peripheral.name
         
         guard let deviceID = deviceID, !deviceID.isEmpty else {
             return

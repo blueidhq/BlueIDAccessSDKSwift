@@ -13,7 +13,6 @@ class BlueXCTestCase: XCTestCase {
     override func tearDown() {
         do {
             _ = try? blueAccessCredentialsKeyChain.deleteAllEntries()
-            _ = try? blueAccessDeviceTokensKeyChain.deleteAllEntries()
             _ = try? blueAccessAuthenticationTokensKeyChain.deleteAllEntries()
             
             blueAccessDevicesStorage.deleteAllEntries()

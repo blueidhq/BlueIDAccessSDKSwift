@@ -8,7 +8,7 @@ public func blueCreateAccessCredentialDemo() -> BlueAccessCredential {
     credential.name = "Someone's iPhone"
     credential.siteName = "Somwehere"
     credential.credentialID.id = "8M-1xA3oze"
-    credential.credentialType = BlueCredentialType.regular
+    credential.credentialType = .maintenance
     credential.privateKey = Data([
         48,129,135,2,1,0,48,19,6,7,42,134,72,206,61,2,1,6,8,42,134,
         72,206,61,3,1,7,4,109,48,107,2,1,1,4,32,152,140,1,4,26,171,
