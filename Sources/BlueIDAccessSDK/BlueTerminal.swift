@@ -10,61 +10,103 @@ private var blueActiveDevice: BlueDevice? = nil
 
 public var defaultTimeoutSec: Double = 10
 
-private func blueGetSpTokenForAction(device: BlueDevice, action: String, data: Data?) throws
-  -> BlueSPToken
-{
-  var token: BlueSPToken? = nil
-
-  let storedToken = try blueTerminalRequestDataKeychain.getEntry(
-    id: "\(device.info.deviceID):\(action)")
-
-  if let storedToken = storedToken {
-    token = try blueDecodeMessage(storedToken)
-  }
-
-  switch action {
-  case "ossSoMobile":
-    if token == nil {
-      if device.info.deviceID == blueDemoData.deviceID {
-        token = try blueCreateSignedOssSoDemoToken()
-      } else {
-        throw BlueError(.invalidArguments)
-      }
+internal func blueStoreSpToken(deviceID: String, token: String) throws {
+    guard let tokenData = Data(base64Encoded: token) else {
+        throw BlueError(.invalidState)
     }
-    break
-  case "ossSidMobile":
-    if token == nil {
-      if device.info.deviceID == blueDemoData.deviceID {
-        token = try blueCreateSignedOssSidDemoToken()
-      } else {
-        throw BlueError(.invalidArguments)
-      }
+    
+    let spToken: BlueSPToken = try blueDecodeMessage(tokenData)
+    
+    var action: String = ""
+    
+    switch (spToken.payload) {
+        case .ossSo:
+            action = "ossSoMobile"
+            break;
+        case .ossSid:
+            action = "ossSidMobile"
+            break;
+        case .command(let spTokenCommand):
+            action = spTokenCommand.command
+            break;
+        case .none:
+            throw BlueError(.invalidState)
     }
-    break
-  default:
-    // -- Assume regular command
-    if token == nil {
-      if device.info.deviceID == blueDemoData.deviceID {
-        token = try blueCreateSignedCommandDemoToken(action)
-      } else {
-        throw BlueError(.invalidArguments)
-      }
+    
+    try blueTerminalRequestDataKeychain.storeEntry(
+        id: "\(deviceID):\(action)",
+        data: tokenData
+    )
+}
+
+private func blueGetSpTokenForAction(device: BlueDevice, action: String, data: Data?) throws -> BlueSPToken {
+    var token: BlueSPToken? = nil
+    
+    var storedToken = try blueTerminalRequestDataKeychain.getEntry(
+        id: "\(device.info.deviceID):\(action)")
+    
+    if storedToken == nil {
+        // Load the maintenance BlueSPToken if there is no available token for the given action.
+        // Internally, the firmware allows maintenance tokens to execute a group of actions, including 'UPDATE,' 'PING,' and others.
+        // This way enables us to avoid requesting a new token for every terminal command since we do not store the private key.
+        storedToken = try blueTerminalRequestDataKeychain.getEntry(id: "\(device.info.deviceID):MAINTC")
     }
-
-    token!.command.data = Data()
-
-    if let commandData = data, !commandData.isEmpty {
-      token!.command.data.append(contentsOf: commandData)
+    
+    if let storedToken = storedToken {
+        token = try blueDecodeMessage(storedToken)
     }
-
-    break
-  }
-
-  guard let token = token else {
-    throw BlueError(.invalidState)
-  }
-
-  return token
+    
+    if (token != nil) {
+        if (token!.command.command == "MAINTC") {
+            // We use the maintenance command along with the maintenance signature. Internally, the firmware handles it properly.
+            // However, we need to indicate which command we want to execute here.
+            token!.command.command = action
+        }
+    }
+    
+    switch action {
+    case "ossSoMobile":
+        if token == nil {
+            if device.info.deviceID == blueDemoData.deviceID {
+                token = try blueCreateSignedOssSoDemoToken()
+            } else {
+                throw BlueError(.invalidArguments)
+            }
+        }
+        break
+    case "ossSidMobile":
+        if token == nil {
+            if device.info.deviceID == blueDemoData.deviceID {
+                token = try blueCreateSignedOssSidDemoToken()
+            } else {
+                throw BlueError(.invalidArguments)
+            }
+        }
+        break
+    default:
+        // -- Assume regular command
+        if token == nil {
+            if device.info.deviceID == blueDemoData.deviceID {
+                token = try blueCreateSignedCommandDemoToken(action)
+            } else {
+                throw BlueError(.invalidArguments)
+            }
+        }
+        
+        token!.command.data = Data()
+        
+        if let commandData = data, !commandData.isEmpty {
+            token!.command.data.append(contentsOf: commandData)
+        }
+        
+        break
+    }
+    
+    guard let token = token else {
+        throw BlueError(.invalidState)
+    }
+    
+    return token
 }
 
 private func blueTerminalRequest(action: String, data: Data?) throws -> Data? {

@@ -3,6 +3,12 @@ import XCTest
 @testable import BlueIDAccessSDK
 
 private struct BlueAPIMock: BlueAPIProtocol {
+    func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueCreateDeviceConfigurationResult {
+        return BlueCreateDeviceConfigurationResult(
+            systemConfiguration: "dummy"
+        )
+    }
+    
     func getAccessToken(credentialId: String) -> BlueAccessToken{
         let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
         
@@ -13,16 +19,19 @@ private struct BlueAPIMock: BlueAPIProtocol {
     }
     
     func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueMobileAccessSynchronizationResult {
+        let token1 = try blueCreateSignedCommandDemoToken("MAINTC")
+        let token2 = try blueCreateSignedCommandDemoToken("PING")
+        
         return BlueMobileAccessSynchronizationResult(
             siteId: 1,
             validity: 0,
             tokens: [
-                BlueAccessDeviceToken(deviceId: "device-1", token: "device-token-1"),
-                BlueAccessDeviceToken(deviceId: "device-2", token: "device-token-2")
+                BlueAccessDeviceToken(deviceId: "device-1", token: try blueEncodeMessage(token1).base64EncodedString()),
+                BlueAccessDeviceToken(deviceId: "device-2", token: try blueEncodeMessage(token2).base64EncodedString())
             ],
             deviceTerminalPublicKeys: [
-                "device-1": "public-key-1",
-                "device-2": "public-key-2",
+                "device-1": "public-key-1".data(using: .utf8)!.base64EncodedString(),
+                "device-2": "public-key-2".data(using: .utf8)!.base64EncodedString(),
             ]
         )
     }
@@ -36,10 +45,11 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         do {
             try await BlueSynchronizeMobileAccessCommand(BlueAPIMock()).runAsync(credential: credential)
         } catch {
+            print(error.localizedDescription)
             XCTFail("Should not throw any errors")
         }
         
-        let result = try BlueGetAccessDevices().run(credential: credential)
+        let result = try BlueGetAccessDevicesCommand().run(credential: credential)
         XCTAssertEqual(result.devices[0].deviceID, "device-1")
         XCTAssertEqual(result.devices[1].deviceID, "device-2")
         
@@ -50,19 +60,23 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         
         let terminalPublicKey1 = try blueTerminalPublicKeysKeychain.getEntry(id: "device-1")
         XCTAssertNotNil(terminalPublicKey1)
-        XCTAssertEqual(terminalPublicKey1, "public-key-1".data(using: .ascii))
+        XCTAssertEqual(String(data: terminalPublicKey1!, encoding: .utf8), "public-key-1")
         
         let terminalPublicKey2 = try blueTerminalPublicKeysKeychain.getEntry(id: "device-2")
         XCTAssertNotNil(terminalPublicKey2)
-        XCTAssertEqual(terminalPublicKey2, "public-key-2".data(using: .ascii))
+        XCTAssertEqual(String(data: terminalPublicKey2!, encoding: .utf8), "public-key-2")
         
-        let deviceToken1 = try blueAccessDeviceTokensKeyChain.getEntry(id: "device-1")
-        XCTAssertNotNil(deviceToken1)
-        XCTAssertEqual(deviceToken1, "device-token-1".data(using: .ascii))
+        let deviceToken1Data = try blueTerminalRequestDataKeychain.getEntry(id: "device-1:MAINTC")
+        XCTAssertNotNil(deviceToken1Data)
         
-        let deviceToken2 = try blueAccessDeviceTokensKeyChain.getEntry(id: "device-2")
-        XCTAssertNotNil(deviceToken2)
-        XCTAssertEqual(deviceToken2, "device-token-2".data(using: .ascii))
+        let deviceToken1: BlueSPToken = try blueDecodeMessage(deviceToken1Data!)
+        XCTAssertEqual(deviceToken1.command.command, "MAINTC")
+        
+        let deviceToken2Data = try blueTerminalRequestDataKeychain.getEntry(id: "device-2:PING")
+        XCTAssertNotNil(deviceToken2Data)
+        
+        let deviceToken2: BlueSPToken = try blueDecodeMessage(deviceToken2Data!)
+        XCTAssertEqual(deviceToken2.command.command, "PING")
     }
     
     func testSynchronizeMobileAccessWithValidAccessToken() async throws {

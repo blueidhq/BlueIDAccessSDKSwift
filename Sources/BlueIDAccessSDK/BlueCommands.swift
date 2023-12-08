@@ -49,7 +49,8 @@ public struct BlueCommands {
     public let addAccessCredential = BlueAddAccessCredentialCommand()
     public let getAccessCredentials = BlueGetAccessCredentialsCommand()
     public let synchronizeMobileAccess = BlueSynchronizeMobileAccessCommand()
-    public let getAccessDevices = BlueGetAccessDevices()
+    public let getAccessDevices = BlueGetAccessDevicesCommand()
+    public let updateDeviceConfiguration = BlueUpdateDeviceConfigurationCommand()
     
     fileprivate init() {}
 }
