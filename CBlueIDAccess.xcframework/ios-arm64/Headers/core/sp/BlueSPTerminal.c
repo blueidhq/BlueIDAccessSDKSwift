@@ -422,9 +422,9 @@ static BlueReturnCode_t handleReceiveData(const BlueSPConnection_t *const pConne
     return BlueReturnCode_Ok;
 }
 
-static BlueReturnCode_t createCommandSignatureMessage(const BlueSPTokenCommand_t *const pCommand, const char *const pCommandGroup, uint8_t *const pMessage, int *const pMessageLength)
+BlueReturnCode_t createCommandSignatureMessage(const BlueSPTokenCommand_t *const pCommand, const char *const pCommandGroup, uint8_t *const pMessage, int *const pMessageLength)
 {
-    *pMessageLength = snprintf((char *const)pMessage, *pMessageLength, "%.10s:%.8s:%d%d%d%d%d:%d%d%d%d%d", pCommand->credentialId.id, pCommandGroup != NULL ? pCommandGroup : pCommand->command,
+    *pMessageLength = snprintf((char *const)pMessage, *pMessageLength, "%.10s:%.8s:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", pCommand->credentialId.id, pCommandGroup != NULL ? pCommandGroup : pCommand->command,
                                (int)pCommand->validityStart.year, (int)pCommand->validityStart.month, (int)pCommand->validityStart.date, (int)pCommand->validityStart.hours, (int)pCommand->validityStart.minutes,
                                (int)pCommand->validityEnd.year, (int)pCommand->validityEnd.month, (int)pCommand->validityEnd.date, (int)pCommand->validityEnd.hours, (int)pCommand->validityEnd.minutes);
 

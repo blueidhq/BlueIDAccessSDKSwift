@@ -149,7 +149,7 @@ BlueReturnCode_t blueSP_SignToken(BlueSPToken_t *const pToken, const uint8_t *co
 
         char commandSignatureTemplate[64];
 
-        int signatureTemplateLen = snprintf(commandSignatureTemplate, sizeof(commandSignatureTemplate), "%.10s:%.8s:%d%d%d%d%d:%d%d%d%d%d", command->credentialId.id, command->command,
+        int signatureTemplateLen = snprintf(commandSignatureTemplate, sizeof(commandSignatureTemplate), "%.10s:%.8s:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d", command->credentialId.id, command->command,
                                             (int)command->validityStart.year, (int)command->validityStart.month, (int)command->validityStart.date, (int)command->validityStart.hours, (int)command->validityStart.minutes,
                                             (int)command->validityEnd.year, (int)command->validityEnd.month, (int)command->validityEnd.date, (int)command->validityEnd.hours, (int)command->validityEnd.minutes);
 

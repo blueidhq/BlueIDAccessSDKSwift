@@ -962,10 +962,10 @@ extern "C" {
 #define BLUEBLEADVERTISEMENTINFO_MFINFO_TAG      4
 #define BLUEEVENT_SEQUENCEID_TAG                 1
 #define BLUEEVENT_EVENTTIME_TAG                  2
-#define BLUEEVENT_EVENTID_TAG                    4
-#define BLUEEVENT_EVENTINFO_TAG                  5
-#define BLUEEVENT_CREDENTIALID_TAG               6
-#define BLUEEVENT_COMMAND_TAG                    7
+#define BLUEEVENT_EVENTID_TAG                    3
+#define BLUEEVENT_EVENTINFO_TAG                  4
+#define BLUEEVENT_CREDENTIALID_TAG               5
+#define BLUEEVENT_COMMAND_TAG                    6
 #define BLUESPHANDSHAKE_TRANSPONDERSALT_TAG      1
 #define BLUESPHANDSHAKEREPLY_TERMINALSALT_TAG    1
 #define BLUESPHANDSHAKEREPLY_TERMINALSIGNATURE_TAG 2
@@ -1187,12 +1187,12 @@ X(a, STATIC,   REQUIRED, MESSAGE,  mfInfo,            4)
 #define BLUEEVENT_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, UINT32,   sequenceId,        1) \
 X(a, STATIC,   REQUIRED, MESSAGE,  eventTime,         2) \
-X(a, STATIC,   REQUIRED, UENUM,    eventId,           4) \
-X(a, STATIC,   REQUIRED, INT32,    eventInfo,         5) \
-X(a, STATIC,   OPTIONAL, MESSAGE,  credentialId,      6) \
-X(a, STATIC,   OPTIONAL, STRING,   command,           7)
+X(a, STATIC,   REQUIRED, UENUM,    eventId,           3) \
+X(a, STATIC,   REQUIRED, INT32,    eventInfo,         4) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  credentialId,      5) \
+X(a, STATIC,   OPTIONAL, STRING,   command,           6)
 #define BLUEEVENT_CALLBACK NULL
-#define BLUEEVENT_DEFAULT (const pb_byte_t*)"\x20\x01\x00"
+#define BLUEEVENT_DEFAULT (const pb_byte_t*)"\x18\x01\x00"
 #define BlueEvent_t_eventTime_MSGTYPE BlueLocalTimestamp_t
 #define BlueEvent_t_credentialId_MSGTYPE BlueCredentialId_t
 

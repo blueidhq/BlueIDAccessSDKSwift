@@ -24,27 +24,6 @@ private class ViewMock: BlueEventListener {
     }
 }
 
-private struct BlueAPIMock: BlueAPIProtocol {
-    func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueCreateDeviceConfigurationResult {
-        return BlueCreateDeviceConfigurationResult(
-            systemConfiguration: "dummy"
-        )
-    }
-    
-    func getAccessToken(credentialId: String) async throws -> BlueAccessToken {
-        return BlueAccessToken(token: "dummy", expiresAt: 0)
-    }
-    
-    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueMobileAccessSynchronizationResult{
-        return BlueMobileAccessSynchronizationResult(
-            siteId: 1,
-            validity: 0,
-            tokens: [],
-            deviceTerminalPublicKeys: [:]
-        )
-    }
-}
-
 final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
     func testWithoutAccessCredentials() async throws {
         _ = try? blueAccessCredentialsKeyChain.deleteAllEntries()
@@ -54,7 +33,7 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         let scheduler = BlueTokenSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeMobileAccessCommand(BlueAPIMock())
+            command: BlueSynchronizeMobileAccessCommand(DefaultBlueAPIMock())
         )
         
         defer {
@@ -77,14 +56,14 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         let scheduler = BlueTokenSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeMobileAccessCommand(BlueAPIMock())
+            command: BlueSynchronizeMobileAccessCommand(DefaultBlueAPIMock())
         )
         
         defer {
             scheduler.suspend()
         }
 
-        try await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: blueCreateAccessCredentialDemo())
+        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: blueCreateAccessCredentialDemo())
         
         let expectation = XCTestExpectation()
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) { expectation.fulfill() }

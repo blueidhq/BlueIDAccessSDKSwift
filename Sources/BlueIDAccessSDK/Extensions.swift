@@ -1,6 +1,6 @@
 import Foundation
 
-extension BlueLocalTimestamp {
+extension BlueLocalTimestamp: Encodable {
     public init(_ date: Date) {
         self.init()
         
@@ -42,4 +42,71 @@ extension BlueLocalTimestamp {
         
         return date
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(year, forKey: .year)
+        try container.encode(month, forKey: .month)
+        try container.encode(date, forKey: .date)
+        try container.encode(hours, forKey: .hours)
+        try container.encode(minutes, forKey: .minutes)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case year
+        case month
+        case date
+        case hours
+        case minutes
+    }
 }
+
+extension BlueAccessObject: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(String.self, forKey: ._id)
+        objectID = try container.decode(Int32.self, forKey: .objectId)
+        name = try container.decode(String.self, forKey: .name)
+        
+        if let description = try? container.decode(String.self, forKey: .description) {
+            description_p = description
+        }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case _id
+        case objectId
+        case name
+        case description
+    }
+}
+
+extension BlueAccessObjectList {
+    public init (objects: [BlueAccessObject]) {
+        self.objects = objects
+    }
+}
+
+extension BlueAccessDeviceList {
+    public init(devices: [BlueAccessDevice]) {
+        self.devices = devices
+    }
+}
+
+extension Array {
+    func chunks(of size: Int) -> [[Element]] {
+        var index = 0
+        var result = [[Element]]()
+
+        while index < self.count {
+            let endIndex = index + size < self.count ? index + size : self.count
+            let subArray = Array(self[index..<endIndex])
+            result.append(subArray)
+            index += size
+        }
+
+        return result
+    }
+}
+
