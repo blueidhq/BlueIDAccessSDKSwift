@@ -50,7 +50,14 @@ public struct BlueCommands {
     public let getAccessCredentials = BlueGetAccessCredentialsCommand()
     public let synchronizeMobileAccess = BlueSynchronizeMobileAccessCommand()
     public let getAccessDevices = BlueGetAccessDevicesCommand()
+    public let listAccessDevices = BlueListAccessDevicesCommand()
     public let updateDeviceConfiguration = BlueUpdateDeviceConfigurationCommand()
+    public let getAccessObjects = BlueGetAccessObjectsCommand()
+    
+    public let clearBlacklist = BlueClearBlacklistCommand()
+    public let clearEventLog = BlueClearEventLogCommand()
+    public let clearSystemLog = BlueClearSystemLogCommand()
+    public let getSystemStatus = BlueGetSystemStatusCommand()
     
     fileprivate init() {}
 }

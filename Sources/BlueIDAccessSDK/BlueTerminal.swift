@@ -39,6 +39,16 @@ internal func blueStoreSpToken(deviceID: String, token: String) throws {
     )
 }
 
+internal func blueDeleteSpTokens(deviceID: String) throws {
+    try blueTerminalRequestDataKeychain.getEntryIds().forEach{ entryId in
+        if (entryId.hasPrefix(deviceID)) {
+            do {
+                _ = try? blueTerminalRequestDataKeychain.deleteEntry(id: entryId)
+            }
+        }
+    }
+}
+
 private func blueGetSpTokenForAction(device: BlueDevice, action: String, data: Data?) throws -> BlueSPToken {
     var token: BlueSPToken? = nil
     
@@ -152,11 +162,13 @@ private func blueTerminalRequest(action: String, data: Data?) throws -> Data? {
 }
 
 public func blueTerminalRequest(action: String, data: Data? = nil) throws {
-  let rawResult: Data? = try blueTerminalRequest(action: action, data: data)
-
-  guard rawResult == nil else {
-    throw BlueError(.invalidState)
-  }
+    let rawResult: Data? = try blueTerminalRequest(action: action, data: data)
+    
+    if let rawResult = rawResult {
+        guard rawResult.isEmpty else {
+            throw BlueError(.invalidState)
+        }
+    }
 }
 
 public func blueTerminalRequest<DataType: Message>(action: String, data: DataType) throws {
@@ -330,11 +342,24 @@ public func blueTerminalRun<ResultType: Message>(
 }
 
 @available(macOS 10.15, *)
+public func blueTerminalRun<DataType: Message>(
+  deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, action: String, data: DataType
+) async throws -> Void {
+    try await blueTerminalRun(
+      deviceID: deviceID,
+      timeoutSeconds: timeoutSeconds,
+      {
+          try blueTerminalRequest(action: action, data: data)
+      })
+}
+
+@available(macOS 10.15, *)
 public func blueTerminalRun<DataType: Message, ResultType: Message>(
   deviceID: String, timeoutSeconds: Double = defaultTimeoutSec, action: String, data: DataType
 ) async throws -> ResultType {
   return try await blueTerminalRun(
     deviceID: deviceID,
+    timeoutSeconds: timeoutSeconds,
     {
       return try blueTerminalRequest(action: action, data: data)
     })

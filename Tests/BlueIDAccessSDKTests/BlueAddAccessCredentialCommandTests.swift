@@ -2,34 +2,13 @@ import XCTest
 
 @testable import BlueIDAccessSDK
 
-private struct BlueAPIMock: BlueAPIProtocol {
-    func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueCreateDeviceConfigurationResult {
-        return BlueCreateDeviceConfigurationResult(
-            systemConfiguration: "dummy"
-        )
-    }
-    
-    func getAccessToken(credentialId: String) async throws -> BlueAccessToken {
-        return BlueAccessToken(token: "dummy", expiresAt: 0)
-    }
-    
-    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueMobileAccessSynchronizationResult{
-        return BlueMobileAccessSynchronizationResult(
-            siteId: 1,
-            validity: 0,
-            tokens: [],
-            deviceTerminalPublicKeys: [:]
-        )
-    }
-}
-
-final class BlueAddAccessCredentialTests: BlueXCTestCase {
+final class BlueAddAccessCredentialCommandTests: BlueXCTestCase {
     
     func testBlueAddAccessCredentialCommand() async throws {
         let credential = blueCreateAccessCredentialDemo()
         
         do {
-            try await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
         } catch {
             XCTFail("Should not throw any errors when adding the credential for the first time")
         }
@@ -49,13 +28,13 @@ final class BlueAddAccessCredentialTests: BlueXCTestCase {
         let credential = blueCreateAccessCredentialDemo()
         
         do {
-            try await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
         } catch {
             XCTFail("Should not throw any errors when adding the credential for the first time")
         }
         
         do {
-            try await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
         } catch {
             XCTFail("Should not throw any errors when updating the same credential")
         }

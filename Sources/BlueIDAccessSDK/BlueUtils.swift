@@ -2,6 +2,8 @@ import Foundation
 import SwiftProtobuf
 import CBlueIDAccess
 
+private let _1_NANO = 1_000_000_000
+
 internal let blueI18n = BlueI18n()
 
 internal func blueIsValidPublicDERKey(_ keyData: Data) -> Bool {
@@ -228,4 +230,8 @@ internal func blueCastResult<ResultType>(_ result: ResultType?) throws -> Any {
     }
     
     return result
+}
+
+internal func blueSecondsToNanoseconds(_ seconds: Int) -> Int {
+    return seconds * _1_NANO
 }

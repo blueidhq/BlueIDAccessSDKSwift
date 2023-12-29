@@ -4255,10 +4255,10 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "sequenceId"),
     2: .same(proto: "eventTime"),
-    4: .same(proto: "eventId"),
-    5: .same(proto: "eventInfo"),
-    6: .same(proto: "credentialId"),
-    7: .same(proto: "command"),
+    3: .same(proto: "eventId"),
+    4: .same(proto: "eventInfo"),
+    5: .same(proto: "credentialId"),
+    6: .same(proto: "command"),
   ]
 
   public var isInitialized: Bool {
@@ -4279,10 +4279,10 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self._sequenceID) }()
       case 2: try { try decoder.decodeSingularMessageField(value: &self._eventTime) }()
-      case 4: try { try decoder.decodeSingularEnumField(value: &self._eventID) }()
-      case 5: try { try decoder.decodeSingularInt32Field(value: &self._eventInfo) }()
-      case 6: try { try decoder.decodeSingularMessageField(value: &self._credentialID) }()
-      case 7: try { try decoder.decodeSingularStringField(value: &self._command) }()
+      case 3: try { try decoder.decodeSingularEnumField(value: &self._eventID) }()
+      case 4: try { try decoder.decodeSingularInt32Field(value: &self._eventInfo) }()
+      case 5: try { try decoder.decodeSingularMessageField(value: &self._credentialID) }()
+      case 6: try { try decoder.decodeSingularStringField(value: &self._command) }()
       default: break
       }
     }
@@ -4300,16 +4300,16 @@ extension BlueEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementation
       try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
     } }()
     try { if let v = self._eventID {
-      try visitor.visitSingularEnumField(value: v, fieldNumber: 4)
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 3)
     } }()
     try { if let v = self._eventInfo {
-      try visitor.visitSingularInt32Field(value: v, fieldNumber: 5)
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 4)
     } }()
     try { if let v = self._credentialID {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
     } }()
     try { if let v = self._command {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 7)
+      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }

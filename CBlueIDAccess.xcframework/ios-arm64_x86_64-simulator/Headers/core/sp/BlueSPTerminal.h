@@ -53,6 +53,7 @@ extern "C"
     BlueReturnCode_t blueSPTerminal_Clear(void);
 
 #ifdef BLUE_TEST
+    BlueReturnCode_t createCommandSignatureMessage(const BlueSPTokenCommand_t *const pCommand, const char *const pCommandGroup, uint8_t *const pMessage, int *const pMessageLength);
     void blueSPTerminal_GetSessionSalt(uint8_t *const pTerminalSalt);
 #endif
 

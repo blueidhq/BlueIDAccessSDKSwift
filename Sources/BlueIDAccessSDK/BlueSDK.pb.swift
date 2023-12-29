@@ -444,12 +444,22 @@ public struct BlueAccessDevice {
   /// Clears the value of `objectName`. Subsequent reads from it will return its default value.
   public mutating func clearObjectName() {self._objectName = nil}
 
+  public var objectID: Int32 {
+    get {return _objectID ?? 0}
+    set {_objectID = newValue}
+  }
+  /// Returns true if `objectID` has been explicitly set.
+  public var hasObjectID: Bool {return self._objectID != nil}
+  /// Clears the value of `objectID`. Subsequent reads from it will return its default value.
+  public mutating func clearObjectID() {self._objectID = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _deviceID: String? = nil
   fileprivate var _objectName: String? = nil
+  fileprivate var _objectID: Int32? = nil
 }
 
 public struct BlueAccessDeviceList {
@@ -458,6 +468,69 @@ public struct BlueAccessDeviceList {
   // methods supported on all messages.
 
   public var devices: [BlueAccessDevice] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
+public struct BlueAccessObject {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var id: String {
+    get {return _id ?? String()}
+    set {_id = newValue}
+  }
+  /// Returns true if `id` has been explicitly set.
+  public var hasID: Bool {return self._id != nil}
+  /// Clears the value of `id`. Subsequent reads from it will return its default value.
+  public mutating func clearID() {self._id = nil}
+
+  public var objectID: Int32 {
+    get {return _objectID ?? 0}
+    set {_objectID = newValue}
+  }
+  /// Returns true if `objectID` has been explicitly set.
+  public var hasObjectID: Bool {return self._objectID != nil}
+  /// Clears the value of `objectID`. Subsequent reads from it will return its default value.
+  public mutating func clearObjectID() {self._objectID = nil}
+
+  public var name: String {
+    get {return _name ?? String()}
+    set {_name = newValue}
+  }
+  /// Returns true if `name` has been explicitly set.
+  public var hasName: Bool {return self._name != nil}
+  /// Clears the value of `name`. Subsequent reads from it will return its default value.
+  public mutating func clearName() {self._name = nil}
+
+  public var description_p: String {
+    get {return _description_p ?? String()}
+    set {_description_p = newValue}
+  }
+  /// Returns true if `description_p` has been explicitly set.
+  public var hasDescription_p: Bool {return self._description_p != nil}
+  /// Clears the value of `description_p`. Subsequent reads from it will return its default value.
+  public mutating func clearDescription_p() {self._description_p = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _id: String? = nil
+  fileprivate var _objectID: Int32? = nil
+  fileprivate var _name: String? = nil
+  fileprivate var _description_p: String? = nil
+}
+
+public struct BlueAccessObjectList {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var objects: [BlueAccessObject] = []
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -475,6 +548,8 @@ extension BlueAccessCredential: @unchecked Sendable {}
 extension BlueAccessCredentialList: @unchecked Sendable {}
 extension BlueAccessDevice: @unchecked Sendable {}
 extension BlueAccessDeviceList: @unchecked Sendable {}
+extension BlueAccessObject: @unchecked Sendable {}
+extension BlueAccessObjectList: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -961,6 +1036,7 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "deviceId"),
     2: .same(proto: "objectName"),
+    3: .same(proto: "objectId"),
   ]
 
   public var isInitialized: Bool {
@@ -976,6 +1052,7 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self._deviceID) }()
       case 2: try { try decoder.decodeSingularStringField(value: &self._objectName) }()
+      case 3: try { try decoder.decodeSingularInt32Field(value: &self._objectID) }()
       default: break
       }
     }
@@ -992,12 +1069,16 @@ extension BlueAccessDevice: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._objectName {
       try visitor.visitSingularStringField(value: v, fieldNumber: 2)
     } }()
+    try { if let v = self._objectID {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BlueAccessDevice, rhs: BlueAccessDevice) -> Bool {
     if lhs._deviceID != rhs._deviceID {return false}
     if lhs._objectName != rhs._objectName {return false}
+    if lhs._objectID != rhs._objectID {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -1035,6 +1116,104 @@ extension BlueAccessDeviceList: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
   public static func ==(lhs: BlueAccessDeviceList, rhs: BlueAccessDeviceList) -> Bool {
     if lhs.devices != rhs.devices {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessObject: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessObject"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "_id"),
+    2: .same(proto: "objectId"),
+    3: .same(proto: "name"),
+    4: .same(proto: "description"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._id == nil {return false}
+    if self._objectID == nil {return false}
+    if self._name == nil {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularStringField(value: &self._id) }()
+      case 2: try { try decoder.decodeSingularInt32Field(value: &self._objectID) }()
+      case 3: try { try decoder.decodeSingularStringField(value: &self._name) }()
+      case 4: try { try decoder.decodeSingularStringField(value: &self._description_p) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._id {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._objectID {
+      try visitor.visitSingularInt32Field(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._name {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+    } }()
+    try { if let v = self._description_p {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessObject, rhs: BlueAccessObject) -> Bool {
+    if lhs._id != rhs._id {return false}
+    if lhs._objectID != rhs._objectID {return false}
+    if lhs._name != rhs._name {return false}
+    if lhs._description_p != rhs._description_p {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueAccessObjectList: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueAccessObjectList"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "objects"),
+  ]
+
+  public var isInitialized: Bool {
+    if !SwiftProtobuf.Internal.areAllInitialized(self.objects) {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.objects) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.objects.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.objects, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueAccessObjectList, rhs: BlueAccessObjectList) -> Bool {
+    if lhs.objects != rhs.objects {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
