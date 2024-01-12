@@ -504,14 +504,17 @@ public class BlueGetAccessObjectsCommand: BlueAPIAsyncCommand {
 
 public struct BlueListAccessDevicesCommand: BlueAsyncCommand {
     internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
-        guard let credentialType = BlueCredentialType(rawValue: try blueCastArg(Int.self, arg0)) else {
-            throw BlueError(.invalidArguments)
+        let credentialTypeRawValue: Int? = try blueCastArg(Int.self, arg0)
+        var credentialType: BlueCredentialType? = nil
+        
+        if let credentialTypeRawValue = credentialTypeRawValue {
+            credentialType = BlueCredentialType(rawValue: credentialTypeRawValue)
         }
         
         return try await runAsync(credentialType: credentialType)
     }
     
-    public func runAsync(credentialType: BlueCredentialType) async throws -> BlueAccessDeviceList {
+    public func runAsync(credentialType: BlueCredentialType? = nil) async throws -> BlueAccessDeviceList {
         let credentialList = try await BlueGetAccessCredentialsCommand().runAsync(includePrivateKey: false, credentialType: credentialType)
         
         let devices = credentialList.credentials.compactMap { credential in
@@ -520,7 +523,11 @@ public struct BlueListAccessDevicesCommand: BlueAsyncCommand {
             return deviceList?.devices
         }.flatMap{ $0 }
         
-        return BlueAccessDeviceList(devices: devices)
+        let uniqueDevices = Array(Set(devices)).sorted(by: { (firstDevice, secondDevice) -> Bool in
+            return firstDevice.deviceID < secondDevice.deviceID
+        })
+        
+        return BlueAccessDeviceList(devices: uniqueDevices)
     }
 }
 

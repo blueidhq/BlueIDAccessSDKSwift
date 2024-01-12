@@ -231,3 +231,9 @@ public struct BlueBluetoothDeactivate: BlueCommand {
         blueUpdateBluetoothScanning()
     }
 }
+
+public struct BlueIsBluetoothActiveCommand: BlueCommand {
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return blueBluetoothIsActive
+    }
+}

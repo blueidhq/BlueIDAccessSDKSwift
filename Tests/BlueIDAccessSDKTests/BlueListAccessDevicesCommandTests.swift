@@ -2,27 +2,27 @@ import XCTest
 
 @testable import BlueIDAccessSDK
 
+private class BlueAPIMock: DefaultBlueAPIMock {
+    let tokens: [BlueAccessDeviceToken]
+    
+    init(tokens: [BlueAccessDeviceToken]) { self.tokens = tokens }
+    
+    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: BlueMobileAccessSynchronizationResult(
+                siteId: 1,
+                validity: 0,
+                tokens: tokens,
+                deviceTerminalPublicKeys: [:]
+            )
+        )
+    }
+}
+
 final class BlueListAccessDevicesCommandTests: BlueXCTestCase {
     
     func testListAccessDevices() async throws {
-        class BlueAPIMock: DefaultBlueAPIMock {
-            let tokens: [BlueAccessDeviceToken]
-            
-            init(tokens: [BlueAccessDeviceToken]) { self.tokens = tokens }
-            
-            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
-                return BlueFetchResponse(
-                    statusCode: 200,
-                    data: BlueMobileAccessSynchronizationResult(
-                        siteId: 1,
-                        validity: 0,
-                        tokens: tokens,
-                        deviceTerminalPublicKeys: [:]
-                    )
-                )
-            }
-        }
-        
         var credential1 = blueCreateAccessCredentialDemo()
         credential1.credentialID.id = "maintenance-1"
         credential1.credentialType = .maintenance
@@ -47,6 +47,11 @@ final class BlueListAccessDevicesCommandTests: BlueXCTestCase {
         
         let commandForCredential2 = BlueAddAccessCredentialCommand(BlueAPIMock(
             tokens: [
+                BlueAccessDeviceToken(
+                    deviceId: "device-for-maintenance-1",
+                    objectId: 1,
+                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
+                ),
                 BlueAccessDeviceToken(
                     deviceId: "device-for-maintenance-2",
                     objectId: 1,
@@ -91,5 +96,14 @@ final class BlueListAccessDevicesCommandTests: BlueXCTestCase {
         XCTAssertEqual(regularDeviceList?.devices[0].deviceID, "device-for-regular-1", "Wrong device ID")
         XCTAssertEqual(regularDeviceList?.devices[1].deviceID, "device-for-regular-2", "Wrong device ID")
         XCTAssertEqual(regularDeviceList?.devices[2].deviceID, "device-for-regular-3", "Wrong device ID")
+        
+        let entireDeviceList = try? await BlueListAccessDevicesCommand().runAsync()
+        XCTAssertNotNil(entireDeviceList, "Should not be null")
+        XCTAssertEqual(entireDeviceList?.devices.count, 5, "There should be 5 devices")
+        XCTAssertEqual(entireDeviceList?.devices[0].deviceID, "device-for-maintenance-1", "Wrong device ID")
+        XCTAssertEqual(entireDeviceList?.devices[1].deviceID, "device-for-maintenance-2", "Wrong device ID")
+        XCTAssertEqual(entireDeviceList?.devices[2].deviceID, "device-for-regular-1", "Wrong device ID")
+        XCTAssertEqual(entireDeviceList?.devices[3].deviceID, "device-for-regular-2", "Wrong device ID")
+        XCTAssertEqual(entireDeviceList?.devices[4].deviceID, "device-for-regular-3", "Wrong device ID")
     }
 }

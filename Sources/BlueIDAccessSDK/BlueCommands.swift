@@ -20,6 +20,7 @@ public struct BlueCommands {
     
     public let bluetoothActivate = BlueBluetoothActivate()
     public let bluetoothDeactivate = BlueBluetoothDeactivate()
+    public let isBluetoothActive = BlueIsBluetoothActiveCommand()
     
 #if os(iOS) || os(watchOS)
     public let nearByActivate = BlueNearByActivate()
