@@ -523,3 +523,32 @@ public struct BlueListAccessDevicesCommand: BlueAsyncCommand {
         return BlueAccessDeviceList(devices: devices)
     }
 }
+
+public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
+    internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        if #available(macOS 10.15, *) {
+            return try await runAsync(
+                credential: try blueCastArg(BlueAccessCredential.self, arg0),
+                deviceID: try blueCastArg(String.self, arg1),
+                objectID: try blueCastArg(String.self, arg2)
+            )
+        } else {
+            throw BlueError(.unavailable)
+        }
+    }
+    
+    @available(macOS 10.15, *)
+    public func runAsync(credential: BlueAccessCredential, deviceID: String, objectID: String, refreshToken: Bool? = nil) async throws -> BlueSystemStatus? {
+        guard let _ = blueGetDevice(deviceID) else {
+            throw BlueError(.invalidState)
+        }
+        
+        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        
+        _ = try await blueAPI!.claimDevice(deviceID: deviceID, objectID: objectID, with: tokenAuthentication).getData()
+        
+        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credential: credential, refreshToken: refreshToken)
+        
+        return try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credential: credential, deviceID: deviceID, refreshToken: refreshToken)
+    }
+}

@@ -53,6 +53,7 @@ public struct BlueCommands {
     public let listAccessDevices = BlueListAccessDevicesCommand()
     public let updateDeviceConfiguration = BlueUpdateDeviceConfigurationCommand()
     public let getAccessObjects = BlueGetAccessObjectsCommand()
+    public let claimAccessDevice = BlueClaimAccessDeviceCommand()
     
     public let clearBlacklist = BlueClearBlacklistCommand()
     public let clearEventLog = BlueClearEventLogCommand()

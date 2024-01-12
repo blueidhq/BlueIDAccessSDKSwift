@@ -13,6 +13,7 @@ public enum BlueAPIEndpoints: String {
     case AccessPushEvents = "/access/pushEvents"
     case AccessPushSystemLog = "/access/pushSystemLog"
     case AccessBlacklistEntries = "/access/blacklistEntries"
+    case AccessClaimDevice = "/access/claimDevice"
     
     var url: URL {
         guard let url = URL(string: baseURL) else {
@@ -26,6 +27,17 @@ public enum BlueAPIEndpoints: String {
 internal struct BlueTokenAuthentication: Encodable {
     var token: String
     var signature: String
+}
+
+/// [POST] /access/claimDevice request
+internal struct BlueClaimDeviceRequest: Encodable {
+    var deviceId: String
+    var object: String
+    var tokenAuthentication: BlueTokenAuthentication
+}
+/// [POST] /access/claimDevice response
+internal struct BlueClaimDeviceResult: Decodable {
+    var site: String
 }
 
 /// [POST] /access/blacklistEntries request
@@ -176,4 +188,5 @@ protocol BlueAPIProtocol {
     func pushSystemLogs(deviceID: String, logEntries: [BluePushSystemLogEntry], with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BluePushSystemLogResult>
     func getAccessObjects(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessObjectsResult>
     func getBlacklistEntries(deviceID: String, with tokenAuthentication: BlueTokenAuthentication, limit: Int?) async throws -> BlueFetchResponse<BlueGetBlacklistEntriesResult>
+    func claimDevice(deviceID: String, objectID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueClaimDeviceResult>
 }

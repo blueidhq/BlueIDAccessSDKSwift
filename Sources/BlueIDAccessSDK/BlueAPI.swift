@@ -59,6 +59,13 @@ class BlueAPI: BlueAPIProtocol {
         )
     }
     
+    func claimDevice(deviceID: String, objectID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueClaimDeviceResult> {
+        return try await post(
+            endpoint: .AccessClaimDevice,
+            request: BlueClaimDeviceRequest(deviceId: deviceID, object: objectID, tokenAuthentication: tokenAuthentication)
+        )
+    }
+    
     private func post<T>(endpoint: BlueAPIEndpoints, request: Encodable) async throws -> BlueFetchResponse<T> {
         return try await BlueFetch.post(
             url: endpoint.url,

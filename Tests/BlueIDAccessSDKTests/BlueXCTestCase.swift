@@ -64,6 +64,13 @@ class DefaultBlueAPIMock: BlueAPIProtocol {
             data: BlueGetBlacklistEntriesResult(blacklistEntries: "")
         )
     }
+    
+    func claimDevice(deviceID: String, objectID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueClaimDeviceResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: BlueClaimDeviceResult(site: "")
+        )
+    }
 }
 
 class BlueXCTestCase: XCTestCase {
