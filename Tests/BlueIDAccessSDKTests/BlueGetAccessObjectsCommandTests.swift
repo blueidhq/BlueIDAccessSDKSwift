@@ -20,7 +20,9 @@ final class BlueGetAccessObjectsCommandTests: BlueXCTestCase {
         }
         
         let credential = blueCreateAccessCredentialDemo()
-        let objectList = try? await BlueGetAccessObjectsCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        
+        let objectList = try? await BlueGetAccessObjectsCommand(BlueAPIMock()).runAsync(credentialID: credential.credentialID.id)
         
         XCTAssertNotNil(objectList, "Returned objects should not be null")
         XCTAssertEqual(objectList?.objects.count, 1, "There should be 1 object")

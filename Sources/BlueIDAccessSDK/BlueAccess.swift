@@ -75,7 +75,7 @@ public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
         
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: credential.jsonUTF8Data())
         
-        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credential: credential, refreshToken: true)
+        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, refreshToken: true)
         
         blueFireListeners(fireEvent: .accessCredentialAdded, data: nil)
     }
@@ -90,13 +90,12 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
         }
         
         return try await runAsync(
-            includePrivateKey: false,
             credentialType: credentialType,
             for: blueCastArg(String.self, arg1)
         )
     }
     
-    public func runAsync(includePrivateKey: Bool, credentialType: BlueCredentialType? = nil, for deviceID: String? = nil) async throws -> BlueAccessCredentialList {
+    public func runAsync(credentialType: BlueCredentialType? = nil, for deviceID: String? = nil) async throws -> BlueAccessCredentialList {
         let filterByCredentialType = { (_ credential: BlueAccessCredential) -> Bool in
             guard let credentialType = credentialType else {
                 return true
@@ -110,7 +109,7 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
                 return true
             }
             
-            let deviceList = try BlueGetAccessDevicesCommand().run(credential: credential)
+            let deviceList = try BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
             
             let device = deviceList.devices.first() { device in
                 return device.deviceID == deviceID
@@ -125,9 +124,8 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
             credentialList.credentials = try entries.compactMap { entry in
                 if var credential = try? BlueAccessCredential(jsonUTF8Data: entry) {
                     
-                    if (!includePrivateKey) {
-                        credential.clearPrivateKey()
-                    }
+                    // Never expose it
+                    credential.clearPrivateKey()
                     
                     return credential
                 }
@@ -153,12 +151,16 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
 public class BlueSynchronizeMobileAccessCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
-            credential: try blueCastArg(BlueAccessCredential.self, arg0),
+            credentialID: try blueCastArg(String.self, arg0),
             refreshToken: try blueCastArg(Bool.self, arg1)
         )
     }
     
-    public func runAsync(credential: BlueAccessCredential, refreshToken: Bool? = nil) async throws -> Void {
+    public func runAsync(credentialID: String, refreshToken: Bool? = nil) async throws -> Void {
+        guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
+            throw BlueError(.notFound)
+        }
+        
         let tokenAuthentication = try await self.getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
         
         guard let response = try? await self.blueAPI!.synchronizeMobileAccess(with: tokenAuthentication) else {
@@ -222,7 +224,7 @@ public class BlueSynchronizeMobileAccessCommand: BlueAPIAsyncCommand {
     private func purge(_ credential: BlueAccessCredential) throws {
         _ = try? blueAccessCredentialsKeyChain.deleteEntry(id: credential.credentialID.id)
         
-        guard let accessDeviceList = try? BlueGetAccessDevicesCommand().run(credential: credential) else {
+        guard let accessDeviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id) else {
             return
         }
         
@@ -239,11 +241,11 @@ public class BlueSynchronizeMobileAccessCommand: BlueAPIAsyncCommand {
 
 public struct BlueGetAccessDevicesCommand: BlueCommand {
     internal func run(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) throws -> Any? {
-        return try run(credential: try blueCastArg(BlueAccessCredential.self, arg0))
+        return try run(credentialID: try blueCastArg(String.self, arg0))
     }
     
-    public func run(credential: BlueAccessCredential) throws -> BlueAccessDeviceList {
-        if let data = blueAccessDevicesStorage.getEntry(id: credential.credentialID.id) {
+    public func run(credentialID: String) throws -> BlueAccessDeviceList {
+        if let data = blueAccessDevicesStorage.getEntry(id: credentialID) {
             return try BlueAccessDeviceList(jsonUTF8Data: data)
         }
         return BlueAccessDeviceList()
@@ -254,7 +256,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) async throws -> Any? {
         if #available(macOS 10.15, *) {
             return try await runAsync(
-                credential: try blueCastArg(BlueAccessCredential.self, arg0),
+                credentialID: try blueCastArg(String.self, arg0),
                 deviceID: try blueCastArg(String.self, arg1)
             )
         } else {
@@ -263,9 +265,13 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     }
     
     @available(macOS 10.15, *)
-    public func runAsync(credential: BlueAccessCredential, deviceID: String, refreshToken: Bool? = false) async throws -> BlueSystemStatus? {
+    public func runAsync(credentialID: String, deviceID: String, refreshToken: Bool? = false) async throws -> BlueSystemStatus? {
         guard let _ = blueGetDevice(deviceID) else {
             throw BlueError(.invalidState)
+        }
+        
+        guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
+            throw BlueError(.notFound)
         }
         
         let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
@@ -373,7 +379,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     @available(macOS 10.15, *)
     private func pushEventLogs(status: BlueSystemStatus, credential: BlueAccessCredential, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async {
         do {
-            let deviceList = try BlueGetAccessDevicesCommand().run(credential: credential)
+            let deviceList = try BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
             guard let device = deviceList.devices.first(where: { $0.deviceID == deviceID }) else {
                 blueLogWarn("Device could not be found. Event logs have not been deployed")
                 return
@@ -489,11 +495,15 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
 public class BlueGetAccessObjectsCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
-            credential: try blueCastArg(BlueAccessCredential.self, arg0)
+            credentialID: try blueCastArg(String.self, arg0)
         )
     }
     
-    public func runAsync(credential: BlueAccessCredential, refreshToken: Bool? = nil) async throws -> BlueAccessObjectList {
+    public func runAsync(credentialID: String, refreshToken: Bool? = nil) async throws -> BlueAccessObjectList {
+        guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
+            throw BlueError(.notFound)
+        }
+        
         let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
         
         let objects = try await blueAPI!.getAccessObjects(with: tokenAuthentication).getData()
@@ -515,10 +525,10 @@ public struct BlueListAccessDevicesCommand: BlueAsyncCommand {
     }
     
     public func runAsync(credentialType: BlueCredentialType? = nil) async throws -> BlueAccessDeviceList {
-        let credentialList = try await BlueGetAccessCredentialsCommand().runAsync(includePrivateKey: false, credentialType: credentialType)
+        let credentialList = try await BlueGetAccessCredentialsCommand().runAsync(credentialType: credentialType)
         
         let devices = credentialList.credentials.compactMap { credential in
-            let deviceList = try? BlueGetAccessDevicesCommand().run(credential: credential)
+            let deviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
             
             return deviceList?.devices
         }.flatMap{ $0 }
@@ -535,7 +545,7 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         if #available(macOS 10.15, *) {
             return try await runAsync(
-                credential: try blueCastArg(BlueAccessCredential.self, arg0),
+                credentialID: try blueCastArg(String.self, arg0),
                 deviceID: try blueCastArg(String.self, arg1),
                 objectID: try blueCastArg(String.self, arg2)
             )
@@ -545,17 +555,29 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
     }
     
     @available(macOS 10.15, *)
-    public func runAsync(credential: BlueAccessCredential, deviceID: String, objectID: String, refreshToken: Bool? = nil) async throws -> BlueSystemStatus? {
+    public func runAsync(credentialID: String, deviceID: String, objectID: String, refreshToken: Bool? = nil) async throws -> BlueSystemStatus? {
         guard let _ = blueGetDevice(deviceID) else {
             throw BlueError(.invalidState)
+        }
+        
+        guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
+            throw BlueError(.notFound)
         }
         
         let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
         
         _ = try await blueAPI!.claimDevice(deviceID: deviceID, objectID: objectID, with: tokenAuthentication).getData()
         
-        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credential: credential, refreshToken: refreshToken)
+        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, refreshToken: refreshToken)
         
-        return try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credential: credential, deviceID: deviceID, refreshToken: refreshToken)
+        return try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID, refreshToken: refreshToken)
     }
+}
+
+private func blueGetAccessCredential(credentialID: String) -> BlueAccessCredential? {
+    if let entry = try? blueAccessCredentialsKeyChain.getEntry(id: credentialID) {
+        return try? BlueAccessCredential(jsonUTF8Data: entry)
+    }
+    
+    return nil
 }

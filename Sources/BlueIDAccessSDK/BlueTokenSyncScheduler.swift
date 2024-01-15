@@ -239,13 +239,13 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
             blueFireListeners(fireEvent: BlueEventType.tokenSyncFinished, data: nil)
         }
         
-        let accessCredentialList = try await blueCommands.getAccessCredentials.runAsync(includePrivateKey: true)
+        let accessCredentialList = try await blueCommands.getAccessCredentials.runAsync()
 
         await withThrowingTaskGroup(of: Void.self) { group in
             for credential in accessCredentialList.credentials {
                 group.addTask {
                     do {
-                        try await self.command.runAsync(credential: credential)
+                        try await self.command.runAsync(credentialID: credential.credentialID.id)
                         
                         blueLogDebug("Access credential has been successfully synchronized: \(credential.credentialID.id)")
                     } catch {
