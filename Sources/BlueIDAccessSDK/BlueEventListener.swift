@@ -19,6 +19,8 @@ public enum BlueEventType: String, CaseIterable {
     // data = nil
     case accessCredentialAdded
     // data = nil
+    case accessDeviceClaimed
+    // data = nil
     case tokenSyncStarted
     // data = nil
     case tokenSyncFinished

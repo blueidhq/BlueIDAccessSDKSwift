@@ -570,7 +570,11 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
         
         try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, refreshToken: refreshToken)
         
-        return try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID, refreshToken: refreshToken)
+        let status = try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID, refreshToken: refreshToken)
+        
+        blueFireListeners(fireEvent: .accessDeviceClaimed, data: nil)
+        
+        return status
     }
 }
 
