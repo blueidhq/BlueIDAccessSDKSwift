@@ -72,6 +72,10 @@ extension BlueAccessObject: Decodable {
         if let description = try? container.decode(String.self, forKey: .description) {
             description_p = description
         }
+        
+        if let deviceIds = try? container.decode([String].self, forKey: .deviceIds) {
+            self.deviceIds = deviceIds
+        }
     }
     
     enum CodingKeys: String, CodingKey {
@@ -79,6 +83,7 @@ extension BlueAccessObject: Decodable {
         case objectId
         case name
         case description
+        case deviceIds
     }
 }
 

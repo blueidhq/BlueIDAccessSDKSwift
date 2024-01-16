@@ -515,6 +515,8 @@ public struct BlueAccessObject {
   /// Clears the value of `description_p`. Subsequent reads from it will return its default value.
   public mutating func clearDescription_p() {self._description_p = nil}
 
+  public var deviceIds: [String] = []
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1128,6 +1130,7 @@ extension BlueAccessObject: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     2: .same(proto: "objectId"),
     3: .same(proto: "name"),
     4: .same(proto: "description"),
+    5: .same(proto: "deviceIds"),
   ]
 
   public var isInitialized: Bool {
@@ -1147,6 +1150,7 @@ extension BlueAccessObject: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       case 2: try { try decoder.decodeSingularInt32Field(value: &self._objectID) }()
       case 3: try { try decoder.decodeSingularStringField(value: &self._name) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self._description_p) }()
+      case 5: try { try decoder.decodeRepeatedStringField(value: &self.deviceIds) }()
       default: break
       }
     }
@@ -1169,6 +1173,9 @@ extension BlueAccessObject: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     try { if let v = self._description_p {
       try visitor.visitSingularStringField(value: v, fieldNumber: 4)
     } }()
+    if !self.deviceIds.isEmpty {
+      try visitor.visitRepeatedStringField(value: self.deviceIds, fieldNumber: 5)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -1177,6 +1184,7 @@ extension BlueAccessObject: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     if lhs._objectID != rhs._objectID {return false}
     if lhs._name != rhs._name {return false}
     if lhs._description_p != rhs._description_p {return false}
+    if lhs.deviceIds != rhs.deviceIds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

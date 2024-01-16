@@ -44,4 +44,13 @@ internal class BlueDevice: NSObject, BlueSPConnectionDelegate {
     internal func receive() throws -> Data? {
         preconditionFailure("Not implemented")
     }
+    
+    internal func updateInfo(systemStatus: BlueSystemStatus) {
+        info.manufacturerInfo.isFactory = !systemStatus.settings.timeWasSet
+        info.manufacturerInfo.hardwareType = systemStatus.hardwareType
+        info.manufacturerInfo.batteryLevel = systemStatus.batteryLevel
+        info.manufacturerInfo.applicationVersion = systemStatus.applicationVersion
+        
+        blueNotifyUpdatedDevice(self)
+    }
 }

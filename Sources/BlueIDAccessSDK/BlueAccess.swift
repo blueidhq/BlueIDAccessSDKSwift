@@ -266,7 +266,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     
     @available(macOS 10.15, *)
     public func runAsync(credentialID: String, deviceID: String, refreshToken: Bool? = false) async throws -> BlueSystemStatus? {
-        guard let _ = blueGetDevice(deviceID) else {
+        guard let device = blueGetDevice(deviceID) else {
             throw BlueError(.invalidState)
         }
         
@@ -292,6 +292,8 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             action: "UPDATE",
             data: update
         )
+        
+        device.updateInfo(systemStatus: updateStatus)
         
         await waitUntilDeviceHasBeenRestarted()
         
