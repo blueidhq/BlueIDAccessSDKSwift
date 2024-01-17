@@ -41,7 +41,8 @@ public class BlueAPIAsyncCommand: BlueAsyncCommand {
     internal func getAccessToken(credential: BlueAccessCredential, refreshToken: Bool) async throws -> BlueAccessToken {
         if (!refreshToken) {
             if let accessToken: BlueAccessToken = try blueAccessAuthenticationTokensKeyChain.getCodableEntry(id: credential.credentialID.id) {
-                let isExpired = accessToken.expiresAt < Int(Date().timeIntervalSince1970)
+                let expiresAt = Date(timeIntervalSince1970: TimeInterval(accessToken.expiresAt) / 1000.0)
+                let isExpired = expiresAt < Date()
                 
                 if (!isExpired) {
                     return accessToken

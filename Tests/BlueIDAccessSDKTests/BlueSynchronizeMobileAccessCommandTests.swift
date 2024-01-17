@@ -89,14 +89,14 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
         
         let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
-        let validAccessToken = BlueAccessToken(token: "valid-access-token", expiresAt: Int(tomorrowDate!.timeIntervalSince1970))
+        let validAccessToken = BlueAccessToken(token: "valid-access-token", expiresAt: Int(tomorrowDate!.timeIntervalSince1970) * 1000)
         try blueAccessAuthenticationTokensKeyChain.storeCodableEntry(id: credential.credentialID.id, data: validAccessToken)
         
         try! await BlueSynchronizeMobileAccessCommand(BlueAPIMock()).runAsync(credentialID: credential.credentialID.id)
         let accessToken: BlueAccessToken? = try blueAccessAuthenticationTokensKeyChain.getCodableEntry(id: credential.credentialID.id)
         XCTAssertNotNil(accessToken, "No new token should have been issued")
         XCTAssertEqual(accessToken!.token, "valid-access-token")
-        XCTAssertEqual(accessToken!.expiresAt, Int(tomorrowDate!.timeIntervalSince1970))
+        XCTAssertEqual(accessToken!.expiresAt, Int(tomorrowDate!.timeIntervalSince1970) * 1000)
     }
     
     func testSynchronizeMobileAccessWithExpiredAccessToken() async throws {
