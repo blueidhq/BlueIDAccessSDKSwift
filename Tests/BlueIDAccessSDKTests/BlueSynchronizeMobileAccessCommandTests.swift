@@ -71,16 +71,10 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         XCTAssertNotNil(terminalPublicKey2)
         XCTAssertEqual(String(data: terminalPublicKey2!, encoding: .utf8), "public-key-2")
         
-        let deviceToken1Data = try blueTerminalRequestDataKeychain.getEntry(id: "device-1:MAINTC")
-        XCTAssertNotNil(deviceToken1Data)
-        
-        let deviceToken1: BlueSPToken = try blueDecodeMessage(deviceToken1Data!)
+        let deviceToken1: BlueSPToken = try blueGetSpToken("device-1:MAINTC")!
         XCTAssertEqual(deviceToken1.command.command, "MAINTC")
         
-        let deviceToken2Data = try blueTerminalRequestDataKeychain.getEntry(id: "device-2:PING")
-        XCTAssertNotNil(deviceToken2Data)
-        
-        let deviceToken2: BlueSPToken = try blueDecodeMessage(deviceToken2Data!)
+        let deviceToken2: BlueSPToken = try blueGetSpToken("device-2:PING")!
         XCTAssertEqual(deviceToken2.command.command, "PING")
     }
     

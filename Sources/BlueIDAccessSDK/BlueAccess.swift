@@ -218,24 +218,44 @@ public class BlueSynchronizeMobileAccessCommand: BlueAPIAsyncCommand {
         }
         
         try synchronizationResult.tokens?.forEach{deviceToken in
-            try blueStoreSpToken(deviceID: deviceToken.deviceId, token: deviceToken.token)
+            try blueStoreSpToken(credential: credential, deviceID: deviceToken.deviceId, token: deviceToken.token)
         }
     }
     
     private func purge(_ credential: BlueAccessCredential) throws {
         _ = try? blueAccessCredentialsKeyChain.deleteEntry(id: credential.credentialID.id)
         
-        guard let accessDeviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id) else {
+        guard let deviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id) else {
             return
         }
         
-        accessDeviceList.devices.forEach { device in
-            do {
-                _ = try? blueDeleteSpTokens(deviceID: device.deviceID)
-                _ = try? blueTerminalPublicKeysKeychain.deleteEntry(id: device.deviceID)
+        purgeSpTokens(credential, deviceList.devices)
+        purgeTerminalPublicKeys(deviceList.devices)
+        purgeDevicesStorage(credential)
+    }
+    
+    private func purgeSpTokens(_ credential: BlueAccessCredential, _ devices: [BlueAccessDevice]) {
+        devices.forEach { device in
+            _ = try? blueDeleteSpTokens(credential: credential, deviceID: device.deviceID)
+        }
+    }
+    
+    /// Deletes terminal public keys for a given device list. 
+    /// The terminal public keys are only removed if there are no BlueSPTokens in use by the device.
+    /// We may have more than one credential that grants access to the same device.
+    /// Therefore, if we simply remove the terminal public key without checking it, the other credentials will no longer work.
+    /// - parameter devices:The devices to purge their terminal public keys, if possible.
+    private func purgeTerminalPublicKeys(_ devices: [BlueAccessDevice]) {
+        devices.forEach { device in
+            if let entryIds = try? blueGetSpTokenEntryIds(deviceID: device.deviceID) {
+                if (entryIds.isEmpty) {
+                    _ = try? blueTerminalPublicKeysKeychain.deleteEntry(id: device.deviceID)
+                }
             }
         }
-        
+    }
+    
+    private func purgeDevicesStorage(_ credential: BlueAccessCredential) {
         blueAccessDevicesStorage.deleteEntry(id: credential.credentialID.id)
     }
 }
