@@ -17,6 +17,20 @@ class BlueAPI: BlueAPIProtocol {
         )
     }
     
+    func synchronizeNfcAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult> {
+        return try await post(
+            endpoint: .AccessSynchronizeNfcAccess,
+            request: BlueNfcAccessSynchronizationRequest(tokenAuthentication: tokenAuthentication)
+        )
+    }
+    
+    func synchronizeOfflineAccess(credentialID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueOfflineAccessSynchronizationResult> {
+        return try await post(
+            endpoint: .AccessSynchronizeOfflineAccess,
+            request: BlueOfflineAccessSynchronizationRequest(credentialId: credentialID, tokenAuthentication: tokenAuthentication)
+        )
+    }
+    
     func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueCreateDeviceConfigurationResult> {
         return try await post(
             endpoint: .AccessCreateDeviceConfiguration,
@@ -63,6 +77,23 @@ class BlueAPI: BlueAPIProtocol {
         return try await post(
             endpoint: .AccessClaimDevice,
             request: BlueClaimDeviceRequest(deviceId: deviceID, object: objectID, tokenAuthentication: tokenAuthentication)
+        )
+    }
+    
+    func claimAccessCredential(activationToken: String) async throws -> BlueFetchResponse<BlueClaimAccessCredentialResult> {
+        let endpoint = BlueAPIEndpoints.AccessClaimCredential.url.absoluteString
+        
+        guard let url = URL(string: "\(endpoint)?\(activationToken)") else {
+            throw BlueError(.invalidArguments)
+        }
+        
+        return try await BlueFetch.get(url: url)
+    }
+    
+    func getAccessCredentials(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult> {
+        return try await post(
+            endpoint: .AccessCredentials,
+            request: BlueGetAccessCredentialsRequest(tokenAuthentication: tokenAuthentication)
         )
     }
     

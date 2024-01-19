@@ -1,6 +1,6 @@
 import Foundation
 
-extension BlueLocalTimestamp: Encodable {
+extension BlueLocalTimestamp: Encodable, Decodable {
     public init(_ date: Date) {
         self.init()
         
@@ -24,6 +24,17 @@ extension BlueLocalTimestamp: Encodable {
         self.hours = UInt32(hours)
         self.minutes = UInt32(minutes)
         self.seconds = UInt32(seconds)
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        year = try container.decode(UInt32.self, forKey: .year)
+        month = try container.decode(UInt32.self, forKey: .month)
+        date = try container.decode(UInt32.self, forKey: .date)
+        hours = try container.decode(UInt32.self, forKey: .hours)
+        minutes = try container.decode(UInt32.self, forKey: .minutes)
+        seconds = try container.decode(UInt32.self, forKey: .seconds)
     }
     
     public func toDate() -> Date? {
@@ -58,6 +69,7 @@ extension BlueLocalTimestamp: Encodable {
         case date
         case hours
         case minutes
+        case seconds
     }
 }
 
@@ -87,6 +99,76 @@ extension BlueAccessObject: Decodable {
     }
 }
 
+extension BlueAccessCredential: Decodable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        credentialID = BlueCredentialId()
+        credentialID.id = try container.decode(String.self, forKey: .credentialId)
+        
+        let credentialTypeAsString = try container.decode(String.self, forKey: .credentialType)
+        guard let credentialType = BlueCredentialType(stringValue: credentialTypeAsString) else {
+            throw BlueError(.invalidState)
+        }
+        
+        self.credentialType = credentialType
+        self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? String()
+        self.validFrom = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validFrom) ?? BlueLocalTimestamp()
+        self.validTo = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validTo) ?? BlueLocalTimestamp()
+        self.validity = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validity) ?? BlueLocalTimestamp()
+        self.siteID = try container.decode(Int32.self, forKey: .siteId)
+        self.siteName = try container.decodeIfPresent(String.self, forKey: .siteName) ?? String()
+        self.receiverName = try container.decodeIfPresent(String.self, forKey: .receiverName) ?? String()
+        self.organisation = try container.decode(String.self, forKey: .organisation)
+        self.organisationName = try container.decodeIfPresent(String.self, forKey: .organisationName) ?? String()
+        
+        if let privateKeyBase64 = try container.decodeIfPresent(String.self, forKey: .privateKey) {
+            if let privateKey = Data(base64Encoded: privateKeyBase64) {
+                self.privateKey = privateKey
+            }
+        }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case description
+        case credentialId
+        case credentialType
+        case validFrom
+        case validTo
+        case validity
+        case privateKey
+        case siteId
+        case siteName
+        case receiverName
+        case organisation
+        case organisationName
+    }
+}
+
+extension BlueCredentialType {
+    init?(stringValue: String) {
+        switch stringValue.lowercased() {
+            case "regular":
+                self = .regular
+            case "maintenance":
+                self = .maintenance
+            case "master":
+                self = .master
+            case "nfcwriter":
+                self = .nfcWriter
+            default:
+                return nil
+        }
+    }
+}
+
+extension BlueAccessCredentialList {
+    public init (credentials: [BlueAccessCredential]) {
+        self.credentials = credentials
+    }
+}
+
 extension BlueAccessObjectList {
     public init (objects: [BlueAccessObject]) {
         self.objects = objects
@@ -103,14 +185,14 @@ extension Array {
     func chunks(of size: Int) -> [[Element]] {
         var index = 0
         var result = [[Element]]()
-
+        
         while index < self.count {
             let endIndex = index + size < self.count ? index + size : self.count
             let subArray = Array(self[index..<endIndex])
             result.append(subArray)
             index += size
         }
-
+        
         return result
     }
 }

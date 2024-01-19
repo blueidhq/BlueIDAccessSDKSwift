@@ -147,14 +147,14 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
     
     private let foregroundScheduler = ForegroundScheduler()
     
-    private let command: BlueSynchronizeMobileAccessCommand
+    private let command: BlueSynchronizeAccessCredentialCommand
     
     init(
         timeInterval: TimeInterval? = 60,
         autoSchedule: Bool? = true,
-        command: BlueSynchronizeMobileAccessCommand? = nil
+        command: BlueSynchronizeAccessCredentialCommand? = nil
     ) {
-        self.command = command ?? blueCommands.synchronizeMobileAccess
+        self.command = command ?? blueCommands.synchronizeAccessCredential
         self.timeInterval = timeInterval ?? 60
         self.autoSchedule = autoSchedule ?? true
         

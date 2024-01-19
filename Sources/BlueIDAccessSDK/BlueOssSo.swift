@@ -55,7 +55,7 @@ public struct BlueOssSoCreateMobileCommand: BlueCommand {
         
         return try blueClibFunctionOut({ ossSoMobileOutputPtr, ossSoMobileOutputSize in
             let ossSoMobileOutputSizeMutable = UnsafeMutablePointer<UInt16>.allocate(capacity: 1)
-
+            
             defer { ossSoMobileOutputSizeMutable.deallocate() }
             
             ossSoMobileOutputSizeMutable.pointee = ossSoMobileOutputSize
@@ -280,3 +280,110 @@ public struct BlueOssSoUpdateConfigurationCommand: BlueCommand {
     }
 }
 
+public struct BlueReadOssSoCredentialCommand: BlueCommand {
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return try run(
+            organisation: blueCastArg(String.self, arg0),
+            siteID: blueCastArg(Int.self, arg1)
+        )
+    }
+    
+    public func run(organisation: String, siteID: Int) throws -> BlueOssSoConfiguration {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+            throw BlueError(.notFound)
+        }
+        
+        guard let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id) else {
+            throw BlueError(.invalidState)
+        }
+        
+        return try BlueOssSoReadConfigurationCommand().run(ossSoSettings)
+    }
+}
+
+/*
+public struct BlueFormatOssSoCredentialCommand: BlueCommand {
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return try run(
+            organisation: blueCastArg(String.self, arg0),
+            siteID: blueCastArg(Int.self, arg1)
+        )
+    }
+    
+    public func run(organisation: String, siteID: Int) throws {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+            throw BlueError(.notFound)
+        }
+        
+        let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
+        
+        try BlueOssSoFormatCommand().run(ossSoSettings)
+    }
+}*/
+
+public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
+    override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync(
+            credentialID: blueCastArg(String.self, arg0),
+            organisation: blueCastArg(String.self, arg1),
+            siteID: blueCastArg(Int.self, arg2)
+        )
+    }
+    
+    public func runAsync(credentialID: String, organisation: String, siteID: Int, refreshToken: Bool? = nil) async throws -> Bool {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+            throw BlueError(.notFound)
+        }
+        
+        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        
+        let result = try await blueAPI!.synchronizeOfflineAccess(credentialID: credentialID, with: tokenAuthentication).getData()
+        if (result.noRefresh == true) {
+            return false
+        }
+        
+        guard let configuration = result.configuration else {
+            throw BlueError(.invalidState)
+        }
+        
+        guard let data = Data(base64Encoded: configuration) else {
+            throw BlueError(.invalidState)
+        }
+        
+        let ossSoConfiguration: BlueOssSoConfiguration = try blueDecodeMessage(data)
+        let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
+        let ossSoProvisioningData = try BlueOssSoCreateStandardProvisioningDataCommand().run(credentialID, siteID)
+        
+        return try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
+            let isProvisioned = blueOssSo_IsProvisioned(pStorage) == BlueReturnCode_Ok
+            if (!isProvisioned) {
+                // format
+                _ = try blueClibErrorCheck(blueOssSo_Format(pStorage, true))
+                
+                // provision
+                try blueClibFunctionIn(message: ossSoProvisioningData, { (dataPtr, dataSize) in
+                    return blueOssSo_Provision_Ext(pStorage, dataPtr, dataSize)
+                })
+            }
+            
+            // update
+            try blueClibFunctionIn(message: ossSoConfiguration, { (newConfigPtr, newConfigSize) in
+                return blueOssSo_UpdateConfiguration_Ext(pStorage, newConfigPtr, newConfigSize, false)
+            })
+            
+            return true
+        })
+    }
+}
+
+private func blueGetOssSoSettings(credentialID: String) throws -> BlueOssSoSettings? {
+    guard let ossSoEntry: BlueOssEntry = try blueAccessOssSettingsKeyChain.getCodableEntry(id: credentialID) else {
+        throw BlueError(.invalidState)
+    }
+    
+    guard let ossSoSettingsData = ossSoEntry.ossSo else {
+        throw BlueError(.invalidState)
+    }
+    
+    return try blueDecodeMessage(ossSoSettingsData)
+}

@@ -33,7 +33,7 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         let scheduler = BlueTokenSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeMobileAccessCommand(DefaultBlueAPIMock())
+            command: BlueSynchronizeAccessCredentialCommand(DefaultBlueAPIMock())
         )
         
         defer {
@@ -56,7 +56,7 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         let scheduler = BlueTokenSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeMobileAccessCommand(DefaultBlueAPIMock())
+            command: BlueSynchronizeAccessCredentialCommand(DefaultBlueAPIMock())
         )
         
         defer {

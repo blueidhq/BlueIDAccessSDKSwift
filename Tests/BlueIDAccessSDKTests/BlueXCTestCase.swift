@@ -2,6 +2,13 @@ import XCTest
 @testable import BlueIDAccessSDK
 
 class DefaultBlueAPIMock: BlueAPIProtocol {
+    func getAccessCredentials(with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: []
+        )
+    }
+    
     func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueCreateDeviceConfigurationResult> {
         return BlueFetchResponse(
             statusCode: 200,
@@ -51,10 +58,24 @@ class DefaultBlueAPIMock: BlueAPIProtocol {
         )
     }
     
+    func synchronizeNfcAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: BlueNfcAccessSynchronizationResult()
+        )
+    }
+    
     func getAccessObjects(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessObjectsResult> {
         return BlueFetchResponse(
             statusCode: 200,
             data: []
+        )
+    }
+    
+    func synchronizeOfflineAccess(credentialID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueOfflineAccessSynchronizationResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: BlueOfflineAccessSynchronizationResult()
         )
     }
     
@@ -69,6 +90,13 @@ class DefaultBlueAPIMock: BlueAPIProtocol {
         return BlueFetchResponse(
             statusCode: 200,
             data: BlueClaimDeviceResult(site: "")
+        )
+    }
+    
+    func claimAccessCredential(activationToken: String) async throws -> BlueFetchResponse<BlueClaimAccessCredentialResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: BlueAccessCredential()
         )
     }
 }

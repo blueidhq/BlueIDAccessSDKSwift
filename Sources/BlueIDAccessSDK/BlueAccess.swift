@@ -3,6 +3,7 @@ import Foundation
 internal let blueAccessCredentialsKeyChain = BlueKeychain(attrService: "blueid.accessCredentials")
 internal let blueAccessAuthenticationTokensKeyChain = BlueKeychain(attrService: "blueid.accessAuthenticationTokens")
 internal let blueAccessDevicesStorage = BlueStorage(collection: "blueid.accessDevices")
+internal let blueAccessOssSettingsKeyChain = BlueKeychain(attrService: "blueid.accessOssSettings")
 
 public class BlueAPIAsyncCommand: BlueAsyncCommand {
     internal let blueAPI: BlueAPIProtocol?
@@ -16,7 +17,7 @@ public class BlueAPIAsyncCommand: BlueAsyncCommand {
     }
     
     internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
-        throw BlueError(.unavailable)
+        fatalError("not implemented")
     }
     
     internal func getTokenAuthentication(credential: BlueAccessCredential, refreshToken: Bool) async throws -> BlueTokenAuthentication {
@@ -76,9 +77,22 @@ public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
         
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: credential.jsonUTF8Data())
         
-        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, refreshToken: true)
+        try await BlueSynchronizeAccessCredentialCommand(self.blueAPI)
+            .runAsync(credentialID: credential.credentialID.id, refreshToken: true)
         
         blueFireListeners(fireEvent: .accessCredentialAdded, data: nil)
+    }
+}
+
+public class BlueClaimAccessCredentialCommand: BlueAPIAsyncCommand {
+    internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync(activationToken: try blueCastArg(String.self, arg0))
+    }
+    
+    public func runAsync(activationToken: String) async throws -> Void {
+        let credential = try await blueAPI!.claimAccessCredential(activationToken: activationToken).getData()
+        
+        try await BlueAddAccessCredentialCommand(self.blueAPI).runAsync(credential: credential)
     }
 }
 
@@ -146,117 +160,6 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
         }
         
         return credentialList
-    }
-}
-
-public class BlueSynchronizeMobileAccessCommand: BlueAPIAsyncCommand {
-    internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
-        return try await runAsync(
-            credentialID: try blueCastArg(String.self, arg0),
-            refreshToken: try blueCastArg(Bool.self, arg1)
-        )
-    }
-    
-    public func runAsync(credentialID: String, refreshToken: Bool? = nil) async throws -> Void {
-        guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
-            throw BlueError(.notFound)
-        }
-        
-        let tokenAuthentication = try await self.getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
-        
-        guard let response = try? await self.blueAPI!.synchronizeMobileAccess(with: tokenAuthentication) else {
-            if (credential.hasValidTo) {
-                if let validTo = credential.validTo.toDate() {
-                    
-                    let isExpired = validTo < Date()
-                    if (isExpired) {
-                        try purge(credential)
-                    }
-                }
-            }
-            
-            return
-        }
-        
-        if (response.statusCode == 401) {
-            try purge(credential)
-            return
-        }
-        
-        guard let synchronizationResult = response.data else {
-            return
-        }
-        
-        if synchronizationResult.noRefresh == true {
-            return
-        }
-        
-        try update(credential, synchronizationResult)
-    }
-    
-    private func update(_ credential: BlueAccessCredential, _ synchronizationResult: BlueMobileAccessSynchronizationResult) throws {
-        var updatedCredential = credential
-        updatedCredential.siteName = synchronizationResult.siteName ?? ""
-        
-        if let siteId = synchronizationResult.siteId {
-            updatedCredential.siteID = Int32(siteId)
-        }
-        
-        if let validity = synchronizationResult.validity {
-            updatedCredential.validity = BlueLocalTimestamp(Date(timeIntervalSince1970: TimeInterval(validity/1000)))
-        }
-        
-        try blueAccessCredentialsKeyChain.storeEntry(id: updatedCredential.credentialID.id, data: updatedCredential.jsonUTF8Data())
-        
-        let deviceList = synchronizationResult.getAccessDeviceList()
-        try blueAccessDevicesStorage.storeEntry(id: credential.credentialID.id, data: deviceList.jsonUTF8Data())
-        
-        try synchronizationResult.deviceTerminalPublicKeys?.forEach{terminalPublicKey in
-            if let publicKey = Data(base64Encoded: terminalPublicKey.value) {
-                try blueTerminalPublicKeysKeychain.storeEntry(id: terminalPublicKey.key, data: publicKey)
-            }
-        }
-        
-        try synchronizationResult.tokens?.forEach{deviceToken in
-            try blueStoreSpToken(credential: credential, deviceID: deviceToken.deviceId, token: deviceToken.token)
-        }
-    }
-    
-    private func purge(_ credential: BlueAccessCredential) throws {
-        _ = try? blueAccessCredentialsKeyChain.deleteEntry(id: credential.credentialID.id)
-        
-        guard let deviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id) else {
-            return
-        }
-        
-        purgeSpTokens(credential, deviceList.devices)
-        purgeTerminalPublicKeys(deviceList.devices)
-        purgeDevicesStorage(credential)
-    }
-    
-    private func purgeSpTokens(_ credential: BlueAccessCredential, _ devices: [BlueAccessDevice]) {
-        devices.forEach { device in
-            _ = try? blueDeleteSpTokens(credential: credential, deviceID: device.deviceID)
-        }
-    }
-    
-    /// Deletes terminal public keys for a given device list. 
-    /// The terminal public keys are only removed if there are no BlueSPTokens in use by the device.
-    /// We may have more than one credential that grants access to the same device.
-    /// Therefore, if we simply remove the terminal public key without checking it, the other credentials will no longer work.
-    /// - parameter devices:The devices to purge their terminal public keys, if possible.
-    private func purgeTerminalPublicKeys(_ devices: [BlueAccessDevice]) {
-        devices.forEach { device in
-            if let entryIds = try? blueGetSpTokenEntryIds(deviceID: device.deviceID) {
-                if (entryIds.isEmpty) {
-                    _ = try? blueTerminalPublicKeysKeychain.deleteEntry(id: device.deviceID)
-                }
-            }
-        }
-    }
-    
-    private func purgeDevicesStorage(_ credential: BlueAccessCredential) {
-        blueAccessDevicesStorage.deleteEntry(id: credential.credentialID.id)
     }
 }
 
@@ -601,10 +504,50 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
     }
 }
 
-private func blueGetAccessCredential(credentialID: String) -> BlueAccessCredential? {
+public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
+    override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync(
+            organisation: blueCastArg(String.self, arg0),
+            siteID: blueCastArg(Int.self, arg1)
+        )
+    }
+    
+    public func runAsync(organisation: String, siteID: Int, refreshToken: Bool? = nil) async throws -> BlueAccessCredentialList {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+            throw BlueError(.notFound)
+        }
+        
+        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        
+        let credentials = try await blueAPI!.getAccessCredentials(with: tokenAuthentication).getData()
+        
+        return BlueAccessCredentialList(credentials: credentials)
+    }
+}
+
+internal func blueGetAccessCredential(credentialID: String) -> BlueAccessCredential? {
     if let entry = try? blueAccessCredentialsKeyChain.getEntry(id: credentialID) {
         return try? BlueAccessCredential(jsonUTF8Data: entry)
     }
     
     return nil
+}
+
+internal func blueGetAccessCredential(organisation: String, siteID: Int) -> BlueAccessCredential? {
+    guard let entries = try? blueAccessCredentialsKeyChain.getAllEntries() else {
+        return nil
+    }
+    
+    let condition: (Data) -> Bool = { entry in
+        if let credential = try? BlueAccessCredential(jsonUTF8Data: entry) {
+            return credential.organisation == organisation && credential.siteID == siteID
+        }
+        return false
+    }
+    
+    guard let entry = entries.first(where: condition) else {
+        return nil
+    }
+    
+    return try? BlueAccessCredential(jsonUTF8Data: entry)
 }

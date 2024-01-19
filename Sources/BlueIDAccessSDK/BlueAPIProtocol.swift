@@ -7,6 +7,7 @@ private let baseURL = "https://api.dev.blue-id.com"
 public enum BlueAPIEndpoints: String {
     case AccessAuthenticationToken = "/access/authenticationToken"
     case AccessSynchronizeMobileAccess = "/access/synchronizeMobileAccess"
+    case AccessSynchronizeNfcAccess = "/access/synchronizeNfcAccess"
     case AccessCreateDeviceConfiguration = "/access/createDeviceConfiguration"
     case AccessUpdateDeviceSystemStatus = "/access/updateDeviceSystemStatus"
     case AccessObjects = "/access/objects"
@@ -14,6 +15,9 @@ public enum BlueAPIEndpoints: String {
     case AccessPushSystemLog = "/access/pushSystemLog"
     case AccessBlacklistEntries = "/access/blacklistEntries"
     case AccessClaimDevice = "/access/claimDevice"
+    case AccessCredentials = "/access/credentials"
+    case AccessSynchronizeOfflineAccess = "/access/synchronizeOfflineAccess"
+    case AccessClaimCredential = "/access/cc"
     
     var url: URL {
         guard let url = URL(string: baseURL) else {
@@ -28,6 +32,16 @@ internal struct BlueTokenAuthentication: Encodable {
     var token: String
     var signature: String
 }
+
+/// [GET] /access/cc response
+internal typealias BlueClaimAccessCredentialResult = BlueAccessCredential
+
+/// [POST] /access/credentials request
+internal struct BlueGetAccessCredentialsRequest: Encodable {
+    var tokenAuthentication: BlueTokenAuthentication
+}
+/// [POST] /access/credentials response
+internal typealias BlueGetAccessCredentialsResult = [BlueAccessCredential]
 
 /// [POST] /access/claimDevice request
 internal struct BlueClaimDeviceRequest: Encodable {
@@ -139,12 +153,43 @@ internal struct BlueAccessDeviceToken: Decodable {
     var objectName: String?
     var token: String
 }
+
+internal protocol BlueSynchronizationResponse: Decodable {
+    var credentialId: String? { get }
+    var noRefresh: Bool? { get }
+}
+
+/// [POST] /access/synchronizeOfflineAccess request
+internal struct BlueOfflineAccessSynchronizationRequest: Encodable {
+    var credentialId: String
+    var tokenAuthentication: BlueTokenAuthentication
+}
+/// [POST] /access/synchronizeOfflineAccess response
+internal struct BlueOfflineAccessSynchronizationResult: BlueSynchronizationResponse {
+    var credentialId: String?
+    var noRefresh: Bool?
+    var configuration: String?
+    var blacklistFile: String?
+}
+
+/// [POST] /access/synchronizeNfcAccess request
+internal struct BlueNfcAccessSynchronizationRequest: Encodable {
+    var tokenAuthentication: BlueTokenAuthentication
+}
+/// [POST] /access/synchronizeNfcAccess response
+internal struct BlueNfcAccessSynchronizationResult: BlueSynchronizationResponse {
+    var credentialId: String?
+    var noRefresh: Bool?
+    var ossSoSettings: String?
+    var ossSidSettings: String?
+}
+
 /// [POST] /access/synchronizeMobileAccess request
 internal struct BlueMobileAccessSynchronizationRequest: Encodable {
     var tokenAuthentication: BlueTokenAuthentication
 }
 /// [POST] /access/synchronizeMobileAccess response
-internal struct BlueMobileAccessSynchronizationResult: Decodable {
+internal struct BlueMobileAccessSynchronizationResult: BlueSynchronizationResponse {
     var credentialId: String?
     var noRefresh: Bool?
     var siteId: Int?
@@ -182,6 +227,8 @@ internal struct BlueAccessToken: Codable {
 protocol BlueAPIProtocol {
     func getAccessToken(credentialId: String) async throws -> BlueFetchResponse<BlueAccessToken>
     func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult>
+    func synchronizeNfcAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult>
+    func synchronizeOfflineAccess(credentialID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueOfflineAccessSynchronizationResult>
     func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueCreateDeviceConfigurationResult>
     func updateDeviceSystemStatus(systemStatus: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueUpdateDeviceSystemStatusResult>
     func pushEvents(events: [BluePushEvent], with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BluePushEventsResult>
@@ -189,4 +236,6 @@ protocol BlueAPIProtocol {
     func getAccessObjects(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessObjectsResult>
     func getBlacklistEntries(deviceID: String, with tokenAuthentication: BlueTokenAuthentication, limit: Int?) async throws -> BlueFetchResponse<BlueGetBlacklistEntriesResult>
     func claimDevice(deviceID: String, objectID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueClaimDeviceResult>
+    func claimAccessCredential(activationToken: String) async throws -> BlueFetchResponse<BlueClaimAccessCredentialResult>
+    func getAccessCredentials(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult>
 }

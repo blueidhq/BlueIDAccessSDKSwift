@@ -37,6 +37,8 @@ public struct BlueCommands {
     public let ossSoUnprovision = BlueOssSoUnprovisionCommand()
     public let ossSoReadConfiguration = BlueOssSoReadConfigurationCommand()
     public let ossSoUpdateConfiguration = BlueOssSoUpdateConfigurationCommand()
+    public let readOssSoCredential = BlueReadOssSoCredentialCommand()
+    public let writeOssSoCredential = BlueWriteOssSoCredentialCommand()
     
     public let ossSidCreateMobile = BlueOssSidCreateMobileCommand()
     public let ossSidFormat = BlueOssSidFormatCommand()
@@ -48,13 +50,15 @@ public struct BlueCommands {
     public let ossSidReadConfiguration = BlueOssSidReadConfigurationCommand()
     
     public let addAccessCredential = BlueAddAccessCredentialCommand()
+    public let claimAccessCredential = BlueClaimAccessCredentialCommand()
     public let getAccessCredentials = BlueGetAccessCredentialsCommand()
-    public let synchronizeMobileAccess = BlueSynchronizeMobileAccessCommand()
+    public let synchronizeAccessCredential = BlueSynchronizeAccessCredentialCommand()
     public let getAccessDevices = BlueGetAccessDevicesCommand()
     public let listAccessDevices = BlueListAccessDevicesCommand()
     public let updateDeviceConfiguration = BlueUpdateDeviceConfigurationCommand()
     public let getAccessObjects = BlueGetAccessObjectsCommand()
     public let claimAccessDevice = BlueClaimAccessDeviceCommand()
+    public let getWritableAccessCredentials = BlueGetWritableAccessCredentialsCommand()
     
     public let clearBlacklist = BlueClearBlacklistCommand()
     public let clearEventLog = BlueClearEventLogCommand()
