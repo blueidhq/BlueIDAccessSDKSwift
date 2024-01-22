@@ -65,6 +65,9 @@ public struct BlueCommands {
     public let clearSystemLog = BlueClearSystemLogCommand()
     public let getSystemStatus = BlueGetSystemStatusCommand()
     
+    // TODO: Make it available only for dev environment
+    public let UNSAFE_clearData = BlueClearDataCommand()
+    
     fileprivate init() {}
 }
 

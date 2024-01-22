@@ -113,6 +113,7 @@ extension BlueAccessCredential: Decodable {
         
         self.credentialType = credentialType
         self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? String()
+        self.description_p = try container.decodeIfPresent(String.self, forKey: .description) ?? String()
         self.validFrom = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validFrom) ?? BlueLocalTimestamp()
         self.validTo = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validTo) ?? BlueLocalTimestamp()
         self.validity = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validity) ?? BlueLocalTimestamp()

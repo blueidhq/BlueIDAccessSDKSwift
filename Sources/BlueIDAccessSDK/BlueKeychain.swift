@@ -194,14 +194,16 @@ internal class BlueKeychain {
         
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: attrService,
-            kSecMatchLimit as String: kSecMatchLimitAll,
+            kSecAttrService as String: attrService
         ]
         
         let status = SecItemDelete(query as CFDictionary)
         
         guard status == errSecSuccess || status == errSecItemNotFound else {
-            blueLogError("Keychain error \(status)")
+            let errorMessage = SecCopyErrorMessageString(status, nil) as? String ?? ""
+            
+            blueLogError("Keychain error \(status) \"\(errorMessage)\"")
+
             throw BlueError(.invalidState)
         }
         

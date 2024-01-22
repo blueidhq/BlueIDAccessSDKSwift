@@ -56,4 +56,12 @@ final class CommandsTests: BlueXCTestCase {
         let deviceList2: BlueAccessDeviceList = try blueDecodeMessage(commandResult2.data as! Data)
         XCTAssertNotNil(deviceList2, "Device list should not be null")
     }
+    
+    func testRunUNSAFE_clearDataCommand() async throws {
+        do {
+            _ = try await blueRunCommand("UNSAFE_clearData")
+        } catch {
+            XCTFail()
+        }
+    }
 }

@@ -525,6 +525,22 @@ public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
     }
 }
 
+public struct BlueClearDataCommand: BlueCommand {
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return run()
+    }
+    
+    public func run() {
+        _ = try? blueAccessCredentialsKeyChain.deleteAllEntries()
+        _ = try? blueAccessAuthenticationTokensKeyChain.deleteAllEntries()
+        _ = try? blueAccessOssSettingsKeyChain.deleteAllEntries()
+        _ = try? blueTerminalPublicKeysKeychain.deleteAllEntries()
+        _ = try? blueTerminalRequestDataKeychain.deleteAllEntries()
+        
+        blueAccessDevicesStorage.deleteAllEntries()
+    }
+}
+
 internal func blueGetAccessCredential(credentialID: String) -> BlueAccessCredential? {
     if let entry = try? blueAccessCredentialsKeyChain.getEntry(id: credentialID) {
         return try? BlueAccessCredential(jsonUTF8Data: entry)

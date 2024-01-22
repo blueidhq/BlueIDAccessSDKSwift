@@ -301,26 +301,6 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
     }
 }
 
-/*
-public struct BlueFormatOssSoCredentialCommand: BlueCommand {
-    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
-        return try run(
-            organisation: blueCastArg(String.self, arg0),
-            siteID: blueCastArg(Int.self, arg1)
-        )
-    }
-    
-    public func run(organisation: String, siteID: Int) throws {
-        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
-            throw BlueError(.notFound)
-        }
-        
-        let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
-        
-        try BlueOssSoFormatCommand().run(ossSoSettings)
-    }
-}*/
-
 public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
@@ -342,15 +322,24 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
             return false
         }
         
-        guard let configuration = result.configuration else {
+        var ossSoConfiguration: BlueOssSoConfiguration?
+        
+        if let configuration = result.configuration {
+            if let data = Data(base64Encoded: configuration) {
+                ossSoConfiguration = try blueDecodeMessage(data)
+            }
+        }
+        else if let blacklistFile = result.blacklistFile {
+            if let data = Data(base64Encoded: blacklistFile) {
+                ossSoConfiguration = BlueOssSoConfiguration()
+                ossSoConfiguration?.blacklist = try blueDecodeMessage(data)
+            }
+        }
+        
+        guard let ossSoConfiguration = ossSoConfiguration else {
             throw BlueError(.invalidState)
         }
         
-        guard let data = Data(base64Encoded: configuration) else {
-            throw BlueError(.invalidState)
-        }
-        
-        let ossSoConfiguration: BlueOssSoConfiguration = try blueDecodeMessage(data)
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
         let ossSoProvisioningData = try BlueOssSoCreateStandardProvisioningDataCommand().run(credentialID, siteID)
         
