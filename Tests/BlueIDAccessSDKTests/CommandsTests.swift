@@ -24,6 +24,9 @@ final class CommandsTests: BlueXCTestCase {
     }
     
     func testRunGetAccessCredentialsCommand() async throws {
+        let credential = blueCreateAccessCredentialDemo()
+        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+        
         let arg0: Any? = NSNull()
         let arg1: Data? = nil
         
@@ -39,6 +42,7 @@ final class CommandsTests: BlueXCTestCase {
         let credentialList: BlueAccessCredentialList = try blueDecodeMessage(credentialListData)
         
         XCTAssertNotNil(credentialList)
+        XCTAssertEqual(credentialList.credentials.count, 1)
     }
     
     func testRunListAccessDevicesCommand() async throws {

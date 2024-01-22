@@ -114,14 +114,23 @@ extension BlueAccessCredential: Decodable {
         self.credentialType = credentialType
         self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? String()
         self.description_p = try container.decodeIfPresent(String.self, forKey: .description) ?? String()
-        self.validFrom = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validFrom) ?? BlueLocalTimestamp()
-        self.validTo = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validTo) ?? BlueLocalTimestamp()
-        self.validity = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validity) ?? BlueLocalTimestamp()
         self.siteID = try container.decode(Int32.self, forKey: .siteId)
         self.siteName = try container.decodeIfPresent(String.self, forKey: .siteName) ?? String()
         self.receiverName = try container.decodeIfPresent(String.self, forKey: .receiverName) ?? String()
         self.organisation = try container.decode(String.self, forKey: .organisation)
         self.organisationName = try container.decodeIfPresent(String.self, forKey: .organisationName) ?? String()
+        
+        if let validFrom = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validFrom) {
+            self.validFrom = validFrom
+        }
+        
+        if let validTo = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validTo) {
+            self.validTo = validTo
+        }
+        
+        if let validity = try container.decodeIfPresent(BlueLocalTimestamp.self, forKey: .validity) {
+            self.validity = validity
+        }
         
         if let privateKeyBase64 = try container.decodeIfPresent(String.self, forKey: .privateKey) {
             if let privateKey = Data(base64Encoded: privateKeyBase64) {
