@@ -192,10 +192,15 @@ internal class BlueKeychain {
             return numberOfEntries
         }
         
-        let query: [String: Any] = [
+        var query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: attrService
         ]
+        
+        #if os(macOS)
+        // Using kSecMatchLimitAll in iOS results in a -50 error.
+        query[kSecMatchLimit as String] = kSecMatchLimitAll
+        #endif
         
         let status = SecItemDelete(query as CFDictionary)
         

@@ -142,11 +142,13 @@ extension XCTest {
         _ message: @autoclosure () -> String = "",
         file: StaticString = #filePath,
         line: UInt = #line
-    ) async {
+    ) async -> T? {
         do {
-            _ = try await expression()
+            return try await expression()
         } catch {
             XCTFail(message())
         }
+        
+        return nil
     }
 }

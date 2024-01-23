@@ -289,7 +289,7 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
     }
     
     public func run(organisation: String, siteID: Int) throws -> BlueOssSoConfiguration {
-        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
             throw BlueError(.notFound)
         }
         
@@ -311,7 +311,7 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
     }
     
     public func runAsync(credentialID: String, organisation: String, siteID: Int, refreshToken: Bool? = nil) async throws -> Bool {
-        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
             throw BlueError(.notFound)
         }
         

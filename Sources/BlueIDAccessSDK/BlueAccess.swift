@@ -513,7 +513,7 @@ public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
     }
     
     public func runAsync(organisation: String, siteID: Int, refreshToken: Bool? = nil) async throws -> BlueAccessCredentialList {
-        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID) else {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
             throw BlueError(.notFound)
         }
         
@@ -549,14 +549,14 @@ internal func blueGetAccessCredential(credentialID: String) -> BlueAccessCredent
     return nil
 }
 
-internal func blueGetAccessCredential(organisation: String, siteID: Int) -> BlueAccessCredential? {
+internal func blueGetAccessCredential(organisation: String, siteID: Int, credentialType: BlueCredentialType) -> BlueAccessCredential? {
     guard let entries = try? blueAccessCredentialsKeyChain.getAllEntries() else {
         return nil
     }
     
     let condition: (Data) -> Bool = { entry in
         if let credential = try? BlueAccessCredential(jsonUTF8Data: entry) {
-            return credential.organisation == organisation && credential.siteID == siteID
+            return credential.credentialType == credentialType && credential.organisation == organisation && credential.siteID == siteID
         }
         return false
     }
