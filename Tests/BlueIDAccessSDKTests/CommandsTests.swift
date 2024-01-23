@@ -62,10 +62,6 @@ final class CommandsTests: BlueXCTestCase {
     }
     
     func testRunUNSAFE_clearDataCommand() async throws {
-        do {
-            _ = try await blueRunCommand("UNSAFE_clearData")
-        } catch {
-            XCTFail()
-        }
+        await XCTAssertNotThrowsError(try await blueRunCommand("UNSAFE_clearData"))
     }
 }
