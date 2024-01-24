@@ -24,6 +24,8 @@ public enum BlueEventType: String, CaseIterable {
     case tokenSyncStarted
     // data = nil
     case tokenSyncFinished
+    // data = Bool
+    case bluetoothStateChanged
 }
 
 public protocol BlueEventListener: AnyObject {

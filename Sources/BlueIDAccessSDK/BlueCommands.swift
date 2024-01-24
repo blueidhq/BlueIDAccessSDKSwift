@@ -21,6 +21,7 @@ public struct BlueCommands {
     public let bluetoothActivate = BlueBluetoothActivate()
     public let bluetoothDeactivate = BlueBluetoothDeactivate()
     public let isBluetoothActive = BlueIsBluetoothActiveCommand()
+    public let checkBluetoothPermission = BlueCheckBluetoothPermissionCommand()
     
 #if os(iOS) || os(watchOS)
     public let nearByActivate = BlueNearByActivate()
@@ -64,6 +65,8 @@ public struct BlueCommands {
     public let clearEventLog = BlueClearEventLogCommand()
     public let clearSystemLog = BlueClearSystemLogCommand()
     public let getSystemStatus = BlueGetSystemStatusCommand()
+    
+    public let openAppSettings = BlueOpenAppSettingsCommand()
     
     // TODO: Make it available only for dev environment
     public let UNSAFE_clearData = BlueClearDataCommand()

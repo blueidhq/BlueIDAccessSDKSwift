@@ -16,6 +16,19 @@ private final class BlueCentralManagerListener: NSObject, CBCentralManagerDelega
     public func centralManagerDidUpdateState(_ centralManager: CBCentralManager) {
         dispatchPrecondition(condition: .onQueue(blueDeviceQueue))
         
+        switch centralManager.state {
+            case .poweredOn:
+                blueFireListeners(fireEvent: .bluetoothStateChanged, data: true)
+                break
+                
+            case .poweredOff:
+                blueFireListeners(fireEvent: .bluetoothStateChanged, data: false)
+                break
+                
+            default:
+                break
+        }
+        
         blueUpdateBluetoothScanning()
     }
     
@@ -233,7 +246,37 @@ public struct BlueBluetoothDeactivate: BlueCommand {
 }
 
 public struct BlueIsBluetoothActiveCommand: BlueCommand {
-    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+    internal func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return run()
+    }
+    
+    public func run() -> Bool {
         return blueBluetoothIsActive
+    }
+}
+
+public struct BlueCheckBluetoothPermissionCommand: BlueCommand {
+    internal func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return run()
+    }
+    
+    public func run() -> String {
+        if #available(macOS 10.15, *) {
+            switch(CBCentralManager.authorization) {
+                case .notDetermined:
+                    return "notDetermined"
+                    
+                case .restricted, .denied:
+                    return "denied"
+                    
+                case .allowedAlways:
+                    return "granted"
+                    
+                @unknown default:
+                    return "notDetermined"
+            }
+        }
+        
+        return "notDetermined"
     }
 }
