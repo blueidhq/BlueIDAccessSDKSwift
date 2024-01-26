@@ -6,7 +6,6 @@ import Foundation
 /// - parameter message: The modal message.
 /// - parameter successMessage: A success message to be shown in case the task is finished successfully.
 /// - parameter task: The task to be performed .
-@available(iOS 15.0, *)
 public func blueShowModal<T>(
     title: String,
     message: String? = nil,

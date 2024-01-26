@@ -44,7 +44,6 @@ internal class BlueModalViewModel: ObservableObject {
     }
 }
 
-@available(iOS 15.0, *)
 internal struct BlueModalView: View {
     @ObservedObject private var vm: BlueModalViewModel
     
@@ -94,9 +93,15 @@ internal struct BlueModalView: View {
                                 } else {
                                     switch (vm.status) {
                                         case .Waiting:
-                                            ProgressView()
-                                                .controlSize(.large)
-                                                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                                            if #available(iOS 15.0, *) {
+                                                ProgressView()
+                                                    .controlSize(.large)
+                                                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                                            } else {
+                                                ProgressView()
+                                                    .scaleEffect(x: 2, y: 2, anchor: .center)
+                                                    .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                                            }
                                             
                                         case .Success:
                                             Image(systemName: "checkmark.circle")

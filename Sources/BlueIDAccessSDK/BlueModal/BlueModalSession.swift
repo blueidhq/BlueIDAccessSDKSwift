@@ -8,7 +8,6 @@ import SwiftUI
  * Modal session for processing BlueModal.
  * BlueModal (sheet) helps people perform a scoped task that’s closely related to their current context.
  */
-@available(iOS 15.0, *)
 internal class BlueModalSession {
     private var viewModel = BlueModalViewModel()
     private var controller: UIHostingController<BlueModalView>? = nil

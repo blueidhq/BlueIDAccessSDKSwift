@@ -548,17 +548,13 @@ public struct BlueOpenViaOssSoCommand: BlueAsyncCommand {
     
     public func runAsync(deviceID: String) async throws -> BlueOssAccessResult {
 #if os(iOS) || os(watchOS)
-        if #available(iOS 15.0, *) {
-            return try await blueShowModal(
-                title: blueI18n.openViaOssTitle,
-                message: blueI18n.openViaOssWaitMessage,
-                successMessage: blueI18n.openViaOssSuccessMessage
-            ) {
-                return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
-            }
+        return try await blueShowModal(
+            title: blueI18n.openViaOssTitle,
+            message: blueI18n.openViaOssWaitMessage,
+            successMessage: blueI18n.openViaOssSuccessMessage
+        ) {
+            return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
         }
-        
-        return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
 #else
         if #available(macOS 10.15, *) {
             return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
