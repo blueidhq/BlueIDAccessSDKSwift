@@ -18,7 +18,7 @@ public struct BlueOpenAppSettingsCommand: BlueAsyncCommand {
         #if os(iOS) || os(watchOS)
         if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
             if UIApplication.shared.canOpenURL(settingsUrl) {
-                runInMainThread {
+                blueRunInMainThread {
                     UIApplication.shared.open(settingsUrl, completionHandler: completionHandler)
                 }
                 return
@@ -26,7 +26,7 @@ public struct BlueOpenAppSettingsCommand: BlueAsyncCommand {
         }
         #else
         if let securityPrivacyUrl = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Bluetooth") {
-            runInMainThread {
+            blueRunInMainThread {
                 completionHandler(NSWorkspace.shared.open(securityPrivacyUrl))
             }
             return
@@ -34,15 +34,5 @@ public struct BlueOpenAppSettingsCommand: BlueAsyncCommand {
         #endif
         
         completionHandler(false)
-    }
-    
-    private func runInMainThread(_ handler: @escaping () -> Void) {
-        if Thread.isMainThread {
-            handler()
-        } else {
-            DispatchQueue.main.async {
-                handler()
-            }
-        }
     }
 }

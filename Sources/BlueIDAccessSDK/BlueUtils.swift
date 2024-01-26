@@ -235,3 +235,13 @@ internal func blueCastResult<ResultType>(_ result: ResultType?) throws -> Any {
 internal func blueSecondsToNanoseconds(_ seconds: Int) -> Int {
     return seconds * _1_NANO
 }
+
+internal func blueRunInMainThread(_ handler: @escaping () -> Void) {
+    if Thread.isMainThread {
+        handler()
+    } else {
+        DispatchQueue.main.async {
+            handler()
+        }
+    }
+}

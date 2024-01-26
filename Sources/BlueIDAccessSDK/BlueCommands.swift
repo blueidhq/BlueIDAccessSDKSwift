@@ -49,6 +49,7 @@ public struct BlueCommands {
     public let ossSidProvision = BlueOssSidProvisionCommand()
     public let ossSidUnprovision = BlueOssSidUnprovisionCommand()
     public let ossSidReadConfiguration = BlueOssSidReadConfigurationCommand()
+    public let openViaOssSo = BlueOpenViaOssSoCommand()
     
     public let addAccessCredential = BlueAddAccessCredentialCommand()
     public let claimAccessCredential = BlueClaimAccessCredentialCommand()

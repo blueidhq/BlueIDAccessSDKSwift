@@ -541,6 +541,34 @@ public struct BlueClearDataCommand: BlueCommand {
     }
 }
 
+public struct BlueOpenViaOssSoCommand: BlueAsyncCommand {
+    internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync(deviceID: blueCastArg(String.self, arg0))
+    }
+    
+    public func runAsync(deviceID: String) async throws -> BlueOssAccessResult {
+#if os(iOS) || os(watchOS)
+        if #available(iOS 15.0, *) {
+            return try await blueShowModal(
+                title: blueI18n.openViaOssTitle,
+                message: blueI18n.openViaOssWaitMessage,
+                successMessage: blueI18n.openViaOssSuccessMessage
+            ) {
+                return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
+            }
+        }
+        
+        return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
+#else
+        if #available(macOS 10.15, *) {
+            return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
+        }
+        
+        throw BlueError(.notSupported)
+#endif
+    }
+}
+
 internal func blueGetAccessCredential(credentialID: String) -> BlueAccessCredential? {
     if let entry = try? blueAccessCredentialsKeyChain.getEntry(id: credentialID) {
         return try? BlueAccessCredential(jsonUTF8Data: entry)

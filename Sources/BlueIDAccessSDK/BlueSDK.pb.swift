@@ -131,6 +131,42 @@ public struct BlueI18n {
   /// Clears the value of `nfcOssSuccessFormatMessage`. Subsequent reads from it will return its default value.
   public mutating func clearNfcOssSuccessFormatMessage() {self._nfcOssSuccessFormatMessage = nil}
 
+  public var cmnCancelLabel: String {
+    get {return _cmnCancelLabel ?? "Cancel"}
+    set {_cmnCancelLabel = newValue}
+  }
+  /// Returns true if `cmnCancelLabel` has been explicitly set.
+  public var hasCmnCancelLabel: Bool {return self._cmnCancelLabel != nil}
+  /// Clears the value of `cmnCancelLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearCmnCancelLabel() {self._cmnCancelLabel = nil}
+
+  public var openViaOssTitle: String {
+    get {return _openViaOssTitle ?? "Unlocking the device"}
+    set {_openViaOssTitle = newValue}
+  }
+  /// Returns true if `openViaOssTitle` has been explicitly set.
+  public var hasOpenViaOssTitle: Bool {return self._openViaOssTitle != nil}
+  /// Clears the value of `openViaOssTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssTitle() {self._openViaOssTitle = nil}
+
+  public var openViaOssWaitMessage: String {
+    get {return _openViaOssWaitMessage ?? "Please wait..."}
+    set {_openViaOssWaitMessage = newValue}
+  }
+  /// Returns true if `openViaOssWaitMessage` has been explicitly set.
+  public var hasOpenViaOssWaitMessage: Bool {return self._openViaOssWaitMessage != nil}
+  /// Clears the value of `openViaOssWaitMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssWaitMessage() {self._openViaOssWaitMessage = nil}
+
+  public var openViaOssSuccessMessage: String {
+    get {return _openViaOssSuccessMessage ?? "Successfully unlocked"}
+    set {_openViaOssSuccessMessage = newValue}
+  }
+  /// Returns true if `openViaOssSuccessMessage` has been explicitly set.
+  public var hasOpenViaOssSuccessMessage: Bool {return self._openViaOssSuccessMessage != nil}
+  /// Clears the value of `openViaOssSuccessMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssSuccessMessage() {self._openViaOssSuccessMessage = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -143,6 +179,10 @@ public struct BlueI18n {
   fileprivate var _nfcOssSuccessProvisionMessage: String? = nil
   fileprivate var _nfcOssSuccessUnprovisionMessage: String? = nil
   fileprivate var _nfcOssSuccessFormatMessage: String? = nil
+  fileprivate var _cmnCancelLabel: String? = nil
+  fileprivate var _openViaOssTitle: String? = nil
+  fileprivate var _openViaOssWaitMessage: String? = nil
+  fileprivate var _openViaOssSuccessMessage: String? = nil
 }
 
 public struct BlueDeviceDetailsBluetooth {
@@ -610,6 +650,10 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     6: .same(proto: "nfcOssSuccessProvisionMessage"),
     7: .same(proto: "nfcOssSuccessUnprovisionMessage"),
     8: .same(proto: "nfcOssSuccessFormatMessage"),
+    9: .same(proto: "cmnCancelLabel"),
+    10: .same(proto: "openViaOssTitle"),
+    11: .same(proto: "openViaOssWaitMessage"),
+    12: .same(proto: "openViaOssSuccessMessage"),
   ]
 
   public var isInitialized: Bool {
@@ -621,6 +665,10 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     if self._nfcOssSuccessProvisionMessage == nil {return false}
     if self._nfcOssSuccessUnprovisionMessage == nil {return false}
     if self._nfcOssSuccessFormatMessage == nil {return false}
+    if self._cmnCancelLabel == nil {return false}
+    if self._openViaOssTitle == nil {return false}
+    if self._openViaOssWaitMessage == nil {return false}
+    if self._openViaOssSuccessMessage == nil {return false}
     return true
   }
 
@@ -638,6 +686,10 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       case 6: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessProvisionMessage) }()
       case 7: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessUnprovisionMessage) }()
       case 8: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessFormatMessage) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self._cmnCancelLabel) }()
+      case 10: try { try decoder.decodeSingularStringField(value: &self._openViaOssTitle) }()
+      case 11: try { try decoder.decodeSingularStringField(value: &self._openViaOssWaitMessage) }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self._openViaOssSuccessMessage) }()
       default: break
       }
     }
@@ -672,6 +724,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     try { if let v = self._nfcOssSuccessFormatMessage {
       try visitor.visitSingularStringField(value: v, fieldNumber: 8)
     } }()
+    try { if let v = self._cmnCancelLabel {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 9)
+    } }()
+    try { if let v = self._openViaOssTitle {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 10)
+    } }()
+    try { if let v = self._openViaOssWaitMessage {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 11)
+    } }()
+    try { if let v = self._openViaOssSuccessMessage {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 12)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -684,6 +748,10 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     if lhs._nfcOssSuccessProvisionMessage != rhs._nfcOssSuccessProvisionMessage {return false}
     if lhs._nfcOssSuccessUnprovisionMessage != rhs._nfcOssSuccessUnprovisionMessage {return false}
     if lhs._nfcOssSuccessFormatMessage != rhs._nfcOssSuccessFormatMessage {return false}
+    if lhs._cmnCancelLabel != rhs._cmnCancelLabel {return false}
+    if lhs._openViaOssTitle != rhs._openViaOssTitle {return false}
+    if lhs._openViaOssWaitMessage != rhs._openViaOssWaitMessage {return false}
+    if lhs._openViaOssSuccessMessage != rhs._openViaOssSuccessMessage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
