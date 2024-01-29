@@ -16,7 +16,7 @@ private class BlueAPIMock: DefaultBlueAPIMock {
         )
     }
     
-    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
         let token1 = try blueCreateSignedCommandDemoToken("MAINTC")
         let token2 = try blueCreateSignedCommandDemoToken("PING")
         
@@ -109,7 +109,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
     
     func testSynchronizeMobileAccessWithUnauthorizedResponse() async throws {
         class BlueAPIUnauthorizedMock: BlueAPIMock {
-            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
                 return BlueFetchResponse(statusCode: 401)
             }
         }
@@ -135,7 +135,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
     
     func testSynchronizeMobileAccessWithBadRequestResponse() async throws {
         class BlueAPIBadRequestMock: BlueAPIMock {
-            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
                 return BlueFetchResponse(statusCode: 400)
             }
         }
@@ -161,7 +161,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
     
     func testSynchronizeMobileAccessWithOfflineMode() async throws {
         class BlueAPIOfflineMock: BlueAPIMock {
-            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+            override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
                 throw BlueError(.disconnected)
             }
         }

@@ -1,6 +1,10 @@
 import Foundation
 import SwiftUI
 
+private let blueAppStorage = BlueStorage(collection: "blueid.app")
+
+private var hasLaunchedBefore: Bool? = nil
+
 public struct BlueOpenAppSettingsCommand: BlueAsyncCommand {
     func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         if #available(macOS 10.15, *) {
@@ -35,4 +39,19 @@ public struct BlueOpenAppSettingsCommand: BlueAsyncCommand {
         
         completionHandler(false)
     }
+}
+
+internal func blueAppHasLaunchedBefore() -> Bool {
+    if let hasLaunchedBefore = hasLaunchedBefore {
+        return hasLaunchedBefore
+    }
+    
+    let result = blueAppStorage.getBool(id: "hasLaunchedBefore")
+    if (!result) {
+        blueAppStorage.storeBool(id: "hasLaunchedBefore", bool: true)
+    }
+    
+    hasLaunchedBefore = true
+    
+    return result
 }

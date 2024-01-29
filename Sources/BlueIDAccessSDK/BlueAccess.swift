@@ -1,4 +1,5 @@
 import Foundation
+import SwiftProtobuf
 
 internal let blueAccessCredentialsKeyChain = BlueKeychain(attrService: "blueid.accessCredentials")
 internal let blueAccessAuthenticationTokensKeyChain = BlueKeychain(attrService: "blueid.accessAuthenticationTokens")
@@ -78,7 +79,7 @@ public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: credential.jsonUTF8Data())
         
         try await BlueSynchronizeAccessCredentialCommand(self.blueAPI)
-            .runAsync(credentialID: credential.credentialID.id, refreshToken: true)
+            .runAsync(credentialID: credential.credentialID.id)
         
         blueFireListeners(fireEvent: .accessCredentialAdded, data: nil)
     }
@@ -189,7 +190,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     }
     
     @available(macOS 10.15, *)
-    public func runAsync(credentialID: String, deviceID: String, refreshToken: Bool? = false) async throws -> BlueSystemStatus? {
+    public func runAsync(credentialID: String, deviceID: String) async throws -> BlueSystemStatus? {
         guard let device = blueGetDevice(deviceID) else {
             throw BlueError(.invalidState)
         }
@@ -198,7 +199,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: false)
         
         let config = await getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication)
         
@@ -481,7 +482,7 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
     }
     
     @available(macOS 10.15, *)
-    public func runAsync(credentialID: String, deviceID: String, objectID: String, refreshToken: Bool? = nil) async throws -> BlueSystemStatus? {
+    public func runAsync(credentialID: String, deviceID: String, objectID: String) async throws -> BlueSystemStatus? {
         guard let _ = blueGetDevice(deviceID) else {
             throw BlueError(.invalidState)
         }
@@ -490,13 +491,13 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: false)
         
         _ = try await blueAPI!.claimDevice(deviceID: deviceID, objectID: objectID, with: tokenAuthentication).getData()
         
-        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, refreshToken: refreshToken)
+        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id)
         
-        let status = try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID, refreshToken: refreshToken)
+        let status = try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID)
         
         blueFireListeners(fireEvent: .accessDeviceClaimed, data: nil)
         
@@ -541,26 +542,76 @@ public struct BlueClearDataCommand: BlueCommand {
     }
 }
 
-public struct BlueOpenViaOssSoCommand: BlueAsyncCommand {
+internal typealias BlueTerminalRunClosure = (
+    _ deviceID: String,
+    _ timeoutSeconds: Double,
+    _ action: String
+) async throws -> BlueOssAccessResult
+
+public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
+    private let terminalRun: BlueTerminalRunClosure?
+    
+    init(using terminalRun: BlueTerminalRunClosure? = nil) {
+        if #available(macOS 10.15, *) {
+            self.terminalRun = terminalRun ?? blueTerminalRun
+        } else {
+            self.terminalRun = nil
+        }
+    }
+    
     internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(deviceID: blueCastArg(String.self, arg0))
     }
     
+    /// Try to open/unlock the device via OssSo or OssSid command.
+    /// A modal view (sheet) is shown in iOS to represent the progress of the command execution.
+    ///
+    /// - parameter deviceID: The Device ID.
+    /// - throws: Throws an error of type `BlueError(.invalidState)` if the device could not be found.
+    /// - throws: Throws an error of type `BlueError(.notFound)` if neither an OssSo nor an OssSid token is found.
+    /// - throws: Throws an error of type `BlueError(.notSuported)` If the macOS version is earlier than 10.15.
     public func runAsync(deviceID: String) async throws -> BlueOssAccessResult {
+        guard let device = blueGetDevice(deviceID) else {
+            throw BlueError(.invalidState)
+        }
+        
+        let hasOssSoToken = blueHasSpTokenForAction(device: device, action: "ossSoMobile")
+        let hasOssSidToken = blueHasSpTokenForAction(device: device, action: "ossSidMobile")
+        
+        if (!hasOssSoToken && !hasOssSidToken) {
+            throw BlueError(.notFound)
+        }
+        
+        let tryOssAccess: () async throws -> BlueOssAccessResult = {
+            guard #available(macOS 10.15, *) else {
+                throw BlueError(.notSupported)
+            }
+            
+            guard let terminalRun = self.terminalRun else {
+                throw BlueError(.notSupported)
+            }
+            
+            if (hasOssSoToken) {
+                return try await terminalRun(deviceID, defaultTimeoutSec, "ossSoMobile")
+            }
+            
+            if (hasOssSidToken) {
+                return try await terminalRun(deviceID, defaultTimeoutSec, "ossSidMobile")
+            }
+            
+            throw BlueError(.invalidState)
+        }
+        
 #if os(iOS) || os(watchOS)
         return try await blueShowModal(
             title: blueI18n.openViaOssTitle,
             message: blueI18n.openViaOssWaitMessage,
             successMessage: blueI18n.openViaOssSuccessMessage
         ) {
-            return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
+            return try await tryOssAccess()
         }
 #else
-        if #available(macOS 10.15, *) {
-            return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
-        }
-        
-        throw BlueError(.notSupported)
+        return try await tryOssAccess()
 #endif
     }
 }

@@ -134,6 +134,15 @@ internal func blueGetSpToken(_ entryID: String) throws -> BlueSPToken? {
     return nil
 }
 
+internal func blueHasSpTokenForAction(device: BlueDevice, action: String) -> Bool {
+    do {
+        _ = try blueGetSpTokenForAction(device: device, action: action, data: nil)
+        return true
+    } catch {
+        return false
+    }
+}
+
 private func blueGetSpTokenForAction(device: BlueDevice, action: String, data: Data?) throws -> BlueSPToken {
     var token: BlueSPToken? = try blueGetSpToken("\(device.info.deviceID):\(action)")
     

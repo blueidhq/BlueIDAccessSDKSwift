@@ -22,24 +22,24 @@ internal class BlueModalViewModel: ObservableObject {
     
     var symbol: String {
         switch(status) {
-            case .Waiting:
-                return "wifi"
-                
-            case .Success:
-                return "checkmark.circle"
-                
-            case .Failed:
-                return "exclamationmark.circle"
+        case .Waiting:
+            return "wifi"
+            
+        case .Success:
+            return "checkmark.circle"
+            
+        case .Failed:
+            return "exclamationmark.circle"
         }
     }
     
     var symbolColor: Color {
         switch(status) {
-            case .Waiting, .Success:
-                return .blue
-                
-            case .Failed:
-                return .red
+        case .Waiting, .Success:
+            return .blue
+            
+        case .Failed:
+            return .red
         }
     }
 }
@@ -52,7 +52,7 @@ internal struct BlueModalView: View {
     internal var foregroundColor: UIColor = .black
     
     private let onDismiss: () -> Void
-    private let cornerRadius: CGFloat = 25
+    private let cornerRadius: CGFloat = 35
     
     public init(
         _ vm: BlueModalViewModel,
@@ -70,9 +70,8 @@ internal struct BlueModalView: View {
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .foregroundColor(.white)
-                        RoundedRectangle(cornerRadius: cornerRadius)
                             .foregroundColor(Color(backgroundColor))
+                            .shadow(color: .gray, radius: 1)
                         
                         VStack(alignment: .center) {
                             Text(vm.title)
@@ -142,10 +141,11 @@ internal struct BlueModalView: View {
                         .padding(30)
                     }
                     .frame(height: height + cornerRadius)
-                    .offset(y: cornerRadius)
-                    .padding(.horizontal, 5)
+                    .offset(y: cornerRadius - 15)
+                    .padding(.horizontal, 15)
                 }
                 .foregroundColor(Color(foregroundColor))
+                
             }
         }
     }

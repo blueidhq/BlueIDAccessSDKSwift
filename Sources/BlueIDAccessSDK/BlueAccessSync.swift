@@ -3,42 +3,40 @@ import Foundation
 public class BlueSynchronizeAccessCredentialCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
-            credentialID: try blueCastArg(String.self, arg0),
-            refreshToken: try blueCastArg(Bool.self, arg1)
+            credentialID: try blueCastArg(String.self, arg0)
         )
     }
     
-    func runAsync(credentialID: String, refreshToken: Bool? = nil) async throws {
+    public func runAsync(credentialID: String, forceRefresh: Bool? = nil) async throws {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
             throw BlueError(.notFound)
         }
         
         if (credential.credentialType == .nfcWriter) {
             return try await BlueSynchronizeNfcAccessCommand(self.blueAPI)
-                .runAsync(credentialID: credentialID, refreshToken: refreshToken)
+                .runAsync(credentialID: credentialID, forceRefresh: forceRefresh)
         }
         
         return try await BlueSynchronizeMobileAccessCommand(self.blueAPI)
-            .runAsync(credentialID: credentialID, refreshToken: refreshToken)
+            .runAsync(credentialID: credentialID, forceRefresh: forceRefresh)
     }
 }
 
 internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand where T: BlueSynchronizationResponse {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
-            credentialID: try blueCastArg(String.self, arg0),
-            refreshToken: try blueCastArg(Bool.self, arg1)
+            credentialID: try blueCastArg(String.self, arg0)
         )
     }
     
-    func runAsync(credentialID: String, refreshToken: Bool? = nil) async throws -> Void {
+    func runAsync(credentialID: String, forceRefresh: Bool? = nil) async throws -> Void {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await self.getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        let tokenAuthentication = try await self.getTokenAuthentication(credential: credential, refreshToken: false)
         
-        guard let response = try? await self.sync(with: tokenAuthentication) else {
+        guard let response = try? await self.sync(with: tokenAuthentication, forceRefresh: forceRefresh) else {
             if (credential.hasValidTo) {
                 if let validTo = credential.validTo.toDate() {
                     
@@ -68,7 +66,7 @@ internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand wher
         try update(credential, synchronizationResult)
     }
     
-    func sync(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<T> {
+    func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<T> {
         fatalError("not implemented")
     }
     
@@ -87,7 +85,7 @@ internal struct BlueOssEntry: Codable {
 }
 
 internal class BlueSynchronizeNfcAccessCommand: BlueAbstractSynchronizeAccessCommand<BlueNfcAccessSynchronizationResult> {
-    override func sync(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult> {
+    override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult> {
         return try await self.blueAPI!.synchronizeNfcAccess(with: tokenAuthentication)
     }
     
@@ -118,8 +116,8 @@ internal class BlueSynchronizeNfcAccessCommand: BlueAbstractSynchronizeAccessCom
 }
 
 internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccessCommand<BlueMobileAccessSynchronizationResult> {
-    override func sync(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
-        return try await self.blueAPI!.synchronizeMobileAccess(with: tokenAuthentication)
+    override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+        return try await self.blueAPI!.synchronizeMobileAccess(with: tokenAuthentication, forceRefresh: forceRefresh)
     }
     
     override func update(_ credential: BlueAccessCredential, _ synchronizationResult: BlueMobileAccessSynchronizationResult) throws {

@@ -35,6 +35,13 @@ internal class BlueStorage {
         return BlueStorage.getEntry(collection: self.collection, id: id)
     }
     
+    func getBool(id: String) -> Bool {
+        return BlueStorage.getBool(collection: self.collection, id: id)
+    }
+    func storeBool(id: String, bool: Bool) {
+        BlueStorage.storeBool(collection: self.collection, id: id, bool: bool)
+    }
+    
     static func storeEntry(collection: String, id: String, data: Data) {
         UserDefaults.standard.set(data, forKey: "\(collection).\(id)")
     }
@@ -45,6 +52,14 @@ internal class BlueStorage {
     
     static func getEntry(collection: String, id: String) -> Data? {
         return UserDefaults.standard.data(forKey: "\(collection).\(id)")
+    }
+    
+    static func storeBool(collection: String, id: String, bool: Bool) {
+        UserDefaults.standard.set(bool, forKey: "\(collection).\(id)")
+    }
+    
+    static func getBool(collection: String, id: String) -> Bool {
+        return UserDefaults.standard.bool(forKey: "\(collection).\(id)")
     }
     
     static func deleteAllEntries(collection: String) {

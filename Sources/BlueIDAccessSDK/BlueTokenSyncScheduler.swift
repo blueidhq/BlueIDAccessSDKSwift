@@ -30,43 +30,43 @@ private class ForegroundScheduler {
         timer = nil
     }
     
-    func schedule() {
+    func schedule(_ now: Bool? = false) {
+        guard #available(macOS 10.15, *) else {
+            blueLogWarn("Unsupported platform")
+            return
+        }
+        
         suspend()
         
-        if (Thread.isMainThread) {
-            scheduleTimer()
+        if now == true {
+            self.handleTask()
         } else {
-            DispatchQueue.main.async {
-                self.scheduleTimer()
+            blueRunInMainThread {
+                self.timer = Timer.scheduledTimer(
+                    timeInterval: self.scheduler!.timeInterval,
+                    target: self,
+                    selector: #selector(self.handleTask),
+                    userInfo: nil,
+                    repeats: false
+                )
             }
         }
     }
     
-    private func scheduleTimer() {
-        timer = Timer.scheduledTimer(
-            timeInterval: scheduler!.timeInterval,
-            target: self,
-            selector: #selector(handleTask),
-            userInfo: nil,
-            repeats: false
-        )
-    }
-    
+    @available(macOS 10.15, *)
     @objc private func handleTask() {
-        if #available(macOS 10.15, *) {
+        DispatchQueue.global(qos: .background).async {
             Task {
                 do {
-                    try await scheduler!.syncTokens()
+                    try await self.scheduler!.syncTokens()
                 } catch {
                     blueLogError("Tokens could not be synchronized")
                 }
                 
-                if (scheduler!.autoSchedule) {
-                    schedule()
+                if (self.scheduler!.autoSchedule) {
+                    self.schedule()
                 }
             }
-        } else {
-            blueLogWarn("Unsupported version")
         }
     }
 }
@@ -141,9 +141,9 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
     let timeInterval: TimeInterval
     let autoSchedule: Bool
     
-    #if os(iOS) || os(watchOS)
+#if os(iOS) || os(watchOS)
     private let backgroundScheduler = BackgroundScheduler()
-    #endif
+#endif
     
     private let foregroundScheduler = ForegroundScheduler()
     
@@ -160,9 +160,9 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
         
         foregroundScheduler.setup(self)
         
-        #if os(iOS) || os(watchOS)
+#if os(iOS) || os(watchOS)
         backgroundScheduler.setup(self)
-        #endif
+#endif
         
         blueAddEventListener(listener: self)
     }
@@ -174,23 +174,23 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
     func willResignActive() {
         foregroundScheduler.suspend()
         
-        #if os(iOS) || os(watchOS)
+#if os(iOS) || os(watchOS)
         backgroundScheduler.schedule()
-        #endif
+#endif
     }
-
+    
     func didBecomeActive() {
-        #if os(iOS) || os(watchOS)
+#if os(iOS) || os(watchOS)
         backgroundScheduler.suspend()
-        #endif
+#endif
         
         foregroundScheduler.schedule()
     }
-
+    
     func didFinishLaunching() {
         setup()
     }
-
+    
     func willTerminate() {
         suspend()
     }
@@ -202,14 +202,14 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
     }
     
     func setup() {
-        #if os(iOS)
+#if os(iOS)
         backgroundScheduler.registerIdentifiers()
-        #endif
-
-        schedule()
+#endif
+        
+        schedule(true)
     }
     
-    func schedule() {
+    func schedule(_ now: Bool? = false) {
         do {
             guard try blueAccessCredentialsKeyChain.getNumberOfEntries() > 0 else {
                 return
@@ -219,16 +219,16 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
         }
         
         blueRemoveEventListener(listener: self)
-
-        foregroundScheduler.schedule()
+        
+        foregroundScheduler.schedule(now)
     }
     
     func suspend() {
         foregroundScheduler.suspend()
         
-        #if os(iOS) || os(watchOS)
+#if os(iOS) || os(watchOS)
         backgroundScheduler.suspend()
-        #endif
+#endif
     }
     
     @available(macOS 10.15, *)
@@ -240,16 +240,23 @@ internal class BlueTokenSyncScheduler: BlueEventListener {
         }
         
         let accessCredentialList = try await blueCommands.getAccessCredentials.runAsync()
-
+        
         await withThrowingTaskGroup(of: Void.self) { group in
+            // After deleting the app, since we store credentials in KeyChain Access, they reappear upon app reinstallation.
+            // But, as the device list is not saved there, it is lost.
+            // So, when searching for nearby devices, nothing is shown due to the absence of the device list.
+            // Although this issue would be solved in this synchronization, the synchronization may not return the device list as it depends on the refresh rate and can take up to 30 days, which is not ideal.
+            // Therefore, we force a refresh in case the app has never been launched before.
+            let forceRefresh = !blueAppHasLaunchedBefore()
+            
             for credential in accessCredentialList.credentials {
                 group.addTask {
                     do {
-                        try await self.command.runAsync(credentialID: credential.credentialID.id)
+                        try await self.command.runAsync(credentialID: credential.credentialID.id, forceRefresh: forceRefresh)
                         
                         blueLogDebug("Access credential has been successfully synchronized: \(credential.credentialID.id)")
                     } catch {
-                        blueLogError("Access credential could not be synchronized: \(error)")
+                        blueLogError("Access credential could not be synchronized: \(credential.credentialID.id) - \(error.localizedDescription)")
                     }
                 }
             }

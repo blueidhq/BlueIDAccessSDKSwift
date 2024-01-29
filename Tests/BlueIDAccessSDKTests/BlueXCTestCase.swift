@@ -46,7 +46,7 @@ class DefaultBlueAPIMock: BlueAPIProtocol {
         )
     }
     
-    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult>{
+    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult>{
         return BlueFetchResponse(
             statusCode: 200,
             data: BlueMobileAccessSynchronizationResult(

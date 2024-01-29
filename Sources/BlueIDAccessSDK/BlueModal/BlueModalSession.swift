@@ -2,6 +2,12 @@
 import AVFoundation
 import SwiftUI
 
+private class HostingController: UIHostingController<BlueModalView> {
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return true
+    }
+}
+
 /**
  * @class BlueModalSession
  *
@@ -10,7 +16,6 @@ import SwiftUI
  */
 internal class BlueModalSession {
     private var viewModel = BlueModalViewModel()
-    private var controller: UIHostingController<BlueModalView>? = nil
     private var isInvalidated: Bool = false
     
     /// Starts the modal session.
@@ -20,10 +25,8 @@ internal class BlueModalSession {
         viewModel.title = title ?? ""
         viewModel.message = message ?? ""
         
-        let hostingController = UIHostingController(
-            rootView: BlueModalView(viewModel) {
-                self.invalidate()
-            }
+        let hostingController = HostingController(
+            rootView: BlueModalView(viewModel) { self.invalidate() }
         )
         
         hostingController.view.backgroundColor = .clear

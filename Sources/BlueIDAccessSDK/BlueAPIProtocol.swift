@@ -187,6 +187,7 @@ internal struct BlueNfcAccessSynchronizationResult: BlueSynchronizationResponse 
 /// [POST] /access/synchronizeMobileAccess request
 internal struct BlueMobileAccessSynchronizationRequest: Encodable {
     var tokenAuthentication: BlueTokenAuthentication
+    var forceRefresh: Bool?
 }
 /// [POST] /access/synchronizeMobileAccess response
 internal struct BlueMobileAccessSynchronizationResult: BlueSynchronizationResponse {
@@ -226,7 +227,7 @@ internal struct BlueAccessToken: Codable {
 
 protocol BlueAPIProtocol {
     func getAccessToken(credentialId: String) async throws -> BlueFetchResponse<BlueAccessToken>
-    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult>
+    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool?) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult>
     func synchronizeNfcAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult>
     func synchronizeOfflineAccess(credentialID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueOfflineAccessSynchronizationResult>
     func createDeviceConfiguration(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueCreateDeviceConfigurationResult>

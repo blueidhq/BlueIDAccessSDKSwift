@@ -7,7 +7,7 @@ private class BlueAPIMock: DefaultBlueAPIMock {
     
     init(tokens: [BlueAccessDeviceToken]) { self.tokens = tokens }
     
-    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
         return BlueFetchResponse(
             statusCode: 200,
             data: BlueMobileAccessSynchronizationResult(

@@ -10,10 +10,10 @@ class BlueAPI: BlueAPIProtocol {
         )
     }
     
-    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+    func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
         return try await post(
             endpoint: .AccessSynchronizeMobileAccess,
-            request: BlueMobileAccessSynchronizationRequest(tokenAuthentication: tokenAuthentication)
+            request: BlueMobileAccessSynchronizationRequest(tokenAuthentication: tokenAuthentication, forceRefresh: forceRefresh)
         )
     }
     

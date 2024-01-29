@@ -17,9 +17,11 @@ private class BlueAbstractSynchronizeAccessCommandMock: BlueAbstractSynchronizeA
     init(statusCode: Int? = 200, data: BlueSynchronizationResponseMock? = BlueSynchronizationResponseMock()) {
         self.statusCode = statusCode ?? 200
         self.data = data
+  
+        super.init(DefaultBlueAPIMock())
     }
     
-    override func sync(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueSynchronizationResponseMock> {
+    override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueSynchronizationResponseMock> {
         synced = true
         
         return BlueFetchResponse(
@@ -38,7 +40,7 @@ private class BlueAbstractSynchronizeAccessCommandMock: BlueAbstractSynchronizeA
 }
 
 private class BlueAbstractSynchronizeAccessCommandOfflineMock: BlueAbstractSynchronizeAccessCommandMock {
-    override func sync(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueSynchronizationResponseMock> {
+    override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueSynchronizationResponseMock> {
         throw BlueError(.error)
     }
 }

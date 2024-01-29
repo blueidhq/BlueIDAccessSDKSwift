@@ -3,7 +3,7 @@ import XCTest
 @testable import BlueIDAccessSDK
 
 private class BlueAPIMock: DefaultBlueAPIMock {
-    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
+    override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
         let token = try blueCreateSignedCommandDemoToken("MAINTC")
         
         return BlueFetchResponse(
