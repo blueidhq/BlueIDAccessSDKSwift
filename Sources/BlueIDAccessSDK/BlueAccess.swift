@@ -318,7 +318,6 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             }
             
             let limit = 50
-            let accessId = device.objectID
             
             let pushEvents = { (_ offset: Int) in
                 var query = BlueEventLogQuery()
@@ -335,7 +334,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                 )
                 
                 if (!logResult.events.isEmpty) {
-                    let events = logResult.events.map{ BluePushEvent(event: $0, accessId: Int(accessId)) }
+                    let events = logResult.events.map{ BluePushEvent(event: $0, deviceId: deviceID) }
                     
                     let result = try await self.blueAPI!.pushEvents(events: events, with: tokenAuthentication).getData()
                     

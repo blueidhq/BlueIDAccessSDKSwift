@@ -94,16 +94,16 @@ internal struct BluePushSystemLogResult: Decodable {
 }
 
 internal struct BluePushEvent: Encodable {
+    var deviceId: String
     var eventTime: BlueLocalTimestamp
-    var accessId: Int
     var eventId: Int
     var eventInfo: Int32
     var credentialId: String
     var command: String
     
-    init(event: BlueEvent, accessId: Int) {
+    init(event: BlueEvent, deviceId: String) {
         self.eventTime = event.eventTime
-        self.accessId = accessId
+        self.deviceId = deviceId
         self.eventId = event.eventID.rawValue
         self.eventInfo = event.eventInfo
         self.credentialId = event.credentialID.id
