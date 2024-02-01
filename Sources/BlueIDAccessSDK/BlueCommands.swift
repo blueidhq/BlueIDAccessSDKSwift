@@ -11,6 +11,22 @@ protocol BlueAsyncCommand: Command {
     func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any?
 }
 
+public class BlueAPIAsyncCommand: BlueAsyncCommand {
+    internal let blueAPI: BlueAPIProtocol?
+    
+    init(_ blueAPI: BlueAPIProtocol? = nil) {
+        if #available(macOS 12.0, *) {
+            self.blueAPI = blueAPI ?? BlueAPI()
+        } else {
+            self.blueAPI = nil
+        }
+    }
+    
+    internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        fatalError("not implemented")
+    }
+}
+
 public struct BlueCommands {
     public let initialize = BlueInitializeCommand()
     public let release = BlueReleaseCommand()
@@ -40,6 +56,7 @@ public struct BlueCommands {
     public let ossSoUpdateConfiguration = BlueOssSoUpdateConfigurationCommand()
     public let readOssSoCredential = BlueReadOssSoCredentialCommand()
     public let writeOssSoCredential = BlueWriteOssSoCredentialCommand()
+    public let refreshOssSoCredential = BlueRefreshOssSoCredentialCommand()
     
     public let ossSidCreateMobile = BlueOssSidCreateMobileCommand()
     public let ossSidFormat = BlueOssSidFormatCommand()

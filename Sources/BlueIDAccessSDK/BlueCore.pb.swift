@@ -393,7 +393,7 @@ public enum BlueCredentialType: SwiftProtobuf.Enum {
   /// Master can open all locks within the given site and requires no refresh 
   case master // = 3
 
-  /// Nfc writer allows to write any credential within this site on cards & fobs 
+  /// Nfc writer allows to write any credential within this site on cards & fobs
   case nfcWriter // = 4
 
   public init() {
@@ -540,8 +540,9 @@ public enum BlueHardwareType: SwiftProtobuf.Enum {
   case testHardware // = 1
   case gateway // = 2
   case cylinderLock // = 3
-  case wallReader // = 4
-  case kiosk // = 5
+  case doorHandleLock // = 4
+  case wallReader // = 5
+  case kiosk // = 6
 
   public init() {
     self = .unknownHardware
@@ -553,8 +554,9 @@ public enum BlueHardwareType: SwiftProtobuf.Enum {
     case 1: self = .testHardware
     case 2: self = .gateway
     case 3: self = .cylinderLock
-    case 4: self = .wallReader
-    case 5: self = .kiosk
+    case 4: self = .doorHandleLock
+    case 5: self = .wallReader
+    case 6: self = .kiosk
     default: return nil
     }
   }
@@ -565,8 +567,9 @@ public enum BlueHardwareType: SwiftProtobuf.Enum {
     case .testHardware: return 1
     case .gateway: return 2
     case .cylinderLock: return 3
-    case .wallReader: return 4
-    case .kiosk: return 5
+    case .doorHandleLock: return 4
+    case .wallReader: return 5
+    case .kiosk: return 6
     }
   }
 
@@ -3620,8 +3623,9 @@ extension BlueHardwareType: SwiftProtobuf._ProtoNameProviding {
     1: .same(proto: "TestHardware"),
     2: .same(proto: "Gateway"),
     3: .same(proto: "CylinderLock"),
-    4: .same(proto: "WallReader"),
-    5: .same(proto: "Kiosk"),
+    4: .same(proto: "DoorHandleLock"),
+    5: .same(proto: "WallReader"),
+    6: .same(proto: "Kiosk"),
   ]
 }
 

@@ -25,17 +25,17 @@ internal func blueStoreSpToken(credential: BlueAccessCredential, deviceID: Strin
     var action: String = ""
     
     switch (spToken.payload) {
-    case .ossSo:
-        action = "ossSoMobile"
-        break;
-    case .ossSid:
-        action = "ossSidMobile"
-        break;
-    case .command(let spTokenCommand):
-        action = spTokenCommand.command
-        break;
-    case .none:
-        throw BlueError(.invalidState)
+        case .ossSo:
+            action = "ossSoMobile"
+            break;
+        case .ossSid:
+            action = "ossSidMobile"
+            break;
+        case .command(let spTokenCommand):
+            action = spTokenCommand.command
+            break;
+        case .none:
+            throw BlueError(.invalidState)
     }
     
     let entryID = "\(deviceID):\(action)"

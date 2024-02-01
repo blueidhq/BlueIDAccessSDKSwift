@@ -6,66 +6,6 @@ internal let blueAccessAuthenticationTokensKeyChain = BlueKeychain(attrService: 
 internal let blueAccessDevicesStorage = BlueStorage(collection: "blueid.accessDevices")
 internal let blueAccessOssSettingsKeyChain = BlueKeychain(attrService: "blueid.accessOssSettings")
 
-public class BlueAPIAsyncCommand: BlueAsyncCommand {
-    internal let blueAPI: BlueAPIProtocol?
-    
-    init(_ blueAPI: BlueAPIProtocol? = nil) {
-        if #available(macOS 12.0, *) {
-            self.blueAPI = blueAPI ?? BlueAPI()
-        } else {
-            self.blueAPI = nil
-        }
-    }
-    
-    internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
-        fatalError("not implemented")
-    }
-    
-    internal func getTokenAuthentication(credential: BlueAccessCredential, refreshToken: Bool) async throws -> BlueTokenAuthentication {
-        let token = try await getAccessToken(credential: credential, refreshToken: refreshToken)
-        
-        guard let inputData = token.token.data(using: .utf8) else {
-            throw BlueError(.invalidState)
-        }
-        
-        guard let signature = try createSignature(inputData: inputData, privateKey: credential.privateKey) else {
-            throw BlueError(.invalidSignature)
-        }
-        
-        let tokenAuthentication = BlueTokenAuthentication(
-            token: token.token,
-            signature: signature.base64EncodedString()
-        )
-        
-        return tokenAuthentication
-    }
-    
-    internal func getAccessToken(credential: BlueAccessCredential, refreshToken: Bool) async throws -> BlueAccessToken {
-        if (!refreshToken) {
-            if let accessToken: BlueAccessToken = try blueAccessAuthenticationTokensKeyChain.getCodableEntry(id: credential.credentialID.id) {
-                let expiresAt = Date(timeIntervalSince1970: TimeInterval(accessToken.expiresAt) / 1000.0)
-                let isExpired = expiresAt < Date()
-                
-                if (!isExpired) {
-                    return accessToken
-                }
-            }
-        }
-        
-        let accessToken: BlueAccessToken = try await self.blueAPI!.getAccessToken(credentialId: credential.credentialID.id).getData()
-        
-        self.storeAccessToken(credential: credential, accessToken: accessToken)
-        
-        return accessToken
-    }
-    
-    private func storeAccessToken(credential: BlueAccessCredential, accessToken: BlueAccessToken) {
-        do {
-            try? blueAccessAuthenticationTokensKeyChain.storeCodableEntry(id: credential.credentialID.id, data: accessToken)
-        }
-    }
-}
-
 public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(credential: try blueCastArg(BlueAccessCredential.self, arg0))
@@ -199,7 +139,8 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: false)
+        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+            .getTokenAuthentication(credential: credential)
         
         let config = await getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication)
         
@@ -425,12 +366,13 @@ public class BlueGetAccessObjectsCommand: BlueAPIAsyncCommand {
         )
     }
     
-    public func runAsync(credentialID: String, refreshToken: Bool? = nil) async throws -> BlueAccessObjectList {
+    public func runAsync(credentialID: String) async throws -> BlueAccessObjectList {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+            .getTokenAuthentication(credential: credential)
         
         let objects = try await blueAPI!.getAccessObjects(with: tokenAuthentication).getData()
         
@@ -490,7 +432,8 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: false)
+        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+            .getTokenAuthentication(credential: credential)
         
         _ = try await blueAPI!.claimDevice(deviceID: deviceID, objectID: objectID, with: tokenAuthentication).getData()
         
@@ -512,12 +455,13 @@ public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
         )
     }
     
-    public func runAsync(organisation: String, siteID: Int, refreshToken: Bool? = nil) async throws -> BlueAccessCredentialList {
+    public func runAsync(organisation: String, siteID: Int) async throws -> BlueAccessCredentialList {
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
+        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+            .getTokenAuthentication(credential: credential)
         
         let credentials = try await blueAPI!.getAccessCredentials(with: tokenAuthentication).getData()
         

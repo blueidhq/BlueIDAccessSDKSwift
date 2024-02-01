@@ -1,5 +1,6 @@
 import Foundation
 import CBlueIDAccess
+import Dispatch
 
 private func blueCreateOssSoDemoSettings() -> BlueOssSoSettings {
     var result = BlueOssSoSettings()
@@ -293,9 +294,7 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
             throw BlueError(.notFound)
         }
         
-        guard let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id) else {
-            throw BlueError(.invalidState)
-        }
+        let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
         
         return try BlueOssSoReadConfigurationCommand().run(ossSoSettings)
     }
@@ -310,40 +309,27 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
         )
     }
     
-    public func runAsync(credentialID: String, organisation: String, siteID: Int, refreshToken: Bool? = nil) async throws -> Bool {
+    public func runAsync(credentialID: String, organisation: String, siteID: Int) async throws -> Bool {
+        guard #available(macOS 10.15, *) else {
+            throw BlueError(.notSupported)
+        }
+        
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await getTokenAuthentication(credential: credential, refreshToken: refreshToken ?? false)
-        
-        let result = try await blueAPI!.synchronizeOfflineAccess(credentialID: credentialID, with: tokenAuthentication).getData()
-        if (result.noRefresh == true) {
-            return false
-        }
-        
-        var ossSoConfiguration: BlueOssSoConfiguration?
-        
-        if let configuration = result.configuration {
-            if let data = Data(base64Encoded: configuration) {
-                ossSoConfiguration = try blueDecodeMessage(data)
-            }
-        }
-        else if let blacklistFile = result.blacklistFile {
-            if let data = Data(base64Encoded: blacklistFile) {
-                ossSoConfiguration = BlueOssSoConfiguration()
-                ossSoConfiguration?.blacklist = try blueDecodeMessage(data)
-            }
-        }
-        
-        guard let ossSoConfiguration = ossSoConfiguration else {
-            throw BlueError(.invalidState)
+        // sync and get configuration, if any
+        let ossSoConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
+            return try await BlueOssSoAPIHelper(self.blueAPI!)
+                .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: credentialID)
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
         let ossSoProvisioningData = try BlueOssSoCreateStandardProvisioningDataCommand().run(credentialID, siteID)
         
-        return try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
+        let transponderConfiguration: BlueOssSoConfiguration? = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
+            var transponderConfiguration: BlueOssSoConfiguration?
+            
             let isProvisioned = blueOssSo_IsProvisioned(pStorage) == BlueReturnCode_Ok
             if (!isProvisioned) {
                 // format
@@ -353,19 +339,96 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
                 try blueClibFunctionIn(message: ossSoProvisioningData, { (dataPtr, dataSize) in
                     return blueOssSo_Provision_Ext(pStorage, dataPtr, dataSize)
                 })
+            } else {
+                // get current configuration
+                transponderConfiguration = try blueClibFunctionOut({ (dataPtr, dataSize) in
+                    return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
+                })
             }
             
-            // update
-            try blueClibFunctionIn(message: ossSoConfiguration, { (newConfigPtr, newConfigSize) in
-                return blueOssSo_UpdateConfiguration_Ext(pStorage, newConfigPtr, newConfigSize, false)
-            })
+            // no configuration means that the credential has not been refreshed in the backend and there is nothing to be updated here
+            if let ossSoConfiguration = ossSoConfiguration {
+                
+                // update
+                try blueClibFunctionIn(message: ossSoConfiguration, { (newConfigPtr, newConfigSize) in
+                    return blueOssSo_UpdateConfiguration_Ext(pStorage, newConfigPtr, newConfigSize, false)
+                })
+            }
             
-            return true
+            return transponderConfiguration
         })
+        
+        if let transponderConfiguration = transponderConfiguration {
+            try? await BlueOssSoAPIHelper(self.blueAPI!)
+                .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
+        }
+        
+        return ossSoConfiguration != nil
     }
 }
 
-private func blueGetOssSoSettings(credentialID: String) throws -> BlueOssSoSettings? {
+public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
+    override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync(
+            organisation: blueCastArg(String.self, arg0),
+            siteID: blueCastArg(Int.self, arg1)
+        )
+    }
+    
+    public func runAsync(organisation: String, siteID: Int) async throws -> BlueRefreshOssSoCredentialResult {
+        guard #available(macOS 10.15, *) else {
+            throw BlueError(.notSupported)
+        }
+        
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
+            throw BlueError(.notFound)
+        }
+        
+        let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
+        
+        let transponderConfiguration: BlueOssSoConfiguration = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
+
+            // get current configuration
+            let transponderConfiguration: BlueOssSoConfiguration = try blueClibFunctionOut({ (dataPtr, dataSize) in
+                return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
+            })
+            
+            // sync and get configuration, if any
+            let ossSoConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
+                return try await BlueOssSoAPIHelper(self.blueAPI!)
+                    .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: transponderConfiguration.info.credentialID.id)
+            }
+            
+            // no configuration means that the credential has not been refreshed in the backend and there is nothing to be updated here
+            if let ossSoConfiguration = ossSoConfiguration {
+                
+                // update
+                try blueClibFunctionIn(message: ossSoConfiguration, { (newConfigPtr, newConfigSize) in
+                    return blueOssSo_UpdateConfiguration_Ext(pStorage, newConfigPtr, newConfigSize, false)
+                })
+            }
+            
+            return transponderConfiguration
+        })
+        
+        var result = BlueRefreshOssSoCredentialResult()
+        
+        do {
+            try await BlueOssSoAPIHelper(self.blueAPI!)
+                .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
+            
+            result.eventLogsPushed = .ok
+        } catch let error as BlueError {
+            result.eventLogsPushed = error.returnCode
+        } catch {
+            result.eventLogsPushed = .error
+        }
+        
+        return result
+    }
+}
+
+private func blueGetOssSoSettings(credentialID: String) throws -> BlueOssSoSettings {
     guard let ossSoEntry: BlueOssEntry = try blueAccessOssSettingsKeyChain.getCodableEntry(id: credentialID) else {
         throw BlueError(.invalidState)
     }

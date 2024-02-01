@@ -94,20 +94,29 @@ internal struct BluePushSystemLogResult: Decodable {
 }
 
 internal struct BluePushEvent: Encodable {
-    var deviceId: String
+    var deviceId: String?
+    var objectId: Int?
     var eventTime: BlueLocalTimestamp
     var eventId: Int
-    var eventInfo: Int32
-    var credentialId: String
-    var command: String
+    var eventInfo: Int
+    var credentialId: String?
+    var command: String?
     
     init(event: BlueEvent, deviceId: String) {
-        self.eventTime = event.eventTime
         self.deviceId = deviceId
         self.eventId = event.eventID.rawValue
-        self.eventInfo = event.eventInfo
+        self.eventTime = event.eventTime
+        self.eventInfo = Int(event.eventInfo)
         self.credentialId = event.credentialID.id
         self.command = event.command
+    }
+    
+    init(event: BlueOssSoEvent, credentialId: String) {
+        self.objectId = Int(event.doorID)
+        self.eventId = event.eventID.rawValue
+        self.eventTime = event.eventTime
+        self.eventInfo = Int(event.eventInfo)
+        self.credentialId = credentialId
     }
 }
 /// [POST] /access/pushEvents request

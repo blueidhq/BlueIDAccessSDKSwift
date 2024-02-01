@@ -245,3 +245,42 @@ internal func blueRunInMainThread(_ handler: @escaping () -> Void) {
         }
     }
 }
+
+/**
+ * @class BlueAsyncEnclosure
+ * Private container used within the blueRunAsyncBlocking function to encapsulate the result or error of the asynchronous task.
+ */
+private class BlueAsyncEnclosure<T> {
+    var result: T?
+    var error: Error?
+}
+
+/// A utility function that facilitates the execution of asynchronous tasks within a synchronous, blocking context.
+/// This function is intended for scenarios where it is necessary to execute asynchronous code within a synchronous context, and the caller is willing to block the current thread until the asynchronous task completes.
+/// Use with caution to avoid potential deadlocks or performance issues.
+///
+/// - parameter task: The task to perform.
+/// - throws: Throws any errors raised by the given task.
+@available(macOS 10.15, *)
+internal func blueRunAsyncBlocking<T>(_ task: @escaping() async throws -> T?) throws -> T? {
+    let enclosure = BlueAsyncEnclosure<T>()
+    let semaphore = DispatchSemaphore(value: 0)
+    
+    Task {
+        defer { semaphore.signal() }
+        
+        do {
+            enclosure.result = try await task()
+        } catch {
+            enclosure.error = error
+        }
+    }
+    
+    semaphore.wait()
+    
+    if let error = enclosure.error {
+        throw error
+    }
+    
+    return enclosure.result
+}

@@ -192,6 +192,10 @@ extension BlueAccessDeviceList {
 }
 
 extension Array {
+    
+    /// Extension function for Arrays, allowing the splitting of the collection into subarrays of a specified size.
+    /// It returns an array of arrays, where each subarray contains elements from the original collection.
+    /// - parameter of: The desired size of each subarray. It represents the maximum number of elements in each chunk.
     func chunks(of size: Int) -> [[Element]] {
         var index = 0
         var result = [[Element]]()
@@ -206,4 +210,3 @@ extension Array {
         return result
     }
 }
-

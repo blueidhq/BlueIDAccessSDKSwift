@@ -34,7 +34,8 @@ internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand wher
             throw BlueError(.notFound)
         }
         
-        let tokenAuthentication = try await self.getTokenAuthentication(credential: credential, refreshToken: false)
+        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+            .getTokenAuthentication(credential: credential, refreshToken: false)
         
         guard let response = try? await self.sync(with: tokenAuthentication, forceRefresh: forceRefresh) else {
             if (credential.hasValidTo) {
