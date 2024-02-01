@@ -153,8 +153,9 @@ typedef enum BlueHardwareType {
     BlueHardwareType_TestHardware = 1,
     BlueHardwareType_Gateway = 2,
     BlueHardwareType_CylinderLock = 3,
-    BlueHardwareType_WallReader = 4,
-    BlueHardwareType_Kiosk = 5
+    BlueHardwareType_DoorHandleLock = 4,
+    BlueHardwareType_WallReader = 5,
+    BlueHardwareType_Kiosk = 6
 } BlueHardwareType_t;
 
 typedef enum BlueBatteryLevel {
