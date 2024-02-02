@@ -281,6 +281,25 @@ public struct BlueOssSoUpdateConfigurationCommand: BlueCommand {
     }
 }
 
+public struct BlueFormatOssSoCredentialCommand: BlueCommand {
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
+        return try run(
+            organisation: blueCastArg(String.self, arg0),
+            siteID: blueCastArg(Int.self, arg1)
+        )
+    }
+    
+    public func run(organisation: String, siteID: Int) throws {
+        guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
+            throw BlueError(.notFound)
+        }
+        
+        let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
+        
+        try BlueOssSoFormatCommand().run(ossSoSettings, true)
+    }
+}
+
 public struct BlueReadOssSoCredentialCommand: BlueCommand {
     func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
         return try run(
@@ -300,6 +319,9 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
     }
 }
 
+/**
+ * @class BlueWriteOssSoCredentialCommand represents a command to write/update a credential for a transponder using NFC communication.
+ */
 public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
@@ -309,6 +331,14 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
         )
     }
     
+    /// Tries to write/update the transponder's credential.
+    ///
+    /// - parameter credentialID: The credential ID to be written in the Transponder.
+    /// - parameter organisation: The organization to which the credential belongs.
+    /// - parameter siteID: The site ID to which the credential belongs.
+    /// - throws: Throws an error of type `BlueError(.notFound)` If no NFC Writer credentials match the given organisation and site ID.
+    /// - throws: Throws an error of type `BlueError(.notSuported)` If the macOS version is earlier than 10.15.
+    /// - returns: A boolean indicating whether a new configuration has been written in the Transponder or not.
     public func runAsync(credentialID: String, organisation: String, siteID: Int) async throws -> Bool {
         guard #available(macOS 10.15, *) else {
             throw BlueError(.notSupported)
@@ -318,17 +348,10 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
             throw BlueError(.notFound)
         }
         
-        // sync and get configuration, if any
-        let ossSoConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
-            return try await BlueOssSoAPIHelper(self.blueAPI!)
-                .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: credentialID)
-        }
-        
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
         let ossSoProvisioningData = try BlueOssSoCreateStandardProvisioningDataCommand().run(credentialID, siteID)
         
-        let transponderConfiguration: BlueOssSoConfiguration? = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
-            var transponderConfiguration: BlueOssSoConfiguration?
+        let newConfiguration: BlueOssSoConfiguration? = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
             
             let isProvisioned = blueOssSo_IsProvisioned(pStorage) == BlueReturnCode_Ok
             if (!isProvisioned) {
@@ -341,32 +364,47 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
                 })
             } else {
                 // get current configuration
-                transponderConfiguration = try blueClibFunctionOut({ (dataPtr, dataSize) in
+                let transponderConfiguration: BlueOssSoConfiguration = try blueClibFunctionOut({ (dataPtr, dataSize) in
                     return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
                 })
+                
+                // push transponder's events to the backend
+                try blueRunAsyncBlocking {
+                    try await BlueOssSoAPIHelper(self.blueAPI!)
+                        .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
+                }
+                
+                // clear transponders's events
+                _ = try blueClibErrorCheck(blueOssSo_ClearEvents(pStorage))
+            }
+            
+            // sync and get configuration, if any
+            let newConfiguration = try blueRunAsyncBlocking {
+                return try await BlueOssSoAPIHelper(self.blueAPI!)
+                    .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: credentialID)
             }
             
             // no configuration means that the credential has not been refreshed in the backend and there is nothing to be updated here
-            if let ossSoConfiguration = ossSoConfiguration {
+            if let newConfiguration = newConfiguration {
                 
                 // update
-                try blueClibFunctionIn(message: ossSoConfiguration, { (newConfigPtr, newConfigSize) in
+                try blueClibFunctionIn(message: newConfiguration, { (newConfigPtr, newConfigSize) in
                     return blueOssSo_UpdateConfiguration_Ext(pStorage, newConfigPtr, newConfigSize, false)
                 })
             }
             
-            return transponderConfiguration
+            return newConfiguration
         })
         
-        if let transponderConfiguration = transponderConfiguration {
-            try? await BlueOssSoAPIHelper(self.blueAPI!)
-                .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
-        }
-        
-        return ossSoConfiguration != nil
+        return newConfiguration != nil
     }
 }
 
+/**
+ * @class BlueRefreshOssSoCredentialCommand represents a command to refresh credentials for a transponder using NFC communication.
+ * This class encapsulates the process of starting an NFC session, reading the transponder configuration, retrieving a fresh configuration from the backend, and writing it back to the transponder. 
+ * Subsequently, transponder events are pushed to the backend.
+ */
 public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
@@ -375,7 +413,14 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
         )
     }
     
-    public func runAsync(organisation: String, siteID: Int) async throws -> BlueRefreshOssSoCredentialResult {
+    /// Tries to refresh the transponder's credential.
+    ///
+    /// - parameter organisation: The organization to which the transponder belongs.
+    /// - parameter siteID: The site ID to which the transponder belongs.
+    /// - throws: Throws an error of type `BlueError(.notFound)` If no NFC Writer credentials match the given organisation and site ID.
+    /// - throws: Throws an error of type `BlueError(.notSuported)` If the macOS version is earlier than 10.15.
+    /// - returns: The configuration stored in the transponder.
+    public func runAsync(organisation: String, siteID: Int) async throws -> BlueOssSoConfiguration {
         guard #available(macOS 10.15, *) else {
             throw BlueError(.notSupported)
         }
@@ -385,25 +430,35 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
+        var newConfiguration: BlueOssSoConfiguration?
         
-        let transponderConfiguration: BlueOssSoConfiguration = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
-
+        let currentConfiguration: BlueOssSoConfiguration = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
+            
             // get current configuration
             let transponderConfiguration: BlueOssSoConfiguration = try blueClibFunctionOut({ (dataPtr, dataSize) in
                 return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
             })
             
+            // push transponder's events to the backend
+            try blueRunAsyncBlocking {
+                try await BlueOssSoAPIHelper(self.blueAPI!)
+                    .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
+            }
+            
+            // clear transponders's events
+            _ = try blueClibErrorCheck(blueOssSo_ClearEvents(pStorage))
+
             // sync and get configuration, if any
-            let ossSoConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
+            newConfiguration = try blueRunAsyncBlocking {
                 return try await BlueOssSoAPIHelper(self.blueAPI!)
                     .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: transponderConfiguration.info.credentialID.id)
             }
             
             // no configuration means that the credential has not been refreshed in the backend and there is nothing to be updated here
-            if let ossSoConfiguration = ossSoConfiguration {
+            if let newConfiguration = newConfiguration {
                 
                 // update
-                try blueClibFunctionIn(message: ossSoConfiguration, { (newConfigPtr, newConfigSize) in
+                try blueClibFunctionIn(message: newConfiguration, { (newConfigPtr, newConfigSize) in
                     return blueOssSo_UpdateConfiguration_Ext(pStorage, newConfigPtr, newConfigSize, false)
                 })
             }
@@ -411,20 +466,7 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
             return transponderConfiguration
         })
         
-        var result = BlueRefreshOssSoCredentialResult()
-        
-        do {
-            try await BlueOssSoAPIHelper(self.blueAPI!)
-                .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
-            
-            result.eventLogsPushed = .ok
-        } catch let error as BlueError {
-            result.eventLogsPushed = error.returnCode
-        } catch {
-            result.eventLogsPushed = .error
-        }
-        
-        return result
+        return newConfiguration ?? currentConfiguration
     }
 }
 

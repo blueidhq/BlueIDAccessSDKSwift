@@ -2,6 +2,7 @@ import XCTest
 @testable import BlueIDAccessSDK
 
 class DefaultBlueAPIMock: BlueAPIProtocol {
+    
     func getAccessCredentials(with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult> {
         return BlueFetchResponse(
             statusCode: 200,

@@ -13,7 +13,6 @@ internal struct BlueOssSoAPIHelper {
     ///
     /// - parameter nfcCredential: The NFC Writer credential.
     /// - parameter offlineCredentialID: The Offline Credential ID.
-    /// - parameter with: The token authentication.
     /// - throws: Throws an error of type `BlueError(.invalidState)` if the configuration returned from the backend cannot be converted into a BlueOssSoConfiguration.
     func synchronizeOfflineCredential(nfcCredential: BlueAccessCredential, offlineCredentialID: String) async throws -> BlueOssSoConfiguration? {
         let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI)
