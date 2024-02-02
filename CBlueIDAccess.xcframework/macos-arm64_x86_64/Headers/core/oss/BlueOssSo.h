@@ -190,6 +190,8 @@ extern "C"
 
     BlueReturnCode_t blueOssSo_ProcessAccess(const BlueLocalTimestamp_t *const pTimestamp, const BlueOssSoStorage_t *const pStorage, const BlueOssSoProcess_t *const pProcess, BlueOssAccessResult_t *const pAccessResult);
 
+    BlueReturnCode_t blueOssSo_ClearEvents(const BlueOssSoStorage_t *const pStorage);
+
 #ifdef __cplusplus
 }
 #endif
