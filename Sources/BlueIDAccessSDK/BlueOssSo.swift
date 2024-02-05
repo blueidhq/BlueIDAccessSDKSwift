@@ -430,9 +430,8 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
-        var newConfiguration: BlueOssSoConfiguration?
         
-        let currentConfiguration: BlueOssSoConfiguration = try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
+        return try executeOssSoNfc(settings: ossSoSettings, successMessage: blueI18n.nfcOssSuccessUpdateConfigurationMessage, handler: { pStorage in
             
             // get current configuration
             let transponderConfiguration: BlueOssSoConfiguration = try blueClibFunctionOut({ (dataPtr, dataSize) in
@@ -449,7 +448,7 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
             _ = try blueClibErrorCheck(blueOssSo_ClearEvents(pStorage))
 
             // sync and get configuration, if any
-            newConfiguration = try blueRunAsyncBlocking {
+            let newConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
                 return try await BlueOssSoAPIHelper(self.blueAPI!)
                     .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: transponderConfiguration.info.credentialID.id)
             }
@@ -463,10 +462,11 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
                 })
             }
             
-            return transponderConfiguration
+            // return updated configuration
+            return try blueClibFunctionOut({ (dataPtr, dataSize) in
+                return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
+            })
         })
-        
-        return newConfiguration ?? currentConfiguration
     }
 }
 

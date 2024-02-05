@@ -13,8 +13,8 @@ internal class BlueSound {
     static let shared = BlueSound()
     
     init() {
-        AudioServicesCreateSystemSoundID(URL(fileURLWithPath: "/System/Library/Audio/UISounds/SIMToolkitNegativeACK.caf") as CFURL, &BlueNegativeSoundSystemID)
-        AudioServicesCreateSystemSoundID(URL(fileURLWithPath: "/System/Library/Audio/UISounds/SIMToolkitPositiveACK.caf") as CFURL, &BluePositiveSoundSystemID)
+        AudioServicesCreateSystemSoundID(URL(fileURLWithPath: "/System/Library/Audio/UISounds/nfc_scan_failure.caf") as CFURL, &BlueNegativeSoundSystemID)
+        AudioServicesCreateSystemSoundID(URL(fileURLWithPath: "/System/Library/Audio/UISounds/nfc_scan_complete.caf") as CFURL, &BluePositiveSoundSystemID)
     }
     
     func play(_ systemSoundID: SystemSoundID) {
