@@ -61,9 +61,11 @@ internal func blueAddDeviceScanner() {
     blueDeviceScannersCount += 1
     
     if (blueDeviceScannersCount == 1) {
-        // Init our purge timer
-        bluePurgeDevicesTimer = Timer.scheduledTimer(withTimeInterval: maxDeviceAgeSeconds, repeats: true) { _ in
-            bluePurgeOldDevices()
+        blueRunInMainThread {
+            // Init our purge timer
+            bluePurgeDevicesTimer = Timer.scheduledTimer(withTimeInterval: maxDeviceAgeSeconds, repeats: true) { _ in
+                bluePurgeOldDevices()
+            }
         }
     }
 }

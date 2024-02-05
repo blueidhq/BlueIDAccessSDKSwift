@@ -1,17 +1,19 @@
 #if os(iOS) || os(watchOS)
 import Foundation
 
-/// Displays a modal view (sheet) which performs a scoped task that’s closely related to the current context.
+/// Displays a modal view (sheet) which performs a scoped task related to accessing an device via OSS.
 /// - parameter title: The  modal title.
 /// - parameter message: The modal message.
-/// - parameter successMessage: A success message to be shown in case the task is finished successfully.
-/// - parameter task: The task to be performed .
-public func blueShowModal<T>(
+/// - parameter successfulMessage: A successful message to be shown in case the OSS task grants access successfully.
+/// - parameter unsuccessfulMessage: An unsuccessful message to be shown in case the OSS task does not grant access successfully.
+/// - parameter task: The OSS task to be performed.
+public func blueShowAccessDeviceModal(
     title: String,
     message: String? = nil,
-    successMessage: String? = nil,
-    _ task: @escaping () async throws -> T)
-async throws -> T {
+    successfulMessage: String? = nil,
+    unsuccessfulMessage: String? = nil,
+    _ task: @escaping () async throws -> BlueOssAccessResult)
+async throws -> BlueOssAccessResult {
     let session = BlueModalSession()
 
     blueRunInMainThread {
@@ -21,8 +23,14 @@ async throws -> T {
     do {
         let result = try await task()
         
-        blueRunInMainThread {
-            session.invalidate(successMessage: successMessage ?? "")
+        if (!result.accessGranted) {
+            blueRunInMainThread {
+                session.invalidate(errorMessage: unsuccessfulMessage ?? "")
+            }
+        } else {
+            blueRunInMainThread {
+                session.invalidate(successMessage: successfulMessage ?? "")
+            }
         }
         
         return result

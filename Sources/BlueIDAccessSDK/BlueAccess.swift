@@ -546,10 +546,11 @@ public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
         }
         
 #if os(iOS) || os(watchOS)
-        return try await blueShowModal(
+        return try await blueShowAccessDeviceModal(
             title: blueI18n.openViaOssTitle,
             message: blueI18n.openViaOssWaitMessage,
-            successMessage: blueI18n.openViaOssSuccessMessage
+            successfulMessage: blueI18n.openViaOssSuccessfulMessage,
+            unsuccessfulMessage: blueI18n.openViaOssUnsuccessfulMessage
         ) {
             return try await tryOssAccess()
         }

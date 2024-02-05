@@ -158,14 +158,23 @@ public struct BlueI18n {
   /// Clears the value of `openViaOssWaitMessage`. Subsequent reads from it will return its default value.
   public mutating func clearOpenViaOssWaitMessage() {self._openViaOssWaitMessage = nil}
 
-  public var openViaOssSuccessMessage: String {
-    get {return _openViaOssSuccessMessage ?? "Successfully unlocked"}
-    set {_openViaOssSuccessMessage = newValue}
+  public var openViaOssSuccessfulMessage: String {
+    get {return _openViaOssSuccessfulMessage ?? "Successfully unlocked"}
+    set {_openViaOssSuccessfulMessage = newValue}
   }
-  /// Returns true if `openViaOssSuccessMessage` has been explicitly set.
-  public var hasOpenViaOssSuccessMessage: Bool {return self._openViaOssSuccessMessage != nil}
-  /// Clears the value of `openViaOssSuccessMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearOpenViaOssSuccessMessage() {self._openViaOssSuccessMessage = nil}
+  /// Returns true if `openViaOssSuccessfulMessage` has been explicitly set.
+  public var hasOpenViaOssSuccessfulMessage: Bool {return self._openViaOssSuccessfulMessage != nil}
+  /// Clears the value of `openViaOssSuccessfulMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssSuccessfulMessage() {self._openViaOssSuccessfulMessage = nil}
+
+  public var openViaOssUnsuccessfulMessage: String {
+    get {return _openViaOssUnsuccessfulMessage ?? "Unsuccessfully unlocked"}
+    set {_openViaOssUnsuccessfulMessage = newValue}
+  }
+  /// Returns true if `openViaOssUnsuccessfulMessage` has been explicitly set.
+  public var hasOpenViaOssUnsuccessfulMessage: Bool {return self._openViaOssUnsuccessfulMessage != nil}
+  /// Clears the value of `openViaOssUnsuccessfulMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssUnsuccessfulMessage() {self._openViaOssUnsuccessfulMessage = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -182,7 +191,8 @@ public struct BlueI18n {
   fileprivate var _cmnCancelLabel: String? = nil
   fileprivate var _openViaOssTitle: String? = nil
   fileprivate var _openViaOssWaitMessage: String? = nil
-  fileprivate var _openViaOssSuccessMessage: String? = nil
+  fileprivate var _openViaOssSuccessfulMessage: String? = nil
+  fileprivate var _openViaOssUnsuccessfulMessage: String? = nil
 }
 
 public struct BlueDeviceDetailsBluetooth {
@@ -653,7 +663,8 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     9: .same(proto: "cmnCancelLabel"),
     10: .same(proto: "openViaOssTitle"),
     11: .same(proto: "openViaOssWaitMessage"),
-    12: .same(proto: "openViaOssSuccessMessage"),
+    12: .same(proto: "openViaOssSuccessfulMessage"),
+    13: .same(proto: "openViaOssUnsuccessfulMessage"),
   ]
 
   public var isInitialized: Bool {
@@ -668,7 +679,8 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     if self._cmnCancelLabel == nil {return false}
     if self._openViaOssTitle == nil {return false}
     if self._openViaOssWaitMessage == nil {return false}
-    if self._openViaOssSuccessMessage == nil {return false}
+    if self._openViaOssSuccessfulMessage == nil {return false}
+    if self._openViaOssUnsuccessfulMessage == nil {return false}
     return true
   }
 
@@ -689,7 +701,8 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       case 9: try { try decoder.decodeSingularStringField(value: &self._cmnCancelLabel) }()
       case 10: try { try decoder.decodeSingularStringField(value: &self._openViaOssTitle) }()
       case 11: try { try decoder.decodeSingularStringField(value: &self._openViaOssWaitMessage) }()
-      case 12: try { try decoder.decodeSingularStringField(value: &self._openViaOssSuccessMessage) }()
+      case 12: try { try decoder.decodeSingularStringField(value: &self._openViaOssSuccessfulMessage) }()
+      case 13: try { try decoder.decodeSingularStringField(value: &self._openViaOssUnsuccessfulMessage) }()
       default: break
       }
     }
@@ -733,8 +746,11 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     try { if let v = self._openViaOssWaitMessage {
       try visitor.visitSingularStringField(value: v, fieldNumber: 11)
     } }()
-    try { if let v = self._openViaOssSuccessMessage {
+    try { if let v = self._openViaOssSuccessfulMessage {
       try visitor.visitSingularStringField(value: v, fieldNumber: 12)
+    } }()
+    try { if let v = self._openViaOssUnsuccessfulMessage {
+      try visitor.visitSingularStringField(value: v, fieldNumber: 13)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -751,7 +767,8 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     if lhs._cmnCancelLabel != rhs._cmnCancelLabel {return false}
     if lhs._openViaOssTitle != rhs._openViaOssTitle {return false}
     if lhs._openViaOssWaitMessage != rhs._openViaOssWaitMessage {return false}
-    if lhs._openViaOssSuccessMessage != rhs._openViaOssSuccessMessage {return false}
+    if lhs._openViaOssSuccessfulMessage != rhs._openViaOssSuccessfulMessage {return false}
+    if lhs._openViaOssUnsuccessfulMessage != rhs._openViaOssUnsuccessfulMessage {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
