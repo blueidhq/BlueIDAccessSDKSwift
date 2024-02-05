@@ -190,11 +190,18 @@ internal func blueDisconnectBluetoothPeripheral(_ peripheral: CBPeripheral) thro
 
 public struct BlueBluetoothActivate: BlueCommand {
     internal func run(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) throws -> Any? {
-        try run()
+        try run(
+            maxDeviceAgeSeconds: try blueCastArg(Double.self, arg0)
+        )
+        
         return nil
     }
     
-    public func run() throws -> Void {
+    /// Starts scanning for BLE peripherals.
+    ///
+    /// - parameter maxDeviceAgeSeconds: Represents the maximum time duration, in seconds, for which a device is considered valid or relevant. In the event that the device does not advertise within this period, it will be removed.
+    /// - throws: Throws an error of type `BlueError(.invalidState)` if the scanning is already activated.
+    public func run(maxDeviceAgeSeconds: Double? = nil) throws -> Void {
         dispatchPrecondition(condition: .notOnQueue(blueDeviceQueue))
         
         guard !blueBluetoothIsActive else {
@@ -209,6 +216,10 @@ public struct BlueBluetoothActivate: BlueCommand {
         if let blueCentralManager = blueCentralManager {
             if (blueCentralManager.state == .unsupported || blueCentralManager.state == .unauthorized) {
                 throw BlueError(.invalidState)
+            }
+            
+            if let maxDeviceAgeSeconds = maxDeviceAgeSeconds {
+                blueSetMaxDeviceAgeSeconds(maxDeviceAgeSeconds)
             }
             
             blueBluetoothIsActive = true

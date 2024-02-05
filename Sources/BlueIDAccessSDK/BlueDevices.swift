@@ -1,10 +1,14 @@
 import Foundation
 
-internal let maxDeviceAgeSeconds = 30.0
+internal var maxDeviceAgeSeconds = 10.0
 
 private var blueDevices: [BlueDevice] = []
 private var bluePurgeDevicesTimer: Timer? = nil
 private var blueDeviceScannersCount = 0
+
+internal func blueSetMaxDeviceAgeSeconds(_ newMaxDeviceAgeSeconds: Double) {
+    maxDeviceAgeSeconds = max(newMaxDeviceAgeSeconds, 1)
+}
 
 internal func blueGetDevice(_ deviceID: String) -> BlueDevice? {
     for device in blueDevices {
