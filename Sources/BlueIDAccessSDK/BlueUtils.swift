@@ -141,7 +141,8 @@ internal func blueEncodeMessage(_ message: Message!, partial: Bool = false) thro
 internal func blueDecodeMessage<MessageType: Message>(_ data: Data) throws -> MessageType {
     let inputStream = InputStream(data: data)
     inputStream.open()
-    return try! BinaryDelimited.parse(messageType: MessageType.self, from: inputStream, partial: true)
+    
+    return try BinaryDelimited.parse(messageType: MessageType.self, from: inputStream, partial: true)
 }
 
 internal func blueIBeaconMajorMinorToId(major: Int16, minor: Int16) -> String {
