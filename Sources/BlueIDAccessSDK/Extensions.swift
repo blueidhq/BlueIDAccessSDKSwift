@@ -61,6 +61,7 @@ extension BlueLocalTimestamp: Encodable, Decodable {
         try container.encode(date, forKey: .date)
         try container.encode(hours, forKey: .hours)
         try container.encode(minutes, forKey: .minutes)
+        try container.encode(seconds, forKey: .seconds)
     }
     
     enum CodingKeys: String, CodingKey {
