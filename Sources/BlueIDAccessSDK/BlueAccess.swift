@@ -248,7 +248,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     private func pushEventLogs(status: BlueSystemStatus, credential: BlueAccessCredential, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async {
         do {
             let deviceList = try BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
-            guard let device = deviceList.devices.first(where: { $0.deviceID == deviceID }) else {
+            guard deviceList.devices.first(where: { $0.deviceID == deviceID }) != nil else {
                 blueLogWarn("Device could not be found. Event logs have not been deployed")
                 return
             }
@@ -258,14 +258,14 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                 return
             }
             
-            let limit = 50
+            let limit = 40
             
             let pushEvents = { (_ offset: Int) in
                 var query = BlueEventLogQuery()
                 query.maxCount = UInt32(limit)
                 
                 // newest -> oldest
-                query.sequenceID = UInt32(max(1, Int(status.settings.eventLogSequenceID) - offset + 1))
+                query.sequenceID = UInt32(offset)
                 
                 let logResult: BlueEventLogResult = try await blueTerminalRun(
                     deviceID: deviceID,
@@ -288,19 +288,15 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             }
             
             var sent = 0
-            var offset = 0
+            var offset = max(1, Int(status.settings.eventLogSequenceID) - 100)
             
             repeat {
-                offset += limit
-                
                 let logResult = try await pushEvents(offset)
-                if (logResult.events.count < limit) {
-                    break
-                }
                 
+                offset += logResult.events.count
                 sent += logResult.events.count
                 
-            } while (sent < 100 && sent < status.settings.eventLogEntriesCount)
+            } while (sent < 100 && offset < status.settings.eventLogEntriesCount)
             
         } catch {
             blueLogError(error.localizedDescription)

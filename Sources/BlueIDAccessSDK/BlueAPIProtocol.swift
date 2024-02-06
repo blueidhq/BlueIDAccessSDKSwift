@@ -97,6 +97,7 @@ internal struct BluePushEvent: Encodable {
     var deviceId: String?
     var objectId: Int?
     var eventTime: BlueLocalTimestamp
+    var sequenceId: Int?
     var eventId: Int
     var eventInfo: Int
     var credentialId: String?
@@ -104,6 +105,7 @@ internal struct BluePushEvent: Encodable {
     
     init(event: BlueEvent, deviceId: String) {
         self.deviceId = deviceId
+        self.sequenceId = Int(event.sequenceID)
         self.eventId = event.eventID.rawValue
         self.eventTime = event.eventTime
         self.eventInfo = Int(event.eventInfo)
