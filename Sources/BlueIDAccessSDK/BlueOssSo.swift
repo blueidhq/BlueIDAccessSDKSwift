@@ -480,6 +480,10 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
  */
 public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
     
+    override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync()
+    }
+    
     /// Tries to refresh each transponder's credential.
     ///
     /// - throws: Throws an error of type `BlueError(.notFound)` If no NFC Writer credentials are found.
