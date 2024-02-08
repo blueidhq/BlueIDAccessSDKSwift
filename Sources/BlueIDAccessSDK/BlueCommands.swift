@@ -57,6 +57,7 @@ public struct BlueCommands {
     public let readOssSoCredential = BlueReadOssSoCredentialCommand()
     public let writeOssSoCredential = BlueWriteOssSoCredentialCommand()
     public let refreshOssSoCredential = BlueRefreshOssSoCredentialCommand()
+    public let refreshOssSoCredentials = BlueRefreshOssSoCredentialsCommand()
     public let formatOssSoCredential = BlueFormatOssSoCredentialCommand()
     
     public let ossSidCreateMobile = BlueOssSidCreateMobileCommand()

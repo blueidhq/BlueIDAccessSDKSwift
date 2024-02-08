@@ -54,6 +54,46 @@ extension BlueDeviceType: CaseIterable {
 
 #endif  // swift(>=4.2)
 
+public enum BlueRefreshOssSoCredentialStatus: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case succeeded // = 1
+  case failed // = 2
+  case notNeeded // = 3
+  case unsupported // = 4
+
+  public init() {
+    self = .succeeded
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 1: self = .succeeded
+    case 2: self = .failed
+    case 3: self = .notNeeded
+    case 4: self = .unsupported
+    default: return nil
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .succeeded: return 1
+    case .failed: return 2
+    case .notNeeded: return 3
+    case .unsupported: return 4
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension BlueRefreshOssSoCredentialStatus: CaseIterable {
+  // Support synthesized by the compiler.
+}
+
+#endif  // swift(>=4.2)
+
 public struct BlueI18n {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -625,8 +665,62 @@ public struct BlueAccessObjectList {
   public init() {}
 }
 
+public struct BlueRefreshOssSoCredential {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var credentialID: BlueCredentialId {
+    get {return _credentialID ?? BlueCredentialId()}
+    set {_credentialID = newValue}
+  }
+  /// Returns true if `credentialID` has been explicitly set.
+  public var hasCredentialID: Bool {return self._credentialID != nil}
+  /// Clears the value of `credentialID`. Subsequent reads from it will return its default value.
+  public mutating func clearCredentialID() {self._credentialID = nil}
+
+  public var status: BlueRefreshOssSoCredentialStatus {
+    get {return _status ?? .succeeded}
+    set {_status = newValue}
+  }
+  /// Returns true if `status` has been explicitly set.
+  public var hasStatus: Bool {return self._status != nil}
+  /// Clears the value of `status`. Subsequent reads from it will return its default value.
+  public mutating func clearStatus() {self._status = nil}
+
+  public var configuration: BlueOssSoConfiguration {
+    get {return _configuration ?? BlueOssSoConfiguration()}
+    set {_configuration = newValue}
+  }
+  /// Returns true if `configuration` has been explicitly set.
+  public var hasConfiguration: Bool {return self._configuration != nil}
+  /// Clears the value of `configuration`. Subsequent reads from it will return its default value.
+  public mutating func clearConfiguration() {self._configuration = nil}
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _credentialID: BlueCredentialId? = nil
+  fileprivate var _status: BlueRefreshOssSoCredentialStatus? = nil
+  fileprivate var _configuration: BlueOssSoConfiguration? = nil
+}
+
+public struct BlueRefreshOssSoCredentials {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var credentials: [BlueRefreshOssSoCredential] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+}
+
 #if swift(>=5.5) && canImport(_Concurrency)
 extension BlueDeviceType: @unchecked Sendable {}
+extension BlueRefreshOssSoCredentialStatus: @unchecked Sendable {}
 extension BlueI18n: @unchecked Sendable {}
 extension BlueDeviceDetailsBluetooth: @unchecked Sendable {}
 extension BlueDeviceDetailsUWB: @unchecked Sendable {}
@@ -638,6 +732,8 @@ extension BlueAccessDevice: @unchecked Sendable {}
 extension BlueAccessDeviceList: @unchecked Sendable {}
 extension BlueAccessObject: @unchecked Sendable {}
 extension BlueAccessObjectList: @unchecked Sendable {}
+extension BlueRefreshOssSoCredential: @unchecked Sendable {}
+extension BlueRefreshOssSoCredentials: @unchecked Sendable {}
 #endif  // swift(>=5.5) && canImport(_Concurrency)
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
@@ -646,6 +742,15 @@ extension BlueDeviceType: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "BluetoothDevice"),
     2: .same(proto: "UWBDevice"),
+  ]
+}
+
+extension BlueRefreshOssSoCredentialStatus: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "Succeeded"),
+    2: .same(proto: "Failed"),
+    3: .same(proto: "NotNeeded"),
+    4: .same(proto: "Unsupported"),
   ]
 }
 
@@ -1377,6 +1482,99 @@ extension BlueAccessObjectList: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
 
   public static func ==(lhs: BlueAccessObjectList, rhs: BlueAccessObjectList) -> Bool {
     if lhs.objects != rhs.objects {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueRefreshOssSoCredential: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueRefreshOssSoCredential"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "credentialId"),
+    2: .same(proto: "status"),
+    3: .same(proto: "configuration"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._credentialID == nil {return false}
+    if self._status == nil {return false}
+    if let v = self._credentialID, !v.isInitialized {return false}
+    if let v = self._configuration, !v.isInitialized {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._credentialID) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._status) }()
+      case 3: try { try decoder.decodeSingularMessageField(value: &self._configuration) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._credentialID {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    try { if let v = self._status {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    try { if let v = self._configuration {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+    } }()
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueRefreshOssSoCredential, rhs: BlueRefreshOssSoCredential) -> Bool {
+    if lhs._credentialID != rhs._credentialID {return false}
+    if lhs._status != rhs._status {return false}
+    if lhs._configuration != rhs._configuration {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueRefreshOssSoCredentials: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueRefreshOssSoCredentials"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "credentials"),
+  ]
+
+  public var isInitialized: Bool {
+    if !SwiftProtobuf.Internal.areAllInitialized(self.credentials) {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.credentials) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.credentials.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.credentials, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueRefreshOssSoCredentials, rhs: BlueRefreshOssSoCredentials) -> Bool {
+    if lhs.credentials != rhs.credentials {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

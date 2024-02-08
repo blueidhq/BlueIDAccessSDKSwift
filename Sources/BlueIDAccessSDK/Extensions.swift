@@ -192,6 +192,12 @@ extension BlueAccessDeviceList {
     }
 }
 
+extension BlueRefreshOssSoCredentials {
+    internal func hasFailedItems() -> Bool {
+        return credentials.contains{ $0.status == .failed }
+    }
+}
+
 extension Array {
     
     /// Extension function for Arrays, allowing the splitting of the collection into subarrays of a specified size.

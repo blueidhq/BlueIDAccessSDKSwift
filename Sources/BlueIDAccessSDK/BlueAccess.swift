@@ -47,11 +47,12 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
         
         return try await runAsync(
             credentialType: credentialType,
-            for: blueCastArg(String.self, arg1)
+            for: blueCastArg(String.self, arg1),
+            includePrivateKey: false
         )
     }
     
-    public func runAsync(credentialType: BlueCredentialType? = nil, for deviceID: String? = nil) async throws -> BlueAccessCredentialList {
+    public func runAsync(credentialType: BlueCredentialType? = nil, for deviceID: String? = nil, includePrivateKey: Bool? = false) async throws -> BlueAccessCredentialList {
         let filterByCredentialType = { (_ credential: BlueAccessCredential) -> Bool in
             guard let credentialType = credentialType else {
                 return true
@@ -80,8 +81,10 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
             credentialList.credentials = try entries.compactMap { entry in
                 if var credential = try? BlueAccessCredential(jsonUTF8Data: entry) {
                     
-                    // Never expose it
-                    credential.clearPrivateKey()
+                    if includePrivateKey != true {
+                        // Never expose it
+                        credential.clearPrivateKey()
+                    }
                     
                     return credential
                 }
