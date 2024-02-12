@@ -57,7 +57,7 @@
 #define BLUE_MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define BLUE_MAX(a, b) (((a) > (b)) ? (a) : (b))
 
-#define BLUE_BINARY_SEARCH_CMP(LEFT, RIGHT) LEFT - RIGHT
+#define BLUE_BINARY_SEARCH_CMP(LEFT, RIGHT) ((int)LEFT - (int)RIGHT)
 #define BLUE_BINARY_SEARCH_CMP_STR(LEFT, RIGHT) strcmp(LEFT, RIGHT)
 
 #define BLUE_BINARY_SEARCH(ARRAY, ARRAY_COUNT, KEY, KEY_CMP, RESULT_INDEX) \
