@@ -9,7 +9,7 @@ public class BlueSynchronizeAccessCredentialCommand: BlueAPIAsyncCommand {
     
     public func runAsync(credentialID: String, forceRefresh: Bool? = nil) async throws {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         if (credential.credentialType == .nfcWriter) {
@@ -31,7 +31,7 @@ internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand wher
     
     func runAsync(credentialID: String, forceRefresh: Bool? = nil) async throws -> Void {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)

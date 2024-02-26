@@ -13,7 +13,7 @@ public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
     
     public func runAsync(credential: BlueAccessCredential) async throws -> Void {
         guard credential.hasPrivateKey else {
-            throw BlueError(.invalidState)
+            throw BlueError(.sdkCredentialPrivateKeyNotFound)
         }
         
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: credential.jsonUTF8Data())
@@ -128,24 +128,24 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                 deviceID: try blueCastArg(String.self, arg1)
             )
         } else {
-            throw BlueError(.unavailable)
+            throw BlueError(.sdkUnsupportedPlatform)
         }
     }
     
     @available(macOS 10.15, *)
     public func runAsync(credentialID: String, deviceID: String) async throws -> BlueSystemStatus? {
         guard let device = blueGetDevice(deviceID) else {
-            throw BlueError(.invalidState)
+            throw BlueError(.sdkDeviceNotFound)
         }
         
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
             .getTokenAuthentication(credential: credential)
         
-        let config = await getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication)
+        let config = try await getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication)
         
         var update = BlueSystemUpdate()
         update.timeUnix = BlueSystemTimeUnix()
@@ -166,13 +166,13 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
         
         await waitUntilDeviceHasBeenRestarted()
         
-        await pushEventLogs(status: updateStatus, credential: credential, deviceID: deviceID, with: tokenAuthentication)
-        await pushSystemLogs(status: updateStatus, deviceID: deviceID, with: tokenAuthentication)
-        await deployBlacklistEntries(deviceID: deviceID, with: tokenAuthentication)
+        try await pushEventLogs(status: updateStatus, credential: credential, deviceID: deviceID, with: tokenAuthentication)
+        try await pushSystemLogs(status: updateStatus, deviceID: deviceID, with: tokenAuthentication)
+        try await deployBlacklistEntries(deviceID: deviceID, with: tokenAuthentication)
         
         let status: BlueSystemStatus = await getSystemStatus(deviceID) ?? updateStatus
         
-        await pushDeviceSystemStatus(status: status, with: tokenAuthentication)
+        try await pushDeviceSystemStatus(status: status, with: tokenAuthentication)
         
         return status
     }
@@ -192,7 +192,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     }
     
     @available(macOS 10.15, *)
-    private func deployBlacklistEntries(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async {
+    private func deployBlacklistEntries(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
             let response = try await blueAPI!.getBlacklistEntries(deviceID: deviceID, with: tokenAuthentication, limit: 50).getData()
             
@@ -209,11 +209,11 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                 data: entries
             )
         } catch {
-            blueLogError(error.localizedDescription)
+            throw BlueError(.sdkBlacklistEntriesDeployFailed, cause: error)
         }
     }
     
-    private func getBlueSystemConfig(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async -> BlueSystemConfig? {
+    private func getBlueSystemConfig(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueSystemConfig? {
         do {
             let result = try await blueAPI!.createDeviceConfiguration(deviceID: deviceID, with: tokenAuthentication).getData()
             
@@ -222,20 +222,18 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             }
             
             guard let data = Data(base64Encoded: systemConfiguration) else {
-                return nil
+                throw BlueError(.sdkDecodeBase64Failed)
             }
             
             let config: BlueSystemConfig = try blueDecodeMessage(data)
             
             return config
         } catch {
-            blueLogError(error.localizedDescription)
+            throw BlueError(.sdkGetSystemConfigFailed, cause: error)
         }
-        
-        return nil
     }
     
-    private func pushDeviceSystemStatus(status: BlueSystemStatus, with tokenAuthentication: BlueTokenAuthentication) async {
+    private func pushDeviceSystemStatus(status: BlueSystemStatus, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
             let result = try await blueAPI!.updateDeviceSystemStatus(systemStatus: blueEncodeMessage(status).base64EncodedString(), with: tokenAuthentication).getData()
             
@@ -243,19 +241,13 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                 blueLogWarn("System status could not be deployed")
             }
         } catch {
-            blueLogError(error.localizedDescription)
+            throw BlueError(.sdkDeviceSystemStatusPushFailed, cause: error)
         }
     }
     
     @available(macOS 10.15, *)
-    private func pushEventLogs(status: BlueSystemStatus, credential: BlueAccessCredential, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async {
+    private func pushEventLogs(status: BlueSystemStatus, credential: BlueAccessCredential, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
-            let deviceList = try BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
-            guard deviceList.devices.first(where: { $0.deviceID == deviceID }) != nil else {
-                blueLogWarn("Device could not be found. Event logs have not been deployed")
-                return
-            }
-            
             guard status.settings.eventLogEntriesCount > 0 else {
                 blueLogWarn("No event logs to be deployed")
                 return
@@ -302,12 +294,12 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
             } while (sent < 100 && offset < status.settings.eventLogEntriesCount)
             
         } catch {
-            blueLogError(error.localizedDescription)
+            throw BlueError(.sdkEventLogsPushFailed, cause: error)
         }
     }
     
     @available(macOS 10.15, *)
-    private func pushSystemLogs(status: BlueSystemStatus, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async {
+    private func pushSystemLogs(status: BlueSystemStatus, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
             let limit = 10
             
@@ -353,7 +345,7 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                 
             } while (sent < 50 && sent < status.settings.systemLogEntriesCount)
         } catch {
-            blueLogError(error.localizedDescription)
+            throw BlueError(.sdkSystemLogEntriesPushFailed, cause: error)
         }
     }
 }
@@ -367,7 +359,7 @@ public class BlueGetAccessObjectsCommand: BlueAPIAsyncCommand {
     
     public func runAsync(credentialID: String) async throws -> BlueAccessObjectList {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
@@ -417,18 +409,18 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
                 objectID: try blueCastArg(String.self, arg2)
             )
         } else {
-            throw BlueError(.unavailable)
+            throw BlueError(.sdkUnsupportedPlatform)
         }
     }
     
     @available(macOS 10.15, *)
     public func runAsync(credentialID: String, deviceID: String, objectID: String) async throws -> BlueSystemStatus? {
         guard let _ = blueGetDevice(deviceID) else {
-            throw BlueError(.invalidState)
+            throw BlueError(.sdkDeviceNotFound)
         }
         
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
@@ -456,7 +448,7 @@ public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
     
     public func runAsync(organisation: String, siteID: Int) async throws -> BlueAccessCredentialList {
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
@@ -514,23 +506,23 @@ public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
     /// - throws: Throws an error of type `BlueError(.notSuported)` If the macOS version is earlier than 10.15.
     public func runAsync(deviceID: String) async throws -> BlueOssAccessResult {
         guard let device = blueGetDevice(deviceID) else {
-            throw BlueError(.invalidState)
+            throw BlueError(.sdkDeviceNotFound)
         }
         
         let hasOssSoToken = blueHasSpTokenForAction(device: device, action: "ossSoMobile")
         let hasOssSidToken = blueHasSpTokenForAction(device: device, action: "ossSidMobile")
         
         if (!hasOssSoToken && !hasOssSidToken) {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkSpTokenNotFound)
         }
         
         let tryOssAccess: () async throws -> BlueOssAccessResult = {
             guard #available(macOS 10.15, *) else {
-                throw BlueError(.notSupported)
+                throw BlueError(.sdkUnsupportedPlatform)
             }
             
             guard let terminalRun = self.terminalRun else {
-                throw BlueError(.notSupported)
+                throw BlueError(.sdkUnsupportedPlatform)
             }
             
             if (hasOssSoToken) {
@@ -541,7 +533,7 @@ public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
                 return try await terminalRun(deviceID, defaultTimeoutSec, "ossSidMobile")
             }
             
-            throw BlueError(.invalidState)
+            throw BlueError(.sdkSpTokenNotFound)
         }
         
 #if os(iOS) || os(watchOS)

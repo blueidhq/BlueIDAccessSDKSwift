@@ -33,7 +33,8 @@ internal func bluePurgeOldDevices() {
     var newDevices: [BlueDevice] = []
     
     for device in blueDevices {
-        if (now.timeIntervalSince(device.lastSeenAt) >= maxDeviceAgeSeconds) {
+        let shouldPurge = now.timeIntervalSince(device.lastSeenAt) >= maxDeviceAgeSeconds && !isActiveDevice(device)
+        if (shouldPurge) {
             blueNotifyRemovedDevice(device)
         } else {
             newDevices.append(device)

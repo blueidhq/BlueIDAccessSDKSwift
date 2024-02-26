@@ -107,6 +107,22 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
   case mifareDesfireCmacNotReceived // = -302
   case mifareDesfireCmacNotVerified // = -303
   case mifareDesfireNoneOrInvalidAid // = -304
+  case sdkCredentialNotFound // = -400
+  case sdkCredentialPrivateKeyNotFound // = -401
+  case sdkUnsupportedPlatform // = -402
+  case sdkDeviceNotFound // = -403
+  case sdkSpTokenNotFound // = -404
+  case sdkOssEntryNotFound // = -405
+  case sdkOssSoSettingsNotFound // = -406
+  case sdkGetSystemConfigFailed // = -407
+  case sdkEventLogsPushFailed // = -408
+  case sdkSystemLogEntriesPushFailed // = -409
+  case sdkBlacklistEntriesDeployFailed // = -410
+  case sdkDeviceSystemStatusPushFailed // = -411
+  case sdkNetworkError // = -412
+  case sdkDecodeBase64Failed // = -413
+  case sdkDecodeJsonFailed // = -414
+  case sdkFetchDataFailed // = -415
   case ossMareturnCodeStart // = -1000
   case ossMareturnCodeEnd // = -1100
 
@@ -118,6 +134,22 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch rawValue {
     case -1100: self = .ossMareturnCodeEnd
     case -1000: self = .ossMareturnCodeStart
+    case -415: self = .sdkFetchDataFailed
+    case -414: self = .sdkDecodeJsonFailed
+    case -413: self = .sdkDecodeBase64Failed
+    case -412: self = .sdkNetworkError
+    case -411: self = .sdkDeviceSystemStatusPushFailed
+    case -410: self = .sdkBlacklistEntriesDeployFailed
+    case -409: self = .sdkSystemLogEntriesPushFailed
+    case -408: self = .sdkEventLogsPushFailed
+    case -407: self = .sdkGetSystemConfigFailed
+    case -406: self = .sdkOssSoSettingsNotFound
+    case -405: self = .sdkOssEntryNotFound
+    case -404: self = .sdkSpTokenNotFound
+    case -403: self = .sdkDeviceNotFound
+    case -402: self = .sdkUnsupportedPlatform
+    case -401: self = .sdkCredentialPrivateKeyNotFound
+    case -400: self = .sdkCredentialNotFound
     case -304: self = .mifareDesfireNoneOrInvalidAid
     case -303: self = .mifareDesfireCmacNotVerified
     case -302: self = .mifareDesfireCmacNotReceived
@@ -199,6 +231,22 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch self {
     case .ossMareturnCodeEnd: return -1100
     case .ossMareturnCodeStart: return -1000
+    case .sdkFetchDataFailed: return -415
+    case .sdkDecodeJsonFailed: return -414
+    case .sdkDecodeBase64Failed: return -413
+    case .sdkNetworkError: return -412
+    case .sdkDeviceSystemStatusPushFailed: return -411
+    case .sdkBlacklistEntriesDeployFailed: return -410
+    case .sdkSystemLogEntriesPushFailed: return -409
+    case .sdkEventLogsPushFailed: return -408
+    case .sdkGetSystemConfigFailed: return -407
+    case .sdkOssSoSettingsNotFound: return -406
+    case .sdkOssEntryNotFound: return -405
+    case .sdkSpTokenNotFound: return -404
+    case .sdkDeviceNotFound: return -403
+    case .sdkUnsupportedPlatform: return -402
+    case .sdkCredentialPrivateKeyNotFound: return -401
+    case .sdkCredentialNotFound: return -400
     case .mifareDesfireNoneOrInvalidAid: return -304
     case .mifareDesfireCmacNotVerified: return -303
     case .mifareDesfireCmacNotReceived: return -302
@@ -3488,6 +3536,22 @@ extension BlueReturnCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     -1100: .same(proto: "OssMAReturnCodeEnd"),
     -1000: .same(proto: "OssMAReturnCodeStart"),
+    -415: .same(proto: "SdkFetchDataFailed"),
+    -414: .same(proto: "SdkDecodeJsonFailed"),
+    -413: .same(proto: "SdkDecodeBase64Failed"),
+    -412: .same(proto: "SdkNetworkError"),
+    -411: .same(proto: "SdkDeviceSystemStatusPushFailed"),
+    -410: .same(proto: "SdkBlacklistEntriesDeployFailed"),
+    -409: .same(proto: "SdkSystemLogEntriesPushFailed"),
+    -408: .same(proto: "SdkEventLogsPushFailed"),
+    -407: .same(proto: "SdkGetSystemConfigFailed"),
+    -406: .same(proto: "SdkOssSoSettingsNotFound"),
+    -405: .same(proto: "SdkOssEntryNotFound"),
+    -404: .same(proto: "SdkSpTokenNotFound"),
+    -403: .same(proto: "SdkDeviceNotFound"),
+    -402: .same(proto: "SdkUnsupportedPlatform"),
+    -401: .same(proto: "SdkCredentialPrivateKeyNotFound"),
+    -400: .same(proto: "SdkCredentialNotFound"),
     -304: .same(proto: "MifareDesfireNoneOrInvalidAid"),
     -303: .same(proto: "MifareDesfireCmacNotVerified"),
     -302: .same(proto: "MifareDesfireCmacNotReceived"),

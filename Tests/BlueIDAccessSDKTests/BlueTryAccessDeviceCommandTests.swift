@@ -45,7 +45,7 @@ final class BlueTryAccessDeviceCommandTests: BlueXCTestCase {
     func testWhenDeviceIsMissing() async throws {
         try await XCTAssertThrowsError(await BlueTryAccessDeviceCommand().runAsync(deviceID: "")) { error in
             XCTAssert(error is BlueError)
-            XCTAssertEqual((error as? BlueError)?.returnCode, .invalidState)
+            XCTAssertEqual((error as? BlueError)?.returnCode, .sdkDeviceNotFound)
         }
     }
     
@@ -56,7 +56,7 @@ final class BlueTryAccessDeviceCommandTests: BlueXCTestCase {
         
         try await XCTAssertThrowsError(await BlueTryAccessDeviceCommand().runAsync(deviceID: "device-1")) { error in
             XCTAssert(error is BlueError)
-            XCTAssertEqual((error as? BlueError)?.returnCode, .notFound)
+            XCTAssertEqual((error as? BlueError)?.returnCode, .sdkSpTokenNotFound)
         }
     }
     

@@ -80,26 +80,34 @@ public struct BlueOssSoCreateMobileCommand: BlueCommand {
     }
 }
 
-fileprivate func executeOssSoNfc<ResultType>(settings: BlueOssSoSettings?, successMessage: String, handler: @escaping (_: UnsafeMutablePointer<BlueOssSoStorage_t>) throws -> ResultType) throws -> ResultType {
+fileprivate func executeOssSoNfc<ResultType>(
+    settings: BlueOssSoSettings?,
+    successMessage: String,
+    ignoreErrors: [BlueReturnCode]? = nil,
+    handler: @escaping (_: UnsafeMutablePointer<BlueOssSoStorage_t>) throws -> ResultType) throws -> ResultType {
+    
     var result: ResultType? = nil
     
     let settingsInUse: BlueOssSoSettings = settings ?? blueCreateOssSoDemoSettings()
     
-    try blueNfcExecute({ transponderType in
-        let pStorage = UnsafeMutablePointer<BlueOssSoStorage_t>.allocate(capacity: 1)
-        
-        defer {
-            pStorage.deallocate()
-        }
-        
-        try blueClibFunctionIn(message: settingsInUse, { (dataPtr, dataSize) in
-            return blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
-        })
-        
-        result = try handler(pStorage)
-        
-        return successMessage
-    })
+    try blueNfcExecute(
+        { transponderType in
+            let pStorage = UnsafeMutablePointer<BlueOssSoStorage_t>.allocate(capacity: 1)
+            
+            defer {
+                pStorage.deallocate()
+            }
+            
+            try blueClibFunctionIn(message: settingsInUse, { (dataPtr, dataSize) in
+                return blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
+            })
+            
+            result = try handler(pStorage)
+            
+            return successMessage
+        },
+        ignoreErrors: ignoreErrors
+    )
     
     guard let result = result else {
         throw BlueError(.invalidState)
@@ -252,8 +260,8 @@ public struct BlueOssSoReadConfigurationCommand: BlueCommand {
         ))
     }
     
-    public func run(_ settings: BlueOssSoSettings?) throws -> BlueOssSoConfiguration {
-        return try executeOssSoNfc(settings: settings, successMessage: blueI18n.nfcOssSuccessReadConfigurationMessage, handler: { pStorage in
+    public func run(_ settings: BlueOssSoSettings?, ignoreErrors: [BlueReturnCode]? = nil) throws -> BlueOssSoConfiguration {
+        return try executeOssSoNfc(settings: settings, successMessage: blueI18n.nfcOssSuccessReadConfigurationMessage, ignoreErrors: ignoreErrors, handler: { pStorage in
             return try blueClibFunctionOut({ (dataPtr, dataSize) in
                 return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
             })
@@ -291,7 +299,7 @@ public struct BlueFormatOssSoCredentialCommand: BlueCommand {
     
     public func run(organisation: String, siteID: Int) throws {
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
@@ -310,12 +318,14 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
     
     public func run(organisation: String, siteID: Int) throws -> BlueOssSoConfiguration {
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
         
-        return try BlueOssSoReadConfigurationCommand().run(ossSoSettings)
+        return try BlueOssSoReadConfigurationCommand().run(ossSoSettings, ignoreErrors: [
+            .notFound
+        ])
     }
 }
 
@@ -341,11 +351,11 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
     /// - returns: A boolean indicating whether a new configuration has been written in the Transponder or not.
     public func runAsync(credentialID: String, organisation: String, siteID: Int) async throws -> Bool {
         guard #available(macOS 10.15, *) else {
-            throw BlueError(.notSupported)
+            throw BlueError(.sdkUnsupportedPlatform)
         }
         
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
@@ -425,11 +435,11 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
     /// - returns: The configuration stored in the transponder.
     public func runAsync(organisation: String, siteID: Int) async throws -> BlueOssSoConfiguration {
         guard #available(macOS 10.15, *) else {
-            throw BlueError(.notSupported)
+            throw BlueError(.sdkUnsupportedPlatform)
         }
         
         guard let credential = blueGetAccessCredential(organisation: organisation, siteID: siteID, credentialType: .nfcWriter) else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
@@ -491,13 +501,13 @@ public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
     /// - returns: The status of each NFC credential, and in the case of success, the configuration stored in the transponder.
     public func runAsync() async throws -> BlueRefreshOssSoCredentials {
         guard #available(macOS 10.15, *) else {
-            throw BlueError(.notSupported)
+            throw BlueError(.sdkUnsupportedPlatform)
         }
         
         let credentials = try await BlueGetAccessCredentialsCommand().runAsync(credentialType: .nfcWriter, includePrivateKey: true).credentials
         
         guard !credentials.isEmpty else {
-            throw BlueError(.notFound)
+            throw BlueError(.sdkCredentialNotFound)
         }
         
         var refreshResult = BlueRefreshOssSoCredentials()
@@ -594,11 +604,11 @@ public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
 
 private func blueGetOssSoSettings(credentialID: String) throws -> BlueOssSoSettings {
     guard let ossSoEntry: BlueOssEntry = try blueAccessOssSettingsKeyChain.getCodableEntry(id: credentialID) else {
-        throw BlueError(.invalidState)
+        throw BlueError(.sdkOssEntryNotFound)
     }
     
     guard let ossSoSettingsData = ossSoEntry.ossSo else {
-        throw BlueError(.invalidState)
+        throw BlueError(.sdkOssSoSettingsNotFound)
     }
     
     return try blueDecodeMessage(ossSoSettingsData)

@@ -10,6 +10,14 @@ private var blueActiveDevice: BlueDevice? = nil
 
 public var defaultTimeoutSec: Double = 10
 
+internal func isActiveDevice(_ device: BlueDevice) -> Bool {
+    guard let activeDevice = blueActiveDevice else {
+        return false
+    }
+    
+    return activeDevice.info.deviceID == device.info.deviceID
+}
+
 internal struct BlueSPTokenEntry: Codable {
     var credentialID: String
     var data: Data
@@ -330,7 +338,7 @@ public func blueTerminalRun<HandlerResult>(
     }
     
     guard let device = blueGetDevice(deviceID) else {
-        return completion(.failure(BlueError(.notFound)))
+        return completion(.failure(BlueError(.sdkDeviceNotFound)))
     }
     
     return DispatchQueue.global(qos: .background).async {

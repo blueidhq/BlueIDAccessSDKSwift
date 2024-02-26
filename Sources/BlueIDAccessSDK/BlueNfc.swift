@@ -46,7 +46,7 @@ private final class BlueNfcSessionListener: NSObject, NFCTagReaderSessionDelegat
     }
 }
 
-internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0) throws {
+internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0, ignoreErrors: [BlueReturnCode]? = nil) throws {
     try blueExecuteWithTimeout({
         let isActive = blueNfcSession != nil
         
@@ -69,8 +69,8 @@ internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throw
             throw BlueError(.invalidState)
         }
         
-        session.begin()
         session.alertMessage = blueI18n.nfcWaitMessage
+        session.begin()
         
         do {
             _ = try blueWaitSignal(group: "nfc", name: "connect")
@@ -95,13 +95,25 @@ internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throw
             
             blueNfcSession = nil
         } catch let error {
-            var errorMessage = BlueError.unknownErrorMessage
+            var errorMessage: String? = BlueError.unknownErrorMessage
             
             if (error.localizedDescription != "") {
                 errorMessage = error.localizedDescription
             }
             
-            session.invalidate(errorMessage: errorMessage)
+            if let ignoreErrors = ignoreErrors {
+                if let blueError = error as? BlueError {
+                    if (ignoreErrors.contains(blueError.returnCode)) {
+                        errorMessage = nil
+                    }
+                }
+            }
+            
+            if let errorMessage = errorMessage {
+                session.invalidate(errorMessage: errorMessage)
+            } else {
+                session.invalidate()
+            }
             
             blueNfcSession = nil
             
@@ -172,7 +184,7 @@ internal func blueNfc_Transceive(_ pCommandApdu: UnsafePointer<UInt8>, _ command
 
 #else
 
-internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0) throws {
+internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0, ignoreErrors: [BlueReturnCode]? = nil) throws {
     throw BlueError(.notSupported)
 }
 

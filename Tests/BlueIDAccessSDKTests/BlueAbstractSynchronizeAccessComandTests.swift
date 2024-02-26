@@ -51,7 +51,7 @@ final class BlueAbstractSynchronizeAccessCommandTests: BlueXCTestCase {
         
         await XCTAssertThrowsError(try await command.runAsync(credentialID: "")) {error in
             XCTAssert(error is BlueError)
-            XCTAssertEqual((error as! BlueError).returnCode, .notFound)
+            XCTAssertEqual((error as! BlueError).returnCode, .sdkCredentialNotFound)
         }
         
         XCTAssertFalse(command.purged, "purge function should NOT have been called")
