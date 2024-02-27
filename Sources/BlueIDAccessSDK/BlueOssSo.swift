@@ -80,11 +80,12 @@ public struct BlueOssSoCreateMobileCommand: BlueCommand {
     }
 }
 
+
 fileprivate func executeOssSoNfc<ResultType>(
     settings: BlueOssSoSettings?,
     successMessage: String,
-    ignoreErrors: [BlueReturnCode]? = nil,
-    handler: @escaping (_: UnsafeMutablePointer<BlueOssSoStorage_t>) throws -> ResultType) throws -> ResultType {
+    handler: @escaping (_: UnsafeMutablePointer<BlueOssSoStorage_t>) throws -> ResultType,
+    errorHandler: ((_: Error) -> String?)? = nil) throws -> ResultType {
     
     var result: ResultType? = nil
     
@@ -105,8 +106,8 @@ fileprivate func executeOssSoNfc<ResultType>(
             result = try handler(pStorage)
             
             return successMessage
-        },
-        ignoreErrors: ignoreErrors
+        }, 
+        errorHandler: errorHandler
     )
     
     guard let result = result else {
@@ -260,12 +261,12 @@ public struct BlueOssSoReadConfigurationCommand: BlueCommand {
         ))
     }
     
-    public func run(_ settings: BlueOssSoSettings?, ignoreErrors: [BlueReturnCode]? = nil) throws -> BlueOssSoConfiguration {
-        return try executeOssSoNfc(settings: settings, successMessage: blueI18n.nfcOssSuccessReadConfigurationMessage, ignoreErrors: ignoreErrors, handler: { pStorage in
+    public func run(_ settings: BlueOssSoSettings?, errorHandler: ((_: Error) -> String?)? = nil) throws -> BlueOssSoConfiguration {
+        return try executeOssSoNfc(settings: settings, successMessage: blueI18n.nfcOssSuccessReadConfigurationMessage, handler: { pStorage in
             return try blueClibFunctionOut({ (dataPtr, dataSize) in
                 return blueOssSo_ReadConfiguration_Ext(pStorage, dataPtr, dataSize, BlueOssSoReadWriteFlags_t(rawValue: BlueOssSoReadWriteFlags_All.rawValue))
             })
-        })
+        }, errorHandler: errorHandler)
     }
 }
 
@@ -323,9 +324,15 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
         
         let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
         
-        return try BlueOssSoReadConfigurationCommand().run(ossSoSettings, ignoreErrors: [
-            .notFound
-        ])
+        return try BlueOssSoReadConfigurationCommand().run(ossSoSettings) { error in
+            if let blueError = error as? BlueError {
+                if (blueError.returnCode == .notFound) {
+                    return blueI18n.nfcInitializingWritingProcess
+                }
+            }
+            
+            return nil
+        }
     }
 }
 

@@ -249,15 +249,18 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     private func pushEventLogs(status: BlueSystemStatus, credential: BlueAccessCredential, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
             guard status.settings.eventLogEntriesCount > 0 else {
-                blueLogWarn("No event logs to be deployed")
+                blueLogInfo("No event logs to be deployed")
                 return
             }
             
-            let limit = 40
-            
-            let pushEvents = { (_ offset: Int) in
+            try await iterateEvents(
+                sequenceID: status.settings.eventLogSequenceID,
+                entriesCount: status.settings.eventLogEntriesCount,
+                limit: 100
+            ) { offset in
+                
                 var query = BlueEventLogQuery()
-                query.maxCount = UInt32(limit)
+                query.maxCount = UInt32(40)
                 
                 // newest -> oldest
                 query.sequenceID = UInt32(offset)
@@ -279,19 +282,8 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                     }
                 }
                 
-                return logResult
+                return logResult.events.count
             }
-            
-            var sent = 0
-            var offset = max(1, Int(status.settings.eventLogSequenceID) - 100)
-            
-            repeat {
-                let logResult = try await pushEvents(offset)
-                
-                offset += logResult.events.count
-                sent += logResult.events.count
-                
-            } while (sent < 100 && offset < status.settings.eventLogEntriesCount)
             
         } catch {
             throw BlueError(.sdkEventLogsPushFailed, cause: error)
@@ -301,11 +293,19 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
     @available(macOS 10.15, *)
     private func pushSystemLogs(status: BlueSystemStatus, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
-            let limit = 10
+            guard status.settings.systemLogEntriesCount > 0 else {
+                blueLogInfo("No system log entries to be deployed")
+                return
+            }
             
-            let pushEvents = { (_ offset: Int) in
+            try await iterateEvents(
+                sequenceID: status.settings.systemLogSequenceID,
+                entriesCount: status.settings.systemLogEntriesCount,
+                limit: 50
+            ) { offset in
+                
                 var query = BlueSystemLogQuery()
-                query.maxCount = UInt32(limit)
+                query.maxCount = UInt32(10)
                 
                 // newest -> oldest
                 query.sequenceID = UInt32(max(1, Int(status.settings.systemLogSequenceID) - offset + 1))
@@ -327,26 +327,25 @@ public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
                     }
                 }
                 
-                return logResult
+                return logResult.entries.count
             }
-            
-            var sent = 0
-            var offset = 0
-            
-            repeat {
-                offset += limit
-                
-                let logResult = try await pushEvents(offset)
-                if (logResult.entries.count < limit) {
-                    break
-                }
-                
-                sent += logResult.entries.count
-                
-            } while (sent < 50 && sent < status.settings.systemLogEntriesCount)
+
         } catch {
             throw BlueError(.sdkSystemLogEntriesPushFailed, cause: error)
         }
+    }
+    
+    private func iterateEvents(sequenceID: UInt32, entriesCount: UInt32, limit: Int, _ sendBatch: (_ offset: Int) async throws -> Int) async throws {
+        var sent = 0
+        var offset = max(1, Int(sequenceID) - limit)
+        
+        repeat {
+            let entriesSent = try await sendBatch(offset)
+            
+            offset += entriesSent
+            sent += entriesSent
+            
+        } while (sent < limit && offset < entriesCount)
     }
 }
 
@@ -537,12 +536,7 @@ public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
         }
         
 #if os(iOS) || os(watchOS)
-        return try await blueShowAccessDeviceModal(
-            title: blueI18n.openViaOssTitle,
-            message: blueI18n.openViaOssWaitMessage,
-            successfulMessage: blueI18n.openViaOssSuccessfulMessage,
-            unsuccessfulMessage: blueI18n.openViaOssUnsuccessfulMessage
-        ) {
+        return try await blueShowAccessDeviceModal {
             return try await tryOssAccess()
         }
 #else

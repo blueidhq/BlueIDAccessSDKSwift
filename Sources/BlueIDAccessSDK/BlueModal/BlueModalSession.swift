@@ -36,9 +36,14 @@ internal class BlueModalSession {
     }
     
     /// Closes the modal session.  The session cannot be re-used.
+    /// - parameter title: Optional title.
     /// - parameter errorMessage: The specified error message and an error symbol will be displayed momentarily on the modal before it is automatically dismissed.
     /// - parameter successMessage: The specified success message and an success symbol will be displayed momentarily on the modal before it is automatically dismissed.
-    func invalidate(errorMessage: String? = nil, successMessage: String? = nil) {
+    func invalidate(
+        title: String? = nil,
+        errorMessage: String? = nil,
+        successMessage: String? = nil
+    ) {
         if (isInvalidated)  {
             return
         }
@@ -50,16 +55,16 @@ internal class BlueModalSession {
         viewModel.showDismissButton = false
         
         if let errorMessage = errorMessage {
-            viewModel.title = ""
+            viewModel.title = title ?? ""
             viewModel.message = errorMessage
             viewModel.status = .Failed
-            delay = 2
+            delay = 3
             
             BlueSound.shared.play(BlueNegativeSoundSystemID)
         }
         
         if let successMessage = successMessage {
-            viewModel.title = ""
+            viewModel.title = title ?? ""
             viewModel.message = successMessage
             viewModel.status = .Success
             delay = 2

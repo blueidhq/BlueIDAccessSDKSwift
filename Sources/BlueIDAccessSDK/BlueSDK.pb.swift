@@ -100,139 +100,172 @@ public struct BlueI18n {
   // methods supported on all messages.
 
   public var nfcWaitMessage: String {
-    get {return _nfcWaitMessage ?? "Waiting for transponder"}
-    set {_nfcWaitMessage = newValue}
+    get {return _storage._nfcWaitMessage ?? "Waiting for transponder..."}
+    set {_uniqueStorage()._nfcWaitMessage = newValue}
   }
   /// Returns true if `nfcWaitMessage` has been explicitly set.
-  public var hasNfcWaitMessage: Bool {return self._nfcWaitMessage != nil}
+  public var hasNfcWaitMessage: Bool {return _storage._nfcWaitMessage != nil}
   /// Clears the value of `nfcWaitMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcWaitMessage() {self._nfcWaitMessage = nil}
+  public mutating func clearNfcWaitMessage() {_uniqueStorage()._nfcWaitMessage = nil}
 
   public var nfcOssSuccessReadConfigurationMessage: String {
-    get {return _nfcOssSuccessReadConfigurationMessage ?? "Configuration read successfully"}
-    set {_nfcOssSuccessReadConfigurationMessage = newValue}
+    get {return _storage._nfcOssSuccessReadConfigurationMessage ?? "Configuration read successfully"}
+    set {_uniqueStorage()._nfcOssSuccessReadConfigurationMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessReadConfigurationMessage` has been explicitly set.
-  public var hasNfcOssSuccessReadConfigurationMessage: Bool {return self._nfcOssSuccessReadConfigurationMessage != nil}
+  public var hasNfcOssSuccessReadConfigurationMessage: Bool {return _storage._nfcOssSuccessReadConfigurationMessage != nil}
   /// Clears the value of `nfcOssSuccessReadConfigurationMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessReadConfigurationMessage() {self._nfcOssSuccessReadConfigurationMessage = nil}
+  public mutating func clearNfcOssSuccessReadConfigurationMessage() {_uniqueStorage()._nfcOssSuccessReadConfigurationMessage = nil}
 
   public var nfcOssSuccessUpdateConfigurationMessage: String {
-    get {return _nfcOssSuccessUpdateConfigurationMessage ?? "Configuration successfully updated"}
-    set {_nfcOssSuccessUpdateConfigurationMessage = newValue}
+    get {return _storage._nfcOssSuccessUpdateConfigurationMessage ?? "Configuration successfully updated"}
+    set {_uniqueStorage()._nfcOssSuccessUpdateConfigurationMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessUpdateConfigurationMessage` has been explicitly set.
-  public var hasNfcOssSuccessUpdateConfigurationMessage: Bool {return self._nfcOssSuccessUpdateConfigurationMessage != nil}
+  public var hasNfcOssSuccessUpdateConfigurationMessage: Bool {return _storage._nfcOssSuccessUpdateConfigurationMessage != nil}
   /// Clears the value of `nfcOssSuccessUpdateConfigurationMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessUpdateConfigurationMessage() {self._nfcOssSuccessUpdateConfigurationMessage = nil}
+  public mutating func clearNfcOssSuccessUpdateConfigurationMessage() {_uniqueStorage()._nfcOssSuccessUpdateConfigurationMessage = nil}
 
   public var nfcOssSuccessClearEventsMessage: String {
-    get {return _nfcOssSuccessClearEventsMessage ?? "Events successfully cleared"}
-    set {_nfcOssSuccessClearEventsMessage = newValue}
+    get {return _storage._nfcOssSuccessClearEventsMessage ?? "Events successfully cleared"}
+    set {_uniqueStorage()._nfcOssSuccessClearEventsMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessClearEventsMessage` has been explicitly set.
-  public var hasNfcOssSuccessClearEventsMessage: Bool {return self._nfcOssSuccessClearEventsMessage != nil}
+  public var hasNfcOssSuccessClearEventsMessage: Bool {return _storage._nfcOssSuccessClearEventsMessage != nil}
   /// Clears the value of `nfcOssSuccessClearEventsMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessClearEventsMessage() {self._nfcOssSuccessClearEventsMessage = nil}
+  public mutating func clearNfcOssSuccessClearEventsMessage() {_uniqueStorage()._nfcOssSuccessClearEventsMessage = nil}
 
   public var nfcOssSuccessIsProvisionedMessage: String {
-    get {return _nfcOssSuccessIsProvisionedMessage ?? "Is already provisioned"}
-    set {_nfcOssSuccessIsProvisionedMessage = newValue}
+    get {return _storage._nfcOssSuccessIsProvisionedMessage ?? "Is already provisioned"}
+    set {_uniqueStorage()._nfcOssSuccessIsProvisionedMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessIsProvisionedMessage` has been explicitly set.
-  public var hasNfcOssSuccessIsProvisionedMessage: Bool {return self._nfcOssSuccessIsProvisionedMessage != nil}
+  public var hasNfcOssSuccessIsProvisionedMessage: Bool {return _storage._nfcOssSuccessIsProvisionedMessage != nil}
   /// Clears the value of `nfcOssSuccessIsProvisionedMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessIsProvisionedMessage() {self._nfcOssSuccessIsProvisionedMessage = nil}
+  public mutating func clearNfcOssSuccessIsProvisionedMessage() {_uniqueStorage()._nfcOssSuccessIsProvisionedMessage = nil}
 
   public var nfcOssSuccessProvisionMessage: String {
-    get {return _nfcOssSuccessProvisionMessage ?? "Successfully provisioned"}
-    set {_nfcOssSuccessProvisionMessage = newValue}
+    get {return _storage._nfcOssSuccessProvisionMessage ?? "Successfully provisioned"}
+    set {_uniqueStorage()._nfcOssSuccessProvisionMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessProvisionMessage` has been explicitly set.
-  public var hasNfcOssSuccessProvisionMessage: Bool {return self._nfcOssSuccessProvisionMessage != nil}
+  public var hasNfcOssSuccessProvisionMessage: Bool {return _storage._nfcOssSuccessProvisionMessage != nil}
   /// Clears the value of `nfcOssSuccessProvisionMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessProvisionMessage() {self._nfcOssSuccessProvisionMessage = nil}
+  public mutating func clearNfcOssSuccessProvisionMessage() {_uniqueStorage()._nfcOssSuccessProvisionMessage = nil}
 
   public var nfcOssSuccessUnprovisionMessage: String {
-    get {return _nfcOssSuccessUnprovisionMessage ?? "Successfully unprovisioned"}
-    set {_nfcOssSuccessUnprovisionMessage = newValue}
+    get {return _storage._nfcOssSuccessUnprovisionMessage ?? "Successfully unprovisioned"}
+    set {_uniqueStorage()._nfcOssSuccessUnprovisionMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessUnprovisionMessage` has been explicitly set.
-  public var hasNfcOssSuccessUnprovisionMessage: Bool {return self._nfcOssSuccessUnprovisionMessage != nil}
+  public var hasNfcOssSuccessUnprovisionMessage: Bool {return _storage._nfcOssSuccessUnprovisionMessage != nil}
   /// Clears the value of `nfcOssSuccessUnprovisionMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessUnprovisionMessage() {self._nfcOssSuccessUnprovisionMessage = nil}
+  public mutating func clearNfcOssSuccessUnprovisionMessage() {_uniqueStorage()._nfcOssSuccessUnprovisionMessage = nil}
 
   public var nfcOssSuccessFormatMessage: String {
-    get {return _nfcOssSuccessFormatMessage ?? "Transponder was successfully formatted"}
-    set {_nfcOssSuccessFormatMessage = newValue}
+    get {return _storage._nfcOssSuccessFormatMessage ?? "Transponder was successfully formatted"}
+    set {_uniqueStorage()._nfcOssSuccessFormatMessage = newValue}
   }
   /// Returns true if `nfcOssSuccessFormatMessage` has been explicitly set.
-  public var hasNfcOssSuccessFormatMessage: Bool {return self._nfcOssSuccessFormatMessage != nil}
+  public var hasNfcOssSuccessFormatMessage: Bool {return _storage._nfcOssSuccessFormatMessage != nil}
   /// Clears the value of `nfcOssSuccessFormatMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearNfcOssSuccessFormatMessage() {self._nfcOssSuccessFormatMessage = nil}
+  public mutating func clearNfcOssSuccessFormatMessage() {_uniqueStorage()._nfcOssSuccessFormatMessage = nil}
+
+  public var nfcInitializingWritingProcess: String {
+    get {return _storage._nfcInitializingWritingProcess ?? "Initializing writing process"}
+    set {_uniqueStorage()._nfcInitializingWritingProcess = newValue}
+  }
+  /// Returns true if `nfcInitializingWritingProcess` has been explicitly set.
+  public var hasNfcInitializingWritingProcess: Bool {return _storage._nfcInitializingWritingProcess != nil}
+  /// Clears the value of `nfcInitializingWritingProcess`. Subsequent reads from it will return its default value.
+  public mutating func clearNfcInitializingWritingProcess() {_uniqueStorage()._nfcInitializingWritingProcess = nil}
 
   public var cmnCancelLabel: String {
-    get {return _cmnCancelLabel ?? "Cancel"}
-    set {_cmnCancelLabel = newValue}
+    get {return _storage._cmnCancelLabel ?? "Cancel"}
+    set {_uniqueStorage()._cmnCancelLabel = newValue}
   }
   /// Returns true if `cmnCancelLabel` has been explicitly set.
-  public var hasCmnCancelLabel: Bool {return self._cmnCancelLabel != nil}
+  public var hasCmnCancelLabel: Bool {return _storage._cmnCancelLabel != nil}
   /// Clears the value of `cmnCancelLabel`. Subsequent reads from it will return its default value.
-  public mutating func clearCmnCancelLabel() {self._cmnCancelLabel = nil}
+  public mutating func clearCmnCancelLabel() {_uniqueStorage()._cmnCancelLabel = nil}
 
   public var openViaOssTitle: String {
-    get {return _openViaOssTitle ?? "Unlocking the device"}
-    set {_openViaOssTitle = newValue}
+    get {return _storage._openViaOssTitle ?? "Unlocking in Progress"}
+    set {_uniqueStorage()._openViaOssTitle = newValue}
   }
   /// Returns true if `openViaOssTitle` has been explicitly set.
-  public var hasOpenViaOssTitle: Bool {return self._openViaOssTitle != nil}
+  public var hasOpenViaOssTitle: Bool {return _storage._openViaOssTitle != nil}
   /// Clears the value of `openViaOssTitle`. Subsequent reads from it will return its default value.
-  public mutating func clearOpenViaOssTitle() {self._openViaOssTitle = nil}
+  public mutating func clearOpenViaOssTitle() {_uniqueStorage()._openViaOssTitle = nil}
 
   public var openViaOssWaitMessage: String {
-    get {return _openViaOssWaitMessage ?? "Please wait..."}
-    set {_openViaOssWaitMessage = newValue}
+    get {return _storage._openViaOssWaitMessage ?? "Establishing secure connection..."}
+    set {_uniqueStorage()._openViaOssWaitMessage = newValue}
   }
   /// Returns true if `openViaOssWaitMessage` has been explicitly set.
-  public var hasOpenViaOssWaitMessage: Bool {return self._openViaOssWaitMessage != nil}
+  public var hasOpenViaOssWaitMessage: Bool {return _storage._openViaOssWaitMessage != nil}
   /// Clears the value of `openViaOssWaitMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearOpenViaOssWaitMessage() {self._openViaOssWaitMessage = nil}
+  public mutating func clearOpenViaOssWaitMessage() {_uniqueStorage()._openViaOssWaitMessage = nil}
 
-  public var openViaOssSuccessfulMessage: String {
-    get {return _openViaOssSuccessfulMessage ?? "Successfully unlocked"}
-    set {_openViaOssSuccessfulMessage = newValue}
+  public var openViaOssAccessGrantedTitle: String {
+    get {return _storage._openViaOssAccessGrantedTitle ?? "Access Granted"}
+    set {_uniqueStorage()._openViaOssAccessGrantedTitle = newValue}
   }
-  /// Returns true if `openViaOssSuccessfulMessage` has been explicitly set.
-  public var hasOpenViaOssSuccessfulMessage: Bool {return self._openViaOssSuccessfulMessage != nil}
-  /// Clears the value of `openViaOssSuccessfulMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearOpenViaOssSuccessfulMessage() {self._openViaOssSuccessfulMessage = nil}
+  /// Returns true if `openViaOssAccessGrantedTitle` has been explicitly set.
+  public var hasOpenViaOssAccessGrantedTitle: Bool {return _storage._openViaOssAccessGrantedTitle != nil}
+  /// Clears the value of `openViaOssAccessGrantedTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssAccessGrantedTitle() {_uniqueStorage()._openViaOssAccessGrantedTitle = nil}
 
-  public var openViaOssUnsuccessfulMessage: String {
-    get {return _openViaOssUnsuccessfulMessage ?? "Unsuccessfully unlocked"}
-    set {_openViaOssUnsuccessfulMessage = newValue}
+  public var openViaOssAccessGrantedMessage: String {
+    get {return _storage._openViaOssAccessGrantedMessage ?? "Please proceed."}
+    set {_uniqueStorage()._openViaOssAccessGrantedMessage = newValue}
   }
-  /// Returns true if `openViaOssUnsuccessfulMessage` has been explicitly set.
-  public var hasOpenViaOssUnsuccessfulMessage: Bool {return self._openViaOssUnsuccessfulMessage != nil}
-  /// Clears the value of `openViaOssUnsuccessfulMessage`. Subsequent reads from it will return its default value.
-  public mutating func clearOpenViaOssUnsuccessfulMessage() {self._openViaOssUnsuccessfulMessage = nil}
+  /// Returns true if `openViaOssAccessGrantedMessage` has been explicitly set.
+  public var hasOpenViaOssAccessGrantedMessage: Bool {return _storage._openViaOssAccessGrantedMessage != nil}
+  /// Clears the value of `openViaOssAccessGrantedMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssAccessGrantedMessage() {_uniqueStorage()._openViaOssAccessGrantedMessage = nil}
+
+  public var openViaOssAccessDeniedTitle: String {
+    get {return _storage._openViaOssAccessDeniedTitle ?? "Access Denied"}
+    set {_uniqueStorage()._openViaOssAccessDeniedTitle = newValue}
+  }
+  /// Returns true if `openViaOssAccessDeniedTitle` has been explicitly set.
+  public var hasOpenViaOssAccessDeniedTitle: Bool {return _storage._openViaOssAccessDeniedTitle != nil}
+  /// Clears the value of `openViaOssAccessDeniedTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssAccessDeniedTitle() {_uniqueStorage()._openViaOssAccessDeniedTitle = nil}
+
+  public var openViaOssAccessDeniedMessage: String {
+    get {return _storage._openViaOssAccessDeniedMessage ?? "Credentials are invalid or outdated."}
+    set {_uniqueStorage()._openViaOssAccessDeniedMessage = newValue}
+  }
+  /// Returns true if `openViaOssAccessDeniedMessage` has been explicitly set.
+  public var hasOpenViaOssAccessDeniedMessage: Bool {return _storage._openViaOssAccessDeniedMessage != nil}
+  /// Clears the value of `openViaOssAccessDeniedMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssAccessDeniedMessage() {_uniqueStorage()._openViaOssAccessDeniedMessage = nil}
+
+  public var openViaOssAccessDeniedScheduleMismatchMessage: String {
+    get {return _storage._openViaOssAccessDeniedScheduleMismatchMessage ?? "Credentials are not valid at this time and/or day of the week."}
+    set {_uniqueStorage()._openViaOssAccessDeniedScheduleMismatchMessage = newValue}
+  }
+  /// Returns true if `openViaOssAccessDeniedScheduleMismatchMessage` has been explicitly set.
+  public var hasOpenViaOssAccessDeniedScheduleMismatchMessage: Bool {return _storage._openViaOssAccessDeniedScheduleMismatchMessage != nil}
+  /// Clears the value of `openViaOssAccessDeniedScheduleMismatchMessage`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssAccessDeniedScheduleMismatchMessage() {_uniqueStorage()._openViaOssAccessDeniedScheduleMismatchMessage = nil}
+
+  public var openViaOssErrorTitle: String {
+    get {return _storage._openViaOssErrorTitle ?? "Error"}
+    set {_uniqueStorage()._openViaOssErrorTitle = newValue}
+  }
+  /// Returns true if `openViaOssErrorTitle` has been explicitly set.
+  public var hasOpenViaOssErrorTitle: Bool {return _storage._openViaOssErrorTitle != nil}
+  /// Clears the value of `openViaOssErrorTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearOpenViaOssErrorTitle() {_uniqueStorage()._openViaOssErrorTitle = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
-  fileprivate var _nfcWaitMessage: String? = nil
-  fileprivate var _nfcOssSuccessReadConfigurationMessage: String? = nil
-  fileprivate var _nfcOssSuccessUpdateConfigurationMessage: String? = nil
-  fileprivate var _nfcOssSuccessClearEventsMessage: String? = nil
-  fileprivate var _nfcOssSuccessIsProvisionedMessage: String? = nil
-  fileprivate var _nfcOssSuccessProvisionMessage: String? = nil
-  fileprivate var _nfcOssSuccessUnprovisionMessage: String? = nil
-  fileprivate var _nfcOssSuccessFormatMessage: String? = nil
-  fileprivate var _cmnCancelLabel: String? = nil
-  fileprivate var _openViaOssTitle: String? = nil
-  fileprivate var _openViaOssWaitMessage: String? = nil
-  fileprivate var _openViaOssSuccessfulMessage: String? = nil
-  fileprivate var _openViaOssUnsuccessfulMessage: String? = nil
+  fileprivate var _storage = _StorageClass.defaultInstance
 }
 
 public struct BlueDeviceDetailsBluetooth {
@@ -765,115 +798,218 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     6: .same(proto: "nfcOssSuccessProvisionMessage"),
     7: .same(proto: "nfcOssSuccessUnprovisionMessage"),
     8: .same(proto: "nfcOssSuccessFormatMessage"),
-    9: .same(proto: "cmnCancelLabel"),
-    10: .same(proto: "openViaOssTitle"),
-    11: .same(proto: "openViaOssWaitMessage"),
-    12: .same(proto: "openViaOssSuccessfulMessage"),
-    13: .same(proto: "openViaOssUnsuccessfulMessage"),
+    9: .same(proto: "nfcInitializingWritingProcess"),
+    10: .same(proto: "cmnCancelLabel"),
+    11: .same(proto: "openViaOssTitle"),
+    12: .same(proto: "openViaOssWaitMessage"),
+    13: .same(proto: "openViaOssAccessGrantedTitle"),
+    14: .same(proto: "openViaOssAccessGrantedMessage"),
+    15: .same(proto: "openViaOssAccessDeniedTitle"),
+    16: .same(proto: "openViaOssAccessDeniedMessage"),
+    17: .same(proto: "openViaOssAccessDeniedScheduleMismatchMessage"),
+    18: .same(proto: "openViaOssErrorTitle"),
   ]
 
+  fileprivate class _StorageClass {
+    var _nfcWaitMessage: String? = nil
+    var _nfcOssSuccessReadConfigurationMessage: String? = nil
+    var _nfcOssSuccessUpdateConfigurationMessage: String? = nil
+    var _nfcOssSuccessClearEventsMessage: String? = nil
+    var _nfcOssSuccessIsProvisionedMessage: String? = nil
+    var _nfcOssSuccessProvisionMessage: String? = nil
+    var _nfcOssSuccessUnprovisionMessage: String? = nil
+    var _nfcOssSuccessFormatMessage: String? = nil
+    var _nfcInitializingWritingProcess: String? = nil
+    var _cmnCancelLabel: String? = nil
+    var _openViaOssTitle: String? = nil
+    var _openViaOssWaitMessage: String? = nil
+    var _openViaOssAccessGrantedTitle: String? = nil
+    var _openViaOssAccessGrantedMessage: String? = nil
+    var _openViaOssAccessDeniedTitle: String? = nil
+    var _openViaOssAccessDeniedMessage: String? = nil
+    var _openViaOssAccessDeniedScheduleMismatchMessage: String? = nil
+    var _openViaOssErrorTitle: String? = nil
+
+    static let defaultInstance = _StorageClass()
+
+    private init() {}
+
+    init(copying source: _StorageClass) {
+      _nfcWaitMessage = source._nfcWaitMessage
+      _nfcOssSuccessReadConfigurationMessage = source._nfcOssSuccessReadConfigurationMessage
+      _nfcOssSuccessUpdateConfigurationMessage = source._nfcOssSuccessUpdateConfigurationMessage
+      _nfcOssSuccessClearEventsMessage = source._nfcOssSuccessClearEventsMessage
+      _nfcOssSuccessIsProvisionedMessage = source._nfcOssSuccessIsProvisionedMessage
+      _nfcOssSuccessProvisionMessage = source._nfcOssSuccessProvisionMessage
+      _nfcOssSuccessUnprovisionMessage = source._nfcOssSuccessUnprovisionMessage
+      _nfcOssSuccessFormatMessage = source._nfcOssSuccessFormatMessage
+      _nfcInitializingWritingProcess = source._nfcInitializingWritingProcess
+      _cmnCancelLabel = source._cmnCancelLabel
+      _openViaOssTitle = source._openViaOssTitle
+      _openViaOssWaitMessage = source._openViaOssWaitMessage
+      _openViaOssAccessGrantedTitle = source._openViaOssAccessGrantedTitle
+      _openViaOssAccessGrantedMessage = source._openViaOssAccessGrantedMessage
+      _openViaOssAccessDeniedTitle = source._openViaOssAccessDeniedTitle
+      _openViaOssAccessDeniedMessage = source._openViaOssAccessDeniedMessage
+      _openViaOssAccessDeniedScheduleMismatchMessage = source._openViaOssAccessDeniedScheduleMismatchMessage
+      _openViaOssErrorTitle = source._openViaOssErrorTitle
+    }
+  }
+
+  fileprivate mutating func _uniqueStorage() -> _StorageClass {
+    if !isKnownUniquelyReferenced(&_storage) {
+      _storage = _StorageClass(copying: _storage)
+    }
+    return _storage
+  }
+
   public var isInitialized: Bool {
-    if self._nfcWaitMessage == nil {return false}
-    if self._nfcOssSuccessReadConfigurationMessage == nil {return false}
-    if self._nfcOssSuccessUpdateConfigurationMessage == nil {return false}
-    if self._nfcOssSuccessClearEventsMessage == nil {return false}
-    if self._nfcOssSuccessIsProvisionedMessage == nil {return false}
-    if self._nfcOssSuccessProvisionMessage == nil {return false}
-    if self._nfcOssSuccessUnprovisionMessage == nil {return false}
-    if self._nfcOssSuccessFormatMessage == nil {return false}
-    if self._cmnCancelLabel == nil {return false}
-    if self._openViaOssTitle == nil {return false}
-    if self._openViaOssWaitMessage == nil {return false}
-    if self._openViaOssSuccessfulMessage == nil {return false}
-    if self._openViaOssUnsuccessfulMessage == nil {return false}
-    return true
+    return withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      if _storage._nfcWaitMessage == nil {return false}
+      if _storage._nfcOssSuccessReadConfigurationMessage == nil {return false}
+      if _storage._nfcOssSuccessUpdateConfigurationMessage == nil {return false}
+      if _storage._nfcOssSuccessClearEventsMessage == nil {return false}
+      if _storage._nfcOssSuccessIsProvisionedMessage == nil {return false}
+      if _storage._nfcOssSuccessProvisionMessage == nil {return false}
+      if _storage._nfcOssSuccessUnprovisionMessage == nil {return false}
+      if _storage._nfcOssSuccessFormatMessage == nil {return false}
+      if _storage._nfcInitializingWritingProcess == nil {return false}
+      if _storage._cmnCancelLabel == nil {return false}
+      if _storage._openViaOssTitle == nil {return false}
+      if _storage._openViaOssWaitMessage == nil {return false}
+      if _storage._openViaOssAccessGrantedTitle == nil {return false}
+      if _storage._openViaOssAccessGrantedMessage == nil {return false}
+      if _storage._openViaOssAccessDeniedTitle == nil {return false}
+      if _storage._openViaOssAccessDeniedMessage == nil {return false}
+      if _storage._openViaOssAccessDeniedScheduleMismatchMessage == nil {return false}
+      if _storage._openViaOssErrorTitle == nil {return false}
+      return true
+    }
   }
 
   public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self._nfcWaitMessage) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessReadConfigurationMessage) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessUpdateConfigurationMessage) }()
-      case 4: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessClearEventsMessage) }()
-      case 5: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessIsProvisionedMessage) }()
-      case 6: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessProvisionMessage) }()
-      case 7: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessUnprovisionMessage) }()
-      case 8: try { try decoder.decodeSingularStringField(value: &self._nfcOssSuccessFormatMessage) }()
-      case 9: try { try decoder.decodeSingularStringField(value: &self._cmnCancelLabel) }()
-      case 10: try { try decoder.decodeSingularStringField(value: &self._openViaOssTitle) }()
-      case 11: try { try decoder.decodeSingularStringField(value: &self._openViaOssWaitMessage) }()
-      case 12: try { try decoder.decodeSingularStringField(value: &self._openViaOssSuccessfulMessage) }()
-      case 13: try { try decoder.decodeSingularStringField(value: &self._openViaOssUnsuccessfulMessage) }()
-      default: break
+    _ = _uniqueStorage()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      while let fieldNumber = try decoder.nextFieldNumber() {
+        // The use of inline closures is to circumvent an issue where the compiler
+        // allocates stack space for every case branch when no optimizations are
+        // enabled. https://github.com/apple/swift-protobuf/issues/1034
+        switch fieldNumber {
+        case 1: try { try decoder.decodeSingularStringField(value: &_storage._nfcWaitMessage) }()
+        case 2: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessReadConfigurationMessage) }()
+        case 3: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessUpdateConfigurationMessage) }()
+        case 4: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessClearEventsMessage) }()
+        case 5: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessIsProvisionedMessage) }()
+        case 6: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessProvisionMessage) }()
+        case 7: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessUnprovisionMessage) }()
+        case 8: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessFormatMessage) }()
+        case 9: try { try decoder.decodeSingularStringField(value: &_storage._nfcInitializingWritingProcess) }()
+        case 10: try { try decoder.decodeSingularStringField(value: &_storage._cmnCancelLabel) }()
+        case 11: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssTitle) }()
+        case 12: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssWaitMessage) }()
+        case 13: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessGrantedTitle) }()
+        case 14: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessGrantedMessage) }()
+        case 15: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedTitle) }()
+        case 16: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedMessage) }()
+        case 17: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedScheduleMismatchMessage) }()
+        case 18: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssErrorTitle) }()
+        default: break
+        }
       }
     }
   }
 
   public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    // The use of inline closures is to circumvent an issue where the compiler
-    // allocates stack space for every if/case branch local when no optimizations
-    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-    // https://github.com/apple/swift-protobuf/issues/1182
-    try { if let v = self._nfcWaitMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 1)
-    } }()
-    try { if let v = self._nfcOssSuccessReadConfigurationMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 2)
-    } }()
-    try { if let v = self._nfcOssSuccessUpdateConfigurationMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 3)
-    } }()
-    try { if let v = self._nfcOssSuccessClearEventsMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 4)
-    } }()
-    try { if let v = self._nfcOssSuccessIsProvisionedMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 5)
-    } }()
-    try { if let v = self._nfcOssSuccessProvisionMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 6)
-    } }()
-    try { if let v = self._nfcOssSuccessUnprovisionMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 7)
-    } }()
-    try { if let v = self._nfcOssSuccessFormatMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 8)
-    } }()
-    try { if let v = self._cmnCancelLabel {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 9)
-    } }()
-    try { if let v = self._openViaOssTitle {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 10)
-    } }()
-    try { if let v = self._openViaOssWaitMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 11)
-    } }()
-    try { if let v = self._openViaOssSuccessfulMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 12)
-    } }()
-    try { if let v = self._openViaOssUnsuccessfulMessage {
-      try visitor.visitSingularStringField(value: v, fieldNumber: 13)
-    } }()
+    try withExtendedLifetime(_storage) { (_storage: _StorageClass) in
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every if/case branch local when no optimizations
+      // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+      // https://github.com/apple/swift-protobuf/issues/1182
+      try { if let v = _storage._nfcWaitMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 1)
+      } }()
+      try { if let v = _storage._nfcOssSuccessReadConfigurationMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 2)
+      } }()
+      try { if let v = _storage._nfcOssSuccessUpdateConfigurationMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 3)
+      } }()
+      try { if let v = _storage._nfcOssSuccessClearEventsMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 4)
+      } }()
+      try { if let v = _storage._nfcOssSuccessIsProvisionedMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 5)
+      } }()
+      try { if let v = _storage._nfcOssSuccessProvisionMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 6)
+      } }()
+      try { if let v = _storage._nfcOssSuccessUnprovisionMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 7)
+      } }()
+      try { if let v = _storage._nfcOssSuccessFormatMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 8)
+      } }()
+      try { if let v = _storage._nfcInitializingWritingProcess {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 9)
+      } }()
+      try { if let v = _storage._cmnCancelLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._openViaOssTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._openViaOssWaitMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 12)
+      } }()
+      try { if let v = _storage._openViaOssAccessGrantedTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 13)
+      } }()
+      try { if let v = _storage._openViaOssAccessGrantedMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 14)
+      } }()
+      try { if let v = _storage._openViaOssAccessDeniedTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 15)
+      } }()
+      try { if let v = _storage._openViaOssAccessDeniedMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 16)
+      } }()
+      try { if let v = _storage._openViaOssAccessDeniedScheduleMismatchMessage {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 17)
+      } }()
+      try { if let v = _storage._openViaOssErrorTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 18)
+      } }()
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BlueI18n, rhs: BlueI18n) -> Bool {
-    if lhs._nfcWaitMessage != rhs._nfcWaitMessage {return false}
-    if lhs._nfcOssSuccessReadConfigurationMessage != rhs._nfcOssSuccessReadConfigurationMessage {return false}
-    if lhs._nfcOssSuccessUpdateConfigurationMessage != rhs._nfcOssSuccessUpdateConfigurationMessage {return false}
-    if lhs._nfcOssSuccessClearEventsMessage != rhs._nfcOssSuccessClearEventsMessage {return false}
-    if lhs._nfcOssSuccessIsProvisionedMessage != rhs._nfcOssSuccessIsProvisionedMessage {return false}
-    if lhs._nfcOssSuccessProvisionMessage != rhs._nfcOssSuccessProvisionMessage {return false}
-    if lhs._nfcOssSuccessUnprovisionMessage != rhs._nfcOssSuccessUnprovisionMessage {return false}
-    if lhs._nfcOssSuccessFormatMessage != rhs._nfcOssSuccessFormatMessage {return false}
-    if lhs._cmnCancelLabel != rhs._cmnCancelLabel {return false}
-    if lhs._openViaOssTitle != rhs._openViaOssTitle {return false}
-    if lhs._openViaOssWaitMessage != rhs._openViaOssWaitMessage {return false}
-    if lhs._openViaOssSuccessfulMessage != rhs._openViaOssSuccessfulMessage {return false}
-    if lhs._openViaOssUnsuccessfulMessage != rhs._openViaOssUnsuccessfulMessage {return false}
+    if lhs._storage !== rhs._storage {
+      let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
+        let _storage = _args.0
+        let rhs_storage = _args.1
+        if _storage._nfcWaitMessage != rhs_storage._nfcWaitMessage {return false}
+        if _storage._nfcOssSuccessReadConfigurationMessage != rhs_storage._nfcOssSuccessReadConfigurationMessage {return false}
+        if _storage._nfcOssSuccessUpdateConfigurationMessage != rhs_storage._nfcOssSuccessUpdateConfigurationMessage {return false}
+        if _storage._nfcOssSuccessClearEventsMessage != rhs_storage._nfcOssSuccessClearEventsMessage {return false}
+        if _storage._nfcOssSuccessIsProvisionedMessage != rhs_storage._nfcOssSuccessIsProvisionedMessage {return false}
+        if _storage._nfcOssSuccessProvisionMessage != rhs_storage._nfcOssSuccessProvisionMessage {return false}
+        if _storage._nfcOssSuccessUnprovisionMessage != rhs_storage._nfcOssSuccessUnprovisionMessage {return false}
+        if _storage._nfcOssSuccessFormatMessage != rhs_storage._nfcOssSuccessFormatMessage {return false}
+        if _storage._nfcInitializingWritingProcess != rhs_storage._nfcInitializingWritingProcess {return false}
+        if _storage._cmnCancelLabel != rhs_storage._cmnCancelLabel {return false}
+        if _storage._openViaOssTitle != rhs_storage._openViaOssTitle {return false}
+        if _storage._openViaOssWaitMessage != rhs_storage._openViaOssWaitMessage {return false}
+        if _storage._openViaOssAccessGrantedTitle != rhs_storage._openViaOssAccessGrantedTitle {return false}
+        if _storage._openViaOssAccessGrantedMessage != rhs_storage._openViaOssAccessGrantedMessage {return false}
+        if _storage._openViaOssAccessDeniedTitle != rhs_storage._openViaOssAccessDeniedTitle {return false}
+        if _storage._openViaOssAccessDeniedMessage != rhs_storage._openViaOssAccessDeniedMessage {return false}
+        if _storage._openViaOssAccessDeniedScheduleMismatchMessage != rhs_storage._openViaOssAccessDeniedScheduleMismatchMessage {return false}
+        if _storage._openViaOssErrorTitle != rhs_storage._openViaOssErrorTitle {return false}
+        return true
+      }
+      if !storagesAreEqual {return false}
+    }
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

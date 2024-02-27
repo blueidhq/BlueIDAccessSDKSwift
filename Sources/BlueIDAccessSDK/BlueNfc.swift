@@ -46,7 +46,7 @@ private final class BlueNfcSessionListener: NSObject, NFCTagReaderSessionDelegat
     }
 }
 
-internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0, ignoreErrors: [BlueReturnCode]? = nil) throws {
+internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0, errorHandler: ((_: Error) -> String?)? = nil) throws {
     try blueExecuteWithTimeout({
         let isActive = blueNfcSession != nil
         
@@ -97,15 +97,17 @@ internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throw
         } catch let error {
             var errorMessage: String? = BlueError.unknownErrorMessage
             
-            if (error.localizedDescription != "") {
+            if let blueError = error as? BlueError {
+                errorMessage = "Error: \(String(describing: blueError.returnCode)). Code: \(blueError.returnCode.rawValue)"
+            }
+            else if (error.localizedDescription != "") {
                 errorMessage = error.localizedDescription
             }
             
-            if let ignoreErrors = ignoreErrors {
-                if let blueError = error as? BlueError {
-                    if (ignoreErrors.contains(blueError.returnCode)) {
-                        errorMessage = nil
-                    }
+            if let errorHandler = errorHandler {
+                if let message = errorHandler(error) {
+                    errorMessage = nil
+                    blueNfcSession?.alertMessage = message
                 }
             }
             
@@ -184,7 +186,7 @@ internal func blueNfc_Transceive(_ pCommandApdu: UnsafePointer<UInt8>, _ command
 
 #else
 
-internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0, ignoreErrors: [BlueReturnCode]? = nil) throws {
+internal func blueNfcExecute(_ handler: @escaping (_: BlueTransponderType) throws -> String, timeoutSeconds: Double = 0, errorHandler: ((_: Error) -> String?)? = nil) throws {
     throw BlueError(.notSupported)
 }
 

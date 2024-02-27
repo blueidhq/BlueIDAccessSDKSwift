@@ -119,6 +119,7 @@ internal struct BlueModalView: View {
                                 }
                                 
                                 Text(vm.message)
+                                    .multilineTextAlignment(.center)
                                     .font(.system(size: 12))
                                     .padding(.top, 20)
                                     .hidden(vm.message.isEmpty)
@@ -167,21 +168,23 @@ struct ContentView_Preview: PreviewProvider {
     static var previews: some View {
         BlueModalView(
             BlueModalViewModel(
-                title: "Unlocking the device...",
-                message: "Please wait..."
+                title: "Unlocking in Progress",
+                message: "Establishing secure connection..."
             )
         ) {}
         
         BlueModalView(
             BlueModalViewModel(
-                message: "Success",
+                title: "Access Granted",
+                message: "Please proceed.",
                 status: .Success
             )
         ) {}
         
         BlueModalView(
             BlueModalViewModel(
-                message: "Failed",
+                title: "Access Denied",
+                message: "Credentials are not valid at this time and/or day of the week.",
                 status: .Failed
             )
         ) {}
