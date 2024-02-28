@@ -56,9 +56,7 @@ internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand wher
             return
         }
         
-        guard let synchronizationResult = response.data else {
-            return
-        }
+        let synchronizationResult = try response.getData()
         
         if synchronizationResult.noRefresh == true {
             return
@@ -186,5 +184,70 @@ internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccess
     
     private func purgeDevicesStorage(_ credential: BlueAccessCredential) {
         blueAccessDevicesStorage.deleteEntry(id: credential.credentialID.id)
+    }
+}
+
+/**
+ * @class BlueSynchronizeAccessCredentialsCommand
+ * A command to synchronize all stored credentials.
+ */
+public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
+    internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+        return try await runAsync()
+    }
+    
+    /// Synchronizes all stored credentials.
+    /// Note: Master credentials are not synced in case of any, as they can only be synced once during the claiming process.
+    ///
+    /// - throws: Throws an error of type `BlueError(.sdkUnsupportedPlatform)` If the macOS version is earlier than 10.15.
+    /// - returns: The exit status (BlueReturnCode) of each credential, and its error description, if any.
+    public func runAsync() async throws -> BlueSynchronizeAccessCredentials {
+        guard #available(macOS 10.15, *) else {
+            throw BlueError(.sdkUnsupportedPlatform)
+        }
+        
+        let credentials = try await BlueGetAccessCredentialsCommand().runAsync().credentials
+            .filter { $0.credentialType != .master }
+        
+        if (credentials.isEmpty) {
+            return BlueSynchronizeAccessCredentials()
+        }
+        
+        return await withTaskGroup(of: BlueSynchronizeAccessCredential.self, returning: BlueSynchronizeAccessCredentials.self) { group in
+            
+            for credential in credentials {
+                group.addTask { await self.handleCredential(credential) }
+            }
+            
+            var credentials: [BlueSynchronizeAccessCredential] = []
+            
+            for await resultItem in group {
+                credentials.append(resultItem)
+            }
+            
+            return BlueSynchronizeAccessCredentials(credentials: credentials)
+        }
+    }
+    
+    private func handleCredential(_ credential: BlueAccessCredential) async -> BlueSynchronizeAccessCredential {
+        var resultItem = BlueSynchronizeAccessCredential()
+        resultItem.credentialID.id = credential.credentialID.id
+        
+        do {
+            try await BlueSynchronizeAccessCredentialCommand(self.blueAPI)
+                .runAsync(credentialID: credential.credentialID.id, forceRefresh: true)
+            
+            resultItem.returnCode = .ok
+        }
+        catch let error as BlueError {
+            resultItem.returnCode = error.returnCode
+            resultItem.errorDescription = error.localizedDescription
+        }
+        catch {
+            resultItem.returnCode = .error
+            resultItem.errorDescription = error.localizedDescription
+        }
+        
+        return resultItem
     }
 }

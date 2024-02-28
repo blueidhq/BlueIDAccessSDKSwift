@@ -10,7 +10,8 @@ private class BlueAPIMock: DefaultBlueAPIMock {
         synchronizeNfcAccessWasCalled = true
         
         return BlueFetchResponse(
-            statusCode: 200
+            statusCode: 200,
+            data: BlueNfcAccessSynchronizationResult()
         )
     }
     
@@ -18,7 +19,13 @@ private class BlueAPIMock: DefaultBlueAPIMock {
         synchronizeMobileAccessWasCalled = true
         
         return BlueFetchResponse(
-            statusCode: 200
+            statusCode: 200,
+            data: BlueMobileAccessSynchronizationResult(
+                siteId: 1,
+                validity: 0,
+                tokens: [],
+                deviceTerminalPublicKeys: [:]
+            )
         )
     }
 }

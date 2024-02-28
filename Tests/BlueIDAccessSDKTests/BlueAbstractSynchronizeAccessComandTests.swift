@@ -94,17 +94,6 @@ final class BlueAbstractSynchronizeAccessCommandTests: BlueXCTestCase {
         XCTAssertFalse(command.updated, "update function should NOT have been called")
     }
     
-    func testRunAsyncWithNoResponseData() async throws {
-        let command = BlueAbstractSynchronizeAccessCommandMock(data: nil)
-        
-        let credential = blueCreateAccessCredentialDemo()
-        try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: try credential.jsonUTF8Data())
-        
-        await XCTAssertNotThrowsError(try await command.runAsync(credentialID: credential.credentialID.id))
-        XCTAssertFalse(command.purged, "purge function should NOT have been called")
-        XCTAssertFalse(command.updated, "update function should NOT have been called")
-    }
-    
     func testRunAsyncWithNoRefresh() async throws {
         let command = BlueAbstractSynchronizeAccessCommandMock(
             data: BlueSynchronizationResponseMock(noRefresh: true)

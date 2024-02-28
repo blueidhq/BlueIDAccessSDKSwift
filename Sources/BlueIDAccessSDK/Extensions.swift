@@ -198,6 +198,12 @@ extension BlueRefreshOssSoCredentials {
     }
 }
 
+extension BlueSynchronizeAccessCredentials {
+    public init(credentials: [BlueSynchronizeAccessCredential]) {
+        self.credentials = credentials
+    }
+}
+
 extension Array {
     
     /// Extension function for Arrays, allowing the splitting of the collection into subarrays of a specified size.

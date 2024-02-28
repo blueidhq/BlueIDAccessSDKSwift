@@ -150,7 +150,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         XCTAssertNotNil(try? blueTerminalRequestDataKeychain.getEntry(id: "device-2:PING"), "SP Token should have been stored in the KeyChain")
         XCTAssertNotNil(blueAccessDevicesStorage.getEntry(id: credential.credentialID.id), "Access device list should have been stored in the local storage")
         
-        try! await BlueSynchronizeMobileAccessCommand(BlueAPIBadRequestMock()).runAsync(credentialID: credential.credentialID.id)
+        try? await BlueSynchronizeMobileAccessCommand(BlueAPIBadRequestMock()).runAsync(credentialID: credential.credentialID.id)
         XCTAssertNotNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should NOT have been removed from the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should NOT have been removed from the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should NOT have been removed from the KeyChain")
