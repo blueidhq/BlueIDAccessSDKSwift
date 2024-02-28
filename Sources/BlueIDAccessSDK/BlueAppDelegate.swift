@@ -18,7 +18,7 @@ public final class BlueAppDelegate: NSObject {
         }
 #endif
         
-        BlueTokenSyncScheduler.shared.didFinishLaunching()
+        BlueAccessSyncScheduler.shared.didFinishLaunching()
     }
     
 #if os(iOS) || os(watchOS)
@@ -38,7 +38,7 @@ public final class BlueAppDelegate: NSObject {
 #endif
 
     @objc public static func willResignActive() {
-        BlueTokenSyncScheduler.shared.willResignActive()
+        BlueAccessSyncScheduler.shared.willResignActive()
     }
 
     @objc public static func didBecomeActive() {
@@ -46,7 +46,7 @@ public final class BlueAppDelegate: NSObject {
         blueNearbyAppBecameActive()
 #endif
         
-        BlueTokenSyncScheduler.shared.didBecomeActive()
+        BlueAccessSyncScheduler.shared.didBecomeActive()
     }
     
     @objc public static func didEnterBackground() {
@@ -62,6 +62,6 @@ public final class BlueAppDelegate: NSObject {
             fatalError(error.localizedDescription)
         }
         
-        BlueTokenSyncScheduler.shared.willTerminate()
+        BlueAccessSyncScheduler.shared.willTerminate()
     }
 }

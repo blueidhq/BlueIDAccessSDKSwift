@@ -30,17 +30,17 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         
         let viewMock = ViewMock()
         
-        let scheduler = BlueTokenSyncScheduler(
+        let scheduler = BlueAccessSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeAccessCredentialCommand(DefaultBlueAPIMock())
+            command: BlueSynchronizeAccessCredentialsCommand(DefaultBlueAPIMock())
         )
         
-        defer {
+        addTeardownBlock {
             scheduler.suspend()
         }
         
-        scheduler.setup()
+        scheduler.schedule()
         
         let expectation = XCTestExpectation()
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) { expectation.fulfill() }
@@ -53,13 +53,13 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
     func testAddAccessCredential() async throws {
         let viewMock = ViewMock()
         
-        let scheduler = BlueTokenSyncScheduler(
+        let scheduler = BlueAccessSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeAccessCredentialCommand(DefaultBlueAPIMock())
+            command: BlueSynchronizeAccessCredentialsCommand(DefaultBlueAPIMock())
         )
         
-        defer {
+        addTeardownBlock {
             scheduler.suspend()
         }
 

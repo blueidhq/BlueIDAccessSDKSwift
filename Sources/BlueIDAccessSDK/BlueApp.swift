@@ -40,18 +40,3 @@ public struct BlueOpenAppSettingsCommand: BlueAsyncCommand {
         completionHandler(false)
     }
 }
-
-internal func blueAppHasLaunchedBefore() -> Bool {
-    if let hasLaunchedBefore = hasLaunchedBefore {
-        return hasLaunchedBefore
-    }
-    
-    let result = blueAppStorage.getBool(id: "hasLaunchedBefore")
-    if (!result) {
-        blueAppStorage.storeBool(id: "hasLaunchedBefore", bool: true)
-    }
-    
-    hasLaunchedBefore = true
-    
-    return result
-}
