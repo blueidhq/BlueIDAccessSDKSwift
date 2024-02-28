@@ -66,10 +66,22 @@ internal func blueStoreSpToken(credential: BlueAccessCredential, deviceID: Strin
     )
 }
 
-internal func blueDeleteSpTokens(credential: BlueAccessCredential, deviceID: String) throws {
-    try blueGetSpTokenEntryIds(deviceID: deviceID).forEach{ entryID in
+/// Deletes all SP Tokens for a given credential.
+///
+/// - parameter credential: The credential.
+/// - throws: An error is thrown if any error occurs during the retrieval of the entry IDs from the KeyChain.
+internal func blueDeleteSpTokens(credential: BlueAccessCredential) throws {
+    try blueTerminalRequestDataKeychain.getEntryIds().forEach { entryID in
+
         if let storedEntry = try? blueGetSpTokenEntry(entryID) {
+            
             if var spTokenEntries = storedEntry as? [BlueSPTokenEntry] {
+                
+                let matchCredential = spTokenEntries.contains(where: { $0.credentialID == credential.credentialID.id })
+                guard matchCredential else {
+                    return
+                }
+                
                 spTokenEntries.removeAll( where: { $0.credentialID == credential.credentialID.id } )
                 
                 if (spTokenEntries.isEmpty) {
@@ -81,6 +93,7 @@ internal func blueDeleteSpTokens(credential: BlueAccessCredential, deviceID: Str
                     )
                 }
             }
+            
             else if var _ = storedEntry as? Data {
                 _ = try? blueTerminalRequestDataKeychain.deleteEntry(id: entryID)
             }

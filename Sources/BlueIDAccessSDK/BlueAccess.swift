@@ -500,9 +500,9 @@ public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
     /// A modal view (sheet) is shown in iOS to represent the progress of the command execution.
     ///
     /// - parameter deviceID: The Device ID.
-    /// - throws: Throws an error of type `BlueError(.invalidState)` if the device could not be found.
-    /// - throws: Throws an error of type `BlueError(.notFound)` if neither an OssSo nor an OssSid token is found.
-    /// - throws: Throws an error of type `BlueError(.notSuported)` If the macOS version is earlier than 10.15.
+    /// - throws: Throws an error of type `BlueError(.sdkDeviceNotFound)` if the device could not be found.
+    /// - throws: Throws an error of type `BlueError(.sdkSpTokenNotFound)` if neither an OssSo nor an OssSid token is found.
+    /// - throws: Throws an error of type `BlueError(.sdkUnsupportedPlatform)` If the macOS version is earlier than 10.15.
     public func runAsync(deviceID: String) async throws -> BlueOssAccessResult {
         guard let device = blueGetDevice(deviceID) else {
             throw BlueError(.sdkDeviceNotFound)

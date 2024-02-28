@@ -150,20 +150,14 @@ internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccess
     override func purge(_ credential: BlueAccessCredential) throws {
         _ = try? blueAccessCredentialsKeyChain.deleteEntry(id: credential.credentialID.id)
         _ = try? blueAccessAuthenticationTokensKeyChain.deleteEntry(id: credential.credentialID.id)
+        _ = try? blueDeleteSpTokens(credential: credential)
         
         guard let deviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id) else {
             return
         }
-        
-        purgeSpTokens(credential, deviceList.devices)
+
         purgeTerminalPublicKeys(deviceList.devices)
         purgeDevicesStorage(credential)
-    }
-    
-    private func purgeSpTokens(_ credential: BlueAccessCredential, _ devices: [BlueAccessDevice]) {
-        devices.forEach { device in
-            _ = try? blueDeleteSpTokens(credential: credential, deviceID: device.deviceID)
-        }
     }
     
     /// Deletes terminal public keys for a given device list.
@@ -197,7 +191,6 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
     }
     
     /// Synchronizes all stored credentials.
-    /// Note: Master credentials are not synced in case of any, as they can only be synced once during the claiming process.
     ///
     /// - throws: Throws an error of type `BlueError(.sdkUnsupportedPlatform)` If the macOS version is earlier than 10.15.
     /// - returns: The exit status (BlueReturnCode) of each credential, and its error description, if any.
@@ -206,8 +199,7 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
             throw BlueError(.sdkUnsupportedPlatform)
         }
         
-        let credentials = try await BlueGetAccessCredentialsCommand().runAsync().credentials
-            .filter { $0.credentialType != .master }
+        var credentials = try await BlueGetAccessCredentialsCommand().runAsync().credentials
         
         if (credentials.isEmpty) {
             return BlueSynchronizeAccessCredentials()

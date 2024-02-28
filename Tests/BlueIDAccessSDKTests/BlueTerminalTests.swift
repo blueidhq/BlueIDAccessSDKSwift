@@ -96,7 +96,7 @@ final class BlueTerminalTests: BlueXCTestCase {
         try blueStoreSpToken(credential: credentialA, deviceID: "test", token: mockToken.base64)
         try blueStoreSpToken(credential: credentialB, deviceID: "test", token: mockToken.base64)
         
-        try blueDeleteSpTokens(credential: credentialA, deviceID: "test")
+        try blueDeleteSpTokens(credential: credentialA)
         
         let entry = try blueGetSpTokenEntry("test:PING")
         XCTAssert(entry is [BlueSPTokenEntry], "Wrong type")
@@ -106,7 +106,7 @@ final class BlueTerminalTests: BlueXCTestCase {
         XCTAssertEqual(spTokenEntries[0].credentialID, "B")
         XCTAssertEqual(spTokenEntries[0].data, mockToken.data)
         
-        try blueDeleteSpTokens(credential: credentialB, deviceID: "test")
+        try blueDeleteSpTokens(credential: credentialB)
         XCTAssertNil(try blueGetSpTokenEntry("test:PING"))
     }
     
@@ -119,7 +119,7 @@ final class BlueTerminalTests: BlueXCTestCase {
         // In the previous version, the token is stored as raw Data.
         try blueTerminalRequestDataKeychain.storeEntry(id: "test:PING", data: mockToken.data)
         
-        try blueDeleteSpTokens(credential: credentialA, deviceID: "test")
+        try blueDeleteSpTokens(credential: credentialA)
         
         let entry = try blueGetSpTokenEntry("test:PING")
         XCTAssertNil(entry)
