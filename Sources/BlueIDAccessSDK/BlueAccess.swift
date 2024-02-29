@@ -120,7 +120,7 @@ public struct BlueGetAccessDevicesCommand: BlueCommand {
     }
 }
 
-public class BlueUpdateDeviceConfigurationCommand: BlueAPIAsyncCommand {
+public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
     internal override func runAsync(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) async throws -> Any? {
         if #available(macOS 10.15, *) {
             return try await runAsync(
@@ -429,7 +429,7 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
         
         try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id)
         
-        let status = try await BlueUpdateDeviceConfigurationCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID)
+        let status = try await BlueSynchronizeAccessDeviceCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID)
         
         blueFireListeners(fireEvent: .accessDeviceClaimed, data: nil)
         

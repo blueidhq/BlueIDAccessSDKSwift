@@ -77,7 +77,7 @@ public struct BlueCommands {
     public let synchronizeAccessCredentials = BlueSynchronizeAccessCredentialsCommand()
     public let getAccessDevices = BlueGetAccessDevicesCommand()
     public let listAccessDevices = BlueListAccessDevicesCommand()
-    public let updateDeviceConfiguration = BlueUpdateDeviceConfigurationCommand()
+    public let synchronizeAccessDevice = BlueSynchronizeAccessDeviceCommand()
     public let getAccessObjects = BlueGetAccessObjectsCommand()
     public let claimAccessDevice = BlueClaimAccessDeviceCommand()
     public let getWritableAccessCredentials = BlueGetWritableAccessCredentialsCommand()
