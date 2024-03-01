@@ -40,13 +40,13 @@ internal func blueCreateSignedCommandDemoToken(_ command: String) throws -> Blue
   return try blueCreateSignedDemoToken(token)
 }
 
-internal func blueCreateSignedOssSoDemoToken() throws -> BlueSPToken {
+internal func blueCreateSignedOssSoDemoToken(_ credentialID: String? = nil) throws -> BlueSPToken {
   var token = BlueSPToken()
   token.signature = Data()
 
   let demoConfiguration = blueCreateOssSoDemoConfiguration()
 
-  let provisioningData = try blueCommands.ossSoCreateStandardProvisioningData.run("SO12345678", 1)
+  let provisioningData = try blueCommands.ossSoCreateStandardProvisioningData.run(credentialID ?? "SO12345678", 1)
 
   token.ossSo = try blueCommands.ossSoCreateMobile.run(provisioningData, demoConfiguration)
 

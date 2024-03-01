@@ -199,16 +199,16 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
             throw BlueError(.sdkUnsupportedPlatform)
         }
         
-        var credentials = try await BlueGetAccessCredentialsCommand().runAsync().credentials
+        let credentials = try await BlueGetAccessCredentialsCommand().runAsync().credentials
         
         if (credentials.isEmpty) {
             return BlueSynchronizeAccessCredentials()
         }
         
-        return await withTaskGroup(of: BlueSynchronizeAccessCredential.self, returning: BlueSynchronizeAccessCredentials.self) { group in
+        let result = await withTaskGroup(of: BlueSynchronizeAccessCredential.self, returning: BlueSynchronizeAccessCredentials.self) { group in
             
             for credential in credentials {
-                group.addTask { await self.handleCredential(credential) }
+                group.addTask { await self.synchronizeCredential(credential) }
             }
             
             var credentials: [BlueSynchronizeAccessCredential] = []
@@ -219,9 +219,14 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
             
             return BlueSynchronizeAccessCredentials(credentials: credentials)
         }
+
+        await purgeTokens()
+        
+        return result
     }
     
-    private func handleCredential(_ credential: BlueAccessCredential) async -> BlueSynchronizeAccessCredential {
+    /// Synchronize a given credential.
+    private func synchronizeCredential(_ credential: BlueAccessCredential) async -> BlueSynchronizeAccessCredential {
         var resultItem = BlueSynchronizeAccessCredential()
         resultItem.credentialID.id = credential.credentialID.id
         
@@ -241,5 +246,41 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
         }
         
         return resultItem
+    }
+    
+    /// Purges orphaned tokens.
+    private func purgeTokens() async {
+        do {
+            let credentialIds = try await BlueGetAccessCredentialsCommand().runAsync().credentials.compactMap { $0.credentialID.id }
+            
+            try blueGetSpTokenEntryIds().forEach{ entryID in
+                do {
+                    let storedEntry = try blueGetSpTokenEntry(entryID)
+                    
+                    if var spTokenEntries = storedEntry as? [BlueSPTokenEntry] {
+                        
+                        let initialSize = spTokenEntries.count
+                        
+                        spTokenEntries.removeAll{ !credentialIds.contains($0.credentialID) }
+                        
+                        if (initialSize != spTokenEntries.count) {
+                            if (spTokenEntries.isEmpty) {
+                                _ = try blueTerminalRequestDataKeychain.deleteEntry(id: entryID)
+                            } else {
+                                try blueTerminalRequestDataKeychain.storeEntry(
+                                    id: entryID,
+                                    data: JSONEncoder().encode(spTokenEntries)
+                                )
+                            }
+                        }
+                    }
+                    
+                } catch {
+                    blueLogError(error.localizedDescription)
+                }
+            }
+        } catch {
+            blueLogError(error.localizedDescription)
+        }
     }
 }

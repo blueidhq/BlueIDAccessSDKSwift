@@ -101,16 +101,19 @@ internal func blueDeleteSpTokens(credential: BlueAccessCredential) throws {
     }
 }
 
-/// Returns all entry IDs for a given device.
+/// Returns all entry IDs for a given device, if any.
 ///
 /// - parameter deviceID: The Device ID.
 /// - throws: An error is thrown if any error occurs during the retrieval of the entry IDs from the KeyChain.
-internal func blueGetSpTokenEntryIds(deviceID: String) throws -> [String] {
+internal func blueGetSpTokenEntryIds(deviceID: String? = nil) throws -> [String] {
     return try blueTerminalRequestDataKeychain.getEntryIds().compactMap{ entryId in
-        if (entryId.hasPrefix(deviceID)) {
-            return entryId
+        if let deviceID = deviceID {
+            if !entryId.hasPrefix(deviceID) {
+                return nil
+            }
         }
-        return nil
+
+        return entryId
     }
 }
 
@@ -399,6 +402,8 @@ public func blueTerminalRun<HandlerResult>(
                 completion(.success(handlerResult))
             }
         } catch let error {
+            blueActiveDevice = nil
+            
             if !wasConnected && device.isConnected {
                 do {
                     try device.disconnect()
