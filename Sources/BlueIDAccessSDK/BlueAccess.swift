@@ -79,7 +79,8 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
         
         if let entries = try blueAccessCredentialsKeyChain.getAllEntries() {
             credentialList.credentials = try entries.compactMap { entry in
-                if var credential = try? BlueAccessCredential(jsonUTF8Data: entry) {
+                do {
+                    var credential = try BlueAccessCredential(jsonUTF8Data: entry)
                     
                     if includePrivateKey != true {
                         // Never expose it
@@ -87,9 +88,11 @@ public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
                     }
                     
                     return credential
+                    
+                } catch {
+                    throw BlueError(.sdkDecodeJsonFailed, cause: error, detail: String(data: entry, encoding: .utf8))
                 }
-                
-                return nil
+
             }.filter() { credential in
                 if (!filterByCredentialType(credential)) {
                     return false

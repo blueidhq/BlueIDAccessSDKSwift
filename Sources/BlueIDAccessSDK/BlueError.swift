@@ -8,6 +8,7 @@ public final class BlueError: Error, LocalizedError, Equatable {
     public let returnCode: BlueReturnCode
     
     private let cause: Error?
+    private let detail: String?
     
     public var errorDescription: String? {
         if (returnCode == .timeout) {
@@ -16,6 +17,9 @@ public final class BlueError: Error, LocalizedError, Equatable {
             var returnCodeStr = "\(returnCode.rawValue) (\(String(describing: returnCode)))"
             if let cause = cause {
                 returnCodeStr += "\nCause: \(cause.localizedDescription)"
+            }
+            if let detail = detail {
+                returnCodeStr += "\nDetail: \(detail)"
             }
             
             return BlueError.returnCodeMessage.replacingOccurrences(of: "%returnCode%", with: returnCodeStr)
@@ -37,11 +41,13 @@ public final class BlueError: Error, LocalizedError, Equatable {
     public init(_ returnCode: BlueReturnCode) {
         self.returnCode = returnCode
         self.cause = nil
+        self.detail = nil
     }
     
-    public init(_ returnCode: BlueReturnCode, cause: Error) {
+    public init(_ returnCode: BlueReturnCode, cause: Error, detail: String? = nil) {
         self.returnCode = returnCode
         self.cause = cause
+        self.detail = detail
     }
     
     static public func == (lhs: BlueError, rhs: BlueError) -> Bool {
