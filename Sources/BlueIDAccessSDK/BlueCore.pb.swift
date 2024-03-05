@@ -123,6 +123,7 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
   case sdkDecodeBase64Failed // = -413
   case sdkDecodeJsonFailed // = -414
   case sdkFetchDataFailed // = -415
+  case sdkTimeout // = -416
   case ossMareturnCodeStart // = -1000
   case ossMareturnCodeEnd // = -1100
 
@@ -134,6 +135,7 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch rawValue {
     case -1100: self = .ossMareturnCodeEnd
     case -1000: self = .ossMareturnCodeStart
+    case -416: self = .sdkTimeout
     case -415: self = .sdkFetchDataFailed
     case -414: self = .sdkDecodeJsonFailed
     case -413: self = .sdkDecodeBase64Failed
@@ -231,6 +233,7 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch self {
     case .ossMareturnCodeEnd: return -1100
     case .ossMareturnCodeStart: return -1000
+    case .sdkTimeout: return -416
     case .sdkFetchDataFailed: return -415
     case .sdkDecodeJsonFailed: return -414
     case .sdkDecodeBase64Failed: return -413
@@ -3536,6 +3539,7 @@ extension BlueReturnCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     -1100: .same(proto: "OssMAReturnCodeEnd"),
     -1000: .same(proto: "OssMAReturnCodeStart"),
+    -416: .same(proto: "SdkTimeout"),
     -415: .same(proto: "SdkFetchDataFailed"),
     -414: .same(proto: "SdkDecodeJsonFailed"),
     -413: .same(proto: "SdkDecodeBase64Failed"),

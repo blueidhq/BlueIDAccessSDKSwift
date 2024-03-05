@@ -36,7 +36,7 @@ internal func blueExecuteWithTimeout(_ handler: @escaping () throws -> Void, tim
         workItem.wait()
     } else {
         if workItem.wait(timeout: DispatchTime.now() + timeoutSeconds) == .timedOut {
-            throw BlueError(.timeout)
+            throw BlueError(.sdkTimeout)
         }
     }
     

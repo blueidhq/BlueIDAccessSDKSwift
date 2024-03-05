@@ -170,7 +170,7 @@ internal func blueNfc_Transceive(_ pCommandApdu: UnsafePointer<UInt8>, _ command
     let waitResponse = waitSemaphore.wait(timeout: DispatchTime.now() + 13.0)
     
     if waitResponse != .success {
-        return blueAsClibReturnCode(.timeout)
+        return blueAsClibReturnCode(.sdkTimeout)
     }
     
     do {

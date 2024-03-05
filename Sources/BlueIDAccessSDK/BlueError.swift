@@ -1,7 +1,7 @@
 import Foundation
 
 public final class BlueError: Error, LocalizedError, Equatable {
-    public static var timeoutMessage = "A timeout has occurred"
+    public static var timeoutMessage = "A timeout has occurred with return code %returnCode%"
     public static var returnCodeMessage = "Error with return code %returnCode%"
     public static var unknownErrorMessage = "Unknnown error has ocurred"
     
@@ -11,10 +11,11 @@ public final class BlueError: Error, LocalizedError, Equatable {
     private let detail: String?
     
     public var errorDescription: String? {
-        if (returnCode == .timeout) {
-            return BlueError.timeoutMessage
+        var returnCodeStr = "\(returnCode.rawValue) (\(String(describing: returnCode)))"
+        
+        if (returnCode == .timeout || returnCode == .sdkTimeout) {
+            return BlueError.timeoutMessage.replacingOccurrences(of: "%returnCode%", with: returnCodeStr)
         } else {
-            var returnCodeStr = "\(returnCode.rawValue) (\(String(describing: returnCode)))"
             if let cause = cause {
                 returnCodeStr += "\nCause: \(cause.localizedDescription)"
             }
