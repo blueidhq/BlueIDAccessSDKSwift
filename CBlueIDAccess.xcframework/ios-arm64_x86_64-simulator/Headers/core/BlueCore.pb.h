@@ -104,6 +104,7 @@ typedef enum BlueReturnCode {
     BlueReturnCode_SdkDecodeBase64Failed = -413,
     BlueReturnCode_SdkDecodeJsonFailed = -414,
     BlueReturnCode_SdkFetchDataFailed = -415,
+    BlueReturnCode_SdkTimeout = -416,
     BlueReturnCode_OssMAReturnCodeStart = -1000,
     BlueReturnCode_OssMAReturnCodeEnd = -1100
 } BlueReturnCode_t;
