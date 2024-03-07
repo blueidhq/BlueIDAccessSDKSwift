@@ -36,7 +36,7 @@ public struct BlueOssSidCreateMobileCommand: BlueCommand {
             
             ossSidMobileOutputSizeMutable.pointee = ossSidMobileOutputSize
             
-            _ = try blueClibErrorCheck(blueOssSid_GetStorage_Ext(BlueTransponderType_t(UInt32(BlueTransponderType.mobileTransponder.rawValue)), pStorage, nil, 0, ossSidMobileOutputPtr, ossSidMobileOutputSizeMutable))
+            _ = try blueClibErrorCheck(blueOssSid_GetStorage_Ext(BlueTransponderType_t(UInt8(BlueTransponderType.mobileTransponder.rawValue)), pStorage, nil, 0, ossSidMobileOutputPtr, ossSidMobileOutputSizeMutable))
             
             // Clear configuration as we always want to use the default one for mobile
             var usedProvisioningData = provisioningData
@@ -64,7 +64,7 @@ fileprivate func executeOssSidNfc<ResultType>(settings: BlueOssSidSettings?, suc
         }
         
         try blueClibFunctionIn(message: settingsInUse, { (dataPtr, dataSize) in
-            return blueOssSid_GetStorage_Ext(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
+            return blueOssSid_GetStorage_Ext(BlueTransponderType_t(UInt8(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
         })
         
         result = try handler(pStorage)
@@ -109,7 +109,7 @@ public struct BlueOssSidGetStorageProfileCommand: BlueCommand {
             pStorage.deallocate()
         }
         
-        _ = try blueClibErrorCheck(blueOssSid_GetStorage(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, nil, nil, nil))
+        _ = try blueClibErrorCheck(blueOssSid_GetStorage(BlueTransponderType_t(UInt8(transponderType.rawValue)), pStorage, nil, nil, nil))
         
         if let provisioningConfig = provisioningConfig {
             return try blueClibFunctionInOut(message: provisioningConfig, { (configDataPtr, configDataSize, dataPtr, dataSize) in

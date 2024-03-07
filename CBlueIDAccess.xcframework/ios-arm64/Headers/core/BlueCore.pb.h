@@ -116,7 +116,7 @@ typedef enum BlueTimeUnit {
     BlueTimeUnit_Days = 4,
     BlueTimeUnit_Months = 5,
     BlueTimeUnit_Years = 6
-} BlueTimeUnit_t;
+} pb_packed BlueTimeUnit_t;
 
 /* Those may never be changed */
 typedef enum BlueWeekday {
@@ -127,7 +127,7 @@ typedef enum BlueWeekday {
     BlueWeekday_Friday = 4,
     BlueWeekday_Saturday = 5,
     BlueWeekday_Sunday = 6
-} BlueWeekday_t;
+} pb_packed BlueWeekday_t;
 
 typedef enum BlueCredentialType {
     /* Regular credential can only open / enter */
@@ -138,7 +138,7 @@ typedef enum BlueCredentialType {
     BlueCredentialType_Master = 3,
     /* Nfc writer allows to write any credential within this site on cards & fobs */
     BlueCredentialType_NfcWriter = 4
-} BlueCredentialType_t;
+} pb_packed BlueCredentialType_t;
 
 typedef enum BlueAccessType {
     /* Access with default unlock time */
@@ -157,13 +157,13 @@ typedef enum BlueAccessType {
     BlueAccessType_NoAccessValidity = 7,
     /* No access due blacklisted */
     BlueAccessType_NoAccessBlacklisted = 8
-} BlueAccessType_t;
+} pb_packed BlueAccessType_t;
 
 typedef enum BlueTransponderType {
     BlueTransponderType_UnknownTransponder = 0,
     BlueTransponderType_MobileTransponder = 1,
     BlueTransponderType_MifareDesfire = 2
-} BlueTransponderType_t;
+} pb_packed BlueTransponderType_t;
 
 typedef enum BlueHardwareType {
     BlueHardwareType_UnknownHardware = 0,
@@ -173,7 +173,7 @@ typedef enum BlueHardwareType {
     BlueHardwareType_DoorHandleLock = 4,
     BlueHardwareType_WallReader = 5,
     BlueHardwareType_Kiosk = 6
-} BlueHardwareType_t;
+} pb_packed BlueHardwareType_t;
 
 typedef enum BlueBatteryLevel {
     BlueBatteryLevel_UnknownBattery = 0,
@@ -185,9 +185,9 @@ typedef enum BlueBatteryLevel {
     /* 0% (100) - 100% (200) */
     BlueBatteryLevel_FullyDischarged = 100,
     BlueBatteryLevel_FullyCharged = 200
-} BlueBatteryLevel_t;
+} pb_packed BlueBatteryLevel_t;
 
-typedef enum BlueEventId { /* Oss So events -- */
+typedef enum BlueEventId {
     /* * eventInfo = 0 */
     BlueEventId_BatteryLow = 1,
     /* * eventInfo = 0 */
@@ -217,14 +217,14 @@ typedef enum BlueEventId { /* Oss So events -- */
     BlueEventId_TerminalCommand = 14,
     /* * eventInfo = BlueReturnCode */
     BlueEventId_TerminalOss = 15
-} BlueEventId_t;
+} pb_packed BlueEventId_t;
 
-typedef enum BlueEventInfoSystem { /* Oss So events -- */
+typedef enum BlueEventInfoSystem {
     BlueEventInfoSystem_SystemRestart = 1,
     BlueEventInfoSystem_SystemConfigured = 2
-} BlueEventInfoSystem_t;
+} pb_packed BlueEventInfoSystem_t;
 
-typedef enum BlueEventInfoAccess { /* Oss So events -- */
+typedef enum BlueEventInfoAccess {
     BlueEventInfoAccess_Granted = 1,
     BlueEventInfoAccess_GrantedDefaultTime = 2,
     BlueEventInfoAccess_GrantedExtendedTime = 3,
@@ -234,22 +234,22 @@ typedef enum BlueEventInfoAccess { /* Oss So events -- */
     BlueEventInfoAccess_DeniedBlacklisted = 130,
     BlueEventInfoAccess_DeniedValidity = 131,
     BlueEventInfoAccess_DeniedDTSchedule = 132
-} BlueEventInfoAccess_t;
+} pb_packed BlueEventInfoAccess_t;
 
 typedef enum BlueOssCredentialTypeSource {
     BlueOssCredentialTypeSource_Oss = 0,
     BlueOssCredentialTypeSource_Proprietary = 1
-} BlueOssCredentialTypeSource_t;
+} pb_packed BlueOssCredentialTypeSource_t;
 
 typedef enum BlueOssSoCredentialTypeOssCredential {
     BlueOssSoCredentialTypeOssCredential_Standard = 0,
     BlueOssSoCredentialTypeOssCredential_InterventionMedia = 1
-} BlueOssSoCredentialTypeOssCredential_t;
+} pb_packed BlueOssSoCredentialTypeOssCredential_t;
 
 typedef enum BlueOssSoDoorInfoAccessBy {
     BlueOssSoDoorInfoAccessBy_DoorGroupId = 0,
     BlueOssSoDoorInfoAccessBy_DoorId = 1
-} BlueOssSoDoorInfoAccessBy_t;
+} pb_packed BlueOssSoDoorInfoAccessBy_t;
 
 typedef enum BlueOssSoFileId {
     BlueOssSoFileId_Info = 0,
@@ -257,7 +257,7 @@ typedef enum BlueOssSoFileId {
     BlueOssSoFileId_Event = 2,
     BlueOssSoFileId_Blacklist = 3,
     BlueOssSoFileId_CustomerExtensions = 4
-} BlueOssSoFileId_t;
+} pb_packed BlueOssSoFileId_t;
 
 /* Struct definitions */
 typedef PB_BYTES_ARRAY_T(160) BlueSharedDemoData_terminalPrivateKey_t;
@@ -509,20 +509,20 @@ typedef struct BlueOssSoDTSchedule {
 } BlueOssSoDTSchedule_t;
 
 typedef struct BlueOssSoDoorInfo {
-    uint32_t id;
+    uint16_t id;
     BlueOssSoDoorInfoAccessBy_t accessBy;
-    uint32_t dtScheduleNumber;
+    uint8_t dtScheduleNumber;
     BlueAccessType_t accessType;
 } BlueOssSoDoorInfo_t;
 
 typedef struct BlueOssSoEvent {
     BlueLocalTimestamp_t eventTime;
-    uint32_t doorId;
+    uint16_t doorId;
     BlueEventId_t eventId;
     /* If eventId = AccessGranted or AccessDenied -> BlueEventInfoAccess
  If eventId = SystemEvent -> BlueEventInfoSystem
  Otherwise unused */
-    uint32_t eventInfo;
+    uint8_t eventInfo;
 } BlueOssSoEvent_t;
 
 typedef PB_BYTES_ARRAY_T(64) BlueOssSoExtFeature_value_t;
@@ -1714,20 +1714,20 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUEOSSSIDSETTINGS_SIZE                  62
 #define BLUEOSSSIDSTORAGEPROFILE_SIZE            24
 #define BLUEOSSSIDVERSION_SIZE                   12
-#define BLUEOSSSOCONFIGURATION_SIZE              28568
+#define BLUEOSSSOCONFIGURATION_SIZE              26018
 #define BLUEOSSSOCREDENTIALTYPEOSS_SIZE          2
 #define BLUEOSSSOCREDENTIALTYPEPROPRIETARY_SIZE  9
 #define BLUEOSSSOCREDENTIALTYPE_SIZE             17
-#define BLUEOSSSODOORINFO_SIZE                   16
+#define BLUEOSSSODOORINFO_SIZE                   11
 #define BLUEOSSSODTSCHEDULEDAY_SIZE              70
 #define BLUEOSSSODTSCHEDULE_SIZE                 288
-#define BLUEOSSSOEVENT_SIZE                      35
+#define BLUEOSSSOEVENT_SIZE                      30
 #define BLUEOSSSOEXTFEATURE_SIZE                 72
 #define BLUEOSSSOEXTFEATURE_VALIDITYSTART_SIZE   23
 #define BLUEOSSSOFILEBLACKLIST_SIZE              9435
 #define BLUEOSSSOFILECUSTOMEREXTENSIONS_SIZE     617
-#define BLUEOSSSOFILEDATA_SIZE                   8996
-#define BLUEOSSSOFILEEVENT_SIZE                  9449
+#define BLUEOSSSOFILEDATA_SIZE                   7721
+#define BLUEOSSSOFILEEVENT_SIZE                  8174
 #define BLUEOSSSOFILEINFO_SIZE                   57
 #define BLUEOSSSOMIFAREDESFIRECONFIGURATION_SIZE 60
 #define BLUEOSSSOMIFAREDESFIREPROVISIONINGCONFIGURATION_SIZE 56

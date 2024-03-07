@@ -61,7 +61,7 @@ public struct BlueOssSoCreateMobileCommand: BlueCommand {
             
             ossSoMobileOutputSizeMutable.pointee = ossSoMobileOutputSize
             
-            _ = try blueClibErrorCheck(blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt32(BlueTransponderType.mobileTransponder.rawValue)), pStorage, nil, 0, ossSoMobileOutputPtr, ossSoMobileOutputSizeMutable))
+            _ = try blueClibErrorCheck(blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt8(BlueTransponderType.mobileTransponder.rawValue)), pStorage, nil, 0, ossSoMobileOutputPtr, ossSoMobileOutputSizeMutable))
             
             // Clear configuration as we always want to use the default one for mobile
             var usedProvisioningData = provisioningData
@@ -100,7 +100,7 @@ fileprivate func executeOssSoNfc<ResultType>(
             }
             
             try blueClibFunctionIn(message: settingsInUse, { (dataPtr, dataSize) in
-                return blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
+                return blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt8(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
             })
             
             result = try handler(pStorage)
@@ -147,7 +147,7 @@ public struct BlueOssSoGetStorageProfileCommand: BlueCommand {
             pStorage.deallocate()
         }
         
-        _ = try blueClibErrorCheck(blueOssSo_GetStorage(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, nil, nil, nil))
+        _ = try blueClibErrorCheck(blueOssSo_GetStorage(BlueTransponderType_t(UInt8(transponderType.rawValue)), pStorage, nil, nil, nil))
         
         if let provisioningConfig = provisioningConfig {
             return try blueClibFunctionInOut(message: provisioningConfig, { (configDataPtr, configDataSize, dataPtr, dataSize) in
@@ -535,7 +535,7 @@ public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
                     let ossSoSettings = try blueGetOssSoSettings(credentialID: credential.credentialID.id)
                     
                     try blueClibFunctionIn(message: ossSoSettings, { (dataPtr, dataSize) in
-                        return blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt32(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
+                        return blueOssSo_GetStorage_Ext(BlueTransponderType_t(UInt8(transponderType.rawValue)), pStorage, dataPtr, dataSize, nil, nil)
                     })
                     
                     let isProvisioned = blueOssSo_IsProvisioned(pStorage) == BlueReturnCode_Ok

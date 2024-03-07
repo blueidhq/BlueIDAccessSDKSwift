@@ -40,16 +40,23 @@ internal struct BlueAccessAPIHelper {
             }
         }
         
+        // Before issuing a new token, we should always delete the current one.
+        // Whenever we issue a new token, the backend purges any other tokens.
+        // So, in case we are not able to store the token in the keychain, we won't end up having a nonexistent token for upcoming requests.
+        _ = try blueAccessAuthenticationTokensKeyChain.deleteEntry(id: credential.credentialID.id)
+        
         let accessToken: BlueAccessToken = try await self.blueAPI.getAccessToken(credentialId: credential.credentialID.id).getData()
         
-        self.storeAccessToken(credential: credential, accessToken: accessToken)
+        storeAccessToken(credential: credential, accessToken: accessToken)
         
         return accessToken
     }
     
     private func storeAccessToken(credential: BlueAccessCredential, accessToken: BlueAccessToken) {
         do {
-            try? blueAccessAuthenticationTokensKeyChain.storeCodableEntry(id: credential.credentialID.id, data: accessToken)
+            try blueAccessAuthenticationTokensKeyChain.storeCodableEntry(id: credential.credentialID.id, data: accessToken)
+        } catch {
+            blueLogError(error.localizedDescription)
         }
     }
 }

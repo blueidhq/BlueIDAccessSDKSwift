@@ -33,6 +33,22 @@ internal class BlueKeychain {
         return nil
     }
     
+    /// Updates an entry with the specified ID using the provided data without purging it beforehand.
+    /// If the entry does not exist, a new one is created.
+    ///
+    /// - parameter id: The ID of the entry to be updated.
+    /// - parameter data: The data to update the entry with.
+    /// - throws: Throws an error of type `BlueError(.invalidState)` in case the operation does not succeed.
+    func updateEntry(id: String, data: Data) throws {
+        return try BlueKeychain.storeEntry(attrService: attrService, attrAccessible: attrAccessible, id: id, data: data, purge: false)
+    }
+    
+    /// Stores an entry with the specified ID using the provided data.
+    /// If the entry already exists, it is first purged.
+    ///
+    /// - parameter id: The ID of the entry to be updated.
+    /// - parameter data: The data to update the entry with.
+    /// - throws: Throws an error of type `BlueError(.invalidState)` in case the operation does not succeed.
     func storeEntry(id: String, data: Data) throws {
         return try BlueKeychain.storeEntry(attrService: attrService, attrAccessible: attrAccessible, id: id, data: data)
     }
@@ -138,7 +154,7 @@ internal class BlueKeychain {
         return try entryIds.compactMap{ try getEntry(attrService: attrService, attrAccessible: attrAccessible, id: $0) }
     }
     
-    static func storeEntry(attrService: String, attrAccessible: String, id: String, data: Data) throws {
+    static func storeEntry(attrService: String, attrAccessible: String, id: String, data: Data, purge: Bool? = true) throws {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: attrService,
@@ -147,7 +163,9 @@ internal class BlueKeychain {
             kSecValueData as String: data,
         ]
         
-        SecItemDelete(query as CFDictionary)
+        if (purge != false) {
+            SecItemDelete(query as CFDictionary)
+        }
         
         let status = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
         

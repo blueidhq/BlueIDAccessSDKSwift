@@ -131,7 +131,7 @@ internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccess
             updatedCredential.validity = BlueLocalTimestamp(Date(timeIntervalSince1970: TimeInterval(validity/1000)))
         }
         
-        try blueAccessCredentialsKeyChain.storeEntry(id: updatedCredential.credentialID.id, data: updatedCredential.jsonUTF8Data())
+        try blueAccessCredentialsKeyChain.updateEntry(id: updatedCredential.credentialID.id, data: updatedCredential.jsonUTF8Data())
         
         let deviceList = synchronizationResult.getAccessDeviceList()
         try blueAccessDevicesStorage.storeEntry(id: credential.credentialID.id, data: deviceList.jsonUTF8Data())

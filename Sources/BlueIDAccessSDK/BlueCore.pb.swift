@@ -688,7 +688,6 @@ extension BlueBatteryLevel: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-/// Oss So events --
 public enum BlueEventId: SwiftProtobuf.Enum {
   public typealias RawValue = Int
 
@@ -790,7 +789,6 @@ extension BlueEventId: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-/// Oss So events --
 public enum BlueEventInfoSystem: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case systemRestart // = 1
@@ -825,7 +823,6 @@ extension BlueEventInfoSystem: CaseIterable {
 
 #endif  // swift(>=4.2)
 
-/// Oss So events --
 public enum BlueEventInfoAccess: SwiftProtobuf.Enum {
   public typealias RawValue = Int
   case granted // = 1
