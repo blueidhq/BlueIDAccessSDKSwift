@@ -381,6 +381,12 @@ typedef struct BlueOssAccessResult {
     bool scheduleMissmatch;
 } BlueOssAccessResult_t;
 
+typedef struct BlueOssAccessEventsResult {
+    BlueOssAccessResult_t accessResult;
+    pb_size_t events_count;
+    BlueEvent_t events[16];
+} BlueOssAccessEventsResult_t;
+
 typedef struct BlueOssSidVersion {
     bool has_versionMajor;
     uint32_t versionMajor;
@@ -635,6 +641,10 @@ typedef struct BlueOssSoMobile {
     BlueOssSoMobile_dataFile_t dataFile; /* 1 door */
     BlueOssSoMobile_blacklistFile_t blacklistFile; /* 16 items max */
     BlueOssSoMobile_customerExtensionsFile_t customerExtensionsFile;
+    bool has_requestedEventCount;
+    uint32_t requestedEventCount;
+    bool has_supportedEventIds;
+    pb_byte_t supportedEventIds[12];
 } BlueOssSoMobile_t;
 
 typedef PB_BYTES_ARRAY_T(74) BlueSPToken_signature_t;
@@ -789,6 +799,7 @@ extern "C" {
 
 
 
+
 #define BlueOssSidCredentialType_t_typeSource_ENUMTYPE BlueOssCredentialTypeSource_t
 
 
@@ -849,6 +860,7 @@ extern "C" {
 #define BLUESPTOKEN_INIT_DEFAULT                 {{0, {0}}, 0, {BLUESPTOKENCOMMAND_INIT_DEFAULT}}
 #define BLUESPRESULT_INIT_DEFAULT                {{0, {0}}}
 #define BLUEOSSACCESSRESULT_INIT_DEFAULT         {0, _BLUEACCESSTYPE_MIN, BLUELOCALTIMESTAMP_INIT_DEFAULT, 0}
+#define BLUEOSSACCESSEVENTSRESULT_INIT_DEFAULT   {BLUEOSSACCESSRESULT_INIT_DEFAULT, 0, {BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT}}
 #define BLUEOSSSIDVERSION_INIT_DEFAULT           {false, 1u, false, 0u}
 #define BLUEOSSSIDCREDENTIALTYPEOSS_INIT_DEFAULT {false, 0}
 #define BLUEOSSSIDCREDENTIALTYPEPROPRIETARY_INIT_DEFAULT {{0}}
@@ -882,7 +894,7 @@ extern "C" {
 #define BLUEOSSSOSTORAGEPROFILE_INIT_DEFAULT     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 #define BLUEOSSSOPROVISIONINGCONFIGURATION_INIT_DEFAULT {0, 0, 0, 0, 0, {0}, 0, 0}
 #define BLUEOSSSOPROVISIONINGDATA_INIT_DEFAULT   {false, BLUEOSSSOPROVISIONINGCONFIGURATION_INIT_DEFAULT, BLUEOSSSOCREDENTIALTYPE_INIT_DEFAULT, BLUECREDENTIALID_INIT_DEFAULT, 0}
-#define BLUEOSSSOMOBILE_INIT_DEFAULT             {{0, {0}}, {0, {0}}, {0, {0}}, {0, {0}}}
+#define BLUEOSSSOMOBILE_INIT_DEFAULT             {{0, {0}}, {0, {0}}, {0, {0}}, {0, {0}}, false, 0u, false, {0}}
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_INIT_DEFAULT {1u, 1u, 4u, 4u, 0u, {0}, 16u, 32u}
 #define BLUEOSSSOMIFAREDESFIREPROVISIONINGCONFIGURATION_INIT_DEFAULT {70u, 1u, 4u, 2u, 16u, {0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01,0x01}, 3u, 16u}
 #define BLUEOSSSOMIFAREDESFIRECONFIGURATION_INIT_DEFAULT {{16, {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0xaa}}, {16, {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f}}, {16, {0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1a,0x1b,0x1c,0x1d,0x1e,0x1f}}, 16076800u}
@@ -904,6 +916,7 @@ extern "C" {
 #define BLUESPTOKEN_INIT_ZERO                    {{0, {0}}, 0, {BLUESPTOKENCOMMAND_INIT_ZERO}}
 #define BLUESPRESULT_INIT_ZERO                   {{0, {0}}}
 #define BLUEOSSACCESSRESULT_INIT_ZERO            {0, _BLUEACCESSTYPE_MIN, BLUELOCALTIMESTAMP_INIT_ZERO, 0}
+#define BLUEOSSACCESSEVENTSRESULT_INIT_ZERO      {BLUEOSSACCESSRESULT_INIT_ZERO, 0, {BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO}}
 #define BLUEOSSSIDVERSION_INIT_ZERO              {false, 0, false, 0}
 #define BLUEOSSSIDCREDENTIALTYPEOSS_INIT_ZERO    {false, 0}
 #define BLUEOSSSIDCREDENTIALTYPEPROPRIETARY_INIT_ZERO {{0}}
@@ -937,7 +950,7 @@ extern "C" {
 #define BLUEOSSSOSTORAGEPROFILE_INIT_ZERO        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 #define BLUEOSSSOPROVISIONINGCONFIGURATION_INIT_ZERO {0, 0, 0, 0, 0, {0}, 0, 0}
 #define BLUEOSSSOPROVISIONINGDATA_INIT_ZERO      {false, BLUEOSSSOPROVISIONINGCONFIGURATION_INIT_ZERO, BLUEOSSSOCREDENTIALTYPE_INIT_ZERO, BLUECREDENTIALID_INIT_ZERO, 0}
-#define BLUEOSSSOMOBILE_INIT_ZERO                {{0, {0}}, {0, {0}}, {0, {0}}, {0, {0}}}
+#define BLUEOSSSOMOBILE_INIT_ZERO                {{0, {0}}, {0, {0}}, {0, {0}}, {0, {0}}, false, 0, false, {0}}
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_INIT_ZERO {0, 0, 0, 0, 0, {0}, 0, 0}
 #define BLUEOSSSOMIFAREDESFIREPROVISIONINGCONFIGURATION_INIT_ZERO {0, 0, 0, 0, 0, {0}, 0, 0}
 #define BLUEOSSSOMIFAREDESFIRECONFIGURATION_INIT_ZERO {{0, {0}}, {0, {0}}, {0, {0}}, 0}
@@ -997,6 +1010,8 @@ extern "C" {
 #define BLUEOSSACCESSRESULT_ACCESSTYPE_TAG       2
 #define BLUEOSSACCESSRESULT_SCHEDULEENDTIME_TAG  3
 #define BLUEOSSACCESSRESULT_SCHEDULEMISSMATCH_TAG 4
+#define BLUEOSSACCESSEVENTSRESULT_ACCESSRESULT_TAG 1
+#define BLUEOSSACCESSEVENTSRESULT_EVENTS_TAG     2
 #define BLUEOSSSIDVERSION_VERSIONMAJOR_TAG       1
 #define BLUEOSSSIDVERSION_VERSIONMINOR_TAG       2
 #define BLUEOSSSIDCREDENTIALTYPEOSS_NOTUSED_TAG  1
@@ -1098,6 +1113,8 @@ extern "C" {
 #define BLUEOSSSOMOBILE_DATAFILE_TAG             2
 #define BLUEOSSSOMOBILE_BLACKLISTFILE_TAG        3
 #define BLUEOSSSOMOBILE_CUSTOMEREXTENSIONSFILE_TAG 4
+#define BLUEOSSSOMOBILE_REQUESTEDEVENTCOUNT_TAG  5
+#define BLUEOSSSOMOBILE_SUPPORTEDEVENTIDS_TAG    6
 #define BLUESPTOKEN_SIGNATURE_TAG                1
 #define BLUESPTOKEN_COMMAND_TAG                  2
 #define BLUESPTOKEN_OSSSO_TAG                    3
@@ -1261,6 +1278,14 @@ X(a, STATIC,   REQUIRED, BOOL,     scheduleMissmatch,   4)
 #define BLUEOSSACCESSRESULT_CALLBACK NULL
 #define BLUEOSSACCESSRESULT_DEFAULT (const pb_byte_t*)"\x10\x01\x00"
 #define BlueOssAccessResult_t_scheduleEndTime_MSGTYPE BlueLocalTimestamp_t
+
+#define BLUEOSSACCESSEVENTSRESULT_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, MESSAGE,  accessResult,      1) \
+X(a, STATIC,   REPEATED, MESSAGE,  events,            2)
+#define BLUEOSSACCESSEVENTSRESULT_CALLBACK NULL
+#define BLUEOSSACCESSEVENTSRESULT_DEFAULT NULL
+#define BlueOssAccessEventsResult_t_accessResult_MSGTYPE BlueOssAccessResult_t
+#define BlueOssAccessEventsResult_t_events_MSGTYPE BlueEvent_t
 
 #define BLUEOSSSIDVERSION_FIELDLIST(X, a) \
 X(a, STATIC,   OPTIONAL, UINT32,   versionMajor,      1) \
@@ -1527,9 +1552,11 @@ X(a, STATIC,   REQUIRED, UINT32,   siteId,            4)
 X(a, STATIC,   REQUIRED, BYTES,    infoFile,          1) \
 X(a, STATIC,   REQUIRED, BYTES,    dataFile,          2) \
 X(a, STATIC,   REQUIRED, BYTES,    blacklistFile,     3) \
-X(a, STATIC,   REQUIRED, BYTES,    customerExtensionsFile,   4)
+X(a, STATIC,   REQUIRED, BYTES,    customerExtensionsFile,   4) \
+X(a, STATIC,   OPTIONAL, UINT32,   requestedEventCount,   5) \
+X(a, STATIC,   OPTIONAL, FIXED_LENGTH_BYTES, supportedEventIds,   6)
 #define BLUEOSSSOMOBILE_CALLBACK NULL
-#define BLUEOSSSOMOBILE_DEFAULT NULL
+#define BLUEOSSSOMOBILE_DEFAULT (const pb_byte_t*)"\x28\x00\x00"
 
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, UINT32,   numberOfDoors,     1) \
@@ -1593,6 +1620,7 @@ extern const pb_msgdesc_t BlueSPTokenCommand_t_msg;
 extern const pb_msgdesc_t BlueSPToken_t_msg;
 extern const pb_msgdesc_t BlueSPResult_t_msg;
 extern const pb_msgdesc_t BlueOssAccessResult_t_msg;
+extern const pb_msgdesc_t BlueOssAccessEventsResult_t_msg;
 extern const pb_msgdesc_t BlueOssSidVersion_t_msg;
 extern const pb_msgdesc_t BlueOssSidCredentialTypeOss_t_msg;
 extern const pb_msgdesc_t BlueOssSidCredentialTypeProprietary_t_msg;
@@ -1650,6 +1678,7 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUESPTOKEN_FIELDS &BlueSPToken_t_msg
 #define BLUESPRESULT_FIELDS &BlueSPResult_t_msg
 #define BLUEOSSACCESSRESULT_FIELDS &BlueOssAccessResult_t_msg
+#define BLUEOSSACCESSEVENTSRESULT_FIELDS &BlueOssAccessEventsResult_t_msg
 #define BLUEOSSSIDVERSION_FIELDS &BlueOssSidVersion_t_msg
 #define BLUEOSSSIDCREDENTIALTYPEOSS_FIELDS &BlueOssSidCredentialTypeOss_t_msg
 #define BLUEOSSSIDCREDENTIALTYPEPROPRIETARY_FIELDS &BlueOssSidCredentialTypeProprietary_t_msg
@@ -1699,6 +1728,7 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUELOCALTIMEPERIOD_SIZE                 12
 #define BLUELOCALTIMESCHEDULE_SIZE               36
 #define BLUELOCALTIMESTAMP_SIZE                  19
+#define BLUEOSSACCESSEVENTSRESULT_SIZE           1085
 #define BLUEOSSACCESSRESULT_SIZE                 27
 #define BLUEOSSSIDCONFIGURATION_SIZE             47
 #define BLUEOSSSIDCREDENTIALTYPEOSS_SIZE         2
@@ -1732,7 +1762,7 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUEOSSSOMIFAREDESFIRECONFIGURATION_SIZE 60
 #define BLUEOSSSOMIFAREDESFIREPROVISIONINGCONFIGURATION_SIZE 56
 #define BLUEOSSSOMOBILEPROVISIONINGCONFIGURATION_SIZE 56
-#define BLUEOSSSOMOBILE_SIZE                     622
+#define BLUEOSSSOMOBILE_SIZE                     642
 #define BLUEOSSSOPROVISIONINGCONFIGURATION_SIZE  56
 #define BLUEOSSSOPROVISIONINGDATA_SIZE           97
 #define BLUEOSSSOSETTINGS_SIZE                   62
