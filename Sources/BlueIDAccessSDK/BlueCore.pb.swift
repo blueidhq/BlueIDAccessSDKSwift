@@ -1812,6 +1812,29 @@ public struct BlueOssAccessResult {
   fileprivate var _scheduleMissmatch: Bool? = nil
 }
 
+public struct BlueOssAccessEventsResult {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  public var accessResult: BlueOssAccessResult {
+    get {return _accessResult ?? BlueOssAccessResult()}
+    set {_accessResult = newValue}
+  }
+  /// Returns true if `accessResult` has been explicitly set.
+  public var hasAccessResult: Bool {return self._accessResult != nil}
+  /// Clears the value of `accessResult`. Subsequent reads from it will return its default value.
+  public mutating func clearAccessResult() {self._accessResult = nil}
+
+  public var events: [BlueEvent] = []
+
+  public var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  public init() {}
+
+  fileprivate var _accessResult: BlueOssAccessResult? = nil
+}
+
 public struct BlueOssSidVersion {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -3133,6 +3156,24 @@ public struct BlueOssSoMobile {
   /// Clears the value of `customerExtensionsFile`. Subsequent reads from it will return its default value.
   public mutating func clearCustomerExtensionsFile() {self._customerExtensionsFile = nil}
 
+  public var requestedEventCount: UInt32 {
+    get {return _requestedEventCount ?? 0}
+    set {_requestedEventCount = newValue}
+  }
+  /// Returns true if `requestedEventCount` has been explicitly set.
+  public var hasRequestedEventCount: Bool {return self._requestedEventCount != nil}
+  /// Clears the value of `requestedEventCount`. Subsequent reads from it will return its default value.
+  public mutating func clearRequestedEventCount() {self._requestedEventCount = nil}
+
+  public var supportedEventIds: Data {
+    get {return _supportedEventIds ?? Data()}
+    set {_supportedEventIds = newValue}
+  }
+  /// Returns true if `supportedEventIds` has been explicitly set.
+  public var hasSupportedEventIds: Bool {return self._supportedEventIds != nil}
+  /// Clears the value of `supportedEventIds`. Subsequent reads from it will return its default value.
+  public mutating func clearSupportedEventIds() {self._supportedEventIds = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -3141,6 +3182,8 @@ public struct BlueOssSoMobile {
   fileprivate var _dataFile: Data? = nil
   fileprivate var _blacklistFile: Data? = nil
   fileprivate var _customerExtensionsFile: Data? = nil
+  fileprivate var _requestedEventCount: UInt32? = nil
+  fileprivate var _supportedEventIds: Data? = nil
 }
 
 public struct BlueOssSoMobileProvisioningConfiguration {
@@ -3489,6 +3532,7 @@ extension BlueSPToken: @unchecked Sendable {}
 extension BlueSPToken.OneOf_Payload: @unchecked Sendable {}
 extension BlueSPResult: @unchecked Sendable {}
 extension BlueOssAccessResult: @unchecked Sendable {}
+extension BlueOssAccessEventsResult: @unchecked Sendable {}
 extension BlueOssSidVersion: @unchecked Sendable {}
 extension BlueOssSidCredentialTypeOss: @unchecked Sendable {}
 extension BlueOssSidCredentialTypeProprietary: @unchecked Sendable {}
@@ -4755,6 +4799,55 @@ extension BlueOssAccessResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     if lhs._accessType != rhs._accessType {return false}
     if lhs._scheduleEndTime != rhs._scheduleEndTime {return false}
     if lhs._scheduleMissmatch != rhs._scheduleMissmatch {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension BlueOssAccessEventsResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: String = "BlueOssAccessEventsResult"
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "accessResult"),
+    2: .same(proto: "events"),
+  ]
+
+  public var isInitialized: Bool {
+    if self._accessResult == nil {return false}
+    if let v = self._accessResult, !v.isInitialized {return false}
+    if !SwiftProtobuf.Internal.areAllInitialized(self.events) {return false}
+    return true
+  }
+
+  public mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularMessageField(value: &self._accessResult) }()
+      case 2: try { try decoder.decodeRepeatedMessageField(value: &self.events) }()
+      default: break
+      }
+    }
+  }
+
+  public func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    try { if let v = self._accessResult {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
+    } }()
+    if !self.events.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.events, fieldNumber: 2)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  public static func ==(lhs: BlueOssAccessEventsResult, rhs: BlueOssAccessEventsResult) -> Bool {
+    if lhs._accessResult != rhs._accessResult {return false}
+    if lhs.events != rhs.events {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -6575,6 +6668,8 @@ extension BlueOssSoMobile: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     2: .same(proto: "dataFile"),
     3: .same(proto: "blacklistFile"),
     4: .same(proto: "customerExtensionsFile"),
+    5: .same(proto: "requestedEventCount"),
+    6: .same(proto: "supportedEventIds"),
   ]
 
   public var isInitialized: Bool {
@@ -6595,6 +6690,8 @@ extension BlueOssSoMobile: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       case 2: try { try decoder.decodeSingularBytesField(value: &self._dataFile) }()
       case 3: try { try decoder.decodeSingularBytesField(value: &self._blacklistFile) }()
       case 4: try { try decoder.decodeSingularBytesField(value: &self._customerExtensionsFile) }()
+      case 5: try { try decoder.decodeSingularUInt32Field(value: &self._requestedEventCount) }()
+      case 6: try { try decoder.decodeSingularBytesField(value: &self._supportedEventIds) }()
       default: break
       }
     }
@@ -6617,6 +6714,12 @@ extension BlueOssSoMobile: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     try { if let v = self._customerExtensionsFile {
       try visitor.visitSingularBytesField(value: v, fieldNumber: 4)
     } }()
+    try { if let v = self._requestedEventCount {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 5)
+    } }()
+    try { if let v = self._supportedEventIds {
+      try visitor.visitSingularBytesField(value: v, fieldNumber: 6)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
@@ -6625,6 +6728,8 @@ extension BlueOssSoMobile: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     if lhs._dataFile != rhs._dataFile {return false}
     if lhs._blacklistFile != rhs._blacklistFile {return false}
     if lhs._customerExtensionsFile != rhs._customerExtensionsFile {return false}
+    if lhs._requestedEventCount != rhs._requestedEventCount {return false}
+    if lhs._supportedEventIds != rhs._supportedEventIds {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

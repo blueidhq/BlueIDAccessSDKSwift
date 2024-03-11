@@ -11,21 +11,25 @@ protocol BlueAsyncCommand: Command {
     func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any?
 }
 
-public class BlueAPIAsyncCommand: BlueAsyncCommand {
-    internal let blueAPI: BlueAPIProtocol?
+public class BlueSdkAsyncCommand: BlueAsyncCommand {
+    internal let sdkService: BlueSdkService
     
-    init(_ blueAPI: BlueAPIProtocol? = nil) {
-        if #available(macOS 12.0, *) {
-            self.blueAPI = blueAPI ?? BlueAPI()
-        } else {
-            self.blueAPI = nil
-        }
+    init(_ sdkService: BlueSdkService) {
+        self.sdkService = sdkService
     }
     
     internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         fatalError("not implemented")
     }
 }
+
+private let blueApiService = BlueAPI()
+private let blueNetworkMonitorService = BlueNetworkMonitorService()
+
+private let defaultSdkService = BlueSdkService(
+    blueApiService,
+    BlueAccessEventService(blueApiService, blueNetworkMonitorService)
+)
 
 public struct BlueCommands {
     public let initialize = BlueInitializeCommand()
@@ -55,9 +59,9 @@ public struct BlueCommands {
     public let ossSoReadConfiguration = BlueOssSoReadConfigurationCommand()
     public let ossSoUpdateConfiguration = BlueOssSoUpdateConfigurationCommand()
     public let readOssSoCredential = BlueReadOssSoCredentialCommand()
-    public let writeOssSoCredential = BlueWriteOssSoCredentialCommand()
-    public let refreshOssSoCredential = BlueRefreshOssSoCredentialCommand()
-    public let refreshOssSoCredentials = BlueRefreshOssSoCredentialsCommand()
+    public let writeOssSoCredential = BlueWriteOssSoCredentialCommand(defaultSdkService)
+    public let refreshOssSoCredential = BlueRefreshOssSoCredentialCommand(defaultSdkService)
+    public let refreshOssSoCredentials = BlueRefreshOssSoCredentialsCommand(defaultSdkService)
     public let formatOssSoCredential = BlueFormatOssSoCredentialCommand()
     
     public let ossSidCreateMobile = BlueOssSidCreateMobileCommand()
@@ -69,18 +73,18 @@ public struct BlueCommands {
     public let ossSidUnprovision = BlueOssSidUnprovisionCommand()
     public let ossSidReadConfiguration = BlueOssSidReadConfigurationCommand()
     
-    public let tryAccessDevice = BlueTryAccessDeviceCommand()
-    public let addAccessCredential = BlueAddAccessCredentialCommand()
-    public let claimAccessCredential = BlueClaimAccessCredentialCommand()
+    public let tryAccessDevice = BlueTryAccessDeviceCommand(defaultSdkService)
+    public let addAccessCredential = BlueAddAccessCredentialCommand(defaultSdkService)
+    public let claimAccessCredential = BlueClaimAccessCredentialCommand(defaultSdkService)
     public let getAccessCredentials = BlueGetAccessCredentialsCommand()
-    public let synchronizeAccessCredential = BlueSynchronizeAccessCredentialCommand()
-    public let synchronizeAccessCredentials = BlueSynchronizeAccessCredentialsCommand()
+    public let synchronizeAccessCredential = BlueSynchronizeAccessCredentialCommand(defaultSdkService)
+    public let synchronizeAccessCredentials = BlueSynchronizeAccessCredentialsCommand(defaultSdkService)
     public let getAccessDevices = BlueGetAccessDevicesCommand()
     public let listAccessDevices = BlueListAccessDevicesCommand()
-    public let synchronizeAccessDevice = BlueSynchronizeAccessDeviceCommand()
-    public let getAccessObjects = BlueGetAccessObjectsCommand()
-    public let claimAccessDevice = BlueClaimAccessDeviceCommand()
-    public let getWritableAccessCredentials = BlueGetWritableAccessCredentialsCommand()
+    public let synchronizeAccessDevice = BlueSynchronizeAccessDeviceCommand(defaultSdkService)
+    public let getAccessObjects = BlueGetAccessObjectsCommand(defaultSdkService)
+    public let claimAccessDevice = BlueClaimAccessDeviceCommand(defaultSdkService)
+    public let getWritableAccessCredentials = BlueGetWritableAccessCredentialsCommand(defaultSdkService)
     
     public let clearBlacklist = BlueClearBlacklistCommand()
     public let clearEventLog = BlueClearEventLogCommand()

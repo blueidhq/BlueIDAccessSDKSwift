@@ -30,20 +30,26 @@ private class BlueAPIMock: DefaultBlueAPIMock {
     }
 }
 
-private class BlueTerminalMock {
-    var actionCalled: String = ""
+private class BlueTerminalRunMock: BlueTerminalRunProtocol {
+    var actionCalled: String?
     
-    func terminalRun(deviceID: String, timeout: Double, action: String) -> BlueOssAccessResult {
-        actionCalled = action
+    func runOssSidMobile(deviceID: String) async throws -> BlueOssAccessResult {
+        actionCalled = "ossSidMobile"
         
         return BlueOssAccessResult()
+    }
+    
+    func runOssSoMobile(deviceID: String) async throws -> BlueOssAccessEventsResult {
+        actionCalled = "ossSoMobile"
+        
+        return BlueOssAccessEventsResult()
     }
 }
 
 final class BlueTryAccessDeviceCommandTests: BlueXCTestCase {
     
     func testWhenDeviceIsMissing() async throws {
-        try await XCTAssertThrowsError(await BlueTryAccessDeviceCommand().runAsync(deviceID: "")) { error in
+        try await XCTAssertThrowsError(await BlueTryAccessDeviceCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(deviceID: "")) { error in
             XCTAssert(error is BlueError)
             XCTAssertEqual((error as? BlueError)?.returnCode, .sdkDeviceNotFound)
         }
@@ -54,7 +60,7 @@ final class BlueTryAccessDeviceCommandTests: BlueXCTestCase {
         device.info.deviceID = "device-1"
         blueAddDevice(device)
         
-        try await XCTAssertThrowsError(await BlueTryAccessDeviceCommand().runAsync(deviceID: "device-1")) { error in
+        try await XCTAssertThrowsError(await BlueTryAccessDeviceCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(deviceID: "device-1")) { error in
             XCTAssert(error is BlueError)
             XCTAssertEqual((error as? BlueError)?.returnCode, .sdkSpTokenNotFound)
         }
@@ -67,11 +73,11 @@ final class BlueTryAccessDeviceCommandTests: BlueXCTestCase {
         
         let credential = blueCreateAccessCredentialDemo()
         let ossSoToken = try blueCreateSignedOssSoDemoToken()
-        let terminalRunMock = BlueTerminalMock()
+        let terminalRunMock = BlueTerminalRunMock()
         
-        try await BlueAddAccessCredentialCommand(BlueAPIMock(ossSoToken)).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(ossSoToken), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
-        _ = try await XCTAssertNotThrowsError(await BlueTryAccessDeviceCommand(using: terminalRunMock.terminalRun).runAsync(deviceID: "device-1"))
+        _ = try await XCTAssertNotThrowsError(await BlueTryAccessDeviceCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()), using: terminalRunMock).runAsync(deviceID: "device-1"))
         XCTAssertEqual(terminalRunMock.actionCalled, "ossSoMobile")
     }
     
@@ -82,11 +88,11 @@ final class BlueTryAccessDeviceCommandTests: BlueXCTestCase {
         
         let credential = blueCreateAccessCredentialDemo()
         let ossSidToken = try blueCreateSignedOssSidDemoToken()
-        let terminalRunMock = BlueTerminalMock()
+        let terminalRunMock = BlueTerminalRunMock()
         
-        try await BlueAddAccessCredentialCommand(BlueAPIMock(ossSidToken)).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(ossSidToken), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
-        _ = try await XCTAssertNotThrowsError(await BlueTryAccessDeviceCommand(using: terminalRunMock.terminalRun).runAsync(deviceID: "device-1"))
+        _ = try await XCTAssertNotThrowsError(await BlueTryAccessDeviceCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()), using: terminalRunMock).runAsync(deviceID: "device-1"))
         XCTAssertEqual(terminalRunMock.actionCalled, "ossSidMobile")
     }
 }

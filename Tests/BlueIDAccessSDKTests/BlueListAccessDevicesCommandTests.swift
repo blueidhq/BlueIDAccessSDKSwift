@@ -35,50 +35,59 @@ final class BlueListAccessDevicesCommandTests: BlueXCTestCase {
         credential3.credentialID.id = "regular"
         credential3.credentialType = .regular
         
-        let commandForCredential1 = BlueAddAccessCredentialCommand(BlueAPIMock(
-            tokens: [
-                BlueAccessDeviceToken(
-                    deviceId: "device-for-maintenance-1",
-                    objectId: 1,
-                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
-                )
-            ])
-        )
+        let commandForCredential1 = BlueAddAccessCredentialCommand(BlueSdkService(
+            BlueAPIMock(
+                tokens: [
+                    BlueAccessDeviceToken(
+                        deviceId: "device-for-maintenance-1",
+                        objectId: 1,
+                        token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
+                    )
+                ]
+            ),
+            BlueDefaultAccessEventServiceMock()
+        ))
         
-        let commandForCredential2 = BlueAddAccessCredentialCommand(BlueAPIMock(
-            tokens: [
-                BlueAccessDeviceToken(
-                    deviceId: "device-for-maintenance-1",
-                    objectId: 1,
-                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
-                ),
-                BlueAccessDeviceToken(
-                    deviceId: "device-for-maintenance-2",
-                    objectId: 1,
-                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
-                )
-            ])
-        )
+        let commandForCredential2 = BlueAddAccessCredentialCommand(BlueSdkService(
+            BlueAPIMock(
+                tokens: [
+                    BlueAccessDeviceToken(
+                        deviceId: "device-for-maintenance-1",
+                        objectId: 1,
+                        token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
+                    ),
+                    BlueAccessDeviceToken(
+                        deviceId: "device-for-maintenance-2",
+                        objectId: 1,
+                        token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("MAINTC")).base64EncodedString()
+                    )
+                ]
+            ),
+            BlueDefaultAccessEventServiceMock()
+        ))
         
-        let commandForCredential3 = BlueAddAccessCredentialCommand(BlueAPIMock(
-            tokens: [
-                BlueAccessDeviceToken(
-                    deviceId: "device-for-regular-1",
-                    objectId: 1,
-                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("PING")).base64EncodedString()
-                ),
-                BlueAccessDeviceToken(
-                    deviceId: "device-for-regular-2",
-                    objectId: 1,
-                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("PING")).base64EncodedString()
-                ),
-                BlueAccessDeviceToken(
-                    deviceId: "device-for-regular-3",
-                    objectId: 1,
-                    token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("PING")).base64EncodedString()
-                ),
-            ])
-        )
+        let commandForCredential3 = BlueAddAccessCredentialCommand(BlueSdkService(
+            BlueAPIMock(
+                tokens: [
+                    BlueAccessDeviceToken(
+                        deviceId: "device-for-regular-1",
+                        objectId: 1,
+                        token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("PING")).base64EncodedString()
+                    ),
+                    BlueAccessDeviceToken(
+                        deviceId: "device-for-regular-2",
+                        objectId: 1,
+                        token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("PING")).base64EncodedString()
+                    ),
+                    BlueAccessDeviceToken(
+                        deviceId: "device-for-regular-3",
+                        objectId: 1,
+                        token: try blueEncodeMessage(try blueCreateSignedCommandDemoToken("PING")).base64EncodedString()
+                    ),
+                ]
+            ),
+            BlueDefaultAccessEventServiceMock()
+        ))
         
         try? await commandForCredential1.runAsync(credential: credential1)
         try? await commandForCredential2.runAsync(credential: credential2)

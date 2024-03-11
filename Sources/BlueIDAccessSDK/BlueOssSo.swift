@@ -339,7 +339,7 @@ public struct BlueReadOssSoCredentialCommand: BlueCommand {
 /**
  * @class BlueWriteOssSoCredentialCommand represents a command to write/update a credential for a transponder using NFC communication.
  */
-public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
+public class BlueWriteOssSoCredentialCommand: BlueSdkAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             credentialID: blueCastArg(String.self, arg0),
@@ -390,7 +390,7 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
                 
                 // push transponder's events to the backend
                 try blueRunAsyncBlocking {
-                    try await BlueOssSoAPIHelper(self.blueAPI!)
+                    try await self.sdkService.ossSoService
                         .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
                 }
                 
@@ -400,7 +400,7 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
             
             // sync and get configuration, if any
             let newConfiguration = try blueRunAsyncBlocking {
-                return try await BlueOssSoAPIHelper(self.blueAPI!)
+                return try await self.sdkService.ossSoService
                     .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: credentialID)
             }
             
@@ -425,7 +425,7 @@ public class BlueWriteOssSoCredentialCommand: BlueAPIAsyncCommand {
  * This class encapsulates the process of starting an NFC session, reading the transponder configuration, retrieving a fresh configuration from the backend, and writing it back to the transponder.
  * Subsequently, transponder events are pushed to the backend.
  */
-public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
+public class BlueRefreshOssSoCredentialCommand: BlueSdkAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             organisation: blueCastArg(String.self, arg0),
@@ -460,7 +460,7 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
             
             // push transponder's events to the backend
             try blueRunAsyncBlocking {
-                try await BlueOssSoAPIHelper(self.blueAPI!)
+                try await self.sdkService.ossSoService
                     .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
             }
             
@@ -469,7 +469,7 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
             
             // sync and get configuration, if any
             let newConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
-                return try await BlueOssSoAPIHelper(self.blueAPI!)
+                return try await self.sdkService.ossSoService
                     .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: transponderConfiguration.info.credentialID.id)
             }
             
@@ -495,7 +495,7 @@ public class BlueRefreshOssSoCredentialCommand: BlueAPIAsyncCommand {
  * This class encapsulates the process of starting an NFC session, reading each transponder configuration, retrieving a fresh configuration from the backend, and writing it back to the transponder.
  * Subsequently, transponder events are pushed to the backend.
  */
-public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
+public class BlueRefreshOssSoCredentialsCommand: BlueSdkAsyncCommand {
     
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync()
@@ -550,7 +550,7 @@ public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
                             
                             // push transponder's events to the backend
                             try blueRunAsyncBlocking {
-                                try await BlueOssSoAPIHelper(self.blueAPI!)
+                                try await self.sdkService.ossSoService
                                     .pushEventLogs(nfcCredential: credential, ossSoConfiguration: transponderConfiguration)
                             }
                             
@@ -559,7 +559,7 @@ public class BlueRefreshOssSoCredentialsCommand: BlueAPIAsyncCommand {
                             
                             // sync and get configuration, if any
                             let newConfiguration: BlueOssSoConfiguration? = try blueRunAsyncBlocking {
-                                return try await BlueOssSoAPIHelper(self.blueAPI!)
+                                return try await self.sdkService.ossSoService
                                     .synchronizeOfflineCredential(nfcCredential: credential, offlineCredentialID: transponderConfiguration.info.credentialID.id)
                             }
                             

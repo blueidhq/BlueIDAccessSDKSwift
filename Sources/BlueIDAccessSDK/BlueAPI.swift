@@ -1,6 +1,5 @@
 import Foundation
 
-@available(macOS 12.0, *)
 class BlueAPI: BlueAPIProtocol {
     
     func getAccessToken(credentialId: String) async throws -> BlueFetchResponse<BlueAccessToken> {
@@ -81,6 +80,10 @@ class BlueAPI: BlueAPIProtocol {
     }
     
     func claimAccessCredential(activationToken: String) async throws -> BlueFetchResponse<BlueClaimAccessCredentialResult> {
+        guard #available(macOS 12.0, *) else {
+            throw BlueError(.sdkUnsupportedPlatform)
+        }
+        
         let endpoint = BlueAPIEndpoints.AccessClaimCredential.url.absoluteString
         
         guard let url = URL(string: "\(endpoint)?\(activationToken)") else {
@@ -98,6 +101,10 @@ class BlueAPI: BlueAPIProtocol {
     }
     
     private func post<T>(endpoint: BlueAPIEndpoints, request: Encodable) async throws -> BlueFetchResponse<T> {
+        guard #available(macOS 12.0, *) else {
+            throw BlueError(.sdkUnsupportedPlatform)
+        }
+        
         return try await BlueFetch.post(
             url: endpoint.url,
             data: self.toData(request)

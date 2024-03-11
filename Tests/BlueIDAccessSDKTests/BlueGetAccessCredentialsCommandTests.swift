@@ -31,8 +31,8 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         credential2.credentialID.id = "credential-2"
         credential2.credentialType = .nfcWriter
         
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential1)
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential2)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
         let accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync()
         
@@ -53,8 +53,8 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         credential2.credentialID.id = "credential-2"
         credential2.credentialType = .nfcWriter
         
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential1)
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential2)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
         var accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(credentialType: .nfcWriter)
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
@@ -76,8 +76,8 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         credential2.credentialID.id = "credential-2"
         credential2.credentialType = .nfcWriter
         
-        try await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential1)
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential2)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
         var accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(for: "device-1")
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
@@ -99,8 +99,8 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         credential2.credentialID.id = "credential-2"
         credential2.credentialType = .nfcWriter
         
-        try await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential1)
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential2)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
         var accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(credentialType: .maintenance, for: "device-1")
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")

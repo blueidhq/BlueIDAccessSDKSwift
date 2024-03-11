@@ -1,6 +1,6 @@
 import Foundation
 
-public class BlueSynchronizeAccessCredentialCommand: BlueAPIAsyncCommand {
+public class BlueSynchronizeAccessCredentialCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             credentialID: try blueCastArg(String.self, arg0)
@@ -13,16 +13,16 @@ public class BlueSynchronizeAccessCredentialCommand: BlueAPIAsyncCommand {
         }
         
         if (credential.credentialType == .nfcWriter) {
-            return try await BlueSynchronizeNfcAccessCommand(self.blueAPI)
+            return try await BlueSynchronizeNfcAccessCommand(sdkService)
                 .runAsync(credentialID: credentialID, forceRefresh: forceRefresh)
         }
         
-        return try await BlueSynchronizeMobileAccessCommand(self.blueAPI)
+        return try await BlueSynchronizeMobileAccessCommand(sdkService)
             .runAsync(credentialID: credentialID, forceRefresh: forceRefresh)
     }
 }
 
-internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand where T: BlueSynchronizationResponse {
+internal class BlueAbstractSynchronizeAccessCommand<T>: BlueSdkAsyncCommand where T: BlueSynchronizationResponse {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             credentialID: try blueCastArg(String.self, arg0)
@@ -34,7 +34,7 @@ internal class BlueAbstractSynchronizeAccessCommand<T>: BlueAPIAsyncCommand wher
             throw BlueError(.sdkCredentialNotFound)
         }
         
-        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+        let tokenAuthentication = try await sdkService.authenticationTokenService
             .getTokenAuthentication(credential: credential, refreshToken: false)
         
         guard let response = try? await self.sync(with: tokenAuthentication, forceRefresh: forceRefresh) else {
@@ -85,7 +85,7 @@ internal struct BlueOssEntry: Codable {
 
 internal class BlueSynchronizeNfcAccessCommand: BlueAbstractSynchronizeAccessCommand<BlueNfcAccessSynchronizationResult> {
     override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueNfcAccessSynchronizationResult> {
-        return try await self.blueAPI!.synchronizeNfcAccess(with: tokenAuthentication)
+        return try await sdkService.apiService.synchronizeNfcAccess(with: tokenAuthentication)
     }
     
     override func update(_ credential: BlueAccessCredential, _ synchronizationResult: BlueNfcAccessSynchronizationResult) throws {
@@ -116,7 +116,7 @@ internal class BlueSynchronizeNfcAccessCommand: BlueAbstractSynchronizeAccessCom
 
 internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccessCommand<BlueMobileAccessSynchronizationResult> {
     override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
-        return try await self.blueAPI!.synchronizeMobileAccess(with: tokenAuthentication, forceRefresh: forceRefresh)
+        return try await sdkService.apiService.synchronizeMobileAccess(with: tokenAuthentication, forceRefresh: forceRefresh)
     }
     
     override func update(_ credential: BlueAccessCredential, _ synchronizationResult: BlueMobileAccessSynchronizationResult) throws {
@@ -185,7 +185,7 @@ internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccess
  * @class BlueSynchronizeAccessCredentialsCommand
  * A command to synchronize all stored credentials.
  */
-public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
+public class BlueSynchronizeAccessCredentialsCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync()
     }
@@ -231,7 +231,7 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueAPIAsyncCommand {
         resultItem.credentialID.id = credential.credentialID.id
         
         do {
-            try await BlueSynchronizeAccessCredentialCommand(self.blueAPI)
+            try await BlueSynchronizeAccessCredentialCommand(sdkService)
                 .runAsync(credentialID: credential.credentialID.id, forceRefresh: true)
             
             resultItem.returnCode = .ok

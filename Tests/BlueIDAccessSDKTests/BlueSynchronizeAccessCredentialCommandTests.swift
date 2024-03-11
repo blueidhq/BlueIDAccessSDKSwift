@@ -35,11 +35,11 @@ final class BlueSynchronizeAccessCredentialCommandTests: BlueXCTestCase {
         var credential = blueCreateAccessCredentialDemo()
         credential.credentialType = .nfcWriter
         
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
         let apiMock = BlueAPIMock()
         
-        try await BlueSynchronizeAccessCredentialCommand(apiMock).runAsync(credentialID: credential.credentialID.id)
+        try await BlueSynchronizeAccessCredentialCommand(BlueSdkService(apiMock, BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         
         XCTAssertTrue(apiMock.synchronizeNfcAccessWasCalled)
     }
@@ -55,11 +55,11 @@ final class BlueSynchronizeAccessCredentialCommandTests: BlueXCTestCase {
             var credential = blueCreateAccessCredentialDemo()
             credential.credentialType = credentialType
             
-            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
             
             let apiMock = BlueAPIMock()
             
-            try await BlueSynchronizeAccessCredentialCommand(apiMock).runAsync(credentialID: credential.credentialID.id)
+            try await BlueSynchronizeAccessCredentialCommand(BlueSdkService(apiMock, BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
             
             XCTAssertTrue(apiMock.synchronizeMobileAccessWasCalled)
         }

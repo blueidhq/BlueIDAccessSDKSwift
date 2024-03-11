@@ -50,9 +50,9 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
     
     func testSynchronizeMobileAccess() async throws {
         let credential = blueCreateAccessCredentialDemo()
-        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
-        try! await BlueSynchronizeMobileAccessCommand(BlueAPIMock()).runAsync(credentialID: credential.credentialID.id)
+        try! await BlueSynchronizeMobileAccessCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         
         let result = try BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
         XCTAssertEqual(result.devices[0].deviceID, "device-1")
@@ -80,13 +80,13 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
     
     func testSynchronizeMobileAccessWithValidAccessToken() async throws {
         let credential = blueCreateAccessCredentialDemo()
-        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
         let tomorrowDate = Calendar.current.date(byAdding: .day, value: 1, to: Date())
         let validAccessToken = BlueAccessToken(token: "valid-access-token", expiresAt: Int(tomorrowDate!.timeIntervalSince1970) * 1000)
         try blueAccessAuthenticationTokensKeyChain.storeCodableEntry(id: credential.credentialID.id, data: validAccessToken)
         
-        try! await BlueSynchronizeMobileAccessCommand(BlueAPIMock()).runAsync(credentialID: credential.credentialID.id)
+        try! await BlueSynchronizeMobileAccessCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         let accessToken: BlueAccessToken? = try blueAccessAuthenticationTokensKeyChain.getCodableEntry(id: credential.credentialID.id)
         XCTAssertNotNil(accessToken, "No new token should have been issued")
         XCTAssertEqual(accessToken!.token, "valid-access-token")
@@ -95,12 +95,12 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
     
     func testSynchronizeMobileAccessWithExpiredAccessToken() async throws {
         let credential = blueCreateAccessCredentialDemo()
-        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
         let expiredAccessToken = BlueAccessToken(token: "expired-access--oken", expiresAt: 0)
         try blueAccessAuthenticationTokensKeyChain.storeCodableEntry(id: credential.credentialID.id, data: expiredAccessToken)
         
-        try! await BlueSynchronizeMobileAccessCommand(BlueAPIMock()).runAsync(credentialID: credential.credentialID.id)
+        try! await BlueSynchronizeMobileAccessCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         let accessToken: BlueAccessToken? = try blueAccessAuthenticationTokensKeyChain.getCodableEntry(id: credential.credentialID.id)
         XCTAssertNotNil(accessToken, "A new access token should have been stored in the KeyChain")
         XCTAssertEqual(accessToken!.token, "new-access-token")
@@ -116,7 +116,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         
         let credential = blueCreateAccessCredentialDemo()
         
-        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         XCTAssertNotNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should have been stored in the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should have been stored in the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should have been stored in the KeyChain")
@@ -124,7 +124,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         XCTAssertNotNil(try? blueTerminalRequestDataKeychain.getEntry(id: "device-2:PING"), "SP Token should have been stored in the KeyChain")
         XCTAssertNotNil(blueAccessDevicesStorage.getEntry(id: credential.credentialID.id), "Access device list should have been stored in the local storage")
         
-        try! await BlueSynchronizeMobileAccessCommand(BlueAPIUnauthorizedMock()).runAsync(credentialID: credential.credentialID.id)
+        try! await BlueSynchronizeMobileAccessCommand(BlueSdkService(BlueAPIUnauthorizedMock(), BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         XCTAssertNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should have been removed from the KeyChain")
         XCTAssertNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should have been removed from the KeyChain")
         XCTAssertNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should have been removed from the KeyChain")
@@ -142,7 +142,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         
         let credential = blueCreateAccessCredentialDemo()
         
-        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         XCTAssertNotNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should have been stored in the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should have been stored in the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should have been stored in the KeyChain")
@@ -150,7 +150,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         XCTAssertNotNil(try? blueTerminalRequestDataKeychain.getEntry(id: "device-2:PING"), "SP Token should have been stored in the KeyChain")
         XCTAssertNotNil(blueAccessDevicesStorage.getEntry(id: credential.credentialID.id), "Access device list should have been stored in the local storage")
         
-        try? await BlueSynchronizeMobileAccessCommand(BlueAPIBadRequestMock()).runAsync(credentialID: credential.credentialID.id)
+        try? await BlueSynchronizeMobileAccessCommand(BlueSdkService(BlueAPIBadRequestMock(), BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         XCTAssertNotNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should NOT have been removed from the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should NOT have been removed from the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should NOT have been removed from the KeyChain")
@@ -168,7 +168,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         
         let credential = blueCreateAccessCredentialDemo()
         
-        try! await BlueAddAccessCredentialCommand(BlueAPIMock()).runAsync(credential: credential)
+        try! await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         XCTAssertNotNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should have been stored in the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should have been stored in the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should have been stored in the KeyChain")
@@ -176,7 +176,7 @@ final class BlueSynchronizeMobileAccessCommandTests: BlueXCTestCase {
         XCTAssertNotNil(try? blueTerminalRequestDataKeychain.getEntry(id: "device-2:PING"), "SP Token should have been stored in the KeyChain")
         XCTAssertNotNil(blueAccessDevicesStorage.getEntry(id: credential.credentialID.id), "Access device list should have been stored in the local storage")
         
-        try! await BlueSynchronizeMobileAccessCommand(BlueAPIOfflineMock()).runAsync(credentialID: credential.credentialID.id)
+        try! await BlueSynchronizeMobileAccessCommand(BlueSdkService(BlueAPIOfflineMock(), BlueDefaultAccessEventServiceMock())).runAsync(credentialID: credential.credentialID.id)
         XCTAssertNotNil(try? blueAccessCredentialsKeyChain.getEntry(id: credential.credentialID.id), "Access credential should NOT have been removed from the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-1"), "Terminal public key should NOT have been removed from the KeyChain")
         XCTAssertNotNil(try? blueTerminalPublicKeysKeychain.getEntry(id: "device-2"), "Terminal public key should NOT have been removed from the KeyChain")

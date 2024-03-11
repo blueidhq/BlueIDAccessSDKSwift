@@ -7,7 +7,7 @@ final class BlueAccessTests: BlueXCTestCase {
         var credential = blueCreateAccessCredentialDemo()
         credential.credentialID.id = "credential-1"
         
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
         var returnedCredential = blueGetAccessCredential(credentialID: "credential-1")
         XCTAssertNotNil(returnedCredential)
@@ -24,7 +24,7 @@ final class BlueAccessTests: BlueXCTestCase {
         credential.credentialType = .nfcWriter
         credential.siteID = 1
         
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
         var returnedCredential = blueGetAccessCredential(organisation: "organisation-1", siteID: 1, credentialType: .nfcWriter)
         XCTAssertNotNil(returnedCredential)

@@ -33,7 +33,7 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         let scheduler = BlueAccessSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeAccessCredentialsCommand(DefaultBlueAPIMock())
+            command: BlueSynchronizeAccessCredentialsCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
         )
         
         addTeardownBlock {
@@ -56,14 +56,14 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         let scheduler = BlueAccessSyncScheduler(
             timeInterval: 1,
             autoSchedule: false,
-            command: BlueSynchronizeAccessCredentialsCommand(DefaultBlueAPIMock())
+            command: BlueSynchronizeAccessCredentialsCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
         )
         
         addTeardownBlock {
             scheduler.suspend()
         }
 
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: blueCreateAccessCredentialDemo())
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: blueCreateAccessCredentialDemo())
         
         let expectation = XCTestExpectation()
         DispatchQueue.global().asyncAfter(deadline: .now() + 2) { expectation.fulfill() }

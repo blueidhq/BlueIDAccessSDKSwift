@@ -4,7 +4,7 @@ import XCTest
 
 final class BlueSynchronizeNfcAccessCommandTests: BlueXCTestCase {
     func testSync() async throws {
-        let command = BlueSynchronizeNfcAccessCommand(DefaultBlueAPIMock())
+        let command = BlueSynchronizeNfcAccessCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
         
         let tokenAuthentication = BlueTokenAuthentication(token: "", signature: "")
         
@@ -14,7 +14,7 @@ final class BlueSynchronizeNfcAccessCommandTests: BlueXCTestCase {
     }
     
     func testUpdate() throws {
-        let command = BlueSynchronizeNfcAccessCommand()
+        let command = BlueSynchronizeNfcAccessCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
         
         let credential = blueCreateAccessCredentialDemo()
         let synchronizationResult = BlueNfcAccessSynchronizationResult(
@@ -31,7 +31,7 @@ final class BlueSynchronizeNfcAccessCommandTests: BlueXCTestCase {
     }
     
     func testPurge() throws {
-        let command = BlueSynchronizeNfcAccessCommand()
+        let command = BlueSynchronizeNfcAccessCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
         
         let credential = blueCreateAccessCredentialDemo()
         

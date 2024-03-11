@@ -1,7 +1,7 @@
 import XCTest
 @testable import BlueIDAccessSDK
 
-class DefaultBlueAPIMock: BlueAPIProtocol {
+internal class DefaultBlueAPIMock: BlueAPIProtocol {
     
     func getAccessCredentials(with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult> {
         return BlueFetchResponse(
@@ -100,6 +100,10 @@ class DefaultBlueAPIMock: BlueAPIProtocol {
             data: BlueAccessCredential()
         )
     }
+}
+
+internal class BlueDefaultAccessEventServiceMock: BlueAccessEventServiceProtocol {
+    func pushEvents(_ credentialID: String, _ events: [BluePushEvent]) {}
 }
 
 class BlueXCTestCase: XCTestCase {

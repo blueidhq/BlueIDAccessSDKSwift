@@ -8,7 +8,7 @@ final class BlueAddAccessCredentialCommandTests: BlueXCTestCase {
         let credential = blueCreateAccessCredentialDemo()
         
         do {
-            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         } catch {
             XCTFail("Should not throw any errors when adding the credential for the first time")
         }
@@ -28,13 +28,13 @@ final class BlueAddAccessCredentialCommandTests: BlueXCTestCase {
         let credential = blueCreateAccessCredentialDemo()
         
         do {
-            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         } catch {
             XCTFail("Should not throw any errors when adding the credential for the first time")
         }
         
         do {
-            try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+            try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         } catch {
             XCTFail("Should not throw any errors when updating the same credential")
         }

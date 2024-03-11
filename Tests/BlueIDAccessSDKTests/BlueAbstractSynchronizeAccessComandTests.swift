@@ -18,7 +18,7 @@ private class BlueAbstractSynchronizeAccessCommandMock: BlueAbstractSynchronizeA
         self.statusCode = statusCode ?? 200
         self.data = data
   
-        super.init(DefaultBlueAPIMock())
+        super.init(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
     }
     
     override func sync(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueSynchronizationResponseMock> {

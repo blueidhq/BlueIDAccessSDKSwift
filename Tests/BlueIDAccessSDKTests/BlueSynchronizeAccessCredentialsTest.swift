@@ -10,7 +10,7 @@ private class BlueAPIMock: DefaultBlueAPIMock {
     }
     
     override func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool? = nil) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult> {
-        var token = try blueCreateSignedOssSoDemoToken(credentialId)
+        let token = try blueCreateSignedOssSoDemoToken(credentialId)
         
         return BlueFetchResponse(
             statusCode: 200,
@@ -42,8 +42,8 @@ final class BlueSynchronizeAccessCredentials: BlueXCTestCase {
         credentialB.credentialID.id = "CREDENT-BB"
         credentialB.credentialType = .regular
         
-        try await BlueAddAccessCredentialCommand(BlueAPIMock("CREDENT-AA")).runAsync(credential: credentialA)
-        try await BlueAddAccessCredentialCommand(BlueAPIMock("CREDENT-BB")).runAsync(credential: credentialB)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock("CREDENT-AA"), BlueDefaultAccessEventServiceMock())).runAsync(credential: credentialA)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock("CREDENT-BB"), BlueDefaultAccessEventServiceMock())).runAsync(credential: credentialB)
         
         var entry = try blueGetSpTokenEntry("device-1:ossSoMobile");
         guard let spTokenEntry = entry as? [BlueSPTokenEntry] else {
@@ -54,7 +54,7 @@ final class BlueSynchronizeAccessCredentials: BlueXCTestCase {
         XCTAssertEqual(spTokenEntry.count, 2, "Wrong number of entries")
         
         // sync should NOT purge anything yet.
-        _ = try await BlueSynchronizeAccessCredentialsCommand(DefaultBlueAPIMock()).runAsync()
+        _ = try await BlueSynchronizeAccessCredentialsCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync()
         
         entry = try blueGetSpTokenEntry("device-1:ossSoMobile");
         guard let spTokenEntry = entry as? [BlueSPTokenEntry] else {
@@ -67,7 +67,7 @@ final class BlueSynchronizeAccessCredentials: BlueXCTestCase {
         _ = try blueAccessCredentialsKeyChain.deleteEntry(id: credentialB.credentialID.id)
         
         // sync should purge orphaned tokens.
-        _ = try await BlueSynchronizeAccessCredentialsCommand(DefaultBlueAPIMock()).runAsync()
+        _ = try await BlueSynchronizeAccessCredentialsCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync()
         
         entry = try blueGetSpTokenEntry("device-1:ossSoMobile");
         guard let spTokenEntry = entry as? [BlueSPTokenEntry] else {

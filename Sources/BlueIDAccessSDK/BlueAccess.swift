@@ -6,7 +6,7 @@ internal let blueAccessAuthenticationTokensKeyChain = BlueKeychain(attrService: 
 internal let blueAccessDevicesStorage = BlueStorage(collection: "blueid.accessDevices")
 internal let blueAccessOssSettingsKeyChain = BlueKeychain(attrService: "blueid.accessOssSettings")
 
-public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
+public class BlueAddAccessCredentialCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(credential: try blueCastArg(BlueAccessCredential.self, arg0))
     }
@@ -18,22 +18,22 @@ public class BlueAddAccessCredentialCommand: BlueAPIAsyncCommand {
         
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: credential.jsonUTF8Data())
         
-        try await BlueSynchronizeAccessCredentialCommand(self.blueAPI)
+        try await BlueSynchronizeAccessCredentialCommand(sdkService)
             .runAsync(credentialID: credential.credentialID.id)
         
         blueFireListeners(fireEvent: .accessCredentialAdded, data: nil)
     }
 }
 
-public class BlueClaimAccessCredentialCommand: BlueAPIAsyncCommand {
+public class BlueClaimAccessCredentialCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(activationToken: try blueCastArg(String.self, arg0))
     }
     
     public func runAsync(activationToken: String) async throws -> Void {
-        let credential = try await blueAPI!.claimAccessCredential(activationToken: activationToken).getData()
+        let credential = try await sdkService.apiService.claimAccessCredential(activationToken: activationToken).getData()
         
-        try await BlueAddAccessCredentialCommand(self.blueAPI).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(sdkService).runAsync(credential: credential)
     }
 }
 
@@ -123,7 +123,7 @@ public struct BlueGetAccessDevicesCommand: BlueCommand {
     }
 }
 
-public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
+public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) async throws -> Any? {
         if #available(macOS 10.15, *) {
             return try await runAsync(
@@ -145,7 +145,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
             throw BlueError(.sdkCredentialNotFound)
         }
         
-        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+        let tokenAuthentication = try await sdkService.authenticationTokenService
             .getTokenAuthentication(credential: credential)
         
         let config = try await getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication)
@@ -197,7 +197,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
     @available(macOS 10.15, *)
     private func deployBlacklistEntries(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
-            let response = try await blueAPI!.getBlacklistEntries(deviceID: deviceID, with: tokenAuthentication, limit: 50).getData()
+            let response = try await sdkService.apiService.getBlacklistEntries(deviceID: deviceID, with: tokenAuthentication, limit: 50).getData()
             
             guard let data = Data(base64Encoded: response.blacklistEntries) else {
                 return
@@ -218,7 +218,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
     
     private func getBlueSystemConfig(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueSystemConfig? {
         do {
-            let result = try await blueAPI!.createDeviceConfiguration(deviceID: deviceID, with: tokenAuthentication).getData()
+            let result = try await sdkService.apiService.createDeviceConfiguration(deviceID: deviceID, with: tokenAuthentication).getData()
             
             guard let systemConfiguration = result.systemConfiguration else {
                 return nil
@@ -238,7 +238,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
     
     private func pushDeviceSystemStatus(status: BlueSystemStatus, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
-            let result = try await blueAPI!.updateDeviceSystemStatus(systemStatus: blueEncodeMessage(status).base64EncodedString(), with: tokenAuthentication).getData()
+            let result = try await sdkService.apiService.updateDeviceSystemStatus(systemStatus: blueEncodeMessage(status).base64EncodedString(), with: tokenAuthentication).getData()
             
             if (!result.updated) {
                 blueLogWarn("System status could not be deployed")
@@ -278,7 +278,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
                 if (!logResult.events.isEmpty) {
                     let events = logResult.events.map{ BluePushEvent(event: $0, deviceId: deviceID) }
                     
-                    let result = try await self.blueAPI!.pushEvents(events: events, with: tokenAuthentication).getData()
+                    let result = try await sdkService.apiService.pushEvents(events: events, with: tokenAuthentication).getData()
                     
                     if (result.storedEvents.count != events.count) {
                         blueLogWarn("Some event logs have not been deployed")
@@ -323,7 +323,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
                 if (!logResult.entries.isEmpty) {
                     let logEntries = logResult.entries.map{ BluePushSystemLogEntry(logEntry: $0) }
                     
-                    let result = try await self.blueAPI!.pushSystemLogs(deviceID: deviceID, logEntries: logEntries, with: tokenAuthentication).getData()
+                    let result = try await sdkService.apiService.pushSystemLogs(deviceID: deviceID, logEntries: logEntries, with: tokenAuthentication).getData()
                     
                     if (result.storedLogEntries.count != logEntries.count) {
                         blueLogWarn("Some system log entries have not been deployed")
@@ -352,7 +352,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueAPIAsyncCommand {
     }
 }
 
-public class BlueGetAccessObjectsCommand: BlueAPIAsyncCommand {
+public class BlueGetAccessObjectsCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             credentialID: try blueCastArg(String.self, arg0)
@@ -364,10 +364,10 @@ public class BlueGetAccessObjectsCommand: BlueAPIAsyncCommand {
             throw BlueError(.sdkCredentialNotFound)
         }
         
-        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+        let tokenAuthentication = try await sdkService.authenticationTokenService
             .getTokenAuthentication(credential: credential)
         
-        let objects = try await blueAPI!.getAccessObjects(with: tokenAuthentication).getData()
+        let objects = try await sdkService.apiService.getAccessObjects(with: tokenAuthentication).getData()
         
         return BlueAccessObjectList(objects: objects)
     }
@@ -402,7 +402,7 @@ public struct BlueListAccessDevicesCommand: BlueAsyncCommand {
     }
 }
 
-public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
+public class BlueClaimAccessDeviceCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         if #available(macOS 10.15, *) {
             return try await runAsync(
@@ -425,14 +425,14 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
             throw BlueError(.sdkCredentialNotFound)
         }
         
-        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+        let tokenAuthentication = try await sdkService.authenticationTokenService
             .getTokenAuthentication(credential: credential)
         
-        _ = try await blueAPI!.claimDevice(deviceID: deviceID, objectID: objectID, with: tokenAuthentication).getData()
+        _ = try await sdkService.apiService.claimDevice(deviceID: deviceID, objectID: objectID, with: tokenAuthentication).getData()
         
-        try await BlueSynchronizeMobileAccessCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id)
+        try await BlueSynchronizeMobileAccessCommand(sdkService).runAsync(credentialID: credential.credentialID.id)
         
-        let status = try await BlueSynchronizeAccessDeviceCommand(self.blueAPI).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID)
+        let status = try await BlueSynchronizeAccessDeviceCommand(sdkService).runAsync(credentialID: credential.credentialID.id, deviceID: deviceID)
         
         blueFireListeners(fireEvent: .accessDeviceClaimed, data: nil)
         
@@ -440,7 +440,7 @@ public class BlueClaimAccessDeviceCommand: BlueAPIAsyncCommand {
     }
 }
 
-public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
+public class BlueGetWritableAccessCredentialsCommand: BlueSdkAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             organisation: blueCastArg(String.self, arg0),
@@ -453,10 +453,10 @@ public class BlueGetWritableAccessCredentialsCommand: BlueAPIAsyncCommand {
             throw BlueError(.sdkCredentialNotFound)
         }
         
-        let tokenAuthentication = try await BlueAccessAPIHelper(blueAPI!)
+        let tokenAuthentication = try await sdkService.authenticationTokenService
             .getTokenAuthentication(credential: credential)
         
-        let credentials = try await blueAPI!.getAccessCredentials(with: tokenAuthentication).getData()
+        let credentials = try await sdkService.apiService.getAccessCredentials(with: tokenAuthentication).getData()
         
         return BlueAccessCredentialList(credentials: credentials)
     }
@@ -478,24 +478,31 @@ public struct BlueClearDataCommand: BlueCommand {
     }
 }
 
-internal typealias BlueTerminalRunClosure = (
-    _ deviceID: String,
-    _ timeoutSeconds: Double,
-    _ action: String
-) async throws -> BlueOssAccessResult
+protocol BlueTerminalRunProtocol {
+    func runOssSoMobile(deviceID: String) async throws -> BlueOssAccessEventsResult
+    func runOssSidMobile(deviceID: String) async throws -> BlueOssAccessResult
+}
 
-public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
-    private let terminalRun: BlueTerminalRunClosure?
-    
-    init(using terminalRun: BlueTerminalRunClosure? = nil) {
-        if #available(macOS 10.15, *) {
-            self.terminalRun = terminalRun ?? blueTerminalRun
-        } else {
-            self.terminalRun = nil
-        }
+internal class BlueTerminalRunImplementation: BlueTerminalRunProtocol {
+    func runOssSoMobile(deviceID: String) async throws -> BlueOssAccessEventsResult {
+        return try await blueTerminalRun(deviceID: deviceID, action: "ossSoMobile")
     }
     
-    internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+    func runOssSidMobile(deviceID: String) async throws -> BlueOssAccessResult {
+        return try await blueTerminalRun(deviceID: deviceID, action: "ossSidMobile")
+    }
+}
+
+public class BlueTryAccessDeviceCommand: BlueSdkAsyncCommand {
+    private let terminalRun: BlueTerminalRunProtocol
+    
+    init(_ sdkService: BlueSdkService, using terminalRun: BlueTerminalRunProtocol? = nil) {
+        self.terminalRun = terminalRun ?? BlueTerminalRunImplementation()
+        
+        super.init(sdkService)
+    }
+    
+    override internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(deviceID: blueCastArg(String.self, arg0))
     }
     
@@ -505,46 +512,54 @@ public struct BlueTryAccessDeviceCommand: BlueAsyncCommand {
     /// - parameter deviceID: The Device ID.
     /// - throws: Throws an error of type `BlueError(.sdkDeviceNotFound)` if the device could not be found.
     /// - throws: Throws an error of type `BlueError(.sdkSpTokenNotFound)` if neither an OssSo nor an OssSid token is found.
-    /// - throws: Throws an error of type `BlueError(.sdkUnsupportedPlatform)` If the macOS version is earlier than 10.15.
     public func runAsync(deviceID: String) async throws -> BlueOssAccessResult {
         guard let device = blueGetDevice(deviceID) else {
             throw BlueError(.sdkDeviceNotFound)
         }
         
+#if os(iOS) || os(watchOS)
+        return try await blueShowAccessDeviceModal {
+            return try await self.tryOssAccess(device)
+        }
+#else
+        return try await tryOssAccess(device)
+#endif
+    }
+    
+    private func tryOssAccess(_ device: BlueDevice) async throws -> BlueOssAccessResult {
         let hasOssSoToken = blueHasSpTokenForAction(device: device, action: "ossSoMobile")
         let hasOssSidToken = blueHasSpTokenForAction(device: device, action: "ossSidMobile")
         
-        if (!hasOssSoToken && !hasOssSidToken) {
-            throw BlueError(.sdkSpTokenNotFound)
+        if (hasOssSoToken) {
+            let accessResult = try await terminalRun.runOssSoMobile(deviceID: device.info.deviceID)
+        
+            if (!accessResult.events.isEmpty) {
+                pushEvents(device: device, events: accessResult.events)
+            }
+            
+            return accessResult.accessResult
         }
         
-        let tryOssAccess: () async throws -> BlueOssAccessResult = {
-            guard #available(macOS 10.15, *) else {
-                throw BlueError(.sdkUnsupportedPlatform)
-            }
-            
-            guard let terminalRun = self.terminalRun else {
-                throw BlueError(.sdkUnsupportedPlatform)
-            }
-            
-            if (hasOssSoToken) {
-                return try await terminalRun(deviceID, defaultTimeoutSec, "ossSoMobile")
-            }
-            
-            if (hasOssSidToken) {
-                return try await terminalRun(deviceID, defaultTimeoutSec, "ossSidMobile")
-            }
-            
-            throw BlueError(.sdkSpTokenNotFound)
+        if (hasOssSidToken) {
+            return try await terminalRun.runOssSidMobile(deviceID: device.info.deviceID)
         }
         
-#if os(iOS) || os(watchOS)
-        return try await blueShowAccessDeviceModal {
-            return try await tryOssAccess()
+        throw BlueError(.sdkSpTokenNotFound)
+    }
+    
+    private func pushEvents(device: BlueDevice, events: [BlueEvent]) {
+        do {
+            let token = try blueGetSpTokenForAction(device: device, action: "ossSoMobile", data: nil)
+            
+            let credentialID = String(data: token.ossSo.infoFile.subdata(in: 3..<13), encoding: .utf8) ?? ""
+            
+            sdkService.eventService.pushEvents(
+                credentialID,
+                events.map { BluePushEvent(event: $0, deviceId: device.info.deviceID) }
+            )
+        } catch {
+            blueLogError(error.localizedDescription)
         }
-#else
-        return try await tryOssAccess()
-#endif
     }
 }
 

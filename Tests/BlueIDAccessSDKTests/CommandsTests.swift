@@ -25,7 +25,7 @@ final class CommandsTests: BlueXCTestCase {
     
     func testRunGetAccessCredentialsCommand() async throws {
         let credential = blueCreateAccessCredentialDemo()
-        try await BlueAddAccessCredentialCommand(DefaultBlueAPIMock()).runAsync(credential: credential)
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
         
         let arg0: Any? = NSNull()
         let arg1: Data? = nil
