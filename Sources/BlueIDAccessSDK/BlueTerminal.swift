@@ -404,7 +404,7 @@ public func blueTerminalRun<HandlerResult>(
         } catch let error {
             blueActiveDevice = nil
             
-            if !wasConnected && device.isConnected {
+            if !wasConnected {
                 do {
                     try device.disconnect()
                 } catch {
