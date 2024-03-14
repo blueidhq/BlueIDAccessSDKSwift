@@ -1,10 +1,13 @@
 import Foundation
+import Combine
 import SwiftProtobuf
 
 internal let blueAccessCredentialsKeyChain = BlueKeychain(attrService: "blueid.accessCredentials")
 internal let blueAccessAuthenticationTokensKeyChain = BlueKeychain(attrService: "blueid.accessAuthenticationTokens")
 internal let blueAccessDevicesStorage = BlueStorage(collection: "blueid.accessDevices")
 internal let blueAccessOssSettingsKeyChain = BlueKeychain(attrService: "blueid.accessOssSettings")
+
+// TODO: Split into separate files
 
 public class BlueAddAccessCredentialCommand: BlueSdkAsyncCommand {
     internal override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
@@ -124,19 +127,29 @@ public struct BlueGetAccessDevicesCommand: BlueCommand {
 }
 
 public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
-    internal override func runAsync(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) async throws -> Any? {
-        if #available(macOS 10.15, *) {
-            return try await runAsync(
-                credentialID: try blueCastArg(String.self, arg0),
-                deviceID: try blueCastArg(String.self, arg1)
-            )
-        } else {
-            throw BlueError(.sdkUnsupportedPlatform)
-        }
+    public enum BlueSynchronizeAccessTaskId {
+        case getAuthenticationToken
+        case getDeviceConfig
+        case updateDeviceConfig
+        case updateDeviceTime
+        case waitForRestart
+        case pushEventLogs
+        case pushSystemLogs
+        case getBlacklistEntries
+        case deployBlacklistEntries
+        case getSystemStatus
+        case pushSystemStatus
     }
     
-    @available(macOS 10.15, *)
-    public func runAsync(credentialID: String, deviceID: String) async throws -> BlueSystemStatus? {
+    internal override func runAsync(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) async throws -> Any? {
+        return try await runAsync(
+            credentialID: try blueCastArg(String.self, arg0),
+            deviceID: try blueCastArg(String.self, arg1),
+            showModal: try blueCastArg(Bool.self, arg2)
+        )
+    }
+    
+    public func runAsync(credentialID: String, deviceID: String, showModal: Bool? = false) async throws -> BlueSystemStatus? {
         guard let device = blueGetDevice(deviceID) else {
             throw BlueError(.sdkDeviceNotFound)
         }
@@ -145,66 +158,207 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             throw BlueError(.sdkCredentialNotFound)
         }
         
-        let tokenAuthentication = try await sdkService.authenticationTokenService
-            .getTokenAuthentication(credential: credential)
+        let tasks = [
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.getAuthenticationToken,
+                label: blueI18n.syncDeviceGetAuthenticationTokenTaskLabel
+            ) { _ in
+                .result(try await self.getAuthenticationToken(credential))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.getDeviceConfig,
+                label: blueI18n.syncDeviceRetrieveDeviceConfigurationTaskLabel
+            ) { runner in
+                let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
+                
+                return .result(try await self.getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.updateDeviceConfig,
+                label: blueI18n.syncDeviceUpdateDeviceConfigurationTaskLabel
+            ) { runner in
+                let config: BlueSystemConfig? = try runner.getResult(BlueSynchronizeAccessTaskId.getDeviceConfig)
+                
+                let status: BlueSystemStatus = try await self.updateDevice(deviceID, config)
+                
+                device.updateInfo(systemStatus: status)
+                
+                return .resultWithStatus(status, config == nil ? .skipped: .succeeded)
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.updateDeviceTime,
+                label: blueI18n.syncDeviceUpdateDeviceTimeTaskLabel
+            ) { runner in
+                let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.updateDeviceConfig)
+                
+                return .resultWithStatus(nil, status.settings.timeWasSet == true ? .succeeded : .skipped)
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.waitForRestart,
+                label: blueI18n.syncDeviceWaitForDeviceToRestartTaskLabel
+            ) { _ in
+                .result(try await self.waitUntilDeviceHasBeenRestarted(deviceID))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.pushEventLogs,
+                label: blueI18n.syncDevicePushEventLogsTaskLabel,
+                failable: true
+            ) { runner in                
+                let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
+                let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.updateDeviceConfig)
+                
+                return .result(try await self.pushEventLogs(status: status, credential: credential, deviceID: deviceID, with: tokenAuthentication))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.pushSystemLogs,
+                label: blueI18n.syncDevicePushSystemLogsTaskLabel,
+                failable: true
+            ) { runner in
+                let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
+                let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.updateDeviceConfig)
+                
+                return .result(try await self.pushSystemLogs(status: status, deviceID: deviceID, with: tokenAuthentication))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.getBlacklistEntries,
+                label: blueI18n.syncDeviceRetrieveBlacklistEntriesTaskLabel,
+                failable: true
+            ) { runner in
+                let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
+                
+                return .result(try await self.getBlacklistEntries(deviceID, tokenAuthentication))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.deployBlacklistEntries,
+                label: blueI18n.syncDeviceDeployBlacklistEntriesTaskLabel,
+                failable: true
+            ) { runner in
+                let entries: BlueBlacklistEntries? = try runner.getResult(BlueSynchronizeAccessTaskId.getBlacklistEntries)
+                
+                guard let entries = entries else {
+                    return .resultWithStatus(nil, .failed)
+                }
+                
+                return .result(try await self.deployBlacklistEntries(deviceID, entries))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.getSystemStatus,
+                label: blueI18n.syncDeviceRetrieveSystemStatusTaskLabel
+            ) { _ in
+                .result(try await self.getSystemStatus(deviceID))
+            },
+            
+            BlueTask(
+                id: BlueSynchronizeAccessTaskId.pushSystemStatus,
+                label: blueI18n.syncDevicePushSystemStatusTaskLabel
+            ) { runner in
+                let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
+                let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.getSystemStatus)
+                
+                try await self.pushDeviceSystemStatus(status: status, with: tokenAuthentication)
+                
+                return .result(status)
+            }
+        ]
         
-        let config = try await getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication)
+        let runner = BlueSerialTaskRunner(tasks)
         
-        var update = BlueSystemUpdate()
-        update.timeUnix = BlueSystemTimeUnix()
-        update.timeUnix.epoch = UInt32(Date().timeIntervalSince1970)
+#if os(iOS) || os(watchOS)
+        if (showModal == true) {
+            try await blueShowSynchronizeAccessDeviceModal(runner)
+        } else {
+            try await runner.execute(true)
+        }
+#else
+        try await runner.execute(true)
+#endif
         
-        if let config = config {
-            update.config = config
+        if runner.isSuccessful() {
+            return try runner.getResult(BlueSynchronizeAccessTaskId.pushSystemStatus)
         }
         
-        let updateStatus: BlueSystemStatus = try await blueTerminalRun(
-            deviceID: deviceID,
-            timeoutSeconds: 30.0,
-            action: "UPDATE",
-            data: update
-        )
-        
-        device.updateInfo(systemStatus: updateStatus)
-        
-        await waitUntilDeviceHasBeenRestarted()
-        
-        try await pushEventLogs(status: updateStatus, credential: credential, deviceID: deviceID, with: tokenAuthentication)
-        try await pushSystemLogs(status: updateStatus, deviceID: deviceID, with: tokenAuthentication)
-        try await deployBlacklistEntries(deviceID: deviceID, with: tokenAuthentication)
-        
-        let status: BlueSystemStatus = await getSystemStatus(deviceID) ?? updateStatus
-        
-        try await pushDeviceSystemStatus(status: status, with: tokenAuthentication)
-        
-        return status
+        return nil
     }
     
-    @available(macOS 10.15, *)
-    private func waitUntilDeviceHasBeenRestarted() async {
-        try? await Task.sleep(nanoseconds: UInt64(blueSecondsToNanoseconds(10)))
+    private func updateDevice(_ deviceID: String, _ config: BlueSystemConfig?) async throws -> BlueSystemStatus {
+        do {
+            var update = BlueSystemUpdate()
+            update.timeUnix = BlueSystemTimeUnix()
+            update.timeUnix.epoch = UInt32(Date().timeIntervalSince1970)
+            
+            if let config = config {
+                update.config = config
+            }
+            
+            return try await blueTerminalRun(
+                deviceID: deviceID,
+                timeoutSeconds: 30.0,
+                action: "UPDATE",
+                data: update
+            )
+        } catch {
+            throw BlueError(.sdkUpdateDeviceFailed, cause: error)
+        }
     }
     
-    @available(macOS 10.15, *)
-    private func getSystemStatus(_ deviceID: String) async -> BlueSystemStatus? {
-        return try? await blueTerminalRun(
-            deviceID: deviceID,
-            timeoutSeconds: 30.0,
-            action: "STATUS"
-        )
+    private func getAuthenticationToken(_ credential: BlueAccessCredential) async throws -> BlueTokenAuthentication {
+        do {
+            return try await sdkService.authenticationTokenService
+                .getTokenAuthentication(credential: credential)
+        } catch {
+            throw BlueError(.sdkGetAuthenticationTokenFailed, cause: error)
+        }
     }
     
-    @available(macOS 10.15, *)
-    private func deployBlacklistEntries(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
+    private func waitUntilDeviceHasBeenRestarted(_ deviceID: String) async throws {
+        do {
+            try? await Task.sleep(nanoseconds: UInt64(blueSecondsToNanoseconds(30)))
+            
+            if blueGetDevice(deviceID) == nil {
+                throw BlueError(.sdkDeviceNotFound)
+            }
+        } catch {
+            throw BlueError(.sdkWaitDeviceToRestartFailed, cause: error)
+        }
+    }
+    
+    private func getSystemStatus(_ deviceID: String) async throws -> BlueSystemStatus {
+        do {
+            return try await blueTerminalRun(
+                deviceID: deviceID,
+                timeoutSeconds: 30.0,
+                action: "STATUS"
+            )
+        } catch {
+            throw BlueError(.sdkGetSystemStatusFailed, cause: error)
+        }
+    }
+    
+    private func getBlacklistEntries(_ deviceID: String, _ tokenAuthentication: BlueTokenAuthentication) async throws -> BlueBlacklistEntries {
         do {
             let response = try await sdkService.apiService.getBlacklistEntries(deviceID: deviceID, with: tokenAuthentication, limit: 50).getData()
             
             guard let data = Data(base64Encoded: response.blacklistEntries) else {
-                return
+                throw BlueError(.sdkDecodeBase64Failed)
             }
             
-            let entries: BlueBlacklistEntries = try blueDecodeMessage(data)
-            
+            return try blueDecodeMessage(data)
+        } catch {
+            throw BlueError(.sdkGetBlacklistEntriesFailed, cause: error)
+        }
+    }
+    
+    private func deployBlacklistEntries(_ deviceID: String, _ entries: BlueBlacklistEntries) async throws {
+        do {
             try await blueTerminalRun(
                 deviceID: deviceID,
                 timeoutSeconds: 30.0,
@@ -248,7 +402,6 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
         }
     }
     
-    @available(macOS 10.15, *)
     private func pushEventLogs(status: BlueSystemStatus, credential: BlueAccessCredential, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
             guard status.settings.eventLogEntriesCount > 0 else {
@@ -293,7 +446,6 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
         }
     }
     
-    @available(macOS 10.15, *)
     private func pushSystemLogs(status: BlueSystemStatus, deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws {
         do {
             guard status.settings.systemLogEntriesCount > 0 else {
@@ -332,7 +484,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
                 
                 return logResult.entries.count
             }
-
+            
         } catch {
             throw BlueError(.sdkSystemLogEntriesPushFailed, cause: error)
         }
@@ -414,8 +566,7 @@ public class BlueClaimAccessDeviceCommand: BlueSdkAsyncCommand {
             throw BlueError(.sdkUnsupportedPlatform)
         }
     }
-    
-    @available(macOS 10.15, *)
+
     public func runAsync(credentialID: String, deviceID: String, objectID: String) async throws -> BlueSystemStatus? {
         guard let _ = blueGetDevice(deviceID) else {
             throw BlueError(.sdkDeviceNotFound)

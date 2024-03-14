@@ -1,10 +1,10 @@
 #if os(iOS) || os(watchOS)
 import Foundation
 
-/// Displays a modal view (sheet) which performs a scoped task related to accessing an device via OSS.
+/// Displays a modal view (sheet) which performs a scoped task related to accessing a device via OSS.
 /// - parameter task: The OSS task to be performed.
 public func blueShowAccessDeviceModal(_ task: @escaping () async throws -> BlueOssAccessResult) async throws -> BlueOssAccessResult {
-    let session = BlueModalSession()
+    let session = BlueAccessDeviceModalSession()
 
     blueRunInMainThread {
         session.begin(title: blueI18n.openViaOssTitle, message: blueI18n.openViaOssWaitMessage)
@@ -51,6 +51,54 @@ public func blueShowAccessDeviceModal(_ task: @escaping () async throws -> BlueO
                 title: blueI18n.openViaOssErrorTitle,
                 errorMessage: errorMessage
             )
+        }
+        
+        throw error
+    }
+}
+
+/// Displays a modal view (sheet) which performs tasks related to synchronizing a device.
+/// - parameter runner: The Task Runner.
+public func blueShowSynchronizeAccessDeviceModal(_ runner: BlueTaskRunner) async throws {
+    let session = BlueSynchronizeAccessDeviceModalSession()
+
+    blueRunInMainThread {
+        session.begin(
+            title: blueI18n.syncDeviceInProgressTitle,
+            tasks: runner.getTasks(),
+            dismiss: blueI18n.cmnCancelLabel
+        ) {
+            if runner.cancel() {
+                session.disableDismiss()
+                session.updateTitle(blueI18n.syncDeviceCancellingTitle)
+            } else {
+                session.invalidate()
+            }
+        }
+    }
+    
+    do {
+        try await runner.execute(false)
+        
+        blueRunInMainThread {
+            if runner.isCancelled() {
+                session.invalidate()
+            } else {
+                session.updateDismiss(blueI18n.cmnCloseLabel)
+                
+                if runner.isFailed() {
+                    session.updateTitle(blueI18n.syncDeviceFailedTitle)
+                    BlueSound.shared.play(BlueNegativeSoundSystemID)
+                } else {
+                    BlueSound.shared.play(BluePositiveSoundSystemID)
+                }
+            }
+        }
+    } catch {
+        blueRunInMainThread {
+            session.updateTitle(blueI18n.syncDeviceFailedTitle)
+            session.updateDismiss(blueI18n.cmnCloseLabel)
+            BlueSound.shared.play(BlueNegativeSoundSystemID)
         }
         
         throw error

@@ -124,6 +124,11 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
   case sdkDecodeJsonFailed // = -414
   case sdkFetchDataFailed // = -415
   case sdkTimeout // = -416
+  case sdkGetAuthenticationTokenFailed // = -417
+  case sdkUpdateDeviceFailed // = -418
+  case sdkGetBlacklistEntriesFailed // = -419
+  case sdkGetSystemStatusFailed // = -420
+  case sdkWaitDeviceToRestartFailed // = -421
   case ossMareturnCodeStart // = -1000
   case ossMareturnCodeEnd // = -1100
 
@@ -135,6 +140,11 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch rawValue {
     case -1100: self = .ossMareturnCodeEnd
     case -1000: self = .ossMareturnCodeStart
+    case -421: self = .sdkWaitDeviceToRestartFailed
+    case -420: self = .sdkGetSystemStatusFailed
+    case -419: self = .sdkGetBlacklistEntriesFailed
+    case -418: self = .sdkUpdateDeviceFailed
+    case -417: self = .sdkGetAuthenticationTokenFailed
     case -416: self = .sdkTimeout
     case -415: self = .sdkFetchDataFailed
     case -414: self = .sdkDecodeJsonFailed
@@ -233,6 +243,11 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch self {
     case .ossMareturnCodeEnd: return -1100
     case .ossMareturnCodeStart: return -1000
+    case .sdkWaitDeviceToRestartFailed: return -421
+    case .sdkGetSystemStatusFailed: return -420
+    case .sdkGetBlacklistEntriesFailed: return -419
+    case .sdkUpdateDeviceFailed: return -418
+    case .sdkGetAuthenticationTokenFailed: return -417
     case .sdkTimeout: return -416
     case .sdkFetchDataFailed: return -415
     case .sdkDecodeJsonFailed: return -414
@@ -3580,6 +3595,11 @@ extension BlueReturnCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     -1100: .same(proto: "OssMAReturnCodeEnd"),
     -1000: .same(proto: "OssMAReturnCodeStart"),
+    -421: .same(proto: "SdkWaitDeviceToRestartFailed"),
+    -420: .same(proto: "SdkGetSystemStatusFailed"),
+    -419: .same(proto: "SdkGetBlacklistEntriesFailed"),
+    -418: .same(proto: "SdkUpdateDeviceFailed"),
+    -417: .same(proto: "SdkGetAuthenticationTokenFailed"),
     -416: .same(proto: "SdkTimeout"),
     -415: .same(proto: "SdkFetchDataFailed"),
     -414: .same(proto: "SdkDecodeJsonFailed"),

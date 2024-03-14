@@ -180,15 +180,6 @@ public struct BlueI18n {
   /// Clears the value of `nfcInitializingWritingProcess`. Subsequent reads from it will return its default value.
   public mutating func clearNfcInitializingWritingProcess() {_uniqueStorage()._nfcInitializingWritingProcess = nil}
 
-  public var cmnCancelLabel: String {
-    get {return _storage._cmnCancelLabel ?? "Cancel"}
-    set {_uniqueStorage()._cmnCancelLabel = newValue}
-  }
-  /// Returns true if `cmnCancelLabel` has been explicitly set.
-  public var hasCmnCancelLabel: Bool {return _storage._cmnCancelLabel != nil}
-  /// Clears the value of `cmnCancelLabel`. Subsequent reads from it will return its default value.
-  public mutating func clearCmnCancelLabel() {_uniqueStorage()._cmnCancelLabel = nil}
-
   public var openViaOssTitle: String {
     get {return _storage._openViaOssTitle ?? "Unlocking in Progress"}
     set {_uniqueStorage()._openViaOssTitle = newValue}
@@ -260,6 +251,150 @@ public struct BlueI18n {
   public var hasOpenViaOssErrorTitle: Bool {return _storage._openViaOssErrorTitle != nil}
   /// Clears the value of `openViaOssErrorTitle`. Subsequent reads from it will return its default value.
   public mutating func clearOpenViaOssErrorTitle() {_uniqueStorage()._openViaOssErrorTitle = nil}
+
+  public var cmnCancelLabel: String {
+    get {return _storage._cmnCancelLabel ?? "Cancel"}
+    set {_uniqueStorage()._cmnCancelLabel = newValue}
+  }
+  /// Returns true if `cmnCancelLabel` has been explicitly set.
+  public var hasCmnCancelLabel: Bool {return _storage._cmnCancelLabel != nil}
+  /// Clears the value of `cmnCancelLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearCmnCancelLabel() {_uniqueStorage()._cmnCancelLabel = nil}
+
+  public var cmnCloseLabel: String {
+    get {return _storage._cmnCloseLabel ?? "Close"}
+    set {_uniqueStorage()._cmnCloseLabel = newValue}
+  }
+  /// Returns true if `cmnCloseLabel` has been explicitly set.
+  public var hasCmnCloseLabel: Bool {return _storage._cmnCloseLabel != nil}
+  /// Clears the value of `cmnCloseLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearCmnCloseLabel() {_uniqueStorage()._cmnCloseLabel = nil}
+
+  public var syncDeviceInProgressTitle: String {
+    get {return _storage._syncDeviceInProgressTitle ?? "Synchronization in Progress"}
+    set {_uniqueStorage()._syncDeviceInProgressTitle = newValue}
+  }
+  /// Returns true if `syncDeviceInProgressTitle` has been explicitly set.
+  public var hasSyncDeviceInProgressTitle: Bool {return _storage._syncDeviceInProgressTitle != nil}
+  /// Clears the value of `syncDeviceInProgressTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceInProgressTitle() {_uniqueStorage()._syncDeviceInProgressTitle = nil}
+
+  public var syncDeviceFailedTitle: String {
+    get {return _storage._syncDeviceFailedTitle ?? "Synchronization has failed"}
+    set {_uniqueStorage()._syncDeviceFailedTitle = newValue}
+  }
+  /// Returns true if `syncDeviceFailedTitle` has been explicitly set.
+  public var hasSyncDeviceFailedTitle: Bool {return _storage._syncDeviceFailedTitle != nil}
+  /// Clears the value of `syncDeviceFailedTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceFailedTitle() {_uniqueStorage()._syncDeviceFailedTitle = nil}
+
+  public var syncDeviceCancellingTitle: String {
+    get {return _storage._syncDeviceCancellingTitle ?? "Cancelling..."}
+    set {_uniqueStorage()._syncDeviceCancellingTitle = newValue}
+  }
+  /// Returns true if `syncDeviceCancellingTitle` has been explicitly set.
+  public var hasSyncDeviceCancellingTitle: Bool {return _storage._syncDeviceCancellingTitle != nil}
+  /// Clears the value of `syncDeviceCancellingTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceCancellingTitle() {_uniqueStorage()._syncDeviceCancellingTitle = nil}
+
+  public var syncDeviceGetAuthenticationTokenTaskLabel: String {
+    get {return _storage._syncDeviceGetAuthenticationTokenTaskLabel ?? "Issue authentication token"}
+    set {_uniqueStorage()._syncDeviceGetAuthenticationTokenTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceGetAuthenticationTokenTaskLabel` has been explicitly set.
+  public var hasSyncDeviceGetAuthenticationTokenTaskLabel: Bool {return _storage._syncDeviceGetAuthenticationTokenTaskLabel != nil}
+  /// Clears the value of `syncDeviceGetAuthenticationTokenTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceGetAuthenticationTokenTaskLabel() {_uniqueStorage()._syncDeviceGetAuthenticationTokenTaskLabel = nil}
+
+  public var syncDeviceRetrieveDeviceConfigurationTaskLabel: String {
+    get {return _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel ?? "Retrieve device configuration"}
+    set {_uniqueStorage()._syncDeviceRetrieveDeviceConfigurationTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceRetrieveDeviceConfigurationTaskLabel` has been explicitly set.
+  public var hasSyncDeviceRetrieveDeviceConfigurationTaskLabel: Bool {return _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel != nil}
+  /// Clears the value of `syncDeviceRetrieveDeviceConfigurationTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceRetrieveDeviceConfigurationTaskLabel() {_uniqueStorage()._syncDeviceRetrieveDeviceConfigurationTaskLabel = nil}
+
+  public var syncDeviceUpdateDeviceConfigurationTaskLabel: String {
+    get {return _storage._syncDeviceUpdateDeviceConfigurationTaskLabel ?? "Update device configuration"}
+    set {_uniqueStorage()._syncDeviceUpdateDeviceConfigurationTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceUpdateDeviceConfigurationTaskLabel` has been explicitly set.
+  public var hasSyncDeviceUpdateDeviceConfigurationTaskLabel: Bool {return _storage._syncDeviceUpdateDeviceConfigurationTaskLabel != nil}
+  /// Clears the value of `syncDeviceUpdateDeviceConfigurationTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceUpdateDeviceConfigurationTaskLabel() {_uniqueStorage()._syncDeviceUpdateDeviceConfigurationTaskLabel = nil}
+
+  public var syncDeviceUpdateDeviceTimeTaskLabel: String {
+    get {return _storage._syncDeviceUpdateDeviceTimeTaskLabel ?? "Update device time"}
+    set {_uniqueStorage()._syncDeviceUpdateDeviceTimeTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceUpdateDeviceTimeTaskLabel` has been explicitly set.
+  public var hasSyncDeviceUpdateDeviceTimeTaskLabel: Bool {return _storage._syncDeviceUpdateDeviceTimeTaskLabel != nil}
+  /// Clears the value of `syncDeviceUpdateDeviceTimeTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceUpdateDeviceTimeTaskLabel() {_uniqueStorage()._syncDeviceUpdateDeviceTimeTaskLabel = nil}
+
+  public var syncDeviceWaitForDeviceToRestartTaskLabel: String {
+    get {return _storage._syncDeviceWaitForDeviceToRestartTaskLabel ?? "Wait for device to restart"}
+    set {_uniqueStorage()._syncDeviceWaitForDeviceToRestartTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceWaitForDeviceToRestartTaskLabel` has been explicitly set.
+  public var hasSyncDeviceWaitForDeviceToRestartTaskLabel: Bool {return _storage._syncDeviceWaitForDeviceToRestartTaskLabel != nil}
+  /// Clears the value of `syncDeviceWaitForDeviceToRestartTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceWaitForDeviceToRestartTaskLabel() {_uniqueStorage()._syncDeviceWaitForDeviceToRestartTaskLabel = nil}
+
+  public var syncDevicePushEventLogsTaskLabel: String {
+    get {return _storage._syncDevicePushEventLogsTaskLabel ?? "Push event logs"}
+    set {_uniqueStorage()._syncDevicePushEventLogsTaskLabel = newValue}
+  }
+  /// Returns true if `syncDevicePushEventLogsTaskLabel` has been explicitly set.
+  public var hasSyncDevicePushEventLogsTaskLabel: Bool {return _storage._syncDevicePushEventLogsTaskLabel != nil}
+  /// Clears the value of `syncDevicePushEventLogsTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDevicePushEventLogsTaskLabel() {_uniqueStorage()._syncDevicePushEventLogsTaskLabel = nil}
+
+  public var syncDevicePushSystemLogsTaskLabel: String {
+    get {return _storage._syncDevicePushSystemLogsTaskLabel ?? "Push system logs"}
+    set {_uniqueStorage()._syncDevicePushSystemLogsTaskLabel = newValue}
+  }
+  /// Returns true if `syncDevicePushSystemLogsTaskLabel` has been explicitly set.
+  public var hasSyncDevicePushSystemLogsTaskLabel: Bool {return _storage._syncDevicePushSystemLogsTaskLabel != nil}
+  /// Clears the value of `syncDevicePushSystemLogsTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDevicePushSystemLogsTaskLabel() {_uniqueStorage()._syncDevicePushSystemLogsTaskLabel = nil}
+
+  public var syncDeviceRetrieveBlacklistEntriesTaskLabel: String {
+    get {return _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel ?? "Retrieve blacklist entries"}
+    set {_uniqueStorage()._syncDeviceRetrieveBlacklistEntriesTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceRetrieveBlacklistEntriesTaskLabel` has been explicitly set.
+  public var hasSyncDeviceRetrieveBlacklistEntriesTaskLabel: Bool {return _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel != nil}
+  /// Clears the value of `syncDeviceRetrieveBlacklistEntriesTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceRetrieveBlacklistEntriesTaskLabel() {_uniqueStorage()._syncDeviceRetrieveBlacklistEntriesTaskLabel = nil}
+
+  public var syncDeviceDeployBlacklistEntriesTaskLabel: String {
+    get {return _storage._syncDeviceDeployBlacklistEntriesTaskLabel ?? "Deploy blacklist entries"}
+    set {_uniqueStorage()._syncDeviceDeployBlacklistEntriesTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceDeployBlacklistEntriesTaskLabel` has been explicitly set.
+  public var hasSyncDeviceDeployBlacklistEntriesTaskLabel: Bool {return _storage._syncDeviceDeployBlacklistEntriesTaskLabel != nil}
+  /// Clears the value of `syncDeviceDeployBlacklistEntriesTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceDeployBlacklistEntriesTaskLabel() {_uniqueStorage()._syncDeviceDeployBlacklistEntriesTaskLabel = nil}
+
+  public var syncDeviceRetrieveSystemStatusTaskLabel: String {
+    get {return _storage._syncDeviceRetrieveSystemStatusTaskLabel ?? "Retrieve system status"}
+    set {_uniqueStorage()._syncDeviceRetrieveSystemStatusTaskLabel = newValue}
+  }
+  /// Returns true if `syncDeviceRetrieveSystemStatusTaskLabel` has been explicitly set.
+  public var hasSyncDeviceRetrieveSystemStatusTaskLabel: Bool {return _storage._syncDeviceRetrieveSystemStatusTaskLabel != nil}
+  /// Clears the value of `syncDeviceRetrieveSystemStatusTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceRetrieveSystemStatusTaskLabel() {_uniqueStorage()._syncDeviceRetrieveSystemStatusTaskLabel = nil}
+
+  public var syncDevicePushSystemStatusTaskLabel: String {
+    get {return _storage._syncDevicePushSystemStatusTaskLabel ?? "Push system status"}
+    set {_uniqueStorage()._syncDevicePushSystemStatusTaskLabel = newValue}
+  }
+  /// Returns true if `syncDevicePushSystemStatusTaskLabel` has been explicitly set.
+  public var hasSyncDevicePushSystemStatusTaskLabel: Bool {return _storage._syncDevicePushSystemStatusTaskLabel != nil}
+  /// Clears the value of `syncDevicePushSystemStatusTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDevicePushSystemStatusTaskLabel() {_uniqueStorage()._syncDevicePushSystemStatusTaskLabel = nil}
 
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -854,15 +989,30 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     7: .same(proto: "nfcOssSuccessUnprovisionMessage"),
     8: .same(proto: "nfcOssSuccessFormatMessage"),
     9: .same(proto: "nfcInitializingWritingProcess"),
-    10: .same(proto: "cmnCancelLabel"),
-    11: .same(proto: "openViaOssTitle"),
-    12: .same(proto: "openViaOssWaitMessage"),
-    13: .same(proto: "openViaOssAccessGrantedTitle"),
-    14: .same(proto: "openViaOssAccessGrantedMessage"),
-    15: .same(proto: "openViaOssAccessDeniedTitle"),
-    16: .same(proto: "openViaOssAccessDeniedMessage"),
-    17: .same(proto: "openViaOssAccessDeniedScheduleMismatchMessage"),
-    18: .same(proto: "openViaOssErrorTitle"),
+    10: .same(proto: "openViaOssTitle"),
+    11: .same(proto: "openViaOssWaitMessage"),
+    12: .same(proto: "openViaOssAccessGrantedTitle"),
+    13: .same(proto: "openViaOssAccessGrantedMessage"),
+    14: .same(proto: "openViaOssAccessDeniedTitle"),
+    15: .same(proto: "openViaOssAccessDeniedMessage"),
+    16: .same(proto: "openViaOssAccessDeniedScheduleMismatchMessage"),
+    17: .same(proto: "openViaOssErrorTitle"),
+    18: .same(proto: "cmnCancelLabel"),
+    19: .same(proto: "cmnCloseLabel"),
+    20: .same(proto: "syncDeviceInProgressTitle"),
+    21: .same(proto: "syncDeviceFailedTitle"),
+    22: .same(proto: "syncDeviceCancellingTitle"),
+    23: .same(proto: "syncDeviceGetAuthenticationTokenTaskLabel"),
+    24: .same(proto: "syncDeviceRetrieveDeviceConfigurationTaskLabel"),
+    25: .same(proto: "syncDeviceUpdateDeviceConfigurationTaskLabel"),
+    26: .same(proto: "syncDeviceUpdateDeviceTimeTaskLabel"),
+    27: .same(proto: "syncDeviceWaitForDeviceToRestartTaskLabel"),
+    28: .same(proto: "syncDevicePushEventLogsTaskLabel"),
+    29: .same(proto: "syncDevicePushSystemLogsTaskLabel"),
+    30: .same(proto: "syncDeviceRetrieveBlacklistEntriesTaskLabel"),
+    31: .same(proto: "syncDeviceDeployBlacklistEntriesTaskLabel"),
+    32: .same(proto: "syncDeviceRetrieveSystemStatusTaskLabel"),
+    33: .same(proto: "syncDevicePushSystemStatusTaskLabel"),
   ]
 
   fileprivate class _StorageClass {
@@ -875,7 +1025,6 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     var _nfcOssSuccessUnprovisionMessage: String? = nil
     var _nfcOssSuccessFormatMessage: String? = nil
     var _nfcInitializingWritingProcess: String? = nil
-    var _cmnCancelLabel: String? = nil
     var _openViaOssTitle: String? = nil
     var _openViaOssWaitMessage: String? = nil
     var _openViaOssAccessGrantedTitle: String? = nil
@@ -884,6 +1033,22 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     var _openViaOssAccessDeniedMessage: String? = nil
     var _openViaOssAccessDeniedScheduleMismatchMessage: String? = nil
     var _openViaOssErrorTitle: String? = nil
+    var _cmnCancelLabel: String? = nil
+    var _cmnCloseLabel: String? = nil
+    var _syncDeviceInProgressTitle: String? = nil
+    var _syncDeviceFailedTitle: String? = nil
+    var _syncDeviceCancellingTitle: String? = nil
+    var _syncDeviceGetAuthenticationTokenTaskLabel: String? = nil
+    var _syncDeviceRetrieveDeviceConfigurationTaskLabel: String? = nil
+    var _syncDeviceUpdateDeviceConfigurationTaskLabel: String? = nil
+    var _syncDeviceUpdateDeviceTimeTaskLabel: String? = nil
+    var _syncDeviceWaitForDeviceToRestartTaskLabel: String? = nil
+    var _syncDevicePushEventLogsTaskLabel: String? = nil
+    var _syncDevicePushSystemLogsTaskLabel: String? = nil
+    var _syncDeviceRetrieveBlacklistEntriesTaskLabel: String? = nil
+    var _syncDeviceDeployBlacklistEntriesTaskLabel: String? = nil
+    var _syncDeviceRetrieveSystemStatusTaskLabel: String? = nil
+    var _syncDevicePushSystemStatusTaskLabel: String? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -899,7 +1064,6 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       _nfcOssSuccessUnprovisionMessage = source._nfcOssSuccessUnprovisionMessage
       _nfcOssSuccessFormatMessage = source._nfcOssSuccessFormatMessage
       _nfcInitializingWritingProcess = source._nfcInitializingWritingProcess
-      _cmnCancelLabel = source._cmnCancelLabel
       _openViaOssTitle = source._openViaOssTitle
       _openViaOssWaitMessage = source._openViaOssWaitMessage
       _openViaOssAccessGrantedTitle = source._openViaOssAccessGrantedTitle
@@ -908,6 +1072,22 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       _openViaOssAccessDeniedMessage = source._openViaOssAccessDeniedMessage
       _openViaOssAccessDeniedScheduleMismatchMessage = source._openViaOssAccessDeniedScheduleMismatchMessage
       _openViaOssErrorTitle = source._openViaOssErrorTitle
+      _cmnCancelLabel = source._cmnCancelLabel
+      _cmnCloseLabel = source._cmnCloseLabel
+      _syncDeviceInProgressTitle = source._syncDeviceInProgressTitle
+      _syncDeviceFailedTitle = source._syncDeviceFailedTitle
+      _syncDeviceCancellingTitle = source._syncDeviceCancellingTitle
+      _syncDeviceGetAuthenticationTokenTaskLabel = source._syncDeviceGetAuthenticationTokenTaskLabel
+      _syncDeviceRetrieveDeviceConfigurationTaskLabel = source._syncDeviceRetrieveDeviceConfigurationTaskLabel
+      _syncDeviceUpdateDeviceConfigurationTaskLabel = source._syncDeviceUpdateDeviceConfigurationTaskLabel
+      _syncDeviceUpdateDeviceTimeTaskLabel = source._syncDeviceUpdateDeviceTimeTaskLabel
+      _syncDeviceWaitForDeviceToRestartTaskLabel = source._syncDeviceWaitForDeviceToRestartTaskLabel
+      _syncDevicePushEventLogsTaskLabel = source._syncDevicePushEventLogsTaskLabel
+      _syncDevicePushSystemLogsTaskLabel = source._syncDevicePushSystemLogsTaskLabel
+      _syncDeviceRetrieveBlacklistEntriesTaskLabel = source._syncDeviceRetrieveBlacklistEntriesTaskLabel
+      _syncDeviceDeployBlacklistEntriesTaskLabel = source._syncDeviceDeployBlacklistEntriesTaskLabel
+      _syncDeviceRetrieveSystemStatusTaskLabel = source._syncDeviceRetrieveSystemStatusTaskLabel
+      _syncDevicePushSystemStatusTaskLabel = source._syncDevicePushSystemStatusTaskLabel
     }
   }
 
@@ -929,7 +1109,6 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       if _storage._nfcOssSuccessUnprovisionMessage == nil {return false}
       if _storage._nfcOssSuccessFormatMessage == nil {return false}
       if _storage._nfcInitializingWritingProcess == nil {return false}
-      if _storage._cmnCancelLabel == nil {return false}
       if _storage._openViaOssTitle == nil {return false}
       if _storage._openViaOssWaitMessage == nil {return false}
       if _storage._openViaOssAccessGrantedTitle == nil {return false}
@@ -938,6 +1117,22 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       if _storage._openViaOssAccessDeniedMessage == nil {return false}
       if _storage._openViaOssAccessDeniedScheduleMismatchMessage == nil {return false}
       if _storage._openViaOssErrorTitle == nil {return false}
+      if _storage._cmnCancelLabel == nil {return false}
+      if _storage._cmnCloseLabel == nil {return false}
+      if _storage._syncDeviceInProgressTitle == nil {return false}
+      if _storage._syncDeviceFailedTitle == nil {return false}
+      if _storage._syncDeviceCancellingTitle == nil {return false}
+      if _storage._syncDeviceGetAuthenticationTokenTaskLabel == nil {return false}
+      if _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel == nil {return false}
+      if _storage._syncDeviceUpdateDeviceConfigurationTaskLabel == nil {return false}
+      if _storage._syncDeviceUpdateDeviceTimeTaskLabel == nil {return false}
+      if _storage._syncDeviceWaitForDeviceToRestartTaskLabel == nil {return false}
+      if _storage._syncDevicePushEventLogsTaskLabel == nil {return false}
+      if _storage._syncDevicePushSystemLogsTaskLabel == nil {return false}
+      if _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel == nil {return false}
+      if _storage._syncDeviceDeployBlacklistEntriesTaskLabel == nil {return false}
+      if _storage._syncDeviceRetrieveSystemStatusTaskLabel == nil {return false}
+      if _storage._syncDevicePushSystemStatusTaskLabel == nil {return false}
       return true
     }
   }
@@ -959,15 +1154,30 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         case 7: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessUnprovisionMessage) }()
         case 8: try { try decoder.decodeSingularStringField(value: &_storage._nfcOssSuccessFormatMessage) }()
         case 9: try { try decoder.decodeSingularStringField(value: &_storage._nfcInitializingWritingProcess) }()
-        case 10: try { try decoder.decodeSingularStringField(value: &_storage._cmnCancelLabel) }()
-        case 11: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssTitle) }()
-        case 12: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssWaitMessage) }()
-        case 13: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessGrantedTitle) }()
-        case 14: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessGrantedMessage) }()
-        case 15: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedTitle) }()
-        case 16: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedMessage) }()
-        case 17: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedScheduleMismatchMessage) }()
-        case 18: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssErrorTitle) }()
+        case 10: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssTitle) }()
+        case 11: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssWaitMessage) }()
+        case 12: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessGrantedTitle) }()
+        case 13: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessGrantedMessage) }()
+        case 14: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedTitle) }()
+        case 15: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedMessage) }()
+        case 16: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssAccessDeniedScheduleMismatchMessage) }()
+        case 17: try { try decoder.decodeSingularStringField(value: &_storage._openViaOssErrorTitle) }()
+        case 18: try { try decoder.decodeSingularStringField(value: &_storage._cmnCancelLabel) }()
+        case 19: try { try decoder.decodeSingularStringField(value: &_storage._cmnCloseLabel) }()
+        case 20: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceInProgressTitle) }()
+        case 21: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceFailedTitle) }()
+        case 22: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceCancellingTitle) }()
+        case 23: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceGetAuthenticationTokenTaskLabel) }()
+        case 24: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveDeviceConfigurationTaskLabel) }()
+        case 25: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceUpdateDeviceConfigurationTaskLabel) }()
+        case 26: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceUpdateDeviceTimeTaskLabel) }()
+        case 27: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceWaitForDeviceToRestartTaskLabel) }()
+        case 28: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushEventLogsTaskLabel) }()
+        case 29: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemLogsTaskLabel) }()
+        case 30: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveBlacklistEntriesTaskLabel) }()
+        case 31: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceDeployBlacklistEntriesTaskLabel) }()
+        case 32: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveSystemStatusTaskLabel) }()
+        case 33: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemStatusTaskLabel) }()
         default: break
         }
       }
@@ -1007,32 +1217,77 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       try { if let v = _storage._nfcInitializingWritingProcess {
         try visitor.visitSingularStringField(value: v, fieldNumber: 9)
       } }()
-      try { if let v = _storage._cmnCancelLabel {
+      try { if let v = _storage._openViaOssTitle {
         try visitor.visitSingularStringField(value: v, fieldNumber: 10)
       } }()
-      try { if let v = _storage._openViaOssTitle {
+      try { if let v = _storage._openViaOssWaitMessage {
         try visitor.visitSingularStringField(value: v, fieldNumber: 11)
       } }()
-      try { if let v = _storage._openViaOssWaitMessage {
+      try { if let v = _storage._openViaOssAccessGrantedTitle {
         try visitor.visitSingularStringField(value: v, fieldNumber: 12)
       } }()
-      try { if let v = _storage._openViaOssAccessGrantedTitle {
+      try { if let v = _storage._openViaOssAccessGrantedMessage {
         try visitor.visitSingularStringField(value: v, fieldNumber: 13)
       } }()
-      try { if let v = _storage._openViaOssAccessGrantedMessage {
+      try { if let v = _storage._openViaOssAccessDeniedTitle {
         try visitor.visitSingularStringField(value: v, fieldNumber: 14)
       } }()
-      try { if let v = _storage._openViaOssAccessDeniedTitle {
+      try { if let v = _storage._openViaOssAccessDeniedMessage {
         try visitor.visitSingularStringField(value: v, fieldNumber: 15)
       } }()
-      try { if let v = _storage._openViaOssAccessDeniedMessage {
+      try { if let v = _storage._openViaOssAccessDeniedScheduleMismatchMessage {
         try visitor.visitSingularStringField(value: v, fieldNumber: 16)
       } }()
-      try { if let v = _storage._openViaOssAccessDeniedScheduleMismatchMessage {
+      try { if let v = _storage._openViaOssErrorTitle {
         try visitor.visitSingularStringField(value: v, fieldNumber: 17)
       } }()
-      try { if let v = _storage._openViaOssErrorTitle {
+      try { if let v = _storage._cmnCancelLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 18)
+      } }()
+      try { if let v = _storage._cmnCloseLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 19)
+      } }()
+      try { if let v = _storage._syncDeviceInProgressTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 20)
+      } }()
+      try { if let v = _storage._syncDeviceFailedTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 21)
+      } }()
+      try { if let v = _storage._syncDeviceCancellingTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 22)
+      } }()
+      try { if let v = _storage._syncDeviceGetAuthenticationTokenTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 23)
+      } }()
+      try { if let v = _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 24)
+      } }()
+      try { if let v = _storage._syncDeviceUpdateDeviceConfigurationTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 25)
+      } }()
+      try { if let v = _storage._syncDeviceUpdateDeviceTimeTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 26)
+      } }()
+      try { if let v = _storage._syncDeviceWaitForDeviceToRestartTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 27)
+      } }()
+      try { if let v = _storage._syncDevicePushEventLogsTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 28)
+      } }()
+      try { if let v = _storage._syncDevicePushSystemLogsTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 29)
+      } }()
+      try { if let v = _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 30)
+      } }()
+      try { if let v = _storage._syncDeviceDeployBlacklistEntriesTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 31)
+      } }()
+      try { if let v = _storage._syncDeviceRetrieveSystemStatusTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 32)
+      } }()
+      try { if let v = _storage._syncDevicePushSystemStatusTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 33)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -1052,7 +1307,6 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         if _storage._nfcOssSuccessUnprovisionMessage != rhs_storage._nfcOssSuccessUnprovisionMessage {return false}
         if _storage._nfcOssSuccessFormatMessage != rhs_storage._nfcOssSuccessFormatMessage {return false}
         if _storage._nfcInitializingWritingProcess != rhs_storage._nfcInitializingWritingProcess {return false}
-        if _storage._cmnCancelLabel != rhs_storage._cmnCancelLabel {return false}
         if _storage._openViaOssTitle != rhs_storage._openViaOssTitle {return false}
         if _storage._openViaOssWaitMessage != rhs_storage._openViaOssWaitMessage {return false}
         if _storage._openViaOssAccessGrantedTitle != rhs_storage._openViaOssAccessGrantedTitle {return false}
@@ -1061,6 +1315,22 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         if _storage._openViaOssAccessDeniedMessage != rhs_storage._openViaOssAccessDeniedMessage {return false}
         if _storage._openViaOssAccessDeniedScheduleMismatchMessage != rhs_storage._openViaOssAccessDeniedScheduleMismatchMessage {return false}
         if _storage._openViaOssErrorTitle != rhs_storage._openViaOssErrorTitle {return false}
+        if _storage._cmnCancelLabel != rhs_storage._cmnCancelLabel {return false}
+        if _storage._cmnCloseLabel != rhs_storage._cmnCloseLabel {return false}
+        if _storage._syncDeviceInProgressTitle != rhs_storage._syncDeviceInProgressTitle {return false}
+        if _storage._syncDeviceFailedTitle != rhs_storage._syncDeviceFailedTitle {return false}
+        if _storage._syncDeviceCancellingTitle != rhs_storage._syncDeviceCancellingTitle {return false}
+        if _storage._syncDeviceGetAuthenticationTokenTaskLabel != rhs_storage._syncDeviceGetAuthenticationTokenTaskLabel {return false}
+        if _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel != rhs_storage._syncDeviceRetrieveDeviceConfigurationTaskLabel {return false}
+        if _storage._syncDeviceUpdateDeviceConfigurationTaskLabel != rhs_storage._syncDeviceUpdateDeviceConfigurationTaskLabel {return false}
+        if _storage._syncDeviceUpdateDeviceTimeTaskLabel != rhs_storage._syncDeviceUpdateDeviceTimeTaskLabel {return false}
+        if _storage._syncDeviceWaitForDeviceToRestartTaskLabel != rhs_storage._syncDeviceWaitForDeviceToRestartTaskLabel {return false}
+        if _storage._syncDevicePushEventLogsTaskLabel != rhs_storage._syncDevicePushEventLogsTaskLabel {return false}
+        if _storage._syncDevicePushSystemLogsTaskLabel != rhs_storage._syncDevicePushSystemLogsTaskLabel {return false}
+        if _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel != rhs_storage._syncDeviceRetrieveBlacklistEntriesTaskLabel {return false}
+        if _storage._syncDeviceDeployBlacklistEntriesTaskLabel != rhs_storage._syncDeviceDeployBlacklistEntriesTaskLabel {return false}
+        if _storage._syncDeviceRetrieveSystemStatusTaskLabel != rhs_storage._syncDeviceRetrieveSystemStatusTaskLabel {return false}
+        if _storage._syncDevicePushSystemStatusTaskLabel != rhs_storage._syncDevicePushSystemStatusTaskLabel {return false}
         return true
       }
       if !storagesAreEqual {return false}

@@ -2,20 +2,20 @@
 import AVFoundation
 import SwiftUI
 
-private class HostingController: UIHostingController<BlueModalView> {
+private class HostingController: UIHostingController<BlueAccessDeviceModalView> {
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
 }
 
 /**
- * @class BlueModalSession
+ * @class BlueAccessDeviceModalSession
  *
  * Modal session for processing BlueModal.
  * BlueModal (sheet) helps people perform a scoped task that’s closely related to their current context.
  */
-internal class BlueModalSession {
-    private var viewModel = BlueModalViewModel()
+internal class BlueAccessDeviceModalSession {
+    private var viewModel = BlueAccessDeviceModalViewModel()
     private var isInvalidated: Bool = false
     
     /// Starts the modal session.
@@ -26,7 +26,7 @@ internal class BlueModalSession {
         viewModel.message = message ?? ""
         
         let hostingController = HostingController(
-            rootView: BlueModalView(viewModel) { self.invalidate() }
+            rootView: BlueAccessDeviceModalView(viewModel) { self.invalidate() }
         )
         
         hostingController.view.backgroundColor = .clear

@@ -7,7 +7,7 @@ internal enum BlueModalStatus {
     case Failed
 }
 
-internal class BlueModalViewModel: ObservableObject {
+internal class BlueAccessDeviceModalViewModel: ObservableObject {
     @Published var title = ""
     @Published var message = ""
     @Published var status: BlueModalStatus = .Waiting
@@ -44,8 +44,8 @@ internal class BlueModalViewModel: ObservableObject {
     }
 }
 
-internal struct BlueModalView: View {
-    @ObservedObject private var vm: BlueModalViewModel
+internal struct BlueAccessDeviceModalView: View {
+    @ObservedObject private var vm: BlueAccessDeviceModalViewModel
     
     internal var height: CGFloat = 350
     internal var backgroundColor: UIColor = .white
@@ -55,7 +55,7 @@ internal struct BlueModalView: View {
     private let cornerRadius: CGFloat = 35
     
     public init(
-        _ vm: BlueModalViewModel,
+        _ vm: BlueAccessDeviceModalViewModel,
         _ onDismiss: @escaping () -> Void)
     {
         self.vm = vm
@@ -152,37 +152,26 @@ internal struct BlueModalView: View {
     }
 }
 
-extension View {
-    @ViewBuilder
-    func hidden(_ isHidden: Bool) -> some View {
-        if isHidden {
-            self.hidden()
-        } else {
-            self
-        }
-    }
-}
-
 @available(iOS 16.0, *)
-struct ContentView_Preview: PreviewProvider {
+struct BlueAccessDeviceModalView_Preview: PreviewProvider {
     static var previews: some View {
-        BlueModalView(
-            BlueModalViewModel(
+        BlueAccessDeviceModalView(
+            BlueAccessDeviceModalViewModel(
                 title: "Unlocking in Progress",
                 message: "Establishing secure connection..."
             )
         ) {}
         
-        BlueModalView(
-            BlueModalViewModel(
+        BlueAccessDeviceModalView(
+            BlueAccessDeviceModalViewModel(
                 title: "Access Granted",
                 message: "Please proceed.",
                 status: .Success
             )
         ) {}
         
-        BlueModalView(
-            BlueModalViewModel(
+        BlueAccessDeviceModalView(
+            BlueAccessDeviceModalViewModel(
                 title: "Access Denied",
                 message: "Credentials are not valid at this time and/or day of the week.",
                 status: .Failed
