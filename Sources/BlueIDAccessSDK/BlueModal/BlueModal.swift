@@ -90,6 +90,7 @@ public func blueShowSynchronizeAccessDeviceModal(_ runner: BlueTaskRunner) async
                     session.updateTitle(blueI18n.syncDeviceFailedTitle)
                     BlueSound.shared.play(BlueNegativeSoundSystemID)
                 } else {
+                    session.updateTitle(blueI18n.syncDeviceCompletedTitle)
                     BlueSound.shared.play(BluePositiveSoundSystemID)
                 }
             }

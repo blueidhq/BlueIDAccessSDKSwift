@@ -297,6 +297,15 @@ public struct BlueI18n {
   /// Clears the value of `syncDeviceCancellingTitle`. Subsequent reads from it will return its default value.
   public mutating func clearSyncDeviceCancellingTitle() {_uniqueStorage()._syncDeviceCancellingTitle = nil}
 
+  public var syncDeviceCompletedTitle: String {
+    get {return _storage._syncDeviceCompletedTitle ?? "Synchronization has been completed"}
+    set {_uniqueStorage()._syncDeviceCompletedTitle = newValue}
+  }
+  /// Returns true if `syncDeviceCompletedTitle` has been explicitly set.
+  public var hasSyncDeviceCompletedTitle: Bool {return _storage._syncDeviceCompletedTitle != nil}
+  /// Clears the value of `syncDeviceCompletedTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearSyncDeviceCompletedTitle() {_uniqueStorage()._syncDeviceCompletedTitle = nil}
+
   public var syncDeviceGetAuthenticationTokenTaskLabel: String {
     get {return _storage._syncDeviceGetAuthenticationTokenTaskLabel ?? "Issue authentication token"}
     set {_uniqueStorage()._syncDeviceGetAuthenticationTokenTaskLabel = newValue}
@@ -1002,17 +1011,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     20: .same(proto: "syncDeviceInProgressTitle"),
     21: .same(proto: "syncDeviceFailedTitle"),
     22: .same(proto: "syncDeviceCancellingTitle"),
-    23: .same(proto: "syncDeviceGetAuthenticationTokenTaskLabel"),
-    24: .same(proto: "syncDeviceRetrieveDeviceConfigurationTaskLabel"),
-    25: .same(proto: "syncDeviceUpdateDeviceConfigurationTaskLabel"),
-    26: .same(proto: "syncDeviceUpdateDeviceTimeTaskLabel"),
-    27: .same(proto: "syncDeviceWaitForDeviceToRestartTaskLabel"),
-    28: .same(proto: "syncDevicePushEventLogsTaskLabel"),
-    29: .same(proto: "syncDevicePushSystemLogsTaskLabel"),
-    30: .same(proto: "syncDeviceRetrieveBlacklistEntriesTaskLabel"),
-    31: .same(proto: "syncDeviceDeployBlacklistEntriesTaskLabel"),
-    32: .same(proto: "syncDeviceRetrieveSystemStatusTaskLabel"),
-    33: .same(proto: "syncDevicePushSystemStatusTaskLabel"),
+    23: .same(proto: "syncDeviceCompletedTitle"),
+    24: .same(proto: "syncDeviceGetAuthenticationTokenTaskLabel"),
+    25: .same(proto: "syncDeviceRetrieveDeviceConfigurationTaskLabel"),
+    26: .same(proto: "syncDeviceUpdateDeviceConfigurationTaskLabel"),
+    27: .same(proto: "syncDeviceUpdateDeviceTimeTaskLabel"),
+    28: .same(proto: "syncDeviceWaitForDeviceToRestartTaskLabel"),
+    29: .same(proto: "syncDevicePushEventLogsTaskLabel"),
+    30: .same(proto: "syncDevicePushSystemLogsTaskLabel"),
+    31: .same(proto: "syncDeviceRetrieveBlacklistEntriesTaskLabel"),
+    32: .same(proto: "syncDeviceDeployBlacklistEntriesTaskLabel"),
+    33: .same(proto: "syncDeviceRetrieveSystemStatusTaskLabel"),
+    34: .same(proto: "syncDevicePushSystemStatusTaskLabel"),
   ]
 
   fileprivate class _StorageClass {
@@ -1038,6 +1048,7 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     var _syncDeviceInProgressTitle: String? = nil
     var _syncDeviceFailedTitle: String? = nil
     var _syncDeviceCancellingTitle: String? = nil
+    var _syncDeviceCompletedTitle: String? = nil
     var _syncDeviceGetAuthenticationTokenTaskLabel: String? = nil
     var _syncDeviceRetrieveDeviceConfigurationTaskLabel: String? = nil
     var _syncDeviceUpdateDeviceConfigurationTaskLabel: String? = nil
@@ -1077,6 +1088,7 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       _syncDeviceInProgressTitle = source._syncDeviceInProgressTitle
       _syncDeviceFailedTitle = source._syncDeviceFailedTitle
       _syncDeviceCancellingTitle = source._syncDeviceCancellingTitle
+      _syncDeviceCompletedTitle = source._syncDeviceCompletedTitle
       _syncDeviceGetAuthenticationTokenTaskLabel = source._syncDeviceGetAuthenticationTokenTaskLabel
       _syncDeviceRetrieveDeviceConfigurationTaskLabel = source._syncDeviceRetrieveDeviceConfigurationTaskLabel
       _syncDeviceUpdateDeviceConfigurationTaskLabel = source._syncDeviceUpdateDeviceConfigurationTaskLabel
@@ -1122,6 +1134,7 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       if _storage._syncDeviceInProgressTitle == nil {return false}
       if _storage._syncDeviceFailedTitle == nil {return false}
       if _storage._syncDeviceCancellingTitle == nil {return false}
+      if _storage._syncDeviceCompletedTitle == nil {return false}
       if _storage._syncDeviceGetAuthenticationTokenTaskLabel == nil {return false}
       if _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel == nil {return false}
       if _storage._syncDeviceUpdateDeviceConfigurationTaskLabel == nil {return false}
@@ -1167,17 +1180,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         case 20: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceInProgressTitle) }()
         case 21: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceFailedTitle) }()
         case 22: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceCancellingTitle) }()
-        case 23: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceGetAuthenticationTokenTaskLabel) }()
-        case 24: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveDeviceConfigurationTaskLabel) }()
-        case 25: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceUpdateDeviceConfigurationTaskLabel) }()
-        case 26: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceUpdateDeviceTimeTaskLabel) }()
-        case 27: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceWaitForDeviceToRestartTaskLabel) }()
-        case 28: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushEventLogsTaskLabel) }()
-        case 29: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemLogsTaskLabel) }()
-        case 30: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveBlacklistEntriesTaskLabel) }()
-        case 31: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceDeployBlacklistEntriesTaskLabel) }()
-        case 32: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveSystemStatusTaskLabel) }()
-        case 33: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemStatusTaskLabel) }()
+        case 23: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceCompletedTitle) }()
+        case 24: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceGetAuthenticationTokenTaskLabel) }()
+        case 25: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveDeviceConfigurationTaskLabel) }()
+        case 26: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceUpdateDeviceConfigurationTaskLabel) }()
+        case 27: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceUpdateDeviceTimeTaskLabel) }()
+        case 28: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceWaitForDeviceToRestartTaskLabel) }()
+        case 29: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushEventLogsTaskLabel) }()
+        case 30: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemLogsTaskLabel) }()
+        case 31: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveBlacklistEntriesTaskLabel) }()
+        case 32: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceDeployBlacklistEntriesTaskLabel) }()
+        case 33: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveSystemStatusTaskLabel) }()
+        case 34: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemStatusTaskLabel) }()
         default: break
         }
       }
@@ -1256,38 +1270,41 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       try { if let v = _storage._syncDeviceCancellingTitle {
         try visitor.visitSingularStringField(value: v, fieldNumber: 22)
       } }()
-      try { if let v = _storage._syncDeviceGetAuthenticationTokenTaskLabel {
+      try { if let v = _storage._syncDeviceCompletedTitle {
         try visitor.visitSingularStringField(value: v, fieldNumber: 23)
       } }()
-      try { if let v = _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel {
+      try { if let v = _storage._syncDeviceGetAuthenticationTokenTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 24)
       } }()
-      try { if let v = _storage._syncDeviceUpdateDeviceConfigurationTaskLabel {
+      try { if let v = _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 25)
       } }()
-      try { if let v = _storage._syncDeviceUpdateDeviceTimeTaskLabel {
+      try { if let v = _storage._syncDeviceUpdateDeviceConfigurationTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 26)
       } }()
-      try { if let v = _storage._syncDeviceWaitForDeviceToRestartTaskLabel {
+      try { if let v = _storage._syncDeviceUpdateDeviceTimeTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 27)
       } }()
-      try { if let v = _storage._syncDevicePushEventLogsTaskLabel {
+      try { if let v = _storage._syncDeviceWaitForDeviceToRestartTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 28)
       } }()
-      try { if let v = _storage._syncDevicePushSystemLogsTaskLabel {
+      try { if let v = _storage._syncDevicePushEventLogsTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 29)
       } }()
-      try { if let v = _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel {
+      try { if let v = _storage._syncDevicePushSystemLogsTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 30)
       } }()
-      try { if let v = _storage._syncDeviceDeployBlacklistEntriesTaskLabel {
+      try { if let v = _storage._syncDeviceRetrieveBlacklistEntriesTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 31)
       } }()
-      try { if let v = _storage._syncDeviceRetrieveSystemStatusTaskLabel {
+      try { if let v = _storage._syncDeviceDeployBlacklistEntriesTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 32)
       } }()
-      try { if let v = _storage._syncDevicePushSystemStatusTaskLabel {
+      try { if let v = _storage._syncDeviceRetrieveSystemStatusTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 33)
+      } }()
+      try { if let v = _storage._syncDevicePushSystemStatusTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 34)
       } }()
     }
     try unknownFields.traverse(visitor: &visitor)
@@ -1320,6 +1337,7 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         if _storage._syncDeviceInProgressTitle != rhs_storage._syncDeviceInProgressTitle {return false}
         if _storage._syncDeviceFailedTitle != rhs_storage._syncDeviceFailedTitle {return false}
         if _storage._syncDeviceCancellingTitle != rhs_storage._syncDeviceCancellingTitle {return false}
+        if _storage._syncDeviceCompletedTitle != rhs_storage._syncDeviceCompletedTitle {return false}
         if _storage._syncDeviceGetAuthenticationTokenTaskLabel != rhs_storage._syncDeviceGetAuthenticationTokenTaskLabel {return false}
         if _storage._syncDeviceRetrieveDeviceConfigurationTaskLabel != rhs_storage._syncDeviceRetrieveDeviceConfigurationTaskLabel {return false}
         if _storage._syncDeviceUpdateDeviceConfigurationTaskLabel != rhs_storage._syncDeviceUpdateDeviceConfigurationTaskLabel {return false}
