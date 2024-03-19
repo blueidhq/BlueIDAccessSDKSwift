@@ -139,10 +139,12 @@ typedef enum BlueCredentialType {
     BlueCredentialType_Regular = 1,
     /* Maintenance can open and update all locks within the site */
     BlueCredentialType_Maintenance = 2,
-    /* Master can open all locks within the given site and requires no refresh */
+    /* Master can open all locks within the given site */
     BlueCredentialType_Master = 3,
     /* Nfc writer allows to write any credential within this site on cards & fobs */
-    BlueCredentialType_NfcWriter = 4
+    BlueCredentialType_NfcWriter = 4,
+    /* Emergency can open all locks within given site, requires no refresh and has no validity */
+    BlueCredentialType_Emergency = 5
 } pb_packed BlueCredentialType_t;
 
 typedef enum BlueAccessType {
@@ -250,6 +252,10 @@ typedef enum BlueOssSoCredentialTypeOssCredential {
     BlueOssSoCredentialTypeOssCredential_Standard = 0,
     BlueOssSoCredentialTypeOssCredential_InterventionMedia = 1
 } pb_packed BlueOssSoCredentialTypeOssCredential_t;
+
+typedef enum BlueOssSoDoorGroupId {
+    BlueOssSoDoorGroupId_MasterGroupId = 0
+} pb_packed BlueOssSoDoorGroupId_t;
 
 typedef enum BlueOssSoDoorInfoAccessBy {
     BlueOssSoDoorInfoAccessBy_DoorGroupId = 0,
@@ -377,10 +383,12 @@ typedef struct BlueSPResult {
 typedef struct BlueOssAccessResult {
     /* If access is granted or not */
     bool accessGranted;
-    /* The final access type */
+    /* The final access type that was used if access was granted */
     BlueAccessType_t accessType;
-    /* If access type is a toggle then this specifies the time it should lock
- again */
+    /* Additional access info if was granted, depends on device
+ For locks for example this would contain the BlueLockState */
+    uint8_t accessInfo;
+    /* Defines when the used schedule actually ends if any if access was granted */
     BlueLocalTimestamp_t scheduleEndTime;
     /* If access denied this marks if it was denied due a schedule missmatch */
     bool scheduleMissmatch;
@@ -734,8 +742,8 @@ extern "C" {
 #define _BLUEWEEKDAY_ARRAYSIZE ((BlueWeekday_t)(BlueWeekday_Sunday+1))
 
 #define _BLUECREDENTIALTYPE_MIN BlueCredentialType_Regular
-#define _BLUECREDENTIALTYPE_MAX BlueCredentialType_NfcWriter
-#define _BLUECREDENTIALTYPE_ARRAYSIZE ((BlueCredentialType_t)(BlueCredentialType_NfcWriter+1))
+#define _BLUECREDENTIALTYPE_MAX BlueCredentialType_Emergency
+#define _BLUECREDENTIALTYPE_ARRAYSIZE ((BlueCredentialType_t)(BlueCredentialType_Emergency+1))
 
 #define _BLUEACCESSTYPE_MIN BlueAccessType_DefaultTime
 #define _BLUEACCESSTYPE_MAX BlueAccessType_NoAccessBlacklisted
@@ -772,6 +780,10 @@ extern "C" {
 #define _BLUEOSSSOCREDENTIALTYPEOSSCREDENTIAL_MIN BlueOssSoCredentialTypeOssCredential_Standard
 #define _BLUEOSSSOCREDENTIALTYPEOSSCREDENTIAL_MAX BlueOssSoCredentialTypeOssCredential_InterventionMedia
 #define _BLUEOSSSOCREDENTIALTYPEOSSCREDENTIAL_ARRAYSIZE ((BlueOssSoCredentialTypeOssCredential_t)(BlueOssSoCredentialTypeOssCredential_InterventionMedia+1))
+
+#define _BLUEOSSSODOORGROUPID_MIN BlueOssSoDoorGroupId_MasterGroupId
+#define _BLUEOSSSODOORGROUPID_MAX BlueOssSoDoorGroupId_MasterGroupId
+#define _BLUEOSSSODOORGROUPID_ARRAYSIZE ((BlueOssSoDoorGroupId_t)(BlueOssSoDoorGroupId_MasterGroupId+1))
 
 #define _BLUEOSSSODOORINFOACCESSBY_MIN BlueOssSoDoorInfoAccessBy_DoorGroupId
 #define _BLUEOSSSODOORINFOACCESSBY_MAX BlueOssSoDoorInfoAccessBy_DoorId
@@ -864,7 +876,7 @@ extern "C" {
 #define BLUESPTOKENCOMMAND_INIT_DEFAULT          {BLUECREDENTIALID_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, BLUELOCALTIMESTAMP_INIT_DEFAULT, "", {0, {0}}}
 #define BLUESPTOKEN_INIT_DEFAULT                 {{0, {0}}, 0, {BLUESPTOKENCOMMAND_INIT_DEFAULT}}
 #define BLUESPRESULT_INIT_DEFAULT                {{0, {0}}}
-#define BLUEOSSACCESSRESULT_INIT_DEFAULT         {0, _BLUEACCESSTYPE_MIN, BLUELOCALTIMESTAMP_INIT_DEFAULT, 0}
+#define BLUEOSSACCESSRESULT_INIT_DEFAULT         {0, _BLUEACCESSTYPE_MIN, 0, BLUELOCALTIMESTAMP_INIT_DEFAULT, 0}
 #define BLUEOSSACCESSEVENTSRESULT_INIT_DEFAULT   {BLUEOSSACCESSRESULT_INIT_DEFAULT, 0, {BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT, BLUEEVENT_INIT_DEFAULT}}
 #define BLUEOSSSIDVERSION_INIT_DEFAULT           {false, 1u, false, 0u}
 #define BLUEOSSSIDCREDENTIALTYPEOSS_INIT_DEFAULT {false, 0}
@@ -920,7 +932,7 @@ extern "C" {
 #define BLUESPTOKENCOMMAND_INIT_ZERO             {BLUECREDENTIALID_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, BLUELOCALTIMESTAMP_INIT_ZERO, "", {0, {0}}}
 #define BLUESPTOKEN_INIT_ZERO                    {{0, {0}}, 0, {BLUESPTOKENCOMMAND_INIT_ZERO}}
 #define BLUESPRESULT_INIT_ZERO                   {{0, {0}}}
-#define BLUEOSSACCESSRESULT_INIT_ZERO            {0, _BLUEACCESSTYPE_MIN, BLUELOCALTIMESTAMP_INIT_ZERO, 0}
+#define BLUEOSSACCESSRESULT_INIT_ZERO            {0, _BLUEACCESSTYPE_MIN, 0, BLUELOCALTIMESTAMP_INIT_ZERO, 0}
 #define BLUEOSSACCESSEVENTSRESULT_INIT_ZERO      {BLUEOSSACCESSRESULT_INIT_ZERO, 0, {BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO, BLUEEVENT_INIT_ZERO}}
 #define BLUEOSSSIDVERSION_INIT_ZERO              {false, 0, false, 0}
 #define BLUEOSSSIDCREDENTIALTYPEOSS_INIT_ZERO    {false, 0}
@@ -1013,8 +1025,9 @@ extern "C" {
 #define BLUESPRESULT_DATA_TAG                    1
 #define BLUEOSSACCESSRESULT_ACCESSGRANTED_TAG    1
 #define BLUEOSSACCESSRESULT_ACCESSTYPE_TAG       2
-#define BLUEOSSACCESSRESULT_SCHEDULEENDTIME_TAG  3
-#define BLUEOSSACCESSRESULT_SCHEDULEMISSMATCH_TAG 4
+#define BLUEOSSACCESSRESULT_ACCESSINFO_TAG       3
+#define BLUEOSSACCESSRESULT_SCHEDULEENDTIME_TAG  4
+#define BLUEOSSACCESSRESULT_SCHEDULEMISSMATCH_TAG 5
 #define BLUEOSSACCESSEVENTSRESULT_ACCESSRESULT_TAG 1
 #define BLUEOSSACCESSEVENTSRESULT_EVENTS_TAG     2
 #define BLUEOSSSIDVERSION_VERSIONMAJOR_TAG       1
@@ -1278,8 +1291,9 @@ X(a, STATIC,   REQUIRED, BYTES,    data,              1)
 #define BLUEOSSACCESSRESULT_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, BOOL,     accessGranted,     1) \
 X(a, STATIC,   REQUIRED, UENUM,    accessType,        2) \
-X(a, STATIC,   REQUIRED, MESSAGE,  scheduleEndTime,   3) \
-X(a, STATIC,   REQUIRED, BOOL,     scheduleMissmatch,   4)
+X(a, STATIC,   REQUIRED, UINT32,   accessInfo,        3) \
+X(a, STATIC,   REQUIRED, MESSAGE,  scheduleEndTime,   4) \
+X(a, STATIC,   REQUIRED, BOOL,     scheduleMissmatch,   5)
 #define BLUEOSSACCESSRESULT_CALLBACK NULL
 #define BLUEOSSACCESSRESULT_DEFAULT (const pb_byte_t*)"\x10\x01\x00"
 #define BlueOssAccessResult_t_scheduleEndTime_MSGTYPE BlueLocalTimestamp_t
@@ -1733,8 +1747,8 @@ extern const pb_msgdesc_t _BlueTestEncodeDecode_t_msg;
 #define BLUELOCALTIMEPERIOD_SIZE                 12
 #define BLUELOCALTIMESCHEDULE_SIZE               36
 #define BLUELOCALTIMESTAMP_SIZE                  19
-#define BLUEOSSACCESSEVENTSRESULT_SIZE           1085
-#define BLUEOSSACCESSRESULT_SIZE                 27
+#define BLUEOSSACCESSEVENTSRESULT_SIZE           1088
+#define BLUEOSSACCESSRESULT_SIZE                 30
 #define BLUEOSSSIDCONFIGURATION_SIZE             47
 #define BLUEOSSSIDCREDENTIALTYPEOSS_SIZE         2
 #define BLUEOSSSIDCREDENTIALTYPEPROPRIETARY_SIZE 9

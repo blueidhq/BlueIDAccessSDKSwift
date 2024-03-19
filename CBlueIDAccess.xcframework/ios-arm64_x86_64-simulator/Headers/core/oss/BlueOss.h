@@ -27,7 +27,7 @@ typedef enum BlueOssPrepareMode
         },                                        \
     }
 
-typedef BlueReturnCode_t (*BlueOssGrantAccessFunc_t)(void *pContext, BlueAccessType_t accessType, const BlueLocalTimestamp_t *const pScheduleEndTime);
+typedef BlueReturnCode_t (*BlueOssGrantAccessFunc_t)(void *pContext, BlueAccessType_t accessType, const BlueLocalTimestamp_t *const pScheduleEndTime, uint8_t *const pAccessInfo);
 typedef BlueReturnCode_t (*BlueOssDenyAccessFunc_t)(void *pContext, BlueAccessType_t accessType);
 
 #ifdef __cplusplus
