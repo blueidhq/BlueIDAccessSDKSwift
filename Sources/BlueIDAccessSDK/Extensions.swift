@@ -180,6 +180,8 @@ extension BlueCredentialType {
                 self = .master
             case "nfcwriter":
                 self = .nfcWriter
+            case "emergency":
+                self = .emergency
             default:
                 return nil
         }
