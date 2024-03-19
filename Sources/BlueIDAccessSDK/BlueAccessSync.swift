@@ -199,7 +199,7 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueSdkAsyncCommand {
             throw BlueError(.sdkUnsupportedPlatform)
         }
         
-        let credentials = try await BlueGetAccessCredentialsCommand().runAsync().credentials
+        let credentials = try BlueGetAccessCredentialsCommand().run().credentials
         
         if (credentials.isEmpty) {
             return BlueSynchronizeAccessCredentials()
@@ -251,7 +251,7 @@ public class BlueSynchronizeAccessCredentialsCommand: BlueSdkAsyncCommand {
     /// Purges orphaned tokens.
     private func purgeTokens() async {
         do {
-            let credentialIds = try await BlueGetAccessCredentialsCommand().runAsync().credentials.compactMap { $0.credentialID.id }
+            let credentialIds = try BlueGetAccessCredentialsCommand().run().credentials.compactMap { $0.credentialID.id }
             
             try blueGetSpTokenEntryIds().forEach{ entryID in
                 do {

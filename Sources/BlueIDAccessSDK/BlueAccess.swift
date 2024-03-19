@@ -40,22 +40,22 @@ public class BlueClaimAccessCredentialCommand: BlueSdkAsyncCommand {
     }
 }
 
-public struct BlueGetAccessCredentialsCommand: BlueAsyncCommand {
-    internal func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
+public struct BlueGetAccessCredentialsCommand: BlueCommand {
+    func run(arg0: Any?, arg1: Any?, arg2: Any?) throws -> Any? {
         var credentialType: BlueCredentialType?
         
         if let rawValue = try blueCastArg(Int.self, arg0) {
             credentialType = BlueCredentialType(rawValue: rawValue)
         }
         
-        return try await runAsync(
+        return try run(
             credentialType: credentialType,
             for: blueCastArg(String.self, arg1),
             includePrivateKey: false
         )
     }
     
-    public func runAsync(credentialType: BlueCredentialType? = nil, for deviceID: String? = nil, includePrivateKey: Bool? = false) async throws -> BlueAccessCredentialList {
+    public func run(credentialType: BlueCredentialType? = nil, for deviceID: String? = nil, includePrivateKey: Bool? = false) throws -> BlueAccessCredentialList {
         let filterByCredentialType = { (_ credential: BlueAccessCredential) -> Bool in
             guard let credentialType = credentialType else {
                 return true
@@ -321,11 +321,19 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
     
     private func waitUntilDeviceHasBeenRestarted(_ deviceID: String) async throws {
         do {
-            try? await Task.sleep(nanoseconds: UInt64(blueSecondsToNanoseconds(30)))
+            var attempts = 0
             
-            if blueGetDevice(deviceID) == nil {
-                throw BlueError(.sdkDeviceNotFound)
+            while attempts <= 2 {
+                try? await Task.sleep(nanoseconds: UInt64(blueSecondsToNanoseconds(10)))
+                
+                if blueGetDevice(deviceID) != nil {
+                    return
+                }
+                
+                attempts += 1
             }
+            
+            throw BlueError(.sdkDeviceNotFound)
         } catch {
             throw BlueError(.sdkWaitDeviceToRestartFailed, cause: error)
         }
@@ -534,13 +542,23 @@ public struct BlueListAccessDevicesCommand: BlueAsyncCommand {
             credentialType = BlueCredentialType(rawValue: credentialTypeRawValue)
         }
         
-        return try await runAsync(credentialType: credentialType)
+        return try await runAsync(
+            credentialType: credentialType,
+            suppressCredentialValidityStart: blueCastArg(Bool.self, arg1)
+        )
     }
     
-    public func runAsync(credentialType: BlueCredentialType? = nil) async throws -> BlueAccessDeviceList {
-        let credentialList = try await BlueGetAccessCredentialsCommand().runAsync(credentialType: credentialType)
+    public func runAsync(credentialType: BlueCredentialType? = nil, suppressCredentialValidityStart: Bool? = false) async throws -> BlueAccessDeviceList {
+        let credentialList = try BlueGetAccessCredentialsCommand().run(credentialType: credentialType)
         
         let devices = credentialList.credentials.compactMap { credential in
+            
+            if (suppressCredentialValidityStart != true) {
+                if (!credential.checkValidityStart()) {
+                    return [BlueAccessDevice]()
+                }
+            }
+            
             let deviceList = try? BlueGetAccessDevicesCommand().run(credentialID: credential.credentialID.id)
             
             return deviceList?.devices

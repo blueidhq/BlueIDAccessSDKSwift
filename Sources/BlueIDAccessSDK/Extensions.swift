@@ -140,6 +140,18 @@ extension BlueAccessCredential: Decodable {
         }
     }
     
+    public func checkValidityStart() -> Bool {
+        if self.hasValidFrom {
+            if let validFrom = self.validFrom.toDate() {
+                if validFrom > Date() {
+                    return false
+                }
+            }
+        }
+        
+        return true
+    }
+    
     enum CodingKeys: String, CodingKey {
         case name
         case description

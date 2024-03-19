@@ -26,8 +26,6 @@ private class ViewMock: BlueEventListener {
 
 final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
     func testWithoutAccessCredentials() async throws {
-        _ = try? blueAccessCredentialsKeyChain.deleteAllEntries()
-        
         let viewMock = ViewMock()
         
         let scheduler = BlueAccessSyncScheduler(
@@ -71,5 +69,58 @@ final class BlueTokenSyncSchedulerTests: BlueXCTestCase {
         
         XCTAssertTrue(viewMock.tokenSyncStartedCalled, "TokenSyncStarted event should be triggered")
         XCTAssertTrue(viewMock.tokenSyncFinishedCalled, "TokenSyncFinished event should be triggered")
+    }
+    
+    func testWithAccessCredentiaslWithValidFrom() async throws {
+        let now = Date()
+        let validFrom = now.addingTimeInterval(2)
+        
+        let credential = blueCreateAccessCredentialDemo(
+            validFrom: BlueLocalTimestamp(validFrom)
+        )
+        
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
+        
+        let viewMock = ViewMock()
+        
+        let scheduler = BlueAccessSyncScheduler(
+            timeInterval: TimeInterval.infinity,
+            autoSchedule: false,
+            command: BlueSynchronizeAccessCredentialsCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
+        )
+        
+        addTeardownBlock {
+            scheduler.suspend()
+        }
+        
+        scheduler.schedule()
+        
+        let expectation = XCTestExpectation()
+        DispatchQueue.global().asyncAfter(deadline: .now() + 2) { expectation.fulfill() }
+        await fulfillment(of: [expectation], timeout: 10)
+        
+        XCTAssertTrue(viewMock.tokenSyncStartedCalled, "TokenSyncStarted event should be triggered")
+        XCTAssertTrue(viewMock.tokenSyncFinishedCalled, "TokenSyncFinished event should be triggered")
+    }
+    
+    func testCalculateNextInterval() async throws {
+        let now = Date()
+        let validFrom = now.addingTimeInterval(120)
+        
+        let credential = blueCreateAccessCredentialDemo(
+            validFrom: BlueLocalTimestamp(validFrom)
+        )
+        
+        try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential)
+        
+        let scheduler = BlueAccessSyncScheduler(
+            timeInterval: TimeInterval.infinity,
+            autoSchedule: false,
+            command: BlueSynchronizeAccessCredentialsCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock()))
+        )
+        
+        let expected = credential.validFrom.toDate()!.timeIntervalSince(now)
+
+        XCTAssertEqual(scheduler.calculateNextInterval(now), expected)
     }
 }

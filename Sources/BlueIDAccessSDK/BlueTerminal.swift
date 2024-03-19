@@ -139,13 +139,23 @@ internal func blueGetSpTokenEntry(_ entryID: String) throws -> Any? {
 }
 
 /// Returns a BlueSPToken with compatibility with previous versions of the SDK.
-/// In case the SDK is already storing tokens as an array of BlueSPTokenEntry, then the first BlueSPToken will be returned.
+/// In case the SDK is already storing tokens as an array of BlueSPTokenEntry, then SDK tries to return the first valid BlueSPToken.
 /// - parameter entryID: The KeyChain Entry ID.
 /// - throws: An error is thrown if any error occurs during the retrieval of the entry from the KeyChain.
 /// - throws: An error is thrown if any error occurs when decoding the token Data into a BlueSPToken.
 internal func blueGetSpToken(_ entryID: String) throws -> BlueSPToken? {
     if let storedEntry = try blueGetSpTokenEntry(entryID) {
         if let spTokenEntries = storedEntry as? [BlueSPTokenEntry] {
+            
+            for spTokenEntry in spTokenEntries {
+                if let credential = blueGetAccessCredential(credentialID: spTokenEntry.credentialID) {
+                    
+                    if (credential.checkValidityStart()) {
+                        return try blueDecodeMessage(spTokenEntry.data)
+                    }
+                }
+            }
+            
             if let spTokenEntry = spTokenEntries.first {
                 return try blueDecodeMessage(spTokenEntry.data)
             }

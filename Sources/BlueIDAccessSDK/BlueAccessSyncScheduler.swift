@@ -14,11 +14,6 @@ private class ForegroundScheduler {
     }
     
     func schedule(_ now: Bool? = false) {
-        guard #available(macOS 10.15, *) else {
-            blueLogWarn("Unsupported platform")
-            return
-        }
-        
         suspend()
         
         if now == true {
@@ -26,7 +21,7 @@ private class ForegroundScheduler {
         } else {
             blueRunInMainThread {
                 self.timer = Timer.scheduledTimer(
-                    timeInterval: self.scheduler!.timeInterval,
+                    timeInterval: self.scheduler!.calculateNextInterval(),
                     target: self,
                     selector: #selector(self.handleTask),
                     userInfo: nil,
@@ -36,7 +31,6 @@ private class ForegroundScheduler {
         }
     }
     
-    @available(macOS 10.15, *)
     @objc private func handleTask() {
         DispatchQueue.global(qos: .background).async {
             Task {
@@ -141,5 +135,29 @@ internal class BlueAccessSyncScheduler: BlueEventListener {
         }
         
         _ = try await command.runAsync()
+    }
+    
+    func calculateNextInterval(_ now: Date? = nil) -> TimeInterval {
+        var interval: TimeInterval = self.timeInterval
+        
+        if let credentials = try? blueCommands.getAccessCredentials.run().credentials {
+            if (!credentials.isEmpty) {
+                credentials.forEach { credential in
+                    if (!credential.checkValidityStart()) {
+                        if let validFrom = credential.validFrom.toDate() {
+                            let now = now ?? Date()
+                            
+                            if validFrom > now {
+                                let differenceInSeconds = validFrom.timeIntervalSince(now)
+                                
+                                interval = min(differenceInSeconds, interval)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return interval
     }
 }

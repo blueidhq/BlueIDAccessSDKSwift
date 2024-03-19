@@ -456,11 +456,14 @@ public enum BlueCredentialType: SwiftProtobuf.Enum {
   /// Maintenance can open and update all locks within the site 
   case maintenance // = 2
 
-  /// Master can open all locks within the given site and requires no refresh 
+  /// Master can open all locks within the given site 
   case master // = 3
 
   /// Nfc writer allows to write any credential within this site on cards & fobs
   case nfcWriter // = 4
+
+  /// Emergency can open all locks within given site, requires no refresh and has no validity 
+  case emergency // = 5
 
   public init() {
     self = .regular
@@ -472,6 +475,7 @@ public enum BlueCredentialType: SwiftProtobuf.Enum {
     case 2: self = .maintenance
     case 3: self = .master
     case 4: self = .nfcWriter
+    case 5: self = .emergency
     default: return nil
     }
   }
@@ -482,6 +486,7 @@ public enum BlueCredentialType: SwiftProtobuf.Enum {
     case .maintenance: return 2
     case .master: return 3
     case .nfcWriter: return 4
+    case .emergency: return 5
     }
   }
 
@@ -956,6 +961,37 @@ public enum BlueOssSoCredentialTypeOssCredential: SwiftProtobuf.Enum {
 #if swift(>=4.2)
 
 extension BlueOssSoCredentialTypeOssCredential: CaseIterable {
+  // Support synthesized by the compiler.
+}
+
+#endif  // swift(>=4.2)
+
+public enum BlueOssSoDoorGroupId: SwiftProtobuf.Enum {
+  public typealias RawValue = Int
+  case masterGroupID // = 0
+
+  public init() {
+    self = .masterGroupID
+  }
+
+  public init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .masterGroupID
+    default: return nil
+    }
+  }
+
+  public var rawValue: Int {
+    switch self {
+    case .masterGroupID: return 0
+    }
+  }
+
+}
+
+#if swift(>=4.2)
+
+extension BlueOssSoDoorGroupId: CaseIterable {
   // Support synthesized by the compiler.
 }
 
@@ -1786,7 +1822,7 @@ public struct BlueOssAccessResult {
   /// Clears the value of `accessGranted`. Subsequent reads from it will return its default value.
   public mutating func clearAccessGranted() {self._accessGranted = nil}
 
-  /// The final access type
+  /// The final access type that was used if access was granted
   public var accessType: BlueAccessType {
     get {return _accessType ?? .defaultTime}
     set {_accessType = newValue}
@@ -1796,8 +1832,18 @@ public struct BlueOssAccessResult {
   /// Clears the value of `accessType`. Subsequent reads from it will return its default value.
   public mutating func clearAccessType() {self._accessType = nil}
 
-  /// If access type is a toggle then this specifies the time it should lock
-  /// again
+  /// Additional access info if was granted, depends on device
+  /// For locks for example this would contain the BlueLockState
+  public var accessInfo: UInt32 {
+    get {return _accessInfo ?? 0}
+    set {_accessInfo = newValue}
+  }
+  /// Returns true if `accessInfo` has been explicitly set.
+  public var hasAccessInfo: Bool {return self._accessInfo != nil}
+  /// Clears the value of `accessInfo`. Subsequent reads from it will return its default value.
+  public mutating func clearAccessInfo() {self._accessInfo = nil}
+
+  /// Defines when the used schedule actually ends if any if access was granted
   public var scheduleEndTime: BlueLocalTimestamp {
     get {return _scheduleEndTime ?? BlueLocalTimestamp()}
     set {_scheduleEndTime = newValue}
@@ -1823,6 +1869,7 @@ public struct BlueOssAccessResult {
 
   fileprivate var _accessGranted: Bool? = nil
   fileprivate var _accessType: BlueAccessType? = nil
+  fileprivate var _accessInfo: UInt32? = nil
   fileprivate var _scheduleEndTime: BlueLocalTimestamp? = nil
   fileprivate var _scheduleMissmatch: Bool? = nil
 }
@@ -3528,6 +3575,7 @@ extension BlueEventInfoSystem: @unchecked Sendable {}
 extension BlueEventInfoAccess: @unchecked Sendable {}
 extension BlueOssCredentialTypeSource: @unchecked Sendable {}
 extension BlueOssSoCredentialTypeOssCredential: @unchecked Sendable {}
+extension BlueOssSoDoorGroupId: @unchecked Sendable {}
 extension BlueOssSoDoorInfoAccessBy: @unchecked Sendable {}
 extension BlueOssSoFileId: @unchecked Sendable {}
 extension BlueSharedDemoData: @unchecked Sendable {}
@@ -3722,6 +3770,7 @@ extension BlueCredentialType: SwiftProtobuf._ProtoNameProviding {
     2: .same(proto: "Maintenance"),
     3: .same(proto: "Master"),
     4: .same(proto: "NfcWriter"),
+    5: .same(proto: "Emergency"),
   ]
 }
 
@@ -3823,6 +3872,12 @@ extension BlueOssSoCredentialTypeOssCredential: SwiftProtobuf._ProtoNameProvidin
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     0: .same(proto: "Standard"),
     1: .same(proto: "InterventionMedia"),
+  ]
+}
+
+extension BlueOssSoDoorGroupId: SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "MasterGroupId"),
   ]
 }
 
@@ -4766,13 +4821,15 @@ extension BlueOssAccessResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "accessGranted"),
     2: .same(proto: "accessType"),
-    3: .same(proto: "scheduleEndTime"),
-    4: .same(proto: "scheduleMissmatch"),
+    3: .same(proto: "accessInfo"),
+    4: .same(proto: "scheduleEndTime"),
+    5: .same(proto: "scheduleMissmatch"),
   ]
 
   public var isInitialized: Bool {
     if self._accessGranted == nil {return false}
     if self._accessType == nil {return false}
+    if self._accessInfo == nil {return false}
     if self._scheduleEndTime == nil {return false}
     if self._scheduleMissmatch == nil {return false}
     if let v = self._scheduleEndTime, !v.isInitialized {return false}
@@ -4787,8 +4844,9 @@ extension BlueOssAccessResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularBoolField(value: &self._accessGranted) }()
       case 2: try { try decoder.decodeSingularEnumField(value: &self._accessType) }()
-      case 3: try { try decoder.decodeSingularMessageField(value: &self._scheduleEndTime) }()
-      case 4: try { try decoder.decodeSingularBoolField(value: &self._scheduleMissmatch) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self._accessInfo) }()
+      case 4: try { try decoder.decodeSingularMessageField(value: &self._scheduleEndTime) }()
+      case 5: try { try decoder.decodeSingularBoolField(value: &self._scheduleMissmatch) }()
       default: break
       }
     }
@@ -4805,11 +4863,14 @@ extension BlueOssAccessResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
     try { if let v = self._accessType {
       try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
     } }()
+    try { if let v = self._accessInfo {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 3)
+    } }()
     try { if let v = self._scheduleEndTime {
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
     } }()
     try { if let v = self._scheduleMissmatch {
-      try visitor.visitSingularBoolField(value: v, fieldNumber: 4)
+      try visitor.visitSingularBoolField(value: v, fieldNumber: 5)
     } }()
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -4817,6 +4878,7 @@ extension BlueOssAccessResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImpl
   public static func ==(lhs: BlueOssAccessResult, rhs: BlueOssAccessResult) -> Bool {
     if lhs._accessGranted != rhs._accessGranted {return false}
     if lhs._accessType != rhs._accessType {return false}
+    if lhs._accessInfo != rhs._accessInfo {return false}
     if lhs._scheduleEndTime != rhs._scheduleEndTime {return false}
     if lhs._scheduleMissmatch != rhs._scheduleMissmatch {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

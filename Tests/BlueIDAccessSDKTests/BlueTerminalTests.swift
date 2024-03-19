@@ -73,6 +73,47 @@ final class BlueTerminalTests: BlueXCTestCase {
         XCTAssertNotNil(storedSpToken?.command.credentialID, "A")
     }
     
+    func testBlueGetSpTokenWithFutureCredentialValidityStart() throws {
+        let mockToken = try createMockToken()
+        
+        let credentialA = blueCreateAccessCredentialDemo(
+            id: "A",
+            validFrom: BlueLocalTimestamp(Date().addingTimeInterval(3600))
+        )
+        
+        let credentialB = blueCreateAccessCredentialDemo(
+            id: "B"
+        )
+        
+        try blueStoreSpToken(credential: credentialA, deviceID: "test", token: mockToken.base64)
+        try blueStoreSpToken(credential: credentialB, deviceID: "test", token: mockToken.base64)
+        
+        let storedSpToken = try blueGetSpToken("test:PING")
+        XCTAssertNotNil(storedSpToken)
+        XCTAssertNotNil(storedSpToken?.command.credentialID, "B")
+    }
+    
+    func testBlueGetSpTokenWithOnlyFutureCredentialValidityStart() throws {
+        let mockToken = try createMockToken()
+        
+        let credentialA = blueCreateAccessCredentialDemo(
+            id: "A",
+            validFrom: BlueLocalTimestamp(Date().addingTimeInterval(3600))
+        )
+        
+        let credentialB = blueCreateAccessCredentialDemo(
+            id: "B",
+            validFrom: BlueLocalTimestamp(Date().addingTimeInterval(3600))
+        )
+        
+        try blueStoreSpToken(credential: credentialA, deviceID: "test", token: mockToken.base64)
+        try blueStoreSpToken(credential: credentialB, deviceID: "test", token: mockToken.base64)
+        
+        let storedSpToken = try blueGetSpToken("test:PING")
+        XCTAssertNotNil(storedSpToken)
+        XCTAssertNotNil(storedSpToken?.command.credentialID, "A")
+    }
+    
     func testBlueGetSpTokenInPreviousSDKVersion() throws {
         let mockToken = try createMockToken()
         

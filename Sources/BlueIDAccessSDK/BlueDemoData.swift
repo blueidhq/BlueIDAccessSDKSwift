@@ -3,13 +3,16 @@ import Foundation
 
 internal let blueDemoData = BlueSharedDemoData()
 
-public func blueCreateAccessCredentialDemo() -> BlueAccessCredential {
+public func blueCreateAccessCredentialDemo(
+    id: String? = nil,
+    validFrom: BlueLocalTimestamp? = nil
+) -> BlueAccessCredential {
     var credential = BlueAccessCredential()
     credential.name = "Someone's iPhone"
     credential.siteName = "Somewhere"
     credential.siteID = 1
     credential.organisation = "655398ee2b26344d565e6123"
-    credential.credentialID.id = "8M-1xA3oze"
+    credential.credentialID.id = id ?? "8M-1xA3oze"
     credential.credentialType = .maintenance
     credential.privateKey = Data([
         48,129,135,2,1,0,48,19,6,7,42,134,72,206,61,2,1,6,8,42,134,
@@ -21,6 +24,10 @@ public func blueCreateAccessCredentialDemo() -> BlueAccessCredential {
         21,16,242,30,21,101,248,90,139,31,61,150,198,4,196,146,96,174,
         92,230,194,140,79,9
     ])
+    
+    if let validFrom = validFrom {
+        credential.validFrom = validFrom
+    }
 
     return credential
 }

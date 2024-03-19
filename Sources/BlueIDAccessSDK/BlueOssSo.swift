@@ -511,7 +511,7 @@ public class BlueRefreshOssSoCredentialsCommand: BlueSdkAsyncCommand {
             throw BlueError(.sdkUnsupportedPlatform)
         }
         
-        let credentials = try await BlueGetAccessCredentialsCommand().runAsync(credentialType: .nfcWriter, includePrivateKey: true).credentials
+        let credentials = try BlueGetAccessCredentialsCommand().run(credentialType: .nfcWriter, includePrivateKey: true).credentials
         
         guard !credentials.isEmpty else {
             throw BlueError(.sdkCredentialNotFound)

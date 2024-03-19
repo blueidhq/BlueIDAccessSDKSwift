@@ -34,7 +34,7 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
         try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
-        let accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync()
+        let accessCredentialList = try? BlueGetAccessCredentialsCommand().run()
         
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 2, "There should be 2 credentials")
@@ -56,13 +56,13 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
         try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
-        var accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(credentialType: .nfcWriter)
+        var accessCredentialList = try? BlueGetAccessCredentialsCommand().run(credentialType: .nfcWriter)
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 1, "There should be 1 credential")
         XCTAssertEqual(accessCredentialList?.credentials[0].credentialID.id, "credential-2", "Wrong id")
         XCTAssertEqual(accessCredentialList?.credentials[0].credentialType, .nfcWriter, "Wrong type")
         
-        accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(credentialType: .regular)
+        accessCredentialList = try? BlueGetAccessCredentialsCommand().run(credentialType: .regular)
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 0, "There should no credentials")
     }
@@ -79,13 +79,13 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
         try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
-        var accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(for: "device-1")
+        var accessCredentialList = try? BlueGetAccessCredentialsCommand().run(for: "device-1")
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 1, "There should be 1 credential")
         XCTAssertEqual(accessCredentialList?.credentials[0].credentialID.id, "credential-1", "Wrong id")
         XCTAssertEqual(accessCredentialList?.credentials[0].credentialType, .maintenance, "Wrong type")
         
-        accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(for: "device-2")
+        accessCredentialList = try? BlueGetAccessCredentialsCommand().run(for: "device-2")
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 0, "There should no credentials")
     }
@@ -102,13 +102,13 @@ final class BlueGetAccessCredentialsCommandTests: BlueXCTestCase {
         try await BlueAddAccessCredentialCommand(BlueSdkService(BlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential1)
         try await BlueAddAccessCredentialCommand(BlueSdkService(DefaultBlueAPIMock(), BlueDefaultAccessEventServiceMock())).runAsync(credential: credential2)
         
-        var accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(credentialType: .maintenance, for: "device-1")
+        var accessCredentialList = try? BlueGetAccessCredentialsCommand().run(credentialType: .maintenance, for: "device-1")
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 1, "There should be 1 credential")
         XCTAssertEqual(accessCredentialList?.credentials[0].credentialID.id, "credential-1", "Wrong id")
         XCTAssertEqual(accessCredentialList?.credentials[0].credentialType, .maintenance, "Wrong type")
         
-        accessCredentialList = try? await BlueGetAccessCredentialsCommand().runAsync(credentialType: .nfcWriter, for: "device-1")
+        accessCredentialList = try? BlueGetAccessCredentialsCommand().run(credentialType: .nfcWriter, for: "device-1")
         XCTAssertNotNil(accessCredentialList, "Returned access credential list should not be null")
         XCTAssertEqual(accessCredentialList?.credentials.count, 0, "There should no credentials")
     }
