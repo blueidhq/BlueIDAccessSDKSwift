@@ -39,7 +39,7 @@ internal class BlueAbstractSynchronizeAccessCommand<T>: BlueSdkAsyncCommand wher
         
         guard let response = try? await self.sync(with: tokenAuthentication, forceRefresh: forceRefresh) else {
             if (credential.hasValidTo) {
-                if let validTo = credential.validTo.toDate() {
+                if let validTo = credential.validTo.toUTCDate() {
                     
                     let isExpired = validTo < Date()
                     if (isExpired) {
@@ -128,7 +128,7 @@ internal class BlueSynchronizeMobileAccessCommand: BlueAbstractSynchronizeAccess
         }
         
         if let validity = synchronizationResult.validity {
-            updatedCredential.validity = BlueLocalTimestamp(Date(timeIntervalSince1970: TimeInterval(validity/1000)))
+            updatedCredential.validity = BlueLocalTimestamp.fromUTCDate(Date(timeIntervalSince1970: TimeInterval(validity/1000)))
         }
         
         try blueAccessCredentialsKeyChain.updateEntry(id: updatedCredential.credentialID.id, data: updatedCredential.jsonUTF8Data())

@@ -1,18 +1,26 @@
 import Foundation
 
 extension BlueLocalTimestamp: Encodable, Decodable {
-    public init(_ date: Date) {
-        self.init()
+    
+    /// Converts a given UTC Date into a BlueLocalTimestamp.
+    ///
+    /// - returns: The BlueLocalTimestamp
+    static public func fromUTCDate(_ date: Date) -> BlueLocalTimestamp {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "UTC")!
         
-        let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         
-        self.year = UInt32(components.year!)
-        self.month = UInt32(components.month!)
-        self.date = UInt32(components.day!)
-        self.hours = UInt32(components.hour!)
-        self.minutes = UInt32(components.minute!)
-        self.seconds = UInt32(components.second!)
+        var instance = BlueLocalTimestamp()
+        
+        instance.year = UInt32(components.year!)
+        instance.month = UInt32(components.month!)
+        instance.date = UInt32(components.day!)
+        instance.hours = UInt32(components.hour!)
+        instance.minutes = UInt32(components.minute!)
+        instance.seconds = UInt32(components.second!)
+        
+        return instance
     }
     
     public init(_ year: Int, _ month: Int, _ date: Int = 1, _ hours: Int = 0, _ minutes: Int = 0, _ seconds: Int = 0) {
@@ -37,7 +45,15 @@ extension BlueLocalTimestamp: Encodable, Decodable {
         seconds = try container.decode(UInt32.self, forKey: .seconds)
     }
     
-    public func toDate() -> Date? {
+    /// Converts the underlying BlueLocalTimestamp into a date in the UTC timezone. If either the timezone cannot be found or the date is invalid, nil is returned.
+    ///
+    /// - returns: The UTC Date if valid.
+    public func toUTCDate() -> Date? {
+        guard let tz = TimeZone(abbreviation: "UTC") else {
+            blueLogWarn("UTC TZ not found")
+            return nil
+        }
+        
         var dateComponents = DateComponents()
         dateComponents.year = Int(year)
         dateComponents.month = Int(month)
@@ -46,7 +62,10 @@ extension BlueLocalTimestamp: Encodable, Decodable {
         dateComponents.minute = Int(minutes)
         dateComponents.second = Int(seconds)
         
-        let date = Calendar.current.date(from: dateComponents)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = tz
+        
+        let date = calendar.date(from: dateComponents)
         if (date?.timeIntervalSince1970 ?? 0 <= 0) {
             return nil
         }
@@ -140,10 +159,12 @@ extension BlueAccessCredential: Decodable {
         }
     }
     
-    public func checkValidityStart() -> Bool {
+    public func checkValidityStart(_ now: Date? = nil) -> Bool {
         if self.hasValidFrom {
-            if let validFrom = self.validFrom.toDate() {
-                if validFrom > Date() {
+            if let validFrom = self.validFrom.toUTCDate() {
+                let now = now ?? Date()
+                
+                if validFrom > now {
                     return false
                 }
             }

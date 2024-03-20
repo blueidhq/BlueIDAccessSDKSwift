@@ -78,7 +78,7 @@ final class BlueTerminalTests: BlueXCTestCase {
         
         let credentialA = blueCreateAccessCredentialDemo(
             id: "A",
-            validFrom: BlueLocalTimestamp(Date().addingTimeInterval(3600))
+            validFrom: BlueLocalTimestamp.fromUTCDate(Date().addingTimeInterval(3600))
         )
         
         let credentialB = blueCreateAccessCredentialDemo(
@@ -98,12 +98,12 @@ final class BlueTerminalTests: BlueXCTestCase {
         
         let credentialA = blueCreateAccessCredentialDemo(
             id: "A",
-            validFrom: BlueLocalTimestamp(Date().addingTimeInterval(3600))
+            validFrom: BlueLocalTimestamp.fromUTCDate(Date().addingTimeInterval(3600))
         )
         
         let credentialB = blueCreateAccessCredentialDemo(
             id: "B",
-            validFrom: BlueLocalTimestamp(Date().addingTimeInterval(3600))
+            validFrom: BlueLocalTimestamp.fromUTCDate(Date().addingTimeInterval(3600))
         )
         
         try blueStoreSpToken(credential: credentialA, deviceID: "test", token: mockToken.base64)

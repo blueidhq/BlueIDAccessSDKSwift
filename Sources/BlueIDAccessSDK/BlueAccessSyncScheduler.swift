@@ -109,8 +109,6 @@ internal class BlueAccessSyncScheduler: BlueEventListener {
             blueLogError(error.localizedDescription)
         }
         
-        blueRemoveEventListener(listener: self)
-        
         foregroundScheduler.schedule(now)
     }
     
@@ -143,10 +141,10 @@ internal class BlueAccessSyncScheduler: BlueEventListener {
         if let credentials = try? blueCommands.getAccessCredentials.run().credentials {
             if (!credentials.isEmpty) {
                 credentials.forEach { credential in
-                    if (!credential.checkValidityStart()) {
-                        if let validFrom = credential.validFrom.toDate() {
-                            let now = now ?? Date()
-                            
+                    let now = now ?? Date()
+                    
+                    if (!credential.checkValidityStart(now)) {
+                        if let validFrom = credential.validFrom.toUTCDate() {
                             if validFrom > now {
                                 let differenceInSeconds = validFrom.timeIntervalSince(now)
                                 

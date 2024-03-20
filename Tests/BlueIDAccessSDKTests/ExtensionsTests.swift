@@ -66,4 +66,8 @@ final class BlueAccessCredentialDecodableExtensionTests: BlueXCTestCase {
         XCTAssertFalse(credential!.hasValidity)
         XCTAssertFalse(credential!.hasPrivateKey)
     }
+    
+    func testBlueLocalTimestampToUTCDate() {
+        XCTAssertEqual(BlueLocalTimestamp.fromUTCDate(Date(timeIntervalSince1970: 1704285000)).toUTCDate(), Date(timeIntervalSince1970: 1704285000))
+    }
 }

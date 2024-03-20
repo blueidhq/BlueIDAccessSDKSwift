@@ -74,7 +74,7 @@ final class BlueAbstractSynchronizeAccessCommandTests: BlueXCTestCase {
         
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
         var credential = blueCreateAccessCredentialDemo()
-        credential.validTo = BlueLocalTimestamp(yesterday!)
+        credential.validTo = BlueLocalTimestamp.fromUTCDate(yesterday!)
         
         try blueAccessCredentialsKeyChain.storeEntry(id: credential.credentialID.id, data: try credential.jsonUTF8Data())
         
