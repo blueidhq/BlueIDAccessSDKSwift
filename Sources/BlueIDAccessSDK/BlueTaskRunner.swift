@@ -35,7 +35,7 @@ public class BlueTask {
     
     let handler: (BlueSerialTaskRunner) async throws -> BlueTaskResult
     
-    init(id: AnyHashable, label: String, failable: Bool = false, status: BlueTaskStatus = .ready, error: Error? = nil, _ handler: @escaping (BlueSerialTaskRunner) async throws -> BlueTaskResult) {
+    init(id: AnyHashable, label: String, failable: Bool = false, status: BlueTaskStatus = .ready, error: Error? = nil, handler: @escaping (BlueSerialTaskRunner) async throws -> BlueTaskResult) {
         self.id = id
         self.label = label
         self.failable = failable

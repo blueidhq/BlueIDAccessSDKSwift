@@ -13,14 +13,14 @@ private func getColor(_ status: BlueTaskStatus) -> Color {
     }
 }
 
-private func getLineColor(_ status: BlueTaskStatus) -> Color {
+private func getTextColor(_ status: BlueTaskStatus) -> Color {
     switch (status) {
-        case .ready, .started:
-            return .gray
-        case .failed:
-            return .red
-        case .succeeded, .skipped:
-            return .green
+        case .ready, .started, .skipped:
+            return .black
+        case .succeeded:
+            return Color(red: 0.0, green: 0.5, blue: 0.0)
+        default:
+            return getColor(status)
     }
 }
 
@@ -32,8 +32,10 @@ private func getSymbol(_ status: BlueTaskStatus) -> String {
             return "circle.circle"
         case .failed:
             return "xmark.circle"
-        case .succeeded, .skipped:
+        case .succeeded:
             return "checkmark.circle"
+        case .skipped:
+            return "minus.circle"
     }
 }
 
@@ -41,7 +43,7 @@ class BlueTaskModel: ObservableObject, Identifiable {
     @Published var label: String
     @Published var status: BlueTaskStatus
     @Published var statusColor: Color
-    @Published var lineColor: Color
+    @Published var textColor: Color
     @Published var symbol: String
     @Published var errorDescription: String
     @Published var isLast: Bool
@@ -51,8 +53,8 @@ class BlueTaskModel: ObservableObject, Identifiable {
     init(_ task: BlueTask, _ isLast: Bool) {
         self.label = task.label
         self.status = task.status.value
+        self.textColor = getTextColor(task.status.value)
         self.statusColor = getColor(task.status.value)
-        self.lineColor = getLineColor(task.status.value)
         self.symbol = getSymbol(task.status.value)
         self.errorDescription = task.errorDescription ?? ""
         self.isLast = isLast
@@ -61,8 +63,8 @@ class BlueTaskModel: ObservableObject, Identifiable {
             guard let self = self else { return }
             
             self.status = status
+            self.textColor = getTextColor(status)
             self.statusColor = getColor(status)
-            self.lineColor = getLineColor(status)
             self.symbol = getSymbol(status)
             self.errorDescription = task.errorDescription ?? ""
             
@@ -90,23 +92,27 @@ struct TaskView: View {
                 
                 Text(task.label)
                     .font(.system(size: 14))
+                    .foregroundColor(task.textColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             
-            HStack(alignment: .center) {
-                if !task.isLast {
+            HStack(alignment: .center, spacing: 0) {
+                ZStack(alignment: .leading) {
                     Rectangle()
-                        .fill(task.lineColor)
+                        .fill(task.statusColor)
                         .frame(width: 2)
                         .padding(.horizontal, 10.5)
-                }
-                
-                if !task.errorDescription.isEmpty {
-                    Text(task.errorDescription)
-                        .foregroundColor(.red)
-                        .font(.system(size: 11))
-                        .padding(.vertical, 2)
-                        .multilineTextAlignment(.leading)
+                        .hidden(task.isLast)
+                    
+                    if !task.errorDescription.isEmpty {
+                        Text(task.errorDescription)
+                            .foregroundColor(.red)
+                            .font(.system(size: 11))
+                            .padding(.leading, 32)
+                            .padding(.bottom, 5)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .alignmentGuide(.leading) { d in d[.leading] }
+                    }
                 }
             }
         }
@@ -119,9 +125,10 @@ class BlueSynchronizeAccessDeviceModalViewModel: ObservableObject {
     @Published var dismissEnabled: Bool = true
     @Published var tasks: [BlueTask]
     
-    init(title: String = "", dismiss: String = "", tasks: [BlueTask] = []) {
+    init(title: String = "", dismiss: String = "", dismissEnabled: Bool = true, tasks: [BlueTask] = []) {
         self.title = title
         self.dismiss = dismiss
+        self.dismissEnabled = dismissEnabled
         self.tasks = tasks
     }
 }
@@ -129,7 +136,7 @@ class BlueSynchronizeAccessDeviceModalViewModel: ObservableObject {
 struct BlueSynchronizeAccessDeviceModalView: View {
     @ObservedObject private var vm: BlueSynchronizeAccessDeviceModalViewModel
     
-    internal var height: CGFloat = 500
+    internal var height: CGFloat = 550
     internal var backgroundColor: UIColor = .white
     internal var foregroundColor: UIColor = .black
     
@@ -155,24 +162,30 @@ struct BlueSynchronizeAccessDeviceModalView: View {
                             .foregroundColor(Color(backgroundColor))
                             .shadow(color: .gray, radius: 1)
                         
-                        VStack(alignment: .center) {
+                        VStack(alignment: .center, spacing: 0) {
                             Text(vm.title)
                                 .font(.system(size: 20))
                                 .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
                             
                             Spacer()
                             
-                            ScrollView {
-                                VStack(alignment: .leading, spacing: 0) {
-                                    ForEach(vm.tasks.indices, id: \.self){ index in
-                                        TaskView(task: BlueTaskModel(vm.tasks[index], index == vm.tasks.indices.last))
+                            GeometryReader { geometry in
+                                ScrollView(.vertical) {
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        ForEach(vm.tasks.indices, id: \.self){ index in
+                                            TaskView(task: BlueTaskModel(vm.tasks[index], index == vm.tasks.indices.last))
+                                        }
                                     }
-                                }.padding(.vertical, 10)
+                                    .padding(.vertical, 10)
+                                    .frame(width: geometry.size.width)
+                                    .frame(minHeight: geometry.size.height)
+                                }
                             }
                             
+                            Spacer()
+                            
                             if !vm.dismiss.isEmpty {
-                                Spacer()
-                                
                                 Button {
                                     onDismiss()
                                 } label: {
@@ -180,7 +193,8 @@ struct BlueSynchronizeAccessDeviceModalView: View {
                                         .font(.system(size: 18))
                                         .frame(maxWidth: .infinity)
                                         .padding(EdgeInsets(top: 15, leading: 10, bottom: 15, trailing: 10))
-                                        .background(Color.gray.opacity(0.5))
+                                        .background(Color.gray.opacity(vm.dismissEnabled ? 0.5 : 0.3))
+                                        .foregroundColor(vm.dismissEnabled ? .black : .gray)
                                         .cornerRadius(10)
                                 }
                                 .disabled(!vm.dismissEnabled)
@@ -198,38 +212,40 @@ struct BlueSynchronizeAccessDeviceModalView: View {
     }
 }
 
+let noop: (BlueSerialTaskRunner) async throws -> BlueTaskResult = { _ in .result(nil) }
+
 struct BlueSynchronizeAccessDeviceModalView_Preview: PreviewProvider {
     static var previews: some View {
         BlueSynchronizeAccessDeviceModalView(
             BlueSynchronizeAccessDeviceModalViewModel(
-                title: "Synchronization in Progress",
-                dismiss: "Cancel",
-                tasks: [
+                title: "Synchronization has failed (Worst case)",
+                dismiss: "Done",
+                tasks: Array(1..<12).map { element in
                     BlueTask(
-                        id: "A",
-                        label: "Retrieve device configuration",
+                        id: element.description,
+                        label: "Task label - \(element.description)",
                         status: .failed,
-                        error: BlueError(.sdkCredentialNotFound, cause: BlueError(.invalidCrc), detail: "Something is wrong")
-                    ) { _ in .result(nil) },
-                    
+                        error: BlueError(.sdkDecodeJsonFailed, cause: BlueError(.sdkNetworkError), detail: "Something went wrong ¯\\_(ツ)_/¯"),
+                        handler: noop
+                    )
+                }
+            )
+        ) {}
+        
+        BlueSynchronizeAccessDeviceModalView(
+            BlueSynchronizeAccessDeviceModalViewModel(
+                title: "Cancelling...",
+                dismiss: "Cancel",
+                dismissEnabled: false,
+                tasks: Array(1..<12).enumerated().map { (index, element) in
                     BlueTask(
-                        id: "B",
-                        label: "Update device configuration",
-                        status: .succeeded
-                    ) { _ in .result(nil) },
-                    
-                    BlueTask(
-                        id: "C",
-                        label: "Wait for device to restart",
-                        status: .started
-                    ) { _ in .result(nil) },
-                    
-                    BlueTask(
-                        id: "D",
-                        label: "Push system status",
-                        status: .ready
-                    ) { _ in .result(nil) }
-                ]
+                        id: element.description,
+                        label: "Task label - \(element.description)",
+                        status: index == 1 ? .failed : .succeeded,
+                        error: index == 1 ? BlueError(.sdkDecodeJsonFailed, cause: BlueError(.sdkNetworkError), detail: "Something went wrong ¯\\_(ツ)_/¯"): nil,
+                        handler: noop
+                    )
+                }
             )
         ) {}
     }
