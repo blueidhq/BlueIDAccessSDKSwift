@@ -5,8 +5,8 @@ import PackageDescription
 let package = Package(
   name: "BlueIDAccessSDK",
   platforms: [
-    .macOS(.v10_15),
-    .iOS(.v14),
+    .macOS(.v12),
+    .iOS("15.5"),
     .watchOS(.v8),
   ],
   products: [
@@ -16,7 +16,8 @@ let package = Package(
     )
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.24.0")
+    .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.24.0"),
+    .package(url: "https://github.com/NordicSemiconductor/IOS-DFU-Library", from: "4.15.0")
   ],
   targets: [
     .target(
@@ -24,6 +25,7 @@ let package = Package(
       dependencies: [
         "CBlueIDAccess",
         .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+        .product(name: "NordicDFU", package: "IOS-DFU-Library")
       ]
     ),
     .binaryTarget(
