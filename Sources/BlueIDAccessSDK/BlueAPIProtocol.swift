@@ -18,6 +18,7 @@ public enum BlueAPIEndpoints: String {
     case AccessCredentials = "/access/credentials"
     case AccessSynchronizeOfflineAccess = "/access/synchronizeOfflineAccess"
     case AccessClaimCredential = "/access/cc"
+    case AccessGetLatestFirmware = "/access/getLatestFirmware"
     
     var url: URL {
         guard let url = URL(string: baseURL) else {
@@ -236,6 +237,17 @@ internal struct BlueAccessToken: Codable {
     var expiresAt: Int
 }
 
+/// [POST] /access/getLatestFirmware request
+internal struct BlueGetLatestFirmwareRequest: Encodable {
+    var deviceId: String
+    var tokenAuthentication: BlueTokenAuthentication
+}
+/// [POST] /access/getLatestFirmware response
+internal struct BlueGetLatestFirmwareResult: Decodable {
+    var version: Int
+    var url: String
+}
+
 protocol BlueAPIProtocol {
     func getAccessToken(credentialId: String) async throws -> BlueFetchResponse<BlueAccessToken>
     func synchronizeMobileAccess(with tokenAuthentication: BlueTokenAuthentication, forceRefresh: Bool?) async throws -> BlueFetchResponse<BlueMobileAccessSynchronizationResult>
@@ -250,4 +262,5 @@ protocol BlueAPIProtocol {
     func claimDevice(deviceID: String, objectID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueClaimDeviceResult>
     func claimAccessCredential(activationToken: String) async throws -> BlueFetchResponse<BlueClaimAccessCredentialResult>
     func getAccessCredentials(with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult>
+    func getLatestFirmware(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetLatestFirmwareResult>
 }

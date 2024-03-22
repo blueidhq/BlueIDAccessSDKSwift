@@ -405,6 +405,114 @@ public struct BlueI18n {
   /// Clears the value of `syncDevicePushSystemStatusTaskLabel`. Subsequent reads from it will return its default value.
   public mutating func clearSyncDevicePushSystemStatusTaskLabel() {_uniqueStorage()._syncDevicePushSystemStatusTaskLabel = nil}
 
+  public var dfuInProgressTitle: String {
+    get {return _storage._dfuInProgressTitle ?? "Update in Progress"}
+    set {_uniqueStorage()._dfuInProgressTitle = newValue}
+  }
+  /// Returns true if `dfuInProgressTitle` has been explicitly set.
+  public var hasDfuInProgressTitle: Bool {return _storage._dfuInProgressTitle != nil}
+  /// Clears the value of `dfuInProgressTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuInProgressTitle() {_uniqueStorage()._dfuInProgressTitle = nil}
+
+  public var dfuFailedTitle: String {
+    get {return _storage._dfuFailedTitle ?? "Update has failed"}
+    set {_uniqueStorage()._dfuFailedTitle = newValue}
+  }
+  /// Returns true if `dfuFailedTitle` has been explicitly set.
+  public var hasDfuFailedTitle: Bool {return _storage._dfuFailedTitle != nil}
+  /// Clears the value of `dfuFailedTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuFailedTitle() {_uniqueStorage()._dfuFailedTitle = nil}
+
+  public var dfuCancellingTitle: String {
+    get {return _storage._dfuCancellingTitle ?? "Cancelling..."}
+    set {_uniqueStorage()._dfuCancellingTitle = newValue}
+  }
+  /// Returns true if `dfuCancellingTitle` has been explicitly set.
+  public var hasDfuCancellingTitle: Bool {return _storage._dfuCancellingTitle != nil}
+  /// Clears the value of `dfuCancellingTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuCancellingTitle() {_uniqueStorage()._dfuCancellingTitle = nil}
+
+  public var dfuCompletedTitle: String {
+    get {return _storage._dfuCompletedTitle ?? "Update has been completed"}
+    set {_uniqueStorage()._dfuCompletedTitle = newValue}
+  }
+  /// Returns true if `dfuCompletedTitle` has been explicitly set.
+  public var hasDfuCompletedTitle: Bool {return _storage._dfuCompletedTitle != nil}
+  /// Clears the value of `dfuCompletedTitle`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuCompletedTitle() {_uniqueStorage()._dfuCompletedTitle = nil}
+
+  public var dfuGetAuthenticationTokenTaskLabel: String {
+    get {return _storage._dfuGetAuthenticationTokenTaskLabel ?? "Issue authentication token"}
+    set {_uniqueStorage()._dfuGetAuthenticationTokenTaskLabel = newValue}
+  }
+  /// Returns true if `dfuGetAuthenticationTokenTaskLabel` has been explicitly set.
+  public var hasDfuGetAuthenticationTokenTaskLabel: Bool {return _storage._dfuGetAuthenticationTokenTaskLabel != nil}
+  /// Clears the value of `dfuGetAuthenticationTokenTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuGetAuthenticationTokenTaskLabel() {_uniqueStorage()._dfuGetAuthenticationTokenTaskLabel = nil}
+
+  public var dfuCheckLatestFwlabel: String {
+    get {return _storage._dfuCheckLatestFwlabel ?? "Check latest firmware"}
+    set {_uniqueStorage()._dfuCheckLatestFwlabel = newValue}
+  }
+  /// Returns true if `dfuCheckLatestFwlabel` has been explicitly set.
+  public var hasDfuCheckLatestFwlabel: Bool {return _storage._dfuCheckLatestFwlabel != nil}
+  /// Clears the value of `dfuCheckLatestFwlabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuCheckLatestFwlabel() {_uniqueStorage()._dfuCheckLatestFwlabel = nil}
+
+  public var dfuDownloadLatestFwlabel: String {
+    get {return _storage._dfuDownloadLatestFwlabel ?? "Download latest firmware"}
+    set {_uniqueStorage()._dfuDownloadLatestFwlabel = newValue}
+  }
+  /// Returns true if `dfuDownloadLatestFwlabel` has been explicitly set.
+  public var hasDfuDownloadLatestFwlabel: Bool {return _storage._dfuDownloadLatestFwlabel != nil}
+  /// Clears the value of `dfuDownloadLatestFwlabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuDownloadLatestFwlabel() {_uniqueStorage()._dfuDownloadLatestFwlabel = nil}
+
+  public var dfuPrepareUpdateLabel: String {
+    get {return _storage._dfuPrepareUpdateLabel ?? "Prepare Update"}
+    set {_uniqueStorage()._dfuPrepareUpdateLabel = newValue}
+  }
+  /// Returns true if `dfuPrepareUpdateLabel` has been explicitly set.
+  public var hasDfuPrepareUpdateLabel: Bool {return _storage._dfuPrepareUpdateLabel != nil}
+  /// Clears the value of `dfuPrepareUpdateLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuPrepareUpdateLabel() {_uniqueStorage()._dfuPrepareUpdateLabel = nil}
+
+  public var dfuStartBootloaderLabel: String {
+    get {return _storage._dfuStartBootloaderLabel ?? "Start Bootloader"}
+    set {_uniqueStorage()._dfuStartBootloaderLabel = newValue}
+  }
+  /// Returns true if `dfuStartBootloaderLabel` has been explicitly set.
+  public var hasDfuStartBootloaderLabel: Bool {return _storage._dfuStartBootloaderLabel != nil}
+  /// Clears the value of `dfuStartBootloaderLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuStartBootloaderLabel() {_uniqueStorage()._dfuStartBootloaderLabel = nil}
+
+  public var dfuFindDfuperipheralLabel: String {
+    get {return _storage._dfuFindDfuperipheralLabel ?? "Find DFU peripheral"}
+    set {_uniqueStorage()._dfuFindDfuperipheralLabel = newValue}
+  }
+  /// Returns true if `dfuFindDfuperipheralLabel` has been explicitly set.
+  public var hasDfuFindDfuperipheralLabel: Bool {return _storage._dfuFindDfuperipheralLabel != nil}
+  /// Clears the value of `dfuFindDfuperipheralLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuFindDfuperipheralLabel() {_uniqueStorage()._dfuFindDfuperipheralLabel = nil}
+
+  public var dfuUpdateFwlabel: String {
+    get {return _storage._dfuUpdateFwlabel ?? "Update firmware"}
+    set {_uniqueStorage()._dfuUpdateFwlabel = newValue}
+  }
+  /// Returns true if `dfuUpdateFwlabel` has been explicitly set.
+  public var hasDfuUpdateFwlabel: Bool {return _storage._dfuUpdateFwlabel != nil}
+  /// Clears the value of `dfuUpdateFwlabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuUpdateFwlabel() {_uniqueStorage()._dfuUpdateFwlabel = nil}
+
+  public var dfuWaitForDeviceToRestartTaskLabel: String {
+    get {return _storage._dfuWaitForDeviceToRestartTaskLabel ?? "Wait for device to restart"}
+    set {_uniqueStorage()._dfuWaitForDeviceToRestartTaskLabel = newValue}
+  }
+  /// Returns true if `dfuWaitForDeviceToRestartTaskLabel` has been explicitly set.
+  public var hasDfuWaitForDeviceToRestartTaskLabel: Bool {return _storage._dfuWaitForDeviceToRestartTaskLabel != nil}
+  /// Clears the value of `dfuWaitForDeviceToRestartTaskLabel`. Subsequent reads from it will return its default value.
+  public mutating func clearDfuWaitForDeviceToRestartTaskLabel() {_uniqueStorage()._dfuWaitForDeviceToRestartTaskLabel = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1023,6 +1131,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     32: .same(proto: "syncDeviceDeployBlacklistEntriesTaskLabel"),
     33: .same(proto: "syncDeviceRetrieveSystemStatusTaskLabel"),
     34: .same(proto: "syncDevicePushSystemStatusTaskLabel"),
+    35: .same(proto: "dfuInProgressTitle"),
+    36: .same(proto: "dfuFailedTitle"),
+    37: .same(proto: "dfuCancellingTitle"),
+    38: .same(proto: "dfuCompletedTitle"),
+    39: .same(proto: "dfuGetAuthenticationTokenTaskLabel"),
+    40: .same(proto: "dfuCheckLatestFWLabel"),
+    41: .same(proto: "dfuDownloadLatestFWLabel"),
+    42: .same(proto: "dfuPrepareUpdateLabel"),
+    43: .same(proto: "dfuStartBootloaderLabel"),
+    44: .same(proto: "dfuFindDFUPeripheralLabel"),
+    45: .same(proto: "dfuUpdateFWLabel"),
+    46: .same(proto: "dfuWaitForDeviceToRestartTaskLabel"),
   ]
 
   fileprivate class _StorageClass {
@@ -1060,6 +1180,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
     var _syncDeviceDeployBlacklistEntriesTaskLabel: String? = nil
     var _syncDeviceRetrieveSystemStatusTaskLabel: String? = nil
     var _syncDevicePushSystemStatusTaskLabel: String? = nil
+    var _dfuInProgressTitle: String? = nil
+    var _dfuFailedTitle: String? = nil
+    var _dfuCancellingTitle: String? = nil
+    var _dfuCompletedTitle: String? = nil
+    var _dfuGetAuthenticationTokenTaskLabel: String? = nil
+    var _dfuCheckLatestFwlabel: String? = nil
+    var _dfuDownloadLatestFwlabel: String? = nil
+    var _dfuPrepareUpdateLabel: String? = nil
+    var _dfuStartBootloaderLabel: String? = nil
+    var _dfuFindDfuperipheralLabel: String? = nil
+    var _dfuUpdateFwlabel: String? = nil
+    var _dfuWaitForDeviceToRestartTaskLabel: String? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -1100,6 +1232,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       _syncDeviceDeployBlacklistEntriesTaskLabel = source._syncDeviceDeployBlacklistEntriesTaskLabel
       _syncDeviceRetrieveSystemStatusTaskLabel = source._syncDeviceRetrieveSystemStatusTaskLabel
       _syncDevicePushSystemStatusTaskLabel = source._syncDevicePushSystemStatusTaskLabel
+      _dfuInProgressTitle = source._dfuInProgressTitle
+      _dfuFailedTitle = source._dfuFailedTitle
+      _dfuCancellingTitle = source._dfuCancellingTitle
+      _dfuCompletedTitle = source._dfuCompletedTitle
+      _dfuGetAuthenticationTokenTaskLabel = source._dfuGetAuthenticationTokenTaskLabel
+      _dfuCheckLatestFwlabel = source._dfuCheckLatestFwlabel
+      _dfuDownloadLatestFwlabel = source._dfuDownloadLatestFwlabel
+      _dfuPrepareUpdateLabel = source._dfuPrepareUpdateLabel
+      _dfuStartBootloaderLabel = source._dfuStartBootloaderLabel
+      _dfuFindDfuperipheralLabel = source._dfuFindDfuperipheralLabel
+      _dfuUpdateFwlabel = source._dfuUpdateFwlabel
+      _dfuWaitForDeviceToRestartTaskLabel = source._dfuWaitForDeviceToRestartTaskLabel
     }
   }
 
@@ -1146,6 +1290,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       if _storage._syncDeviceDeployBlacklistEntriesTaskLabel == nil {return false}
       if _storage._syncDeviceRetrieveSystemStatusTaskLabel == nil {return false}
       if _storage._syncDevicePushSystemStatusTaskLabel == nil {return false}
+      if _storage._dfuInProgressTitle == nil {return false}
+      if _storage._dfuFailedTitle == nil {return false}
+      if _storage._dfuCancellingTitle == nil {return false}
+      if _storage._dfuCompletedTitle == nil {return false}
+      if _storage._dfuGetAuthenticationTokenTaskLabel == nil {return false}
+      if _storage._dfuCheckLatestFwlabel == nil {return false}
+      if _storage._dfuDownloadLatestFwlabel == nil {return false}
+      if _storage._dfuPrepareUpdateLabel == nil {return false}
+      if _storage._dfuStartBootloaderLabel == nil {return false}
+      if _storage._dfuFindDfuperipheralLabel == nil {return false}
+      if _storage._dfuUpdateFwlabel == nil {return false}
+      if _storage._dfuWaitForDeviceToRestartTaskLabel == nil {return false}
       return true
     }
   }
@@ -1192,6 +1348,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         case 32: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceDeployBlacklistEntriesTaskLabel) }()
         case 33: try { try decoder.decodeSingularStringField(value: &_storage._syncDeviceRetrieveSystemStatusTaskLabel) }()
         case 34: try { try decoder.decodeSingularStringField(value: &_storage._syncDevicePushSystemStatusTaskLabel) }()
+        case 35: try { try decoder.decodeSingularStringField(value: &_storage._dfuInProgressTitle) }()
+        case 36: try { try decoder.decodeSingularStringField(value: &_storage._dfuFailedTitle) }()
+        case 37: try { try decoder.decodeSingularStringField(value: &_storage._dfuCancellingTitle) }()
+        case 38: try { try decoder.decodeSingularStringField(value: &_storage._dfuCompletedTitle) }()
+        case 39: try { try decoder.decodeSingularStringField(value: &_storage._dfuGetAuthenticationTokenTaskLabel) }()
+        case 40: try { try decoder.decodeSingularStringField(value: &_storage._dfuCheckLatestFwlabel) }()
+        case 41: try { try decoder.decodeSingularStringField(value: &_storage._dfuDownloadLatestFwlabel) }()
+        case 42: try { try decoder.decodeSingularStringField(value: &_storage._dfuPrepareUpdateLabel) }()
+        case 43: try { try decoder.decodeSingularStringField(value: &_storage._dfuStartBootloaderLabel) }()
+        case 44: try { try decoder.decodeSingularStringField(value: &_storage._dfuFindDfuperipheralLabel) }()
+        case 45: try { try decoder.decodeSingularStringField(value: &_storage._dfuUpdateFwlabel) }()
+        case 46: try { try decoder.decodeSingularStringField(value: &_storage._dfuWaitForDeviceToRestartTaskLabel) }()
         default: break
         }
       }
@@ -1306,6 +1474,42 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
       try { if let v = _storage._syncDevicePushSystemStatusTaskLabel {
         try visitor.visitSingularStringField(value: v, fieldNumber: 34)
       } }()
+      try { if let v = _storage._dfuInProgressTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 35)
+      } }()
+      try { if let v = _storage._dfuFailedTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 36)
+      } }()
+      try { if let v = _storage._dfuCancellingTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 37)
+      } }()
+      try { if let v = _storage._dfuCompletedTitle {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 38)
+      } }()
+      try { if let v = _storage._dfuGetAuthenticationTokenTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 39)
+      } }()
+      try { if let v = _storage._dfuCheckLatestFwlabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 40)
+      } }()
+      try { if let v = _storage._dfuDownloadLatestFwlabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 41)
+      } }()
+      try { if let v = _storage._dfuPrepareUpdateLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 42)
+      } }()
+      try { if let v = _storage._dfuStartBootloaderLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 43)
+      } }()
+      try { if let v = _storage._dfuFindDfuperipheralLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 44)
+      } }()
+      try { if let v = _storage._dfuUpdateFwlabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 45)
+      } }()
+      try { if let v = _storage._dfuWaitForDeviceToRestartTaskLabel {
+        try visitor.visitSingularStringField(value: v, fieldNumber: 46)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1349,6 +1553,18 @@ extension BlueI18n: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationB
         if _storage._syncDeviceDeployBlacklistEntriesTaskLabel != rhs_storage._syncDeviceDeployBlacklistEntriesTaskLabel {return false}
         if _storage._syncDeviceRetrieveSystemStatusTaskLabel != rhs_storage._syncDeviceRetrieveSystemStatusTaskLabel {return false}
         if _storage._syncDevicePushSystemStatusTaskLabel != rhs_storage._syncDevicePushSystemStatusTaskLabel {return false}
+        if _storage._dfuInProgressTitle != rhs_storage._dfuInProgressTitle {return false}
+        if _storage._dfuFailedTitle != rhs_storage._dfuFailedTitle {return false}
+        if _storage._dfuCancellingTitle != rhs_storage._dfuCancellingTitle {return false}
+        if _storage._dfuCompletedTitle != rhs_storage._dfuCompletedTitle {return false}
+        if _storage._dfuGetAuthenticationTokenTaskLabel != rhs_storage._dfuGetAuthenticationTokenTaskLabel {return false}
+        if _storage._dfuCheckLatestFwlabel != rhs_storage._dfuCheckLatestFwlabel {return false}
+        if _storage._dfuDownloadLatestFwlabel != rhs_storage._dfuDownloadLatestFwlabel {return false}
+        if _storage._dfuPrepareUpdateLabel != rhs_storage._dfuPrepareUpdateLabel {return false}
+        if _storage._dfuStartBootloaderLabel != rhs_storage._dfuStartBootloaderLabel {return false}
+        if _storage._dfuFindDfuperipheralLabel != rhs_storage._dfuFindDfuperipheralLabel {return false}
+        if _storage._dfuUpdateFwlabel != rhs_storage._dfuUpdateFwlabel {return false}
+        if _storage._dfuWaitForDeviceToRestartTaskLabel != rhs_storage._dfuWaitForDeviceToRestartTaskLabel {return false}
         return true
       }
       if !storagesAreEqual {return false}

@@ -100,6 +100,13 @@ class BlueAPI: BlueAPIProtocol {
         )
     }
     
+    func getLatestFirmware(deviceID: String, with tokenAuthentication: BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetLatestFirmwareResult> {
+        return try await post(
+            endpoint: .AccessGetLatestFirmware,
+            request: BlueGetLatestFirmwareRequest(deviceId: deviceID, tokenAuthentication: tokenAuthentication)
+        )
+    }
+    
     private func post<T>(endpoint: BlueAPIEndpoints, request: Encodable) async throws -> BlueFetchResponse<T> {
         guard #available(macOS 12.0, *) else {
             throw BlueError(.sdkUnsupportedPlatform)

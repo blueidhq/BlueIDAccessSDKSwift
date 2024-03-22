@@ -42,24 +42,27 @@ private func getSymbol(_ status: BlueTaskStatus) -> String {
 class BlueTaskModel: ObservableObject, Identifiable {
     @Published var label: String
     @Published var status: BlueTaskStatus
+    @Published var progress: Float?
     @Published var statusColor: Color
     @Published var textColor: Color
     @Published var symbol: String
     @Published var errorDescription: String
     @Published var isLast: Bool
     
-    private var subscriber: AnyCancellable?
+    private var statusSubscriber: AnyCancellable?
+    private var progressSubscriber: AnyCancellable?
     
     init(_ task: BlueTask, _ isLast: Bool) {
         self.label = task.label
         self.status = task.status.value
+        self.progress = task.progress?.value
         self.textColor = getTextColor(task.status.value)
         self.statusColor = getColor(task.status.value)
         self.symbol = getSymbol(task.status.value)
         self.errorDescription = task.errorDescription ?? ""
         self.isLast = isLast
         
-        self.subscriber = task.status.sink{ [weak self] status in
+        self.statusSubscriber = task.status.sink{ [weak self] status in
             guard let self = self else { return }
             
             self.status = status
@@ -68,6 +71,13 @@ class BlueTaskModel: ObservableObject, Identifiable {
             self.symbol = getSymbol(status)
             self.errorDescription = task.errorDescription ?? ""
             
+            self.objectWillChange.send()
+        }
+        
+        self.progressSubscriber = task.progress?.sink{ [weak self] progress in
+            guard let self = self else { return }
+            
+            self.progress = progress
             self.objectWillChange.send()
         }
     }
@@ -112,6 +122,12 @@ struct TaskView: View {
                             .padding(.bottom, 5)
                             .fixedSize(horizontal: false, vertical: true)
                             .alignmentGuide(.leading) { d in d[.leading] }
+                    } else {
+                        if task.status == .started && task.progress != nil {
+                            ProgressView(value: task.progress, total: 100)
+                                .padding(.leading, 32)
+                                .alignmentGuide(.leading) { d in d[.leading] }
+                        }
                     }
                 }
             }
@@ -119,7 +135,7 @@ struct TaskView: View {
     }
 }
 
-class BlueSynchronizeAccessDeviceModalViewModel: ObservableObject {
+class BlueStepProgressModalViewModel: ObservableObject {
     @Published var title = ""
     @Published var dismiss: String = ""
     @Published var dismissEnabled: Bool = true
@@ -133,8 +149,8 @@ class BlueSynchronizeAccessDeviceModalViewModel: ObservableObject {
     }
 }
 
-struct BlueSynchronizeAccessDeviceModalView: View {
-    @ObservedObject private var vm: BlueSynchronizeAccessDeviceModalViewModel
+struct BlueStepProgressModalView: View {
+    @ObservedObject private var vm: BlueStepProgressModalViewModel
     
     internal var height: CGFloat = 550
     internal var backgroundColor: UIColor = .white
@@ -144,7 +160,7 @@ struct BlueSynchronizeAccessDeviceModalView: View {
     private let cornerRadius: CGFloat = 35
     
     public init(
-        _ vm: BlueSynchronizeAccessDeviceModalViewModel,
+        _ vm: BlueStepProgressModalViewModel,
         _ onDismiss: @escaping () -> Void)
     {
         self.vm = vm
@@ -212,12 +228,12 @@ struct BlueSynchronizeAccessDeviceModalView: View {
     }
 }
 
-let noop: (BlueSerialTaskRunner) async throws -> BlueTaskResult = { _ in .result(nil) }
+let noop: (BlueTask, BlueSerialTaskRunner) async throws -> BlueTaskResult = { _, _ in .result(nil) }
 
 struct BlueSynchronizeAccessDeviceModalView_Preview: PreviewProvider {
     static var previews: some View {
-        BlueSynchronizeAccessDeviceModalView(
-            BlueSynchronizeAccessDeviceModalViewModel(
+        BlueStepProgressModalView(
+            BlueStepProgressModalViewModel(
                 title: "Synchronization has failed (Worst case)",
                 dismiss: "Done",
                 tasks: Array(1..<12).map { element in
@@ -232,8 +248,8 @@ struct BlueSynchronizeAccessDeviceModalView_Preview: PreviewProvider {
             )
         ) {}
         
-        BlueSynchronizeAccessDeviceModalView(
-            BlueSynchronizeAccessDeviceModalViewModel(
+        BlueStepProgressModalView(
+            BlueStepProgressModalViewModel(
                 title: "Cancelling...",
                 dismiss: "Cancel",
                 dismissEnabled: false,

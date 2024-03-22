@@ -32,16 +32,32 @@ public class BlueTask {
     var result: Any? = nil
     var error: Error? = nil
     var status: CurrentValueSubject<BlueTaskStatus, Never>
+    var progress: CurrentValueSubject<Float, Never>?
     
-    let handler: (BlueSerialTaskRunner) async throws -> BlueTaskResult
+    let handler: (BlueTask, BlueSerialTaskRunner) async throws -> BlueTaskResult
+    let cancelHandler: (() -> Void)?
     
-    init(id: AnyHashable, label: String, failable: Bool = false, status: BlueTaskStatus = .ready, error: Error? = nil, handler: @escaping (BlueSerialTaskRunner) async throws -> BlueTaskResult) {
+    init(
+        id: AnyHashable,
+        label: String,
+        failable: Bool = false,
+        status: BlueTaskStatus = .ready,
+        error: Error? = nil,
+        progress: Float? = nil,
+        cancelHandler: (() -> Void)? = nil,
+        handler: @escaping (BlueTask, BlueSerialTaskRunner) async throws -> BlueTaskResult
+    ) {
         self.id = id
         self.label = label
         self.failable = failable
         self.error = error
         self.status = .init(status)
         self.handler = handler
+        self.cancelHandler = cancelHandler
+        
+        if let progress = progress {
+            self.progress = CurrentValueSubject(progress)
+        }
     }
     
     var errorDescription: String? {
@@ -53,6 +69,16 @@ public class BlueTask {
             self.status.send(status)
         }
     }
+    
+    func updateProgress(_ progress: Float) {
+        blueRunInMainThread {
+            self.progress?.send(progress)
+        }
+    }
+    
+    func cancel() {
+        self.cancelHandler?()
+    }
 }
 
 public class BlueSerialTaskRunner: BlueTaskRunner {
@@ -61,6 +87,7 @@ public class BlueSerialTaskRunner: BlueTaskRunner {
     private var failed: Bool = false
     private var cancelled: Bool = false
     private var sucessful: Bool = false
+    private var currentTask: BlueTask? = nil
     
     init(_ tasks: [BlueTask]) {
         self.tasks = tasks
@@ -77,12 +104,14 @@ public class BlueSerialTaskRunner: BlueTaskRunner {
                 return
             }
             
+            self.currentTask = task
+            
             do {
                 blueLogDebug("Started: \(task.id)")
                 
                 task.updateStatus(.started)
                 
-                let taskResult = try await task.handler(self)
+                let taskResult = try await task.handler(task, self)
                 
                 let taskStatus: BlueTaskStatus
                 
@@ -131,6 +160,8 @@ public class BlueSerialTaskRunner: BlueTaskRunner {
     
     public func cancel() -> Bool {
         if (!sucessful && !failed) {
+            self.currentTask?.cancel()
+            
             cancelled = true
             
             return true

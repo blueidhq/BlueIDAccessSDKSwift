@@ -2,6 +2,13 @@ import XCTest
 @testable import BlueIDAccessSDK
 
 internal class DefaultBlueAPIMock: BlueAPIProtocol {
+    func getLatestFirmware(deviceID: String, with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueIDAccessSDK.BlueFetchResponse<BlueIDAccessSDK.BlueGetLatestFirmwareResult> {
+        return BlueFetchResponse(
+            statusCode: 200,
+            data: BlueGetLatestFirmwareResult(version: 1, url: "file://")
+        )
+    }
+    
     
     func getAccessCredentials(with tokenAuthentication: BlueIDAccessSDK.BlueTokenAuthentication) async throws -> BlueFetchResponse<BlueGetAccessCredentialsResult> {
         return BlueFetchResponse(

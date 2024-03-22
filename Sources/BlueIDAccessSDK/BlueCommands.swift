@@ -93,6 +93,9 @@ public struct BlueCommands {
     
     public let openAppSettings = BlueOpenAppSettingsCommand()
     
+    // MARK: - DFU commands
+    public let updateAccessDeviceFirmware = BlueUpdateAccessDeviceFirmwareCommand(defaultSdkService)
+    
     // TODO: Make it available only for dev environment
     public let UNSAFE_clearData = BlueClearDataCommand()
     

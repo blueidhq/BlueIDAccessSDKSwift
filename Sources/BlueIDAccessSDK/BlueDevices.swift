@@ -10,6 +10,30 @@ internal func blueSetMaxDeviceAgeSeconds(_ newMaxDeviceAgeSeconds: Double) {
     maxDeviceAgeSeconds = max(newMaxDeviceAgeSeconds, 1)
 }
 
+/// Waits asynchronously for a device with the specified ID to become available.
+/// This function waits for a device with the given ID to be discovered within a predefined timeout period, with a maximum number of retries.
+/// - parameters:
+///   - deviceID: The ID of the device to wait for.
+///   - timeout: The duration in seconds to wait for the device to be discovered each time. Default value is 10 seconds.
+///   - maxRetries: The maximum number of retries before giving up. Default value is 3.
+/// - throws: An error of type `BlueError` if the device is not found within the specified timeout period and maximum retries.
+
+internal func waitForDeviceAvailability(_ deviceID: String, timeout: Int = 10, maxRetries: Int = 3) async throws {
+    var attempts = 0
+    
+    while attempts < maxRetries {
+        try? await Task.sleep(nanoseconds: UInt64(blueSecondsToNanoseconds(timeout)))
+        
+        if blueGetDevice(deviceID) != nil {
+            return
+        }
+        
+        attempts += 1
+    }
+    
+    throw BlueError(.sdkDeviceNotFound)
+}
+
 internal func blueGetDevice(_ deviceID: String) -> BlueDevice? {
     for device in blueDevices {
         if (device.info.deviceID == deviceID) {

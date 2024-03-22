@@ -2,14 +2,14 @@
 import AVFoundation
 import SwiftUI
 
-private class HostingController: UIHostingController<BlueSynchronizeAccessDeviceModalView> {
+private class HostingController: UIHostingController<BlueStepProgressModalView> {
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
 }
 
-internal class BlueSynchronizeAccessDeviceModalSession {
-    private let viewModel = BlueSynchronizeAccessDeviceModalViewModel()
+internal class BlueStepProgressModalSession {
+    private let viewModel = BlueStepProgressModalViewModel()
     private var isInvalidated: Bool = false
     
     func begin(title: String, tasks: [BlueTask], dismiss: String, _ onDismiss: @escaping () -> Void) {
@@ -18,7 +18,7 @@ internal class BlueSynchronizeAccessDeviceModalSession {
         viewModel.dismiss = dismiss
         
         let hostingController = HostingController(
-            rootView: BlueSynchronizeAccessDeviceModalView(viewModel) { onDismiss() }
+            rootView: BlueStepProgressModalView(viewModel) { onDismiss() }
         )
         
         hostingController.view.backgroundColor = .clear

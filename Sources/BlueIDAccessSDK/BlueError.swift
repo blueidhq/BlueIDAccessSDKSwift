@@ -45,7 +45,7 @@ public final class BlueError: Error, LocalizedError, Equatable {
         self.detail = nil
     }
     
-    public init(_ returnCode: BlueReturnCode, cause: Error, detail: String? = nil) {
+    public init(_ returnCode: BlueReturnCode, cause: Error? = nil, detail: String? = nil) {
         self.returnCode = returnCode
         self.cause = cause
         self.detail = detail

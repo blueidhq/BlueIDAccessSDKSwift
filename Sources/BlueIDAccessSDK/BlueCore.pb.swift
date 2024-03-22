@@ -129,6 +129,8 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
   case sdkGetBlacklistEntriesFailed // = -419
   case sdkGetSystemStatusFailed // = -420
   case sdkWaitDeviceToRestartFailed // = -421
+  case sdkUnzipError // = -422
+  case sdkInvalidFirmwareURL // = -423
   case ossMareturnCodeStart // = -1000
   case ossMareturnCodeEnd // = -1100
 
@@ -140,6 +142,8 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch rawValue {
     case -1100: self = .ossMareturnCodeEnd
     case -1000: self = .ossMareturnCodeStart
+    case -423: self = .sdkInvalidFirmwareURL
+    case -422: self = .sdkUnzipError
     case -421: self = .sdkWaitDeviceToRestartFailed
     case -420: self = .sdkGetSystemStatusFailed
     case -419: self = .sdkGetBlacklistEntriesFailed
@@ -243,6 +247,8 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     switch self {
     case .ossMareturnCodeEnd: return -1100
     case .ossMareturnCodeStart: return -1000
+    case .sdkInvalidFirmwareURL: return -423
+    case .sdkUnzipError: return -422
     case .sdkWaitDeviceToRestartFailed: return -421
     case .sdkGetSystemStatusFailed: return -420
     case .sdkGetBlacklistEntriesFailed: return -419
@@ -3643,6 +3649,8 @@ extension BlueReturnCode: SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     -1100: .same(proto: "OssMAReturnCodeEnd"),
     -1000: .same(proto: "OssMAReturnCodeStart"),
+    -423: .same(proto: "SdkInvalidFirmwareURL"),
+    -422: .same(proto: "SdkUnzipError"),
     -421: .same(proto: "SdkWaitDeviceToRestartFailed"),
     -420: .same(proto: "SdkGetSystemStatusFailed"),
     -419: .same(proto: "SdkGetBlacklistEntriesFailed"),

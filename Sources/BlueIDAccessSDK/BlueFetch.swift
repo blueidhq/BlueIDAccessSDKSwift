@@ -15,6 +15,10 @@ struct BlueFetchResponse<T> where T: Decodable {
     
     func getData() throws -> T {
         guard let data = data else {
+            if let rawData = rawData as? T {
+                return rawData
+            }
+            
             let status: String = statusCode?.description ?? "Unknown"
             var description = ""
             
@@ -40,7 +44,6 @@ struct BlueFetchResponse<T> where T: Decodable {
     }
 }
 
-@available(macOS 12.0, *)
 class BlueFetch {
     
     static func post<T>(url: URL, data: Data?, config: BlueFetchConfig? = nil) async throws -> BlueFetchResponse<T> where T: Decodable {
@@ -65,18 +68,23 @@ class BlueFetch {
         
         var statusCode: Int?
         var decodedData: T?
+        var contentType: String?
         
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
             if let httpResponse = response as? HTTPURLResponse {
                 statusCode = httpResponse.statusCode
+                contentType = httpResponse.value(forHTTPHeaderField: "content-type")
                 
                 blueLogDebug("Status code: \(httpResponse.statusCode)")
+                blueLogDebug("Content-Type: \(String(describing: contentType))")
                 blueLogDebug("Data: \(String(describing: String(data: data, encoding: .utf8)))")
             }
             
-            if (statusCode == 200) {
+            let isJSON = contentType == "application/json"
+            
+            if (statusCode == 200 && isJSON) {
                 do {
                     decodedData = try JSONDecoder().decode(T.self, from: data)
                 } catch {

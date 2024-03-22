@@ -60,11 +60,36 @@ public func blueShowAccessDeviceModal(_ task: @escaping () async throws -> BlueO
 /// Displays a modal view (sheet) which performs tasks related to synchronizing a device.
 /// - parameter runner: The Task Runner.
 public func blueShowSynchronizeAccessDeviceModal(_ runner: BlueTaskRunner) async throws {
-    let session = BlueSynchronizeAccessDeviceModalSession()
+    try await blueShowStepProgressModal(
+        title: blueI18n.syncDeviceInProgressTitle,
+        failedTitle: blueI18n.syncDeviceFailedTitle,
+        completedTitle: blueI18n.syncDeviceCompletedTitle,
+        runner: runner
+    )
+}
+
+/// Displays a modal view (sheet) which performs tasks related to updating a device firmware.
+/// - parameter runner: The Task Runner.
+public func blueShowUpdateAccessDeviceFirmwareModal(_ runner: BlueTaskRunner) async throws {
+    try await blueShowStepProgressModal(
+        title: blueI18n.dfuInProgressTitle,
+        failedTitle: blueI18n.dfuFailedTitle,
+        completedTitle: blueI18n.dfuCompletedTitle,
+        runner: runner
+    )
+}
+
+private func blueShowStepProgressModal(
+    title: String,
+    failedTitle: String,
+    completedTitle: String,
+    runner: BlueTaskRunner
+) async throws {
+    let session = BlueStepProgressModalSession()
 
     blueRunInMainThread {
         session.begin(
-            title: blueI18n.syncDeviceInProgressTitle,
+            title: title,
             tasks: runner.getTasks(),
             dismiss: blueI18n.cmnCancelLabel
         ) {
@@ -87,17 +112,17 @@ public func blueShowSynchronizeAccessDeviceModal(_ runner: BlueTaskRunner) async
                 session.updateDismiss(blueI18n.cmnCloseLabel)
                 
                 if runner.isFailed() {
-                    session.updateTitle(blueI18n.syncDeviceFailedTitle)
+                    session.updateTitle(failedTitle)
                     BlueSound.shared.play(BlueNegativeSoundSystemID)
                 } else {
-                    session.updateTitle(blueI18n.syncDeviceCompletedTitle)
+                    session.updateTitle(completedTitle)
                     BlueSound.shared.play(BluePositiveSoundSystemID)
                 }
             }
         }
     } catch {
         blueRunInMainThread {
-            session.updateTitle(blueI18n.syncDeviceFailedTitle)
+            session.updateTitle(failedTitle)
             session.updateDismiss(blueI18n.cmnCloseLabel)
             BlueSound.shared.play(BlueNegativeSoundSystemID)
         }

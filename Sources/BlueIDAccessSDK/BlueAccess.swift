@@ -162,14 +162,14 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.getAuthenticationToken,
                 label: blueI18n.syncDeviceGetAuthenticationTokenTaskLabel
-            ) { _ in
+            ) { _, _ in
                 .result(try await self.getAuthenticationToken(credential))
             },
             
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.getDeviceConfig,
                 label: blueI18n.syncDeviceRetrieveDeviceConfigurationTaskLabel
-            ) { runner in
+            ) { _, runner in
                 let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
                 
                 return .result(try await self.getBlueSystemConfig(deviceID: deviceID, with: tokenAuthentication))
@@ -178,7 +178,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.updateDeviceConfig,
                 label: blueI18n.syncDeviceUpdateDeviceConfigurationTaskLabel
-            ) { runner in
+            ) { _, runner in
                 let config: BlueSystemConfig? = try runner.getResult(BlueSynchronizeAccessTaskId.getDeviceConfig)
                 
                 let status: BlueSystemStatus = try await self.updateDevice(deviceID, config)
@@ -191,7 +191,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.updateDeviceTime,
                 label: blueI18n.syncDeviceUpdateDeviceTimeTaskLabel
-            ) { runner in
+            ) { _, runner in
                 let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.updateDeviceConfig)
                 
                 return .resultWithStatus(nil, status.settings.timeWasSet == true ? .succeeded : .skipped)
@@ -200,7 +200,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.waitForRestart,
                 label: blueI18n.syncDeviceWaitForDeviceToRestartTaskLabel
-            ) { _ in
+            ) { _, _ in
                 .result(try await self.waitUntilDeviceHasBeenRestarted(deviceID))
             },
             
@@ -208,7 +208,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
                 id: BlueSynchronizeAccessTaskId.pushEventLogs,
                 label: blueI18n.syncDevicePushEventLogsTaskLabel,
                 failable: true
-            ) { runner in                
+            ) { _, runner in
                 let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
                 let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.updateDeviceConfig)
                 
@@ -219,7 +219,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
                 id: BlueSynchronizeAccessTaskId.pushSystemLogs,
                 label: blueI18n.syncDevicePushSystemLogsTaskLabel,
                 failable: true
-            ) { runner in
+            ) { _, runner in
                 let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
                 let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.updateDeviceConfig)
                 
@@ -230,7 +230,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
                 id: BlueSynchronizeAccessTaskId.getBlacklistEntries,
                 label: blueI18n.syncDeviceRetrieveBlacklistEntriesTaskLabel,
                 failable: true
-            ) { runner in
+            ) { _, runner in
                 let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
                 
                 return .result(try await self.getBlacklistEntries(deviceID, tokenAuthentication))
@@ -240,7 +240,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
                 id: BlueSynchronizeAccessTaskId.deployBlacklistEntries,
                 label: blueI18n.syncDeviceDeployBlacklistEntriesTaskLabel,
                 failable: true
-            ) { runner in
+            ) { _, runner in
                 let entries: BlueBlacklistEntries? = try runner.getResult(BlueSynchronizeAccessTaskId.getBlacklistEntries)
                 
                 guard let entries = entries else {
@@ -253,14 +253,14 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.getSystemStatus,
                 label: blueI18n.syncDeviceRetrieveSystemStatusTaskLabel
-            ) { _ in
+            ) { _, _ in
                 .result(try await self.getSystemStatus(deviceID))
             },
             
             BlueTask(
                 id: BlueSynchronizeAccessTaskId.pushSystemStatus,
                 label: blueI18n.syncDevicePushSystemStatusTaskLabel
-            ) { runner in
+            ) { _, runner in
                 let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
                 let status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.getSystemStatus)
                 
@@ -321,19 +321,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
     
     private func waitUntilDeviceHasBeenRestarted(_ deviceID: String) async throws {
         do {
-            var attempts = 0
-            
-            while attempts <= 2 {
-                try? await Task.sleep(nanoseconds: UInt64(blueSecondsToNanoseconds(10)))
-                
-                if blueGetDevice(deviceID) != nil {
-                    return
-                }
-                
-                attempts += 1
-            }
-            
-            throw BlueError(.sdkDeviceNotFound)
+            try await waitForDeviceAvailability(deviceID)
         } catch {
             throw BlueError(.sdkWaitDeviceToRestartFailed, cause: error)
         }
