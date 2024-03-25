@@ -139,7 +139,6 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
         case deployBlacklistEntries
         case getSystemStatus
         case pushSystemStatus
-        case checkLatestFirmware
     }
     
     internal override func runAsync(arg0: Any? = nil, arg1: Any? = nil, arg2: Any? = nil) async throws -> Any? {
@@ -268,20 +267,6 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
                 try await self.pushDeviceSystemStatus(status: status, with: tokenAuthentication)
                 
                 return .result(status)
-            },
-            
-            BlueTask(
-                id: BlueSynchronizeAccessTaskId.checkLatestFirmware,
-                label: blueI18n.syncDeviceCheckLatestFwlabel,
-                failable: true
-            ) {_, runner in
-                let tokenAuthentication: BlueTokenAuthentication = try runner.getResult(BlueSynchronizeAccessTaskId.getAuthenticationToken)
-                var status: BlueSystemStatus = try runner.getResult(BlueSynchronizeAccessTaskId.pushSystemStatus)
-                let latestFW = try await self.sdkService.apiService.getLatestFirmware(deviceID: deviceID, with: tokenAuthentication).getData()
-                
-                self.updateFirmwareFlags(&status, latestFW)
-                
-                return .result(status)
             }
         ]
         
@@ -298,11 +283,6 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
 #endif
         
         if runner.isSuccessful() {
-            let status: BlueSystemStatus? = try runner.getResult(BlueSynchronizeAccessTaskId.checkLatestFirmware)
-            if let status = status {
-                return status
-            }
-            
             return try runner.getResult(BlueSynchronizeAccessTaskId.pushSystemStatus)
         }
         
@@ -349,11 +329,7 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
     
     private func getSystemStatus(_ deviceID: String) async throws -> BlueSystemStatus {
         do {
-            return try await blueTerminalRun(
-                deviceID: deviceID,
-                timeoutSeconds: 30.0,
-                action: "STATUS"
-            )
+            return try await BlueGetSystemStatusCommand(sdkService).runAsync(deviceID: deviceID)
         } catch {
             throw BlueError(.sdkGetSystemStatusFailed, cause: error)
         }
@@ -517,24 +493,6 @@ public class BlueSynchronizeAccessDeviceCommand: BlueSdkAsyncCommand {
             sent += entriesSent
             
         } while (sent < limit && offset < entriesCount)
-    }
-    
-    internal func updateFirmwareFlags(_ status: inout BlueSystemStatus, _ latestFW: BlueGetLatestFirmwareResult) {
-        if let testFW = latestFW.test {
-            if let testVersion = testFW.testVersion {
-                status.newTestFirmwareVersionAvailable = testVersion != status.applicationVersionTest || testFW.version != status.applicationVersion
-            }
-        }
-        
-        if let productionFW = latestFW.production {
-            let isTestVersion = status.hasApplicationVersionTest && status.applicationVersionTest != 0
-            
-            if isTestVersion {
-                status.newFirmwareVersionAvailable = true
-            } else {
-                status.newFirmwareVersionAvailable = productionFW.version != status.applicationVersion
-            }
-        }
     }
 }
 

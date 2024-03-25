@@ -89,7 +89,7 @@ public struct BlueCommands {
     public let clearBlacklist = BlueClearBlacklistCommand()
     public let clearEventLog = BlueClearEventLogCommand()
     public let clearSystemLog = BlueClearSystemLogCommand()
-    public let getSystemStatus = BlueGetSystemStatusCommand()
+    public let getSystemStatus = BlueGetSystemStatusCommand(defaultSdkService)
     
     public let openAppSettings = BlueOpenAppSettingsCommand()
     
