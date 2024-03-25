@@ -170,6 +170,11 @@ internal func blueDisconnectBluetoothPeripheral(_ peripheral: CBPeripheral) thro
         return
     }
     
+    if peripheral.state == .connecting {
+        blueRemoveSignal(group: "bleCentral", name: "didConnect")
+        return
+    }
+    
     guard peripheral.state == .connected else {
         throw BlueError(.unavailable)
     }
