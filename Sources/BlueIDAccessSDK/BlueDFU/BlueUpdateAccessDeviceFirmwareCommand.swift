@@ -10,11 +10,12 @@ public class BlueUpdateAccessDeviceFirmwareCommand: BlueSdkAsyncCommand {
     override func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any? {
         return try await runAsync(
             credentialID: blueCastArg(String.self, arg0),
-            deviceID: blueCastArg(String.self, arg1)
+            deviceID: blueCastArg(String.self, arg1),
+            testVersion: blueCastArg(Bool.self, arg2)
         )
     }
     
-    public func runAsync(credentialID: String, deviceID: String) async throws {
+    public func runAsync(credentialID: String, deviceID: String, testVersion: Bool? = false) async throws {
         guard let credential = blueGetAccessCredential(credentialID: credentialID) else {
             throw BlueError(.sdkCredentialNotFound)
         }
@@ -24,7 +25,7 @@ public class BlueUpdateAccessDeviceFirmwareCommand: BlueSdkAsyncCommand {
         }
         
         try await BlueUpdateAccessDeviceFirmware(sdkService)
-            .update(credential, deviceID)
+            .update(credential, deviceID, testVersion)
     }
 }
 
@@ -51,7 +52,7 @@ internal class BlueUpdateAccessDeviceFirmware: LoggerDelegate, DFUServiceDelegat
         self.sdkService = sdkService
     }
     
-    public func update(_ credential: BlueAccessCredential, _ deviceID: String) async throws {
+    public func update(_ credential: BlueAccessCredential, _ deviceID: String, _ testVersion: Bool? = false) async throws {
         
         let tasks = [
             BlueTask(
@@ -73,10 +74,18 @@ internal class BlueUpdateAccessDeviceFirmware: LoggerDelegate, DFUServiceDelegat
             BlueTask(
                 id: BlueUpdateAccessDeviceFirmwareTaskId.downloadLatestFirmware,
                 label: blueI18n.dfuDownloadLatestFwlabel
-            ) { _, runner in
+            ) { task, runner in
                 let latestFW: BlueGetLatestFirmwareResult = try runner.getResult(BlueUpdateAccessDeviceFirmwareTaskId.checkLatestFirmware)
                 
-                return .result(try await self.downloadLatestFirmware(url: latestFW.url))
+                task.updateLabel("\(blueI18n.dfuDownloadLatestFwlabel) (\(self.getFirmwareVersion(latestFW, testVersion)))")
+                
+                let url = testVersion == true ? latestFW.test?.url : latestFW.production?.url
+                
+                guard let url = url else {
+                    throw BlueError(.sdkInvalidFirmwareURL, detail: "NULL")
+                }
+                
+                return .result(try await self.downloadLatestFirmware(url: url))
             },
             
             BlueTask(
@@ -97,7 +106,7 @@ internal class BlueUpdateAccessDeviceFirmware: LoggerDelegate, DFUServiceDelegat
             
             BlueTask(
                 id: BlueUpdateAccessDeviceFirmwareTaskId.findDFUPeripheral,
-                label: blueI18n.dfuFindDfuperipheralLabel
+                label: blueI18n.dfuInitializationLabel
             ) { _, _ in
                 return .result(try await self.findPeripheral())
             },
@@ -110,8 +119,11 @@ internal class BlueUpdateAccessDeviceFirmware: LoggerDelegate, DFUServiceDelegat
                     _ = self.controller?.abort()
                 },
                 handler: { task, runner in
+                    let latestFW: BlueGetLatestFirmwareResult = try runner.getResult(BlueUpdateAccessDeviceFirmwareTaskId.checkLatestFirmware)
                     let urlToZipFile: URL = try runner.getResult(BlueUpdateAccessDeviceFirmwareTaskId.prepareUpdate)
                     let peripheral: CBPeripheral = try runner.getResult(BlueUpdateAccessDeviceFirmwareTaskId.findDFUPeripheral)
+                    
+                    task.updateLabel("\(blueI18n.dfuUpdateFwlabel) (\(self.getFirmwareVersion(latestFW, testVersion)))")
                     
                     self.task = task
                     
@@ -134,6 +146,20 @@ internal class BlueUpdateAccessDeviceFirmware: LoggerDelegate, DFUServiceDelegat
 #else
         try await runner.execute(true)
 #endif
+    }
+    
+    private func getFirmwareVersion(_ latestFW: BlueGetLatestFirmwareResult, _ testVersion: Bool? = false) -> String {
+        if testVersion == true {
+            if let testFW = latestFW.test {
+                if let minor = testFW.testVersion {
+                    return "\(minor)"
+                }
+            }
+        } else if let prodFW = latestFW.production {
+            return "\(prodFW.version)"
+        }
+        
+        return "?"
     }
     
     private func downloadLatestFirmware(url string: String) async throws -> Data {

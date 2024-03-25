@@ -49,11 +49,12 @@ class BlueTaskModel: ObservableObject, Identifiable {
     @Published var errorDescription: String
     @Published var isLast: Bool
     
+    private var labelSubscriber: AnyCancellable?
     private var statusSubscriber: AnyCancellable?
     private var progressSubscriber: AnyCancellable?
     
     init(_ task: BlueTask, _ isLast: Bool) {
-        self.label = task.label
+        self.label = task.label.value
         self.status = task.status.value
         self.progress = task.progress?.value
         self.textColor = getTextColor(task.status.value)
@@ -78,6 +79,13 @@ class BlueTaskModel: ObservableObject, Identifiable {
             guard let self = self else { return }
             
             self.progress = progress
+            self.objectWillChange.send()
+        }
+        
+        self.labelSubscriber = task.label.sink{ [weak self] label in
+            guard let self = self else { return }
+            
+            self.label = label
             self.objectWillChange.send()
         }
     }
@@ -108,11 +116,12 @@ struct TaskView: View {
             
             HStack(alignment: .center, spacing: 0) {
                 ZStack(alignment: .leading) {
-                    Rectangle()
-                        .fill(task.statusColor)
-                        .frame(width: 2)
-                        .padding(.horizontal, 10.5)
-                        .hidden(task.isLast)
+                    if (!task.isLast) {
+                        Rectangle()
+                            .fill(task.statusColor)
+                            .frame(width: 2)
+                            .padding(.horizontal, 10.5)
+                    }
                     
                     if !task.errorDescription.isEmpty {
                         Text(task.errorDescription)
@@ -152,7 +161,7 @@ class BlueStepProgressModalViewModel: ObservableObject {
 struct BlueStepProgressModalView: View {
     @ObservedObject private var vm: BlueStepProgressModalViewModel
     
-    internal var height: CGFloat = 550
+    internal var height: CGFloat = 570
     internal var backgroundColor: UIColor = .white
     internal var foregroundColor: UIColor = .black
     
@@ -230,7 +239,7 @@ struct BlueStepProgressModalView: View {
 
 let noop: (BlueTask, BlueSerialTaskRunner) async throws -> BlueTaskResult = { _, _ in .result(nil) }
 
-struct BlueSynchronizeAccessDeviceModalView_Preview: PreviewProvider {
+struct BlueStepProgressModalView_Preview: PreviewProvider {
     static var previews: some View {
         BlueStepProgressModalView(
             BlueStepProgressModalViewModel(
@@ -259,6 +268,21 @@ struct BlueSynchronizeAccessDeviceModalView_Preview: PreviewProvider {
                         label: "Task label - \(element.description)",
                         status: index == 1 ? .failed : .succeeded,
                         error: index == 1 ? BlueError(.sdkDecodeJsonFailed, cause: BlueError(.sdkNetworkError), detail: "Something went wrong ¯\\_(ツ)_/¯"): nil,
+                        handler: noop
+                    )
+                }
+            )
+        ) {}
+        
+        BlueStepProgressModalView(
+            BlueStepProgressModalViewModel(
+                title: "DFU",
+                dismiss: "Cancel",
+                tasks: Array(1..<7).enumerated().map { (index, element) in
+                    BlueTask(
+                        id: element.description,
+                        label: "Task label - \(element.description)",
+                        status: .ready,
                         handler: noop
                     )
                 }

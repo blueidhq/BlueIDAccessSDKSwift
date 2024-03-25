@@ -26,8 +26,8 @@ enum BlueTaskResult {
 
 public class BlueTask {
     let id: AnyHashable
-    let label: String
     
+    var label: CurrentValueSubject<String, Never>
     var failable: Bool = false
     var result: Any? = nil
     var error: Error? = nil
@@ -48,7 +48,7 @@ public class BlueTask {
         handler: @escaping (BlueTask, BlueSerialTaskRunner) async throws -> BlueTaskResult
     ) {
         self.id = id
-        self.label = label
+        self.label = CurrentValueSubject(label)
         self.failable = failable
         self.error = error
         self.status = .init(status)
@@ -73,6 +73,12 @@ public class BlueTask {
     func updateProgress(_ progress: Float) {
         blueRunInMainThread {
             self.progress?.send(progress)
+        }
+    }
+    
+    func updateLabel(_ label: String) {
+        blueRunInMainThread {
+            self.label.send(label)
         }
     }
     

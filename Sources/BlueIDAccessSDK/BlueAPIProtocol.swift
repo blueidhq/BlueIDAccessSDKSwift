@@ -242,10 +242,17 @@ internal struct BlueGetLatestFirmwareRequest: Encodable {
     var deviceId: String
     var tokenAuthentication: BlueTokenAuthentication
 }
+
+internal struct BlueLatestFirmwareInfo: Decodable {
+    let version: Int
+    let testVersion: Int?
+    let url: String
+}
+
 /// [POST] /access/getLatestFirmware response
 internal struct BlueGetLatestFirmwareResult: Decodable {
-    var version: Int
-    var url: String
+    let production: BlueLatestFirmwareInfo?
+    let test: BlueLatestFirmwareInfo?
 }
 
 protocol BlueAPIProtocol {

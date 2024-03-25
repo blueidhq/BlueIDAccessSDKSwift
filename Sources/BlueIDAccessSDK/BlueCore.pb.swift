@@ -1165,12 +1165,22 @@ public struct BlueVersionInfo {
   /// Clears the value of `version`. Subsequent reads from it will return its default value.
   public mutating func clearVersion() {self._version = nil}
 
+  public var testVersion: UInt32 {
+    get {return _testVersion ?? 0}
+    set {_testVersion = newValue}
+  }
+  /// Returns true if `testVersion` has been explicitly set.
+  public var hasTestVersion: Bool {return self._testVersion != nil}
+  /// Clears the value of `testVersion`. Subsequent reads from it will return its default value.
+  public mutating func clearTestVersion() {self._testVersion = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
 
   fileprivate var _buildTime: UInt32? = nil
   fileprivate var _version: UInt32? = nil
+  fileprivate var _testVersion: UInt32? = nil
 }
 
 public struct BlueLocalTimestamp {
@@ -3980,11 +3990,13 @@ extension BlueVersionInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "buildTime"),
     2: .same(proto: "version"),
+    3: .same(proto: "testVersion"),
   ]
 
   public var isInitialized: Bool {
     if self._buildTime == nil {return false}
     if self._version == nil {return false}
+    if self._testVersion == nil {return false}
     return true
   }
 
@@ -3996,6 +4008,7 @@ extension BlueVersionInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularUInt32Field(value: &self._buildTime) }()
       case 2: try { try decoder.decodeSingularUInt32Field(value: &self._version) }()
+      case 3: try { try decoder.decodeSingularUInt32Field(value: &self._testVersion) }()
       default: break
       }
     }
@@ -4012,12 +4025,16 @@ extension BlueVersionInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplemen
     try { if let v = self._version {
       try visitor.visitSingularUInt32Field(value: v, fieldNumber: 2)
     } }()
+    try { if let v = self._testVersion {
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 3)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
   public static func ==(lhs: BlueVersionInfo, rhs: BlueVersionInfo) -> Bool {
     if lhs._buildTime != rhs._buildTime {return false}
     if lhs._version != rhs._version {return false}
+    if lhs._testVersion != rhs._testVersion {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }

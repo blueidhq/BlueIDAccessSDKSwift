@@ -791,6 +791,33 @@ public struct BlueSystemStatus {
   /// Clears the value of `lock`. Subsequent reads from it will return its default value.
   public mutating func clearLock() {_uniqueStorage()._lock = nil}
 
+  public var applicationVersionTest: UInt32 {
+    get {return _storage._applicationVersionTest ?? 0}
+    set {_uniqueStorage()._applicationVersionTest = newValue}
+  }
+  /// Returns true if `applicationVersionTest` has been explicitly set.
+  public var hasApplicationVersionTest: Bool {return _storage._applicationVersionTest != nil}
+  /// Clears the value of `applicationVersionTest`. Subsequent reads from it will return its default value.
+  public mutating func clearApplicationVersionTest() {_uniqueStorage()._applicationVersionTest = nil}
+
+  public var newFirmwareVersionAvailable: Bool {
+    get {return _storage._newFirmwareVersionAvailable ?? false}
+    set {_uniqueStorage()._newFirmwareVersionAvailable = newValue}
+  }
+  /// Returns true if `newFirmwareVersionAvailable` has been explicitly set.
+  public var hasNewFirmwareVersionAvailable: Bool {return _storage._newFirmwareVersionAvailable != nil}
+  /// Clears the value of `newFirmwareVersionAvailable`. Subsequent reads from it will return its default value.
+  public mutating func clearNewFirmwareVersionAvailable() {_uniqueStorage()._newFirmwareVersionAvailable = nil}
+
+  public var newTestFirmwareVersionAvailable: Bool {
+    get {return _storage._newTestFirmwareVersionAvailable ?? false}
+    set {_uniqueStorage()._newTestFirmwareVersionAvailable = newValue}
+  }
+  /// Returns true if `newTestFirmwareVersionAvailable` has been explicitly set.
+  public var hasNewTestFirmwareVersionAvailable: Bool {return _storage._newTestFirmwareVersionAvailable != nil}
+  /// Clears the value of `newTestFirmwareVersionAvailable`. Subsequent reads from it will return its default value.
+  public mutating func clearNewTestFirmwareVersionAvailable() {_uniqueStorage()._newTestFirmwareVersionAvailable = nil}
+
   public var unknownFields = SwiftProtobuf.UnknownStorage()
 
   public init() {}
@@ -1888,6 +1915,9 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     7: .same(proto: "localTime"),
     8: .same(proto: "settings"),
     9: .same(proto: "lock"),
+    10: .same(proto: "applicationVersionTest"),
+    11: .same(proto: "newFirmwareVersionAvailable"),
+    12: .same(proto: "newTestFirmwareVersionAvailable"),
   ]
 
   fileprivate class _StorageClass {
@@ -1900,6 +1930,9 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
     var _localTime: BlueLocalTimestamp? = nil
     var _settings: BlueSystemSettings? = nil
     var _lock: BlueLockStatus? = nil
+    var _applicationVersionTest: UInt32? = nil
+    var _newFirmwareVersionAvailable: Bool? = nil
+    var _newTestFirmwareVersionAvailable: Bool? = nil
 
     static let defaultInstance = _StorageClass()
 
@@ -1915,6 +1948,9 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       _localTime = source._localTime
       _settings = source._settings
       _lock = source._lock
+      _applicationVersionTest = source._applicationVersionTest
+      _newFirmwareVersionAvailable = source._newFirmwareVersionAvailable
+      _newTestFirmwareVersionAvailable = source._newTestFirmwareVersionAvailable
     }
   }
 
@@ -1959,6 +1995,9 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         case 7: try { try decoder.decodeSingularMessageField(value: &_storage._localTime) }()
         case 8: try { try decoder.decodeSingularMessageField(value: &_storage._settings) }()
         case 9: try { try decoder.decodeSingularMessageField(value: &_storage._lock) }()
+        case 10: try { try decoder.decodeSingularUInt32Field(value: &_storage._applicationVersionTest) }()
+        case 11: try { try decoder.decodeSingularBoolField(value: &_storage._newFirmwareVersionAvailable) }()
+        case 12: try { try decoder.decodeSingularBoolField(value: &_storage._newTestFirmwareVersionAvailable) }()
         default: break
         }
       }
@@ -1998,6 +2037,15 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
       try { if let v = _storage._lock {
         try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
       } }()
+      try { if let v = _storage._applicationVersionTest {
+        try visitor.visitSingularUInt32Field(value: v, fieldNumber: 10)
+      } }()
+      try { if let v = _storage._newFirmwareVersionAvailable {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 11)
+      } }()
+      try { if let v = _storage._newTestFirmwareVersionAvailable {
+        try visitor.visitSingularBoolField(value: v, fieldNumber: 12)
+      } }()
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -2016,6 +2064,9 @@ extension BlueSystemStatus: SwiftProtobuf.Message, SwiftProtobuf._MessageImpleme
         if _storage._localTime != rhs_storage._localTime {return false}
         if _storage._settings != rhs_storage._settings {return false}
         if _storage._lock != rhs_storage._lock {return false}
+        if _storage._applicationVersionTest != rhs_storage._applicationVersionTest {return false}
+        if _storage._newFirmwareVersionAvailable != rhs_storage._newFirmwareVersionAvailable {return false}
+        if _storage._newTestFirmwareVersionAvailable != rhs_storage._newTestFirmwareVersionAvailable {return false}
         return true
       }
       if !storagesAreEqual {return false}
