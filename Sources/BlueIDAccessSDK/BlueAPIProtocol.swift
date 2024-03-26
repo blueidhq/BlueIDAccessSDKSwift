@@ -1,8 +1,11 @@
 import Foundation
 
-// TODO: implement .xconfig files
-// private let baseURL = "http://localhost:3000"
-private let baseURL = "https://api.dev.blue-id.com"
+#if DEBUG
+    private let baseURL = BlueEnvironment.getEnvVar(key: "BLUE_API_ENDPOINT", defaultValue: "https://api.dev.blue-id.com")
+#else
+    private let baseURL = BlueEnvironment.getEnvVar(key: "BLUE_API_ENDPOINT", defaultValue: "https://api.blue-id.com")
+#endif
+
 
 public enum BlueAPIEndpoints: String {
     case AccessAuthenticationToken = "/access/authenticationToken"

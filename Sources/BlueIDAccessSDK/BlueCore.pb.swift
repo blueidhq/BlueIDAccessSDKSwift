@@ -49,6 +49,7 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
   case disconnected // = -19
   case pointerConversionFailed // = -20
   case unavailable // = -21
+  case aborted // = -22
   case test // = -29
   case encodeDataWriteFailed // = -30
   case encodeDataWriteNothingWritten // = -31
@@ -218,6 +219,7 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     case -31: self = .encodeDataWriteNothingWritten
     case -30: self = .encodeDataWriteFailed
     case -29: self = .test
+    case -22: self = .aborted
     case -21: self = .unavailable
     case -20: self = .pointerConversionFailed
     case -19: self = .disconnected
@@ -323,6 +325,7 @@ public enum BlueReturnCode: SwiftProtobuf.Enum {
     case .encodeDataWriteNothingWritten: return -31
     case .encodeDataWriteFailed: return -30
     case .test: return -29
+    case .aborted: return -22
     case .unavailable: return -21
     case .pointerConversionFailed: return -20
     case .disconnected: return -19
@@ -3735,6 +3738,7 @@ extension BlueReturnCode: SwiftProtobuf._ProtoNameProviding {
     -31: .same(proto: "EncodeDataWriteNothingWritten"),
     -30: .same(proto: "EncodeDataWriteFailed"),
     -29: .same(proto: "Test"),
+    -22: .same(proto: "Aborted"),
     -21: .same(proto: "Unavailable"),
     -20: .same(proto: "PointerConversionFailed"),
     -19: .same(proto: "Disconnected"),

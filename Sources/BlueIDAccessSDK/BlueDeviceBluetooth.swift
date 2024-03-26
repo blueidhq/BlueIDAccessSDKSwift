@@ -352,10 +352,7 @@ internal class BlueDeviceBluetooth: BlueDevice, CBPeripheralDelegate {
         try blueDisconnectBluetoothPeripheral(peripheral)
         
         // Remove all signals in case of disconnection, as some of them may not have been properly removed in the event of an abnormal disconnection, such as a timeout.
-        if (peripheral.state == .disconnected) {
-            blueRemoveSignal(group: "blePeripheral", name: "didUpdateValueFor")
-            blueRemoveSignal(group: "blePeripheral", name: "didWriteValueFor")
-        }
+        blueSignalAbort(group: "blePeripheral")
         
         blueNotifyUpdatedDevice(self)
     }

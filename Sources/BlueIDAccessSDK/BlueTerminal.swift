@@ -418,7 +418,7 @@ public func blueTerminalRun<HandlerResult>(
                 do {
                     try device.disconnect()
                 } catch {
-                    blueLogError("Unable to disconnect from peripheral after error")
+                    blueLogError("Unable to disconnect from peripheral after error: \(error.localizedDescription)")
                 }
             }
             

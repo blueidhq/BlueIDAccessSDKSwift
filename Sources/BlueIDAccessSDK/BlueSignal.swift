@@ -45,6 +45,14 @@ fileprivate class BlueSignal {
             semaphore.signal()
         }
     }
+    
+    internal func abort() {
+        if let semaphore = self.semaphore {
+            self.error = BlueError(.aborted)
+            self.result = nil
+            semaphore.signal()
+        }
+    }
 }
 
 private var blueSignalMap: [String: BlueSignal] = [:]
@@ -66,10 +74,12 @@ internal func blueRemoveSignal(group: String, name: String) {
     
     if blueSignalMap[key] != nil {
         blueSignalMap.removeValue(forKey: key)
+        blueLogDebug("BlueSignal \(name) in group \(group) has been removed")
     }
     
     if blueHistoryMap[key] != nil {
         blueHistoryMap.removeValue(forKey: key)
+        blueLogDebug("BlueSignal \(name) in group \(group) has been removed from history map")
     }
 }
 
@@ -118,6 +128,22 @@ internal func blueSignalFailure(group: String, name: String, error: Error) {
     }
     
     signal.failure(error)
+}
+
+/// Aborts the blue signal for a specified group.
+///
+/// - parameters:
+///   - group: A string indicating the group for which the blue signal should be aborted.
+internal func blueSignalAbort(group: String) {
+    for (key, value) in blueSignalMap {
+        let keyComponents = key.components(separatedBy: ":")
+        
+        if keyComponents.count >= 2 {
+            if (keyComponents[0] == group) {
+                value.abort()
+            }
+        }
+    }
 }
 
 internal func blueSignalFailureGroup(group: String, error: Error) {

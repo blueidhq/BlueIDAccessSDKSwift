@@ -170,14 +170,12 @@ internal func blueDisconnectBluetoothPeripheral(_ peripheral: CBPeripheral) thro
         return
     }
     
-    if peripheral.state == .connecting {
-        blueRemoveSignal(group: "bleCentral", name: "didConnect")
-        return
-    }
-    
-    guard peripheral.state == .connected else {
+    guard peripheral.state == .connected || peripheral.state == .connecting else {
         throw BlueError(.unavailable)
     }
+    
+    // Remove all signals in case of disconnection, as some of them may not have been properly removed in the event of an abnormal disconnection, such as a timeout.
+    blueSignalAbort(group: "bleCentral")
     
     try blueAddSignal(group: "bleCentral", name: "didDisconnectPeripheral")
     

@@ -34,6 +34,7 @@ typedef enum BlueReturnCode {
     BlueReturnCode_Disconnected = -19,
     BlueReturnCode_PointerConversionFailed = -20,
     BlueReturnCode_Unavailable = -21,
+    BlueReturnCode_Aborted = -22,
     BlueReturnCode_Test = -29,
     BlueReturnCode_EncodeDataWriteFailed = -30,
     BlueReturnCode_EncodeDataWriteNothingWritten = -31,
