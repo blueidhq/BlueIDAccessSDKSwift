@@ -6,7 +6,7 @@ let package = Package(
   name: "BlueIDAccessSDK",
   platforms: [
     .macOS(.v12),
-    .iOS("15.5"),
+    .iOS(.v14),
     .watchOS(.v8),
   ],
   products: [
