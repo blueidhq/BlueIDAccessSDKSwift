@@ -1,12 +1,11 @@
 Pod::Spec.new do |s|
     s.name = 'BlueIDAccessSDK'
-    s.version = '1.28.0'
+    s.version = '1.29.0'
     s.summary = 'BlueID Access SDK'
     s.homepage = 'https://www.blue-id.com'
     s.license = { :type => 'MIT' }
     s.author = { 'BlueIDAccessSDK' => 'BlueID GmbH' }
     s.source = { :git => 'https://github.com/blueidhq/BlueIDAccessSDKSwift.git', :tag => 'v' + s.version.to_s }
-    s.source_files  = "Sources/BlueIDAccessSDKLib/**/*.{h,m,swift}"
     s.vendored_frameworks = 'BlueIDAccessSDK.xcframework'
     s.requires_arc = true
     s.ios.deployment_target = '14.0'
