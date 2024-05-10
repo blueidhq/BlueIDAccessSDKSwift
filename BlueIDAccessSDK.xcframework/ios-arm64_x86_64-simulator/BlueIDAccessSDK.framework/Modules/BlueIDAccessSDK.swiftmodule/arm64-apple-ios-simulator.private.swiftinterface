@@ -4360,7 +4360,7 @@ public struct BlueClearDataCommand {
   @objc deinit
 }
 public struct BlueCheckAccessTypeCommand {
-  public func run(deviceID: Swift.String) throws -> BlueIDAccessSDK.BlueAccessType?
+  public func run(deviceID: Swift.String) throws -> Swift.Int?
 }
 public protocol BlueTaskRunner {
   func getTasks() -> [BlueIDAccessSDK.BlueTask]
