@@ -4359,6 +4359,9 @@ public struct BlueClearDataCommand {
   #endif
   @objc deinit
 }
+public struct BlueCheckAccessTypeCommand {
+  public func run(deviceID: Swift.String) throws -> BlueIDAccessSDK.BlueAccessType?
+}
 public protocol BlueTaskRunner {
   func getTasks() -> [BlueIDAccessSDK.BlueTask]
   #if compiler(>=5.3) && $AsyncAwait
@@ -4449,6 +4452,7 @@ public struct BlueCommands {
   public let ossSidProvision: BlueIDAccessSDK.BlueOssSidProvisionCommand
   public let ossSidUnprovision: BlueIDAccessSDK.BlueOssSidUnprovisionCommand
   public let ossSidReadConfiguration: BlueIDAccessSDK.BlueOssSidReadConfigurationCommand
+  public let checkAccessType: BlueIDAccessSDK.BlueCheckAccessTypeCommand
   public let tryAccessDevice: BlueIDAccessSDK.BlueTryAccessDeviceCommand
   public let addAccessCredential: BlueIDAccessSDK.BlueAddAccessCredentialCommand
   public let claimAccessCredential: BlueIDAccessSDK.BlueClaimAccessCredentialCommand
