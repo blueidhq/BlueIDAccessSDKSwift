@@ -1766,6 +1766,14 @@ public struct BlueBleManufacturerInfo {
     get
   }
   public mutating func clearIsFactory()
+  public var hardwareState: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasHardwareState: Swift.Bool {
+    get
+  }
+  public mutating func clearHardwareState()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -2017,6 +2025,14 @@ public struct BlueOssAccessResult {
     get
   }
   public mutating func clearScheduleMissmatch()
+  public var accessOpenTime: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasAccessOpenTime: Swift.Bool {
+    get
+  }
+  public mutating func clearAccessOpenTime()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -4086,6 +4102,9 @@ public enum BlueAPIEndpoints : Swift.String {
     get
   }
 }
+public struct BlueIsNfcActive {
+  public func run() -> Swift.Bool
+}
 @_hasMissingDesignatedInitializers public class BlueZip {
   @objc deinit
 }
@@ -4406,6 +4425,7 @@ public struct BlueCommands {
   public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
   public let nearByActivate: BlueIDAccessSDK.BlueNearByActivate
   public let nearByDeactivate: BlueIDAccessSDK.BlueNearByDeactivate
+  public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
   public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
   public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
   public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand
@@ -4472,6 +4492,7 @@ public enum BlueEventType : Swift.String, Swift.CaseIterable {
   case deviceRemoved
   case deviceNearByDetected
   case deviceNearByLost
+  case deviceNearByUpdated
   case terminalResult
   case accessCredentialAdded
   case accessDeviceClaimed
@@ -4632,6 +4653,46 @@ public struct BlueI18n {
     get
   }
   public mutating func clearOpenViaOssAccessGrantedMessage()
+  public var openViaOssAccessGrantedLockEngagedTitle: Swift.String {
+    get
+    set
+  }
+  public var hasOpenViaOssAccessGrantedLockEngagedTitle: Swift.Bool {
+    get
+  }
+  public mutating func clearOpenViaOssAccessGrantedLockEngagedTitle()
+  public var openViaOssAccessGrantedLockEngagedMessage: Swift.String {
+    get
+    set
+  }
+  public var hasOpenViaOssAccessGrantedLockEngagedMessage: Swift.Bool {
+    get
+  }
+  public mutating func clearOpenViaOssAccessGrantedLockEngagedMessage()
+  public var openViaOssAccessGrantedLockDisengagedTitle: Swift.String {
+    get
+    set
+  }
+  public var hasOpenViaOssAccessGrantedLockDisengagedTitle: Swift.Bool {
+    get
+  }
+  public mutating func clearOpenViaOssAccessGrantedLockDisengagedTitle()
+  public var openViaOssAccessGrantedLockDisengagedMessage: Swift.String {
+    get
+    set
+  }
+  public var hasOpenViaOssAccessGrantedLockDisengagedMessage: Swift.Bool {
+    get
+  }
+  public mutating func clearOpenViaOssAccessGrantedLockDisengagedMessage()
+  public var openViaOssAccessGrantedExtendedTimeMessage: Swift.String {
+    get
+    set
+  }
+  public var hasOpenViaOssAccessGrantedExtendedTimeMessage: Swift.Bool {
+    get
+  }
+  public mutating func clearOpenViaOssAccessGrantedExtendedTimeMessage()
   public var openViaOssAccessDeniedTitle: Swift.String {
     get
     set
