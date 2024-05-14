@@ -530,50 +530,6 @@ public struct BlueSystemProvisioning {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueHardwareInfo {
-  public var name: Swift.String {
-    get
-    set
-  }
-  public var hasName: Swift.Bool {
-    get
-  }
-  public mutating func clearName()
-  public var vendor: Swift.String {
-    get
-    set
-  }
-  public var hasVendor: Swift.Bool {
-    get
-  }
-  public mutating func clearVendor()
-  public var vendorName: Swift.String {
-    get
-    set
-  }
-  public var hasVendorName: Swift.Bool {
-    get
-  }
-  public mutating func clearVendorName()
-  public var version: Swift.UInt32 {
-    get
-    set
-  }
-  public var hasVersion: Swift.Bool {
-    get
-  }
-  public mutating func clearVersion()
-  public var type: BlueIDAccessSDK.BlueHardwareType {
-    get
-    set
-  }
-  public var hasType: Swift.Bool {
-    get
-  }
-  public mutating func clearType()
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
 public struct BlueSystemStatus {
   public var configID: Swift.String {
     get
@@ -655,38 +611,6 @@ public struct BlueSystemStatus {
     get
   }
   public mutating func clearApplicationVersionTest()
-  public var newFirmwareVersionAvailable: Swift.Bool {
-    get
-    set
-  }
-  public var hasNewFirmwareVersionAvailable: Swift.Bool {
-    get
-  }
-  public mutating func clearNewFirmwareVersionAvailable()
-  public var newTestFirmwareVersionAvailable: Swift.Bool {
-    get
-    set
-  }
-  public var hasNewTestFirmwareVersionAvailable: Swift.Bool {
-    get
-  }
-  public mutating func clearNewTestFirmwareVersionAvailable()
-  public var newConfigurationAvailable: Swift.Bool {
-    get
-    set
-  }
-  public var hasNewConfigurationAvailable: Swift.Bool {
-    get
-  }
-  public mutating func clearNewConfigurationAvailable()
-  public var hardwareInfo: BlueIDAccessSDK.BlueHardwareInfo {
-    get
-    set
-  }
-  public var hasHardwareInfo: Swift.Bool {
-    get
-  }
-  public mutating func clearHardwareInfo()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -830,8 +754,6 @@ extension BlueIDAccessSDK.BlueSystemUpdate : @unchecked Swift.Sendable {
 extension BlueIDAccessSDK.BlueSystemSettings : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueSystemProvisioning : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueHardwareInfo : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueSystemStatus : @unchecked Swift.Sendable {
 }
@@ -990,19 +912,6 @@ extension BlueIDAccessSDK.BlueSystemProvisioning : SwiftProtobuf.Message, SwiftP
   public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
   public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
   public static func == (lhs: BlueIDAccessSDK.BlueSystemProvisioning, rhs: BlueIDAccessSDK.BlueSystemProvisioning) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueHardwareInfo : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueHardwareInfo, rhs: BlueIDAccessSDK.BlueHardwareInfo) -> Swift.Bool
   public var hashValue: Swift.Int {
     get
   }
@@ -4323,7 +4232,7 @@ public struct BlueGetAccessDevicesCommand {
     }
   }
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatus?
+  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
   #endif
   @objc deinit
 }
@@ -5316,6 +5225,94 @@ public struct BlueSynchronizeAccessCredentials {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
+public struct BlueHardwareInfo {
+  public var name: Swift.String {
+    get
+    set
+  }
+  public var hasName: Swift.Bool {
+    get
+  }
+  public mutating func clearName()
+  public var vendor: Swift.String {
+    get
+    set
+  }
+  public var hasVendor: Swift.Bool {
+    get
+  }
+  public mutating func clearVendor()
+  public var vendorName: Swift.String {
+    get
+    set
+  }
+  public var hasVendorName: Swift.Bool {
+    get
+  }
+  public mutating func clearVendorName()
+  public var version: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasVersion: Swift.Bool {
+    get
+  }
+  public mutating func clearVersion()
+  public var type: BlueIDAccessSDK.BlueHardwareType {
+    get
+    set
+  }
+  public var hasType: Swift.Bool {
+    get
+  }
+  public mutating func clearType()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueSystemStatusExt {
+  public var status: BlueIDAccessSDK.BlueSystemStatus {
+    get
+    set
+  }
+  public var hasStatus: Swift.Bool {
+    get
+  }
+  public mutating func clearStatus()
+  public var newFirmwareVersionAvailable: Swift.Bool {
+    get
+    set
+  }
+  public var hasNewFirmwareVersionAvailable: Swift.Bool {
+    get
+  }
+  public mutating func clearNewFirmwareVersionAvailable()
+  public var newTestFirmwareVersionAvailable: Swift.Bool {
+    get
+    set
+  }
+  public var hasNewTestFirmwareVersionAvailable: Swift.Bool {
+    get
+  }
+  public mutating func clearNewTestFirmwareVersionAvailable()
+  public var newConfigurationAvailable: Swift.Bool {
+    get
+    set
+  }
+  public var hasNewConfigurationAvailable: Swift.Bool {
+    get
+  }
+  public mutating func clearNewConfigurationAvailable()
+  public var hardwareInfo: BlueIDAccessSDK.BlueHardwareInfo {
+    get
+    set
+  }
+  public var hasHardwareInfo: Swift.Bool {
+    get
+  }
+  public mutating func clearHardwareInfo()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
 extension BlueIDAccessSDK.BlueDeviceType : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus : @unchecked Swift.Sendable {
@@ -5349,6 +5346,10 @@ extension BlueIDAccessSDK.BlueRefreshOssSoCredentials : @unchecked Swift.Sendabl
 extension BlueIDAccessSDK.BlueSynchronizeAccessCredential : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : @unchecked Swift.Sendable {
+}
+extension BlueIDAccessSDK.BlueHardwareInfo : @unchecked Swift.Sendable {
+}
+extension BlueIDAccessSDK.BlueSystemStatusExt : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueDeviceType : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
@@ -5538,6 +5539,32 @@ extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : SwiftProtobuf.Messa
     get
   }
 }
+extension BlueIDAccessSDK.BlueHardwareInfo : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueHardwareInfo, rhs: BlueIDAccessSDK.BlueHardwareInfo) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueSystemStatusExt : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueSystemStatusExt, rhs: BlueIDAccessSDK.BlueSystemStatusExt) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
 public struct BlueBluetoothActivate {
   public func run(maxDeviceAgeSeconds: Swift.Double? = nil) throws
 }
@@ -5576,7 +5603,7 @@ public struct BlueCheckBluetoothPermissionCommand {
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetSystemStatusCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatus
+  public func runAsync(deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatusExt
   #endif
   @objc deinit
 }
