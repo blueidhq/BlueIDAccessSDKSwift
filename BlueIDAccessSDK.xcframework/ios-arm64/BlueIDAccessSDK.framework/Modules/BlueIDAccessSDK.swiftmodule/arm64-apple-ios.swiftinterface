@@ -4012,7 +4012,7 @@ public enum BlueAPIEndpoints : Swift.String {
   }
 }
 public struct BlueIsNfcActive {
-  public func run() -> Swift.Bool
+  public func run() -> Swift.String
 }
 @_hasMissingDesignatedInitializers public class BlueZip {
   @objc deinit
