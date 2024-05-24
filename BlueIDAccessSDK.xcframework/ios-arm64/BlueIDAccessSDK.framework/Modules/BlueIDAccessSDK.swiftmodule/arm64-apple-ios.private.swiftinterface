@@ -6,6 +6,7 @@ import AVFoundation
 import BackgroundTasks
 import Combine
 import CoreBluetooth
+import CoreData
 import CoreLocation
 import CoreNFC
 import Dispatch
@@ -19,84 +20,56 @@ import SwiftUI
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
-@_hasMissingDesignatedInitializers public class BlueSdkAsyncCommand {
+public protocol BlueTaskRunner {
+  func getTasks() -> [BlueIDAccessSDK.BlueTask]
+  #if compiler(>=5.3) && $AsyncAwait
+  func execute(_ throwWhenFail: Swift.Bool) async throws
+  #endif
+  func cancel() -> Swift.Bool
+  func isFailed() -> Swift.Bool
+  func isCancelled() -> Swift.Bool
+  func isSuccessful() -> Swift.Bool
+  func getResult<ResultType>(_ id: Swift.AnyHashable) throws -> ResultType
+}
+@_hasMissingDesignatedInitializers public class BlueTask {
   @objc deinit
 }
-public struct BlueCommands {
-  public let initialize: BlueIDAccessSDK.BlueInitializeCommand
-  public let release: BlueIDAccessSDK.BlueReleaseCommand
-  public let test: BlueIDAccessSDK.BlueTestCommand
-  public let versionInfo: BlueIDAccessSDK.BlueVersionInfoCommand
-  public let startScanning: BlueIDAccessSDK.BlueStartScanningCommand
-  public let stopScanning: BlueIDAccessSDK.BlueStopScanningCommand
-  public let isScanningActive: BlueIDAccessSDK.BlueIsScanningActiveCommand
-  public let isBluetoothActive: BlueIDAccessSDK.BlueIsBluetoothActiveCommand
-  public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
-  public let nearByActivate: BlueIDAccessSDK.BlueNearByActivate
-  public let nearByDeactivate: BlueIDAccessSDK.BlueNearByDeactivate
-  public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
-  public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
-  public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
-  public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand
-  public let ossSoCreateStandardProvisioningData: BlueIDAccessSDK.BlueOssSoCreateStandardProvisioningDataCommand
-  public let ossSoCreateInterventionProvisioningData: BlueIDAccessSDK.BlueOssSoCreateInterventionProvisioningDataCommand
-  public let ossSoIsProvisioned: BlueIDAccessSDK.BlueOssSoIsProvisionedCommand
-  public let ossSoProvision: BlueIDAccessSDK.BlueOssSoProvisionCommand
-  public let ossSoUnprovision: BlueIDAccessSDK.BlueOssSoUnprovisionCommand
-  public let ossSoReadConfiguration: BlueIDAccessSDK.BlueOssSoReadConfigurationCommand
-  public let ossSoUpdateConfiguration: BlueIDAccessSDK.BlueOssSoUpdateConfigurationCommand
-  public let readOssSoCredential: BlueIDAccessSDK.BlueReadOssSoCredentialCommand
-  public let writeOssSoCredential: BlueIDAccessSDK.BlueWriteOssSoCredentialCommand
-  public let refreshOssSoCredential: BlueIDAccessSDK.BlueRefreshOssSoCredentialCommand
-  public let refreshOssSoCredentials: BlueIDAccessSDK.BlueRefreshOssSoCredentialsCommand
-  public let formatOssSoCredential: BlueIDAccessSDK.BlueFormatOssSoCredentialCommand
-  public let ossSidCreateMobile: BlueIDAccessSDK.BlueOssSidCreateMobileCommand
-  public let ossSidFormat: BlueIDAccessSDK.BlueOssSidFormatCommand
-  public let ossSidGetStorageProfile: BlueIDAccessSDK.BlueOssSidGetStorageProfileCommand
-  public let ossSidCreateProvisioningData: BlueIDAccessSDK.BlueOssSidCreateProvisioningDataCommand
-  public let ossSidIsProvisioned: BlueIDAccessSDK.BlueOssSidIsProvisionedCommand
-  public let ossSidProvision: BlueIDAccessSDK.BlueOssSidProvisionCommand
-  public let ossSidUnprovision: BlueIDAccessSDK.BlueOssSidUnprovisionCommand
-  public let ossSidReadConfiguration: BlueIDAccessSDK.BlueOssSidReadConfigurationCommand
-  public let checkAccessType: BlueIDAccessSDK.BlueCheckAccessTypeCommand
-  public let tryAccessDevice: BlueIDAccessSDK.BlueTryAccessDeviceCommand
-  public let addAccessCredential: BlueIDAccessSDK.BlueAddAccessCredentialCommand
-  public let claimAccessCredential: BlueIDAccessSDK.BlueClaimAccessCredentialCommand
-  public let getAccessCredentials: BlueIDAccessSDK.BlueGetAccessCredentialsCommand
-  public let synchronizeAccessCredential: BlueIDAccessSDK.BlueSynchronizeAccessCredentialCommand
-  public let synchronizeAccessCredentials: BlueIDAccessSDK.BlueSynchronizeAccessCredentialsCommand
-  public let getAccessDevices: BlueIDAccessSDK.BlueGetAccessDevicesCommand
-  public let listAccessDevices: BlueIDAccessSDK.BlueListAccessDevicesCommand
-  public let synchronizeAccessDevice: BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand
-  public let getAccessObjects: BlueIDAccessSDK.BlueGetAccessObjectsCommand
-  public let claimAccessDevice: BlueIDAccessSDK.BlueClaimAccessDeviceCommand
-  public let getWritableAccessCredentials: BlueIDAccessSDK.BlueGetWritableAccessCredentialsCommand
-  public let clearBlacklist: BlueIDAccessSDK.BlueClearBlacklistCommand
-  public let clearEventLog: BlueIDAccessSDK.BlueClearEventLogCommand
-  public let clearSystemLog: BlueIDAccessSDK.BlueClearSystemLogCommand
-  public let getSystemStatus: BlueIDAccessSDK.BlueGetSystemStatusCommand
-  public let openAppSettings: BlueIDAccessSDK.BlueOpenAppSettingsCommand
-  public let updateAccessDeviceFirmware: BlueIDAccessSDK.BlueUpdateAccessDeviceFirmwareCommand
-  public let UNSAFE_clearData: BlueIDAccessSDK.BlueClearDataCommand
-}
-public let blueCommands: BlueIDAccessSDK.BlueCommands
-@_hasMissingDesignatedInitializers @objc(BlueCommandResult) final public class ObjC_BlueCommandResult : ObjectiveC.NSObject {
-  @objc final public let error: (any Swift.Error)?
-  @objc final public let data: Swift.AnyObject?
-  @objc final public let messageTypeName: Swift.String?
+@_hasMissingDesignatedInitializers public class BlueSerialTaskRunner : BlueIDAccessSDK.BlueTaskRunner {
+  public func getTasks() -> [BlueIDAccessSDK.BlueTask]
+  #if compiler(>=5.3) && $AsyncAwait
+  public func execute(_ throwWhenFail: Swift.Bool) async throws
+  #endif
+  public func cancel() -> Swift.Bool
+  public func isSuccessful() -> Swift.Bool
+  public func isFailed() -> Swift.Bool
+  public func isCancelled() -> Swift.Bool
+  public func getResult<ResultType>(_ id: Swift.AnyHashable) throws -> ResultType
   @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc(BlueCommands) final public class ObjC_BlueCommands : ObjectiveC.NSObject {
-  @objc public static func run(_ command: Swift.String, arg0: Swift.AnyObject?, arg1: Swift.AnyObject?, arg2: Swift.AnyObject?, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
-  @objc public static func run(_ command: Swift.String, arg0: Swift.AnyObject, arg1: Swift.AnyObject, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
-  @objc public static func run(_ command: Swift.String, arg0: Swift.AnyObject, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
-  @objc public static func run(_ command: Swift.String, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
-  @objc deinit
+public struct BlueOssSidCreateMobileCommand {
+  public func run(_ provisioningData: BlueIDAccessSDK.BlueOssSidProvisioningData) throws -> BlueIDAccessSDK.BlueOssSidMobile
 }
-public struct BlueOpenAppSettingsCommand {
-  public func run(completionHandler: @escaping (Swift.Bool) -> Swift.Void)
+public struct BlueOssSidFormatCommand {
+  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?, _ factoryReset: Swift.Bool = false) throws
 }
-public func blueCreateAccessCredentialDemo(id: Swift.String? = nil, validFrom: BlueIDAccessSDK.BlueLocalTimestamp? = nil, credentialType: BlueIDAccessSDK.BlueCredentialType? = nil) -> BlueIDAccessSDK.BlueAccessCredential
+public struct BlueOssSidGetStorageProfileCommand {
+  public func run(_ transponderType: BlueIDAccessSDK.BlueTransponderType, _ provisioningConfig: BlueIDAccessSDK.BlueOssSidProvisioningConfiguration?) throws -> BlueIDAccessSDK.BlueOssSidStorageProfile
+}
+public struct BlueOssSidCreateProvisioningDataCommand {
+  public func run(_ credentialId: Swift.String, _ configuration: BlueIDAccessSDK.BlueOssSidProvisioningConfiguration? = nil) throws -> BlueIDAccessSDK.BlueOssSidProvisioningData
+}
+public struct BlueOssSidIsProvisionedCommand {
+  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?) throws -> Swift.Bool
+}
+public struct BlueOssSidProvisionCommand {
+  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?, _ provisioningData: BlueIDAccessSDK.BlueOssSidProvisioningData) throws
+}
+public struct BlueOssSidUnprovisionCommand {
+  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?) throws
+}
+public struct BlueOssSidReadConfigurationCommand {
+  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?) throws -> BlueIDAccessSDK.BlueOssSidConfiguration
+}
 public enum BlueReturnCode : SwiftProtobuf.Enum {
   public typealias RawValue = Swift.Int
   case ok
@@ -3076,38 +3049,205 @@ extension BlueIDAccessSDK._BlueTestEncodeDecode : SwiftProtobuf.Message, SwiftPr
     get
   }
 }
-public struct BlueInitializeCommand {
-  public func run() throws
+public var defaultTimeoutSec: Swift.Double
+public func blueTerminalRequest(action: Swift.String, data: Foundation.Data? = nil) throws
+public func blueTerminalRequest<DataType>(action: Swift.String, data: DataType) throws where DataType : SwiftProtobuf.Message
+public func blueTerminalRequest<ResultType>(action: Swift.String, data: Foundation.Data? = nil) throws -> ResultType where ResultType : SwiftProtobuf.Message
+public func blueTerminalRequest<DataType, ResultType>(action: Swift.String, data: DataType) throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
+public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, handler: @escaping () throws -> HandlerResult, completion: @escaping (Swift.Result<HandlerResult, any Swift.Error>) -> Swift.Void, isTest: Swift.Bool = false)
+#if compiler(>=5.3) && $AsyncAwait
+@available(macOS 10.15, *)
+public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, _ handler: @escaping () throws -> HandlerResult) async throws -> HandlerResult
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+@available(macOS 10.15, *)
+public func blueTerminalRun(deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, action: Swift.String) async throws
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+public func blueTerminalRunOssSoMobile(deviceID: Swift.String, accessType: BlueIDAccessSDK.BlueAccessType?) async throws -> BlueIDAccessSDK.BlueOssAccessEventsResult
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+@available(macOS 10.15, *)
+public func blueTerminalRun<ResultType>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String) async throws -> ResultType where ResultType : SwiftProtobuf.Message
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+@available(macOS 10.15, *)
+public func blueTerminalRun<DataType>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws where DataType : SwiftProtobuf.Message
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+@available(macOS 10.15, *)
+public func blueTerminalRun<DataType, ResultType>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
+#endif
+@_hasMissingDesignatedInitializers @objc(BlueTerminalRequest) final public class ObjC_BlueTerminalRequest : ObjectiveC.NSObject {
+  @objc final public let action: Swift.String
+  @objc final public let data: Foundation.NSData?
+  @objc deinit
 }
-public struct BlueReleaseCommand {
-  public func run() throws
+@_hasMissingDesignatedInitializers @objc(BlueTerminalResult) final public class ObjC_BlueTerminalResult : ObjectiveC.NSObject {
+  @objc final public let error: (any Swift.Error)?
+  @objc final public let statusCode: Swift.Int
+  @objc final public let data: Foundation.NSData?
+  @objc deinit
 }
-public struct BlueVersionInfoCommand {
-  public func run() throws -> BlueIDAccessSDK.BlueVersionInfo
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc(BlueTerminal) final public class ObjC_BlueTerminal : ObjectiveC.NSObject {
+  @objc public static func run(_ deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, requests: [BlueIDAccessSDK.ObjC_BlueTerminalRequest], completion: (([BlueIDAccessSDK.ObjC_BlueTerminalResult]) -> Swift.Void)?)
+  @objc deinit
 }
-public struct BlueTestCommand {
-  public func run(_ hardwareName: Swift.String, _ hardwareVersion: Swift.Int, _ data: BlueIDAccessSDK._BlueTestEncodeDecode) throws -> BlueIDAccessSDK._BlueTestEncodeDecode
+@_hasMissingDesignatedInitializers public class BlueSdkCommand {
+  @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueSynchronizeAccessCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+@_hasMissingDesignatedInitializers public class BlueSdkAsyncCommand {
+  @objc deinit
+}
+public struct BlueCommands {
+  public let initialize: BlueIDAccessSDK.BlueInitializeCommand
+  public let release: BlueIDAccessSDK.BlueReleaseCommand
+  public let test: BlueIDAccessSDK.BlueTestCommand
+  public let versionInfo: BlueIDAccessSDK.BlueVersionInfoCommand
+  public let startScanning: BlueIDAccessSDK.BlueStartScanningCommand
+  public let stopScanning: BlueIDAccessSDK.BlueStopScanningCommand
+  public let isScanningActive: BlueIDAccessSDK.BlueIsScanningActiveCommand
+  public let isBluetoothActive: BlueIDAccessSDK.BlueIsBluetoothActiveCommand
+  public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
+  public let nearByActivate: BlueIDAccessSDK.BlueNearByActivate
+  public let nearByDeactivate: BlueIDAccessSDK.BlueNearByDeactivate
+  public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
+  public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
+  public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
+  public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand
+  public let ossSoCreateStandardProvisioningData: BlueIDAccessSDK.BlueOssSoCreateStandardProvisioningDataCommand
+  public let ossSoCreateInterventionProvisioningData: BlueIDAccessSDK.BlueOssSoCreateInterventionProvisioningDataCommand
+  public let ossSoIsProvisioned: BlueIDAccessSDK.BlueOssSoIsProvisionedCommand
+  public let ossSoProvision: BlueIDAccessSDK.BlueOssSoProvisionCommand
+  public let ossSoUnprovision: BlueIDAccessSDK.BlueOssSoUnprovisionCommand
+  public let ossSoReadConfiguration: BlueIDAccessSDK.BlueOssSoReadConfigurationCommand
+  public let ossSoUpdateConfiguration: BlueIDAccessSDK.BlueOssSoUpdateConfigurationCommand
+  public let readOssSoCredential: BlueIDAccessSDK.BlueReadOssSoCredentialCommand
+  public let writeOssSoCredential: BlueIDAccessSDK.BlueWriteOssSoCredentialCommand
+  public let refreshOssSoCredential: BlueIDAccessSDK.BlueRefreshOssSoCredentialCommand
+  public let refreshOssSoCredentials: BlueIDAccessSDK.BlueRefreshOssSoCredentialsCommand
+  public let formatOssSoCredential: BlueIDAccessSDK.BlueFormatOssSoCredentialCommand
+  public let ossSidCreateMobile: BlueIDAccessSDK.BlueOssSidCreateMobileCommand
+  public let ossSidFormat: BlueIDAccessSDK.BlueOssSidFormatCommand
+  public let ossSidGetStorageProfile: BlueIDAccessSDK.BlueOssSidGetStorageProfileCommand
+  public let ossSidCreateProvisioningData: BlueIDAccessSDK.BlueOssSidCreateProvisioningDataCommand
+  public let ossSidIsProvisioned: BlueIDAccessSDK.BlueOssSidIsProvisionedCommand
+  public let ossSidProvision: BlueIDAccessSDK.BlueOssSidProvisionCommand
+  public let ossSidUnprovision: BlueIDAccessSDK.BlueOssSidUnprovisionCommand
+  public let ossSidReadConfiguration: BlueIDAccessSDK.BlueOssSidReadConfigurationCommand
+  public let checkAccessType: BlueIDAccessSDK.BlueCheckAccessTypeCommand
+  public let tryAccessDevice: BlueIDAccessSDK.BlueTryAccessDeviceCommand
+  public let addAccessCredential: BlueIDAccessSDK.BlueAddAccessCredentialCommand
+  public let claimAccessCredential: BlueIDAccessSDK.BlueClaimAccessCredentialCommand
+  public let getAccessCredentials: BlueIDAccessSDK.BlueGetAccessCredentialsCommand
+  public let synchronizeAccessCredential: BlueIDAccessSDK.BlueSynchronizeAccessCredentialCommand
+  public let synchronizeAccessCredentials: BlueIDAccessSDK.BlueSynchronizeAccessCredentialsCommand
+  public let getAccessDevices: BlueIDAccessSDK.BlueGetAccessDevicesCommand
+  public let listAccessDevices: BlueIDAccessSDK.BlueListAccessDevicesCommand
+  public let synchronizeAccessDevice: BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand
+  public let getAccessObjects: BlueIDAccessSDK.BlueGetAccessObjectsCommand
+  public let claimAccessDevice: BlueIDAccessSDK.BlueClaimAccessDeviceCommand
+  public let getWritableAccessCredentials: BlueIDAccessSDK.BlueGetWritableAccessCredentialsCommand
+  public let clearBlacklist: BlueIDAccessSDK.BlueClearBlacklistCommand
+  public let clearEventLog: BlueIDAccessSDK.BlueClearEventLogCommand
+  public let clearSystemLog: BlueIDAccessSDK.BlueClearSystemLogCommand
+  public let getSystemStatus: BlueIDAccessSDK.BlueGetSystemStatusCommand
+  public let openAppSettings: BlueIDAccessSDK.BlueOpenAppSettingsCommand
+  public let updateAccessDeviceFirmware: BlueIDAccessSDK.BlueUpdateAccessDeviceFirmwareCommand
+  public let UNSAFE_clearData: BlueIDAccessSDK.BlueClearDataCommand
+}
+public let blueCommands: BlueIDAccessSDK.BlueCommands
+@_hasMissingDesignatedInitializers @objc(BlueCommandResult) final public class ObjC_BlueCommandResult : ObjectiveC.NSObject {
+  @objc final public let error: (any Swift.Error)?
+  @objc final public let data: Swift.AnyObject?
+  @objc final public let messageTypeName: Swift.String?
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc(BlueCommands) final public class ObjC_BlueCommands : ObjectiveC.NSObject {
+  @objc public static func run(_ command: Swift.String, arg0: Swift.AnyObject?, arg1: Swift.AnyObject?, arg2: Swift.AnyObject?, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
+  @objc public static func run(_ command: Swift.String, arg0: Swift.AnyObject, arg1: Swift.AnyObject, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
+  @objc public static func run(_ command: Swift.String, arg0: Swift.AnyObject, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
+  @objc public static func run(_ command: Swift.String, completion: ((BlueIDAccessSDK.ObjC_BlueCommandResult) -> Swift.Void)?)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAddAccessCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws
+  public func runAsync(credential: BlueIDAccessSDK.BlueAccessCredential) async throws
   #endif
   @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueSynchronizeAccessCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueClaimAccessCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync() async throws -> BlueIDAccessSDK.BlueSynchronizeAccessCredentials
+  public func runAsync(activationToken: Swift.String) async throws
   #endif
   @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc final public class BlueAppDelegate : ObjectiveC.NSObject {
-  public static func didFinishLaunchingWithOptions(launchOptions: [UIKit.UIApplication.LaunchOptionsKey : Any]?)
-  @objc public static func didFinishLaunchingWithOptions(_ launchOptions: Foundation.NSDictionary)
-  @objc public static func willResignActive()
-  @objc public static func didBecomeActive()
-  @objc public static func didEnterBackground()
-  @objc public static func willTerminate()
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetAccessCredentialsCommand : BlueIDAccessSDK.BlueSdkCommand {
+  public func run(credentialType: BlueIDAccessSDK.BlueCredentialType? = nil, for deviceID: Swift.String? = nil) throws -> BlueIDAccessSDK.BlueAccessCredentialList
   @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetAccessDevicesCommand : BlueIDAccessSDK.BlueSdkCommand {
+  public func run(credentialID: Swift.String) throws -> BlueIDAccessSDK.BlueAccessDeviceList
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueSynchronizeAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  public enum BlueSynchronizeAccessTaskId {
+    case getAuthenticationToken
+    case getDeviceConfig
+    case updateDeviceConfig
+    case updateDeviceTime
+    case waitForRestart
+    case pushEventLogs
+    case pushSystemLogs
+    case getBlacklistEntries
+    case deployBlacklistEntries
+    case getSystemStatus
+    case pushSystemStatus
+    public static func == (a: BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand.BlueSynchronizeAccessTaskId, b: BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand.BlueSynchronizeAccessTaskId) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
+  #endif
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetAccessObjectsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(credentialID: Swift.String) async throws -> BlueIDAccessSDK.BlueAccessObjectList
+  #endif
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueListAccessDevicesCommand : BlueIDAccessSDK.BlueSdkCommand {
+  public func run(credentialType: BlueIDAccessSDK.BlueCredentialType? = nil, suppressCredentialValidityStart: Swift.Bool? = false) throws -> BlueIDAccessSDK.BlueAccessDeviceList
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueClaimAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, objectID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatus?
+  #endif
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetWritableAccessCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(organisation: Swift.String, siteID: Swift.Int) async throws -> BlueIDAccessSDK.BlueAccessCredentialList
+  #endif
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueClearDataCommand : BlueIDAccessSDK.BlueSdkCommand {
+  public func run()
+  @objc deinit
+}
+public struct BlueCheckAccessTypeCommand {
+  public func run(deviceID: Swift.String) -> Swift.Int?
+}
+public struct BlueNearByActivate {
+  public func run() throws
+}
+public struct BlueNearByDeactivate {
+  public func run() throws
 }
 public struct BlueOssSoCreateMobileCommand {
   public func run(_ provisioningData: BlueIDAccessSDK.BlueOssSoProvisioningData, _ configuration: BlueIDAccessSDK.BlueOssSoConfiguration) throws -> BlueIDAccessSDK.BlueOssSoMobile
@@ -3163,6 +3303,90 @@ public struct BlueReadOssSoCredentialCommand {
   #endif
   @objc deinit
 }
+@_hasMissingDesignatedInitializers public class BlueAsyncTerminalCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(deviceID: Swift.String) async throws
+  #endif
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BlueClearBlacklistCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BlueClearEventLogCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BlueClearSystemLogCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetSystemStatusCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatusExt
+  #endif
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BlueTryAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(deviceID: Swift.String, accessType: BlueIDAccessSDK.BlueAccessType? = nil) async throws -> BlueIDAccessSDK.BlueOssAccessResult
+  #endif
+  @objc deinit
+}
+public struct BlueInitializeCommand {
+  public func run() throws
+}
+public struct BlueReleaseCommand {
+  public func run() throws
+}
+public struct BlueVersionInfoCommand {
+  public func run() throws -> BlueIDAccessSDK.BlueVersionInfo
+}
+public struct BlueTestCommand {
+  public func run(_ hardwareName: Swift.String, _ hardwareVersion: Swift.Int, _ data: BlueIDAccessSDK._BlueTestEncodeDecode) throws -> BlueIDAccessSDK._BlueTestEncodeDecode
+}
+public enum BlueEventType : Swift.String, Swift.CaseIterable {
+  case deviceAdded
+  case deviceUpdated
+  case deviceRemoved
+  case deviceNearByDetected
+  case deviceNearByLost
+  case deviceNearByUpdated
+  case terminalResult
+  case accessCredentialAdded
+  case accessDeviceClaimed
+  case tokenSyncStarted
+  case tokenSyncFinished
+  case bluetoothStateChanged
+  public init?(rawValue: Swift.String)
+  public typealias AllCases = [BlueIDAccessSDK.BlueEventType]
+  public typealias RawValue = Swift.String
+  public static var allCases: [BlueIDAccessSDK.BlueEventType] {
+    get
+  }
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public protocol BlueEventListener : AnyObject {
+  func blueEvent(event: BlueIDAccessSDK.BlueEventType, data: Any?)
+}
+public func blueAddEventListener(event: BlueIDAccessSDK.BlueEventType? = nil, listener: any BlueIDAccessSDK.BlueEventListener)
+public func blueRemoveEventListener(listener: any BlueIDAccessSDK.BlueEventListener)
+public struct BlueIsBluetoothActiveCommand {
+  public func run() -> Swift.Bool
+}
+public struct BlueStartScanningCommand {
+  public func run(maxDeviceAgeSeconds: Swift.Double? = nil) throws
+}
+public struct BlueStopScanningCommand {
+  public func run() throws
+}
+public struct BlueIsScanningActiveCommand {
+  public func run() -> Swift.Bool
+}
+public struct BlueCheckBluetoothPermissionCommand {
+  public func run() -> Swift.String
+}
+public func blueEncodeMessage(_ message: (any SwiftProtobuf.Message)!, partial: Swift.Bool = false) throws -> Foundation.Data
+public func blueDecodeMessage<MessageType>(_ data: Foundation.Data) throws -> MessageType where MessageType : SwiftProtobuf.Message
 public enum BlueDeviceType : SwiftProtobuf.Enum {
   public typealias RawValue = Swift.Int
   case bluetoothDevice
@@ -4357,108 +4581,9 @@ extension BlueIDAccessSDK.BlueSystemStatusExt : SwiftProtobuf.Message, SwiftProt
     get
   }
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAddAccessCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credential: BlueIDAccessSDK.BlueAccessCredential) async throws
-  #endif
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueClaimAccessCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(activationToken: Swift.String) async throws
-  #endif
-  @objc deinit
-}
-public struct BlueGetAccessCredentialsCommand {
-  public func run(credentialType: BlueIDAccessSDK.BlueCredentialType? = nil, for deviceID: Swift.String? = nil, includePrivateKey: Swift.Bool? = false) throws -> BlueIDAccessSDK.BlueAccessCredentialList
-}
-public struct BlueGetAccessDevicesCommand {
-  public func run(credentialID: Swift.String) throws -> BlueIDAccessSDK.BlueAccessDeviceList
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueSynchronizeAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  public enum BlueSynchronizeAccessTaskId {
-    case getAuthenticationToken
-    case getDeviceConfig
-    case updateDeviceConfig
-    case updateDeviceTime
-    case waitForRestart
-    case pushEventLogs
-    case pushSystemLogs
-    case getBlacklistEntries
-    case deployBlacklistEntries
-    case getSystemStatus
-    case pushSystemStatus
-    public static func == (a: BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand.BlueSynchronizeAccessTaskId, b: BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand.BlueSynchronizeAccessTaskId) -> Swift.Bool
-    public func hash(into hasher: inout Swift.Hasher)
-    public var hashValue: Swift.Int {
-      get
-    }
-  }
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
-  #endif
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetAccessObjectsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String) async throws -> BlueIDAccessSDK.BlueAccessObjectList
-  #endif
-  @objc deinit
-}
-public struct BlueListAccessDevicesCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialType: BlueIDAccessSDK.BlueCredentialType? = nil, suppressCredentialValidityStart: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueAccessDeviceList
-  #endif
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueClaimAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, objectID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatus?
-  #endif
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetWritableAccessCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(organisation: Swift.String, siteID: Swift.Int) async throws -> BlueIDAccessSDK.BlueAccessCredentialList
-  #endif
-  @objc deinit
-}
-public struct BlueClearDataCommand {
-  public func run()
-}
-public struct BlueCheckAccessTypeCommand {
-  public func run(deviceID: Swift.String) -> Swift.Int?
-}
-@_hasMissingDesignatedInitializers public class BlueTryAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(deviceID: Swift.String, accessType: BlueIDAccessSDK.BlueAccessType? = nil) async throws -> BlueIDAccessSDK.BlueOssAccessResult
-  #endif
-  @objc deinit
-}
-public protocol BlueTaskRunner {
-  func getTasks() -> [BlueIDAccessSDK.BlueTask]
-  #if compiler(>=5.3) && $AsyncAwait
-  func execute(_ throwWhenFail: Swift.Bool) async throws
-  #endif
-  func cancel() -> Swift.Bool
-  func isFailed() -> Swift.Bool
-  func isCancelled() -> Swift.Bool
-  func isSuccessful() -> Swift.Bool
-  func getResult<ResultType>(_ id: Swift.AnyHashable) throws -> ResultType
-}
-@_hasMissingDesignatedInitializers public class BlueTask {
-  @objc deinit
-}
-@_hasMissingDesignatedInitializers public class BlueSerialTaskRunner : BlueIDAccessSDK.BlueTaskRunner {
-  public func getTasks() -> [BlueIDAccessSDK.BlueTask]
-  #if compiler(>=5.3) && $AsyncAwait
-  public func execute(_ throwWhenFail: Swift.Bool) async throws
-  #endif
-  public func cancel() -> Swift.Bool
-  public func isSuccessful() -> Swift.Bool
-  public func isFailed() -> Swift.Bool
-  public func isCancelled() -> Swift.Bool
-  public func getResult<ResultType>(_ id: Swift.AnyHashable) throws -> ResultType
-  @objc deinit
+public func blueCreateAccessCredentialDemo(id: Swift.String? = nil, validFrom: BlueIDAccessSDK.BlueLocalTimestamp? = nil, credentialType: BlueIDAccessSDK.BlueCredentialType? = nil) -> BlueIDAccessSDK.BlueAccessCredential
+public struct BlueIsNfcActive {
+  public func run() -> Swift.String
 }
 public typealias BluePluginResolve = ([Swift.String : Any]?) -> Swift.Void
 public typealias BluePluginReject = ([Swift.String : Any]) -> Swift.Void
@@ -4473,122 +4598,6 @@ public class BluePlugin : BlueIDAccessSDK.BlueEventListener {
   public func terminalRun(deviceID: Swift.String, timeoutSeconds: Swift.Double, requestValues: [Any], resolve: @escaping BlueIDAccessSDK.BluePluginResolve, reject: @escaping BlueIDAccessSDK.BluePluginReject, isTest: Swift.Bool)
   public func blueEvent(event: BlueIDAccessSDK.BlueEventType, data: Any?)
 }
-public enum BlueEventType : Swift.String, Swift.CaseIterable {
-  case deviceAdded
-  case deviceUpdated
-  case deviceRemoved
-  case deviceNearByDetected
-  case deviceNearByLost
-  case deviceNearByUpdated
-  case terminalResult
-  case accessCredentialAdded
-  case accessDeviceClaimed
-  case tokenSyncStarted
-  case tokenSyncFinished
-  case bluetoothStateChanged
-  public init?(rawValue: Swift.String)
-  public typealias AllCases = [BlueIDAccessSDK.BlueEventType]
-  public typealias RawValue = Swift.String
-  public static var allCases: [BlueIDAccessSDK.BlueEventType] {
-    get
-  }
-  public var rawValue: Swift.String {
-    get
-  }
-}
-public protocol BlueEventListener : AnyObject {
-  func blueEvent(event: BlueIDAccessSDK.BlueEventType, data: Any?)
-}
-public func blueAddEventListener(event: BlueIDAccessSDK.BlueEventType? = nil, listener: any BlueIDAccessSDK.BlueEventListener)
-public func blueRemoveEventListener(listener: any BlueIDAccessSDK.BlueEventListener)
-extension BlueIDAccessSDK.BlueLocalTimestamp : Swift.Encodable, Swift.Decodable {
-  public static func fromUTCDate(_ date: Foundation.Date) -> BlueIDAccessSDK.BlueLocalTimestamp
-  public init(_ year: Swift.Int, _ month: Swift.Int, _ date: Swift.Int = 1, _ hours: Swift.Int = 0, _ minutes: Swift.Int = 0, _ seconds: Swift.Int = 0)
-  public init(from decoder: any Swift.Decoder) throws
-  public func toUTCDate() -> Foundation.Date?
-  public func encode(to encoder: any Swift.Encoder) throws
-}
-extension BlueIDAccessSDK.BlueAccessObject : Swift.Decodable {
-  public init(from decoder: any Swift.Decoder) throws
-}
-extension BlueIDAccessSDK.BlueAccessCredential : Swift.Decodable {
-  public init(from decoder: any Swift.Decoder) throws
-  public func checkValidityStart(_ now: Foundation.Date? = nil) -> Swift.Bool
-}
-extension BlueIDAccessSDK.BlueAccessCredentialList {
-  public init(credentials: [BlueIDAccessSDK.BlueAccessCredential])
-}
-extension BlueIDAccessSDK.BlueAccessObjectList {
-  public init(objects: [BlueIDAccessSDK.BlueAccessObject])
-}
-extension BlueIDAccessSDK.BlueAccessDeviceList {
-  public init(devices: [BlueIDAccessSDK.BlueAccessDevice])
-}
-extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials {
-  public init(credentials: [BlueIDAccessSDK.BlueSynchronizeAccessCredential])
-}
-extension BlueIDAccessSDK.BlueAccessType : Swift.Identifiable {
-  public var id: BlueIDAccessSDK.BlueAccessType {
-    get
-  }
-  public typealias ID = BlueIDAccessSDK.BlueAccessType
-}
-final public class BlueError : Swift.Error, Foundation.LocalizedError, Swift.Equatable {
-  public static var timeoutMessage: Swift.String
-  public static var returnCodeMessage: Swift.String
-  public static var unknownErrorMessage: Swift.String
-  final public let returnCode: BlueIDAccessSDK.BlueReturnCode
-  final public var errorDescription: Swift.String? {
-    get
-  }
-  final public var failureReason: Swift.String? {
-    get
-  }
-  final public var recoverySuggestion: Swift.String? {
-    get
-  }
-  final public var helpAnchor: Swift.String? {
-    get
-  }
-  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode)
-  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode, cause: (any Swift.Error)? = nil, detail: Swift.String? = nil)
-  public static func == (lhs: BlueIDAccessSDK.BlueError, rhs: BlueIDAccessSDK.BlueError) -> Swift.Bool
-  @objc deinit
-}
-final public class BlueTerminalError : Swift.Error, Foundation.LocalizedError, Swift.Equatable {
-  final public var errorDescription: Swift.String? {
-    get
-  }
-  final public var failureReason: Swift.String? {
-    get
-  }
-  final public var recoverySuggestion: Swift.String? {
-    get
-  }
-  final public var helpAnchor: Swift.String? {
-    get
-  }
-  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode)
-  public static func == (lhs: BlueIDAccessSDK.BlueTerminalError, rhs: BlueIDAccessSDK.BlueTerminalError) -> Swift.Bool
-  @objc deinit
-}
-public struct BlueIsBluetoothActiveCommand {
-  public func run() -> Swift.Bool
-}
-public struct BlueStartScanningCommand {
-  public func run(maxDeviceAgeSeconds: Swift.Double? = nil) throws
-}
-public struct BlueStopScanningCommand {
-  public func run() throws
-}
-public struct BlueIsScanningActiveCommand {
-  public func run() -> Swift.Bool
-}
-public struct BlueCheckBluetoothPermissionCommand {
-  public func run() -> Swift.String
-}
-public func blueEncodeMessage(_ message: (any SwiftProtobuf.Message)!, partial: Swift.Bool = false) throws -> Foundation.Data
-public func blueDecodeMessage<MessageType>(_ data: Foundation.Data) throws -> MessageType where MessageType : SwiftProtobuf.Message
 public struct BlueBaseConfig {
   public var isoCountry: Swift.String {
     get
@@ -5523,118 +5532,100 @@ extension BlueIDAccessSDK.BlueBlacklistEntries : SwiftProtobuf.Message, SwiftPro
     get
   }
 }
-public var defaultTimeoutSec: Swift.Double
-public func blueTerminalRequest(action: Swift.String, data: Foundation.Data? = nil) throws
-public func blueTerminalRequest<DataType>(action: Swift.String, data: DataType) throws where DataType : SwiftProtobuf.Message
-public func blueTerminalRequest<ResultType>(action: Swift.String, data: Foundation.Data? = nil) throws -> ResultType where ResultType : SwiftProtobuf.Message
-public func blueTerminalRequest<DataType, ResultType>(action: Swift.String, data: DataType) throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
-public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, handler: @escaping () throws -> HandlerResult, completion: @escaping (Swift.Result<HandlerResult, any Swift.Error>) -> Swift.Void, isTest: Swift.Bool = false)
-#if compiler(>=5.3) && $AsyncAwait
-@available(macOS 10.15, *)
-public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, _ handler: @escaping () throws -> HandlerResult) async throws -> HandlerResult
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-@available(macOS 10.15, *)
-public func blueTerminalRun(deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, action: Swift.String) async throws
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-public func blueTerminalRunOssSoMobile(deviceID: Swift.String, accessType: BlueIDAccessSDK.BlueAccessType?) async throws -> BlueIDAccessSDK.BlueOssAccessEventsResult
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-@available(macOS 10.15, *)
-public func blueTerminalRun<ResultType>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String) async throws -> ResultType where ResultType : SwiftProtobuf.Message
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-@available(macOS 10.15, *)
-public func blueTerminalRun<DataType>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws where DataType : SwiftProtobuf.Message
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-@available(macOS 10.15, *)
-public func blueTerminalRun<DataType, ResultType>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
-#endif
-@_hasMissingDesignatedInitializers @objc(BlueTerminalRequest) final public class ObjC_BlueTerminalRequest : ObjectiveC.NSObject {
-  @objc final public let action: Swift.String
-  @objc final public let data: Foundation.NSData?
-  @objc deinit
-}
-@_hasMissingDesignatedInitializers @objc(BlueTerminalResult) final public class ObjC_BlueTerminalResult : ObjectiveC.NSObject {
-  @objc final public let error: (any Swift.Error)?
-  @objc final public let statusCode: Swift.Int
-  @objc final public let data: Foundation.NSData?
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc(BlueTerminal) final public class ObjC_BlueTerminal : ObjectiveC.NSObject {
-  @objc public static func run(_ deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, requests: [BlueIDAccessSDK.ObjC_BlueTerminalRequest], completion: (([BlueIDAccessSDK.ObjC_BlueTerminalResult]) -> Swift.Void)?)
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceFirmwareCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueSynchronizeAccessCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool? = false) async throws
+  public func runAsync(credentialID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws
   #endif
   @objc deinit
 }
-#if compiler(>=5.3) && $AsyncAwait
-public func blueShowAccessDeviceModal(_ lockState: BlueIDAccessSDK.BlueLockState? = nil, _ accessTypes: [BlueIDAccessSDK.BlueAccessType] = [], _ task: @escaping (BlueIDAccessSDK.BlueAccessType?) async throws -> BlueIDAccessSDK.BlueOssAccessResult) async throws -> BlueIDAccessSDK.BlueOssAccessResult
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-public func blueShowSynchronizeAccessDeviceModal(_ runner: any BlueIDAccessSDK.BlueTaskRunner) async throws
-#endif
-#if compiler(>=5.3) && $AsyncAwait
-public func blueShowUpdateAccessDeviceFirmwareModal(_ runner: any BlueIDAccessSDK.BlueTaskRunner) async throws
-#endif
-public struct BlueNearByActivate {
-  public func run() throws
-}
-public struct BlueNearByDeactivate {
-  public func run() throws
-}
-public struct BlueOssSidCreateMobileCommand {
-  public func run(_ provisioningData: BlueIDAccessSDK.BlueOssSidProvisioningData) throws -> BlueIDAccessSDK.BlueOssSidMobile
-}
-public struct BlueOssSidFormatCommand {
-  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?, _ factoryReset: Swift.Bool = false) throws
-}
-public struct BlueOssSidGetStorageProfileCommand {
-  public func run(_ transponderType: BlueIDAccessSDK.BlueTransponderType, _ provisioningConfig: BlueIDAccessSDK.BlueOssSidProvisioningConfiguration?) throws -> BlueIDAccessSDK.BlueOssSidStorageProfile
-}
-public struct BlueOssSidCreateProvisioningDataCommand {
-  public func run(_ credentialId: Swift.String, _ configuration: BlueIDAccessSDK.BlueOssSidProvisioningConfiguration? = nil) throws -> BlueIDAccessSDK.BlueOssSidProvisioningData
-}
-public struct BlueOssSidIsProvisionedCommand {
-  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?) throws -> Swift.Bool
-}
-public struct BlueOssSidProvisionCommand {
-  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?, _ provisioningData: BlueIDAccessSDK.BlueOssSidProvisioningData) throws
-}
-public struct BlueOssSidUnprovisionCommand {
-  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?) throws
-}
-public struct BlueOssSidReadConfigurationCommand {
-  public func run(_ settings: BlueIDAccessSDK.BlueOssSidSettings?) throws -> BlueIDAccessSDK.BlueOssSidConfiguration
-}
-@_hasMissingDesignatedInitializers public class BlueAsyncTerminalCommand {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueSynchronizeAccessCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(deviceID: Swift.String) async throws
+  public func runAsync() async throws -> BlueIDAccessSDK.BlueSynchronizeAccessCredentials
   #endif
   @objc deinit
 }
-@_hasMissingDesignatedInitializers public class BlueClearBlacklistCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
+public struct BlueOpenAppSettingsCommand {
+  public func run(completionHandler: @escaping (Swift.Bool) -> Swift.Void)
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc final public class BlueAppDelegate : ObjectiveC.NSObject {
+  public static func didFinishLaunchingWithOptions(launchOptions: [UIKit.UIApplication.LaunchOptionsKey : Any]?)
+  @objc public static func didFinishLaunchingWithOptions(_ launchOptions: Foundation.NSDictionary)
+  @objc public static func willResignActive()
+  @objc public static func didBecomeActive()
+  @objc public static func didEnterBackground()
+  @objc public static func willTerminate()
   @objc deinit
 }
-@_hasMissingDesignatedInitializers public class BlueClearEventLogCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
+extension BlueIDAccessSDK.BlueLocalTimestamp : Swift.Encodable, Swift.Decodable {
+  public static func fromUTCDate(_ date: Foundation.Date) -> BlueIDAccessSDK.BlueLocalTimestamp
+  public init(_ year: Swift.Int, _ month: Swift.Int, _ date: Swift.Int = 1, _ hours: Swift.Int = 0, _ minutes: Swift.Int = 0, _ seconds: Swift.Int = 0)
+  public init(from decoder: any Swift.Decoder) throws
+  public func toUTCDate() -> Foundation.Date?
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+extension BlueIDAccessSDK.BlueAccessObject : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension BlueIDAccessSDK.BlueAccessCredential : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+  public func checkValidityStart(_ now: Foundation.Date? = nil) -> Swift.Bool
+}
+extension BlueIDAccessSDK.BlueAccessCredentialList {
+  public init(credentials: [BlueIDAccessSDK.BlueAccessCredential])
+}
+extension BlueIDAccessSDK.BlueAccessObjectList {
+  public init(objects: [BlueIDAccessSDK.BlueAccessObject])
+}
+extension BlueIDAccessSDK.BlueAccessDeviceList {
+  public init(devices: [BlueIDAccessSDK.BlueAccessDevice])
+}
+extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials {
+  public init(credentials: [BlueIDAccessSDK.BlueSynchronizeAccessCredential])
+}
+extension BlueIDAccessSDK.BlueAccessType : Swift.Identifiable {
+  public var id: BlueIDAccessSDK.BlueAccessType {
+    get
+  }
+  public typealias ID = BlueIDAccessSDK.BlueAccessType
+}
+final public class BlueError : Swift.Error, Foundation.LocalizedError, Swift.Equatable {
+  public static var timeoutMessage: Swift.String
+  public static var returnCodeMessage: Swift.String
+  public static var unknownErrorMessage: Swift.String
+  final public let returnCode: BlueIDAccessSDK.BlueReturnCode
+  final public var errorDescription: Swift.String? {
+    get
+  }
+  final public var failureReason: Swift.String? {
+    get
+  }
+  final public var recoverySuggestion: Swift.String? {
+    get
+  }
+  final public var helpAnchor: Swift.String? {
+    get
+  }
+  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode)
+  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode, cause: (any Swift.Error)? = nil, detail: Swift.String? = nil)
+  public static func == (lhs: BlueIDAccessSDK.BlueError, rhs: BlueIDAccessSDK.BlueError) -> Swift.Bool
   @objc deinit
 }
-@_hasMissingDesignatedInitializers public class BlueClearSystemLogCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
+final public class BlueTerminalError : Swift.Error, Foundation.LocalizedError, Swift.Equatable {
+  final public var errorDescription: Swift.String? {
+    get
+  }
+  final public var failureReason: Swift.String? {
+    get
+  }
+  final public var recoverySuggestion: Swift.String? {
+    get
+  }
+  final public var helpAnchor: Swift.String? {
+    get
+  }
+  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode)
+  public static func == (lhs: BlueIDAccessSDK.BlueTerminalError, rhs: BlueIDAccessSDK.BlueTerminalError) -> Swift.Bool
   @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetSystemStatusCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatusExt
-  #endif
-  @objc deinit
-}
-public struct BlueIsNfcActive {
-  public func run() -> Swift.String
 }
 public enum BlueLockState : SwiftProtobuf.Enum {
   public typealias RawValue = Swift.Int
@@ -5745,6 +5736,21 @@ extension BlueIDAccessSDK.BlueLockStatus : SwiftProtobuf.Message, SwiftProtobuf.
   public var hashValue: Swift.Int {
     get
   }
+}
+#if compiler(>=5.3) && $AsyncAwait
+public func blueShowAccessDeviceModal(_ lockState: BlueIDAccessSDK.BlueLockState? = nil, _ accessTypes: [BlueIDAccessSDK.BlueAccessType] = [], _ task: @escaping (BlueIDAccessSDK.BlueAccessType?) async throws -> BlueIDAccessSDK.BlueOssAccessResult) async throws -> BlueIDAccessSDK.BlueOssAccessResult
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+public func blueShowSynchronizeAccessDeviceModal(_ runner: any BlueIDAccessSDK.BlueTaskRunner) async throws
+#endif
+#if compiler(>=5.3) && $AsyncAwait
+public func blueShowUpdateAccessDeviceFirmwareModal(_ runner: any BlueIDAccessSDK.BlueTaskRunner) async throws
+#endif
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceFirmwareCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(credentialID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool? = false) async throws
+  #endif
+  @objc deinit
 }
 extension BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand.BlueSynchronizeAccessTaskId : Swift.Equatable {}
 extension BlueIDAccessSDK.BlueSynchronizeAccessDeviceCommand.BlueSynchronizeAccessTaskId : Swift.Hashable {}
