@@ -24,8 +24,9 @@ public struct BlueCommands {
   public let release: BlueIDAccessSDK.BlueReleaseCommand
   public let test: BlueIDAccessSDK.BlueTestCommand
   public let versionInfo: BlueIDAccessSDK.BlueVersionInfoCommand
-  public let bluetoothActivate: BlueIDAccessSDK.BlueBluetoothActivate
-  public let bluetoothDeactivate: BlueIDAccessSDK.BlueBluetoothDeactivate
+  public let startScanning: BlueIDAccessSDK.BlueStartScanningCommand
+  public let stopScanning: BlueIDAccessSDK.BlueStopScanningCommand
+  public let isScanningActive: BlueIDAccessSDK.BlueIsScanningActiveCommand
   public let isBluetoothActive: BlueIDAccessSDK.BlueIsBluetoothActiveCommand
   public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
@@ -4565,13 +4566,16 @@ final public class BlueTerminalError : Swift.Error, Foundation.LocalizedError, S
   public static func == (lhs: BlueIDAccessSDK.BlueTerminalError, rhs: BlueIDAccessSDK.BlueTerminalError) -> Swift.Bool
   @objc deinit
 }
-public struct BlueBluetoothActivate {
+public struct BlueIsBluetoothActiveCommand {
+  public func run() -> Swift.Bool
+}
+public struct BlueStartScanningCommand {
   public func run(maxDeviceAgeSeconds: Swift.Double? = nil) throws
 }
-public struct BlueBluetoothDeactivate {
+public struct BlueStopScanningCommand {
   public func run() throws
 }
-public struct BlueIsBluetoothActiveCommand {
+public struct BlueIsScanningActiveCommand {
   public func run() -> Swift.Bool
 }
 public struct BlueCheckBluetoothPermissionCommand {
