@@ -4500,6 +4500,7 @@ public struct BlueCommands {
   public let isBluetoothActive: BlueIDAccessSDK.BlueIsBluetoothActiveCommand
   public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
+  public let transponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
   public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
   public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
   public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand
@@ -4649,6 +4650,10 @@ public struct BlueReadOssSoCredentialCommand {
   #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(organisation: Swift.String, siteID: Swift.Int) async throws -> BlueIDAccessSDK.BlueOssSoConfiguration
   #endif
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BlueGetTransponderIdCommand {
+  public func run() throws -> Swift.String?
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueRefreshOssSoCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
