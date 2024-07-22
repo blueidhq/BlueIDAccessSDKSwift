@@ -82,7 +82,7 @@ extension BlueIDAccessSDK.BlueAccessType : Swift.Identifiable {
   }
   public typealias ID = BlueIDAccessSDK.BlueAccessType
 }
-public enum BlueReturnCode : SwiftProtobuf.Enum {
+public enum BlueReturnCode : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case ok
   case pending
@@ -190,14 +190,12 @@ public enum BlueReturnCode : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueReturnCode : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueReturnCode]
   public static var allCases: [BlueIDAccessSDK.BlueReturnCode] {
     get
   }
 }
-public enum BlueTimeUnit : SwiftProtobuf.Enum {
+public enum BlueTimeUnit : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case seconds
   case minutes
@@ -210,14 +208,12 @@ public enum BlueTimeUnit : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueTimeUnit : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueTimeUnit]
   public static var allCases: [BlueIDAccessSDK.BlueTimeUnit] {
     get
   }
 }
-public enum BlueWeekday : SwiftProtobuf.Enum {
+public enum BlueWeekday : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case monday
   case tuesday
@@ -231,14 +227,12 @@ public enum BlueWeekday : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueWeekday : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueWeekday]
   public static var allCases: [BlueIDAccessSDK.BlueWeekday] {
     get
   }
 }
-public enum BlueCredentialType : SwiftProtobuf.Enum {
+public enum BlueCredentialType : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case regular
   case maintenance
@@ -250,14 +244,12 @@ public enum BlueCredentialType : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueCredentialType : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueCredentialType]
   public static var allCases: [BlueIDAccessSDK.BlueCredentialType] {
     get
   }
 }
-public enum BlueAccessType : SwiftProtobuf.Enum {
+public enum BlueAccessType : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case defaultTime
   case extendedTime
@@ -272,14 +264,12 @@ public enum BlueAccessType : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueAccessType : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueAccessType]
   public static var allCases: [BlueIDAccessSDK.BlueAccessType] {
     get
   }
 }
-public enum BlueTransponderType : SwiftProtobuf.Enum {
+public enum BlueTransponderType : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case unknownTransponder
   case mobileTransponder
@@ -289,14 +279,12 @@ public enum BlueTransponderType : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueTransponderType : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueTransponderType]
   public static var allCases: [BlueIDAccessSDK.BlueTransponderType] {
     get
   }
 }
-public enum BlueHardwareType : SwiftProtobuf.Enum {
+public enum BlueHardwareType : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case unknownHardware
   case testHardware
@@ -310,14 +298,12 @@ public enum BlueHardwareType : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueHardwareType : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueHardwareType]
   public static var allCases: [BlueIDAccessSDK.BlueHardwareType] {
     get
   }
 }
-public enum BlueBatteryLevel : SwiftProtobuf.Enum {
+public enum BlueBatteryLevel : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case unknownBattery
   case onPower
@@ -332,14 +318,12 @@ public enum BlueBatteryLevel : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueBatteryLevel : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueBatteryLevel]
   public static var allCases: [BlueIDAccessSDK.BlueBatteryLevel] {
     get
   }
 }
-public enum BlueEventId : SwiftProtobuf.Enum {
+public enum BlueEventId : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case batteryLow
   case batteryReplaced
@@ -361,14 +345,12 @@ public enum BlueEventId : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueEventId : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueEventId]
   public static var allCases: [BlueIDAccessSDK.BlueEventId] {
     get
   }
 }
-public enum BlueEventInfoSystem : SwiftProtobuf.Enum {
+public enum BlueEventInfoSystem : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case systemRestart
   case systemConfigured
@@ -377,14 +359,12 @@ public enum BlueEventInfoSystem : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueEventInfoSystem : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoSystem]
   public static var allCases: [BlueIDAccessSDK.BlueEventInfoSystem] {
     get
   }
 }
-public enum BlueEventInfoAccess : SwiftProtobuf.Enum {
+public enum BlueEventInfoAccess : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case granted
   case grantedDefaultTime
@@ -400,14 +380,12 @@ public enum BlueEventInfoAccess : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueEventInfoAccess : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoAccess]
   public static var allCases: [BlueIDAccessSDK.BlueEventInfoAccess] {
     get
   }
 }
-public enum BlueOssCredentialTypeSource : SwiftProtobuf.Enum {
+public enum BlueOssCredentialTypeSource : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case oss
   case proprietary
@@ -416,14 +394,12 @@ public enum BlueOssCredentialTypeSource : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueOssCredentialTypeSource : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueOssCredentialTypeSource]
   public static var allCases: [BlueIDAccessSDK.BlueOssCredentialTypeSource] {
     get
   }
 }
-public enum BlueOssSoCredentialTypeOssCredential : SwiftProtobuf.Enum {
+public enum BlueOssSoCredentialTypeOssCredential : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case standard
   case interventionMedia
@@ -432,14 +408,12 @@ public enum BlueOssSoCredentialTypeOssCredential : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential]
   public static var allCases: [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential] {
     get
   }
 }
-public enum BlueOssSoDoorGroupId : SwiftProtobuf.Enum {
+public enum BlueOssSoDoorGroupId : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case masterGroupID
   public init()
@@ -447,14 +421,12 @@ public enum BlueOssSoDoorGroupId : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueOssSoDoorGroupId : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoDoorGroupId]
   public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorGroupId] {
     get
   }
 }
-public enum BlueOssSoDoorInfoAccessBy : SwiftProtobuf.Enum {
+public enum BlueOssSoDoorInfoAccessBy : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case doorGroupID
   case doorID
@@ -463,14 +435,12 @@ public enum BlueOssSoDoorInfoAccessBy : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy]
   public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy] {
     get
   }
 }
-public enum BlueOssSoFileId : SwiftProtobuf.Enum {
+public enum BlueOssSoFileId : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case info
   case data
@@ -482,14 +452,12 @@ public enum BlueOssSoFileId : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueOssSoFileId : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoFileId]
   public static var allCases: [BlueIDAccessSDK.BlueOssSoFileId] {
     get
   }
 }
-public struct BlueSharedDemoData {
+public struct BlueSharedDemoData : @unchecked Swift.Sendable {
   public var deviceID: Swift.String {
     get
     set
@@ -533,7 +501,7 @@ public struct BlueSharedDemoData {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueVersionInfo {
+public struct BlueVersionInfo : Swift.Sendable {
   public var buildTime: Swift.UInt32 {
     get
     set
@@ -561,7 +529,7 @@ public struct BlueVersionInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueLocalTimestamp {
+public struct BlueLocalTimestamp : Swift.Sendable {
   public var year: Swift.UInt32 {
     get
     set
@@ -613,7 +581,7 @@ public struct BlueLocalTimestamp {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueLocalTimeperiod {
+public struct BlueLocalTimeperiod : Swift.Sendable {
   public var hoursFrom: Swift.UInt32 {
     get
     set
@@ -649,7 +617,7 @@ public struct BlueLocalTimeperiod {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueLocalTimeSchedule {
+public struct BlueLocalTimeSchedule : Swift.Sendable {
   public var dayOfYearStart: Swift.UInt32 {
     get
     set
@@ -678,7 +646,7 @@ public struct BlueLocalTimeSchedule {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueCredentialId {
+public struct BlueCredentialId : Swift.Sendable {
   public var id: Swift.String {
     get
     set
@@ -690,7 +658,7 @@ public struct BlueCredentialId {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueBlacklistEntry {
+public struct BlueBlacklistEntry : Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
     set
@@ -710,7 +678,7 @@ public struct BlueBlacklistEntry {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueBleManufacturerInfo {
+public struct BlueBleManufacturerInfo : Swift.Sendable {
   public var hardwareType: BlueIDAccessSDK.BlueHardwareType {
     get
     set
@@ -762,7 +730,7 @@ public struct BlueBleManufacturerInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueBleAdvertisementInfo {
+public struct BlueBleAdvertisementInfo : Swift.Sendable {
   public var deviceID: Swift.String {
     get
     set
@@ -798,7 +766,7 @@ public struct BlueBleAdvertisementInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueEvent {
+public struct BlueEvent : Swift.Sendable {
   public var sequenceID: Swift.UInt32 {
     get
     set
@@ -850,7 +818,7 @@ public struct BlueEvent {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPHandshake {
+public struct BlueSPHandshake : @unchecked Swift.Sendable {
   public var transponderSalt: Foundation.Data {
     get
     set
@@ -862,7 +830,7 @@ public struct BlueSPHandshake {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPHandshakeReply {
+public struct BlueSPHandshakeReply : @unchecked Swift.Sendable {
   public var terminalSalt: Foundation.Data {
     get
     set
@@ -882,7 +850,7 @@ public struct BlueSPHandshakeReply {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPTokenCommand {
+public struct BlueSPTokenCommand : @unchecked Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
     set
@@ -926,7 +894,7 @@ public struct BlueSPTokenCommand {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPToken {
+public struct BlueSPToken : @unchecked Swift.Sendable {
   public var signature: Foundation.Data {
     get
     set
@@ -949,7 +917,7 @@ public struct BlueSPToken {
     set
   }
   public var unknownFields: SwiftProtobuf.UnknownStorage
-  public enum OneOf_Payload : Swift.Equatable {
+  public enum OneOf_Payload : Swift.Equatable, Swift.Sendable {
     case command(BlueIDAccessSDK.BlueSPTokenCommand)
     case ossSo(BlueIDAccessSDK.BlueOssSoMobile)
     case ossSid(BlueIDAccessSDK.BlueOssSidMobile)
@@ -957,7 +925,7 @@ public struct BlueSPToken {
   }
   public init()
 }
-public struct BlueSPResult {
+public struct BlueSPResult : @unchecked Swift.Sendable {
   public var data: Foundation.Data {
     get
     set
@@ -969,7 +937,7 @@ public struct BlueSPResult {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssAccessResult {
+public struct BlueOssAccessResult : Swift.Sendable {
   public var accessGranted: Swift.Bool {
     get
     set
@@ -1021,7 +989,7 @@ public struct BlueOssAccessResult {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssAccessEventsResult {
+public struct BlueOssAccessEventsResult : Swift.Sendable {
   public var accessResult: BlueIDAccessSDK.BlueOssAccessResult {
     get
     set
@@ -1034,7 +1002,7 @@ public struct BlueOssAccessEventsResult {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidVersion {
+public struct BlueOssSidVersion : Swift.Sendable {
   public var versionMajor: Swift.UInt32 {
     get
     set
@@ -1054,7 +1022,7 @@ public struct BlueOssSidVersion {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidCredentialTypeOss {
+public struct BlueOssSidCredentialTypeOss : Swift.Sendable {
   public var notUsed: Swift.Bool {
     get
     set
@@ -1066,7 +1034,7 @@ public struct BlueOssSidCredentialTypeOss {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidCredentialTypeProprietary {
+public struct BlueOssSidCredentialTypeProprietary : @unchecked Swift.Sendable {
   public var mfgCode: Foundation.Data {
     get
     set
@@ -1078,7 +1046,7 @@ public struct BlueOssSidCredentialTypeProprietary {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidCredentialType {
+public struct BlueOssSidCredentialType : Swift.Sendable {
   public var typeSource: BlueIDAccessSDK.BlueOssCredentialTypeSource {
     get
     set
@@ -1106,7 +1074,7 @@ public struct BlueOssSidCredentialType {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidFileInfo {
+public struct BlueOssSidFileInfo : Swift.Sendable {
   public var versionMajor: Swift.UInt32 {
     get
     set
@@ -1142,7 +1110,7 @@ public struct BlueOssSidFileInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidConfiguration {
+public struct BlueOssSidConfiguration : Swift.Sendable {
   public var info: BlueIDAccessSDK.BlueOssSidFileInfo {
     get
     set
@@ -1154,7 +1122,7 @@ public struct BlueOssSidConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidStorageProfile {
+public struct BlueOssSidStorageProfile : Swift.Sendable {
   public var dataLength: Swift.UInt32 {
     get
     set
@@ -1190,7 +1158,7 @@ public struct BlueOssSidStorageProfile {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidProvisioningConfiguration {
+public struct BlueOssSidProvisioningConfiguration : Swift.Sendable {
   public var notUsed: Swift.Bool {
     get
     set
@@ -1202,7 +1170,7 @@ public struct BlueOssSidProvisioningConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidProvisioningData {
+public struct BlueOssSidProvisioningData : Swift.Sendable {
   public var configuration: BlueIDAccessSDK.BlueOssSidProvisioningConfiguration {
     get
     set
@@ -1230,7 +1198,7 @@ public struct BlueOssSidProvisioningData {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidMobile {
+public struct BlueOssSidMobile : @unchecked Swift.Sendable {
   public var infoFile: Foundation.Data {
     get
     set
@@ -1242,7 +1210,7 @@ public struct BlueOssSidMobile {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidMobileProvisioningConfiguration {
+public struct BlueOssSidMobileProvisioningConfiguration : Swift.Sendable {
   public var notUsed: Swift.Bool {
     get
     set
@@ -1254,7 +1222,7 @@ public struct BlueOssSidMobileProvisioningConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidMifareDesfireProvisioningConfiguration {
+public struct BlueOssSidMifareDesfireProvisioningConfiguration : Swift.Sendable {
   public var notUsed: Swift.Bool {
     get
     set
@@ -1266,7 +1234,7 @@ public struct BlueOssSidMifareDesfireProvisioningConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidMifareDesfireConfiguration {
+public struct BlueOssSidMifareDesfireConfiguration : @unchecked Swift.Sendable {
   public var piccMasterKey: Foundation.Data {
     get
     set
@@ -1302,7 +1270,7 @@ public struct BlueOssSidMifareDesfireConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidSettings {
+public struct BlueOssSidSettings : Swift.Sendable {
   public var mifareDesfireConfig: BlueIDAccessSDK.BlueOssSidMifareDesfireConfiguration {
     get
     set
@@ -1314,7 +1282,7 @@ public struct BlueOssSidSettings {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoVersion {
+public struct BlueOssSoVersion : Swift.Sendable {
   public var versionMajor: Swift.UInt32 {
     get
     set
@@ -1334,7 +1302,7 @@ public struct BlueOssSoVersion {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoCredentialTypeOss {
+public struct BlueOssSoCredentialTypeOss : Swift.Sendable {
   public var credential: BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential {
     get
     set
@@ -1346,7 +1314,7 @@ public struct BlueOssSoCredentialTypeOss {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoCredentialTypeProprietary {
+public struct BlueOssSoCredentialTypeProprietary : @unchecked Swift.Sendable {
   public var mfgCode: Foundation.Data {
     get
     set
@@ -1358,7 +1326,7 @@ public struct BlueOssSoCredentialTypeProprietary {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoCredentialType {
+public struct BlueOssSoCredentialType : Swift.Sendable {
   public var typeSource: BlueIDAccessSDK.BlueOssCredentialTypeSource {
     get
     set
@@ -1386,18 +1354,18 @@ public struct BlueOssSoCredentialType {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoDTScheduleDay {
+public struct BlueOssSoDTScheduleDay : Swift.Sendable {
   public var weekdays: [Swift.Bool]
   public var timePeriods: [BlueIDAccessSDK.BlueLocalTimeperiod]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoDTSchedule {
+public struct BlueOssSoDTSchedule : Swift.Sendable {
   public var days: [BlueIDAccessSDK.BlueOssSoDTScheduleDay]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoDoorInfo {
+public struct BlueOssSoDoorInfo : Swift.Sendable {
   public var id: Swift.UInt32 {
     get
     set
@@ -1433,7 +1401,7 @@ public struct BlueOssSoDoorInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoEvent {
+public struct BlueOssSoEvent : Swift.Sendable {
   public var eventTime: BlueIDAccessSDK.BlueLocalTimestamp {
     get
     set
@@ -1469,7 +1437,7 @@ public struct BlueOssSoEvent {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoExtFeature {
+public struct BlueOssSoExtFeature : @unchecked Swift.Sendable {
   public var tag: Swift.UInt32 {
     get
     set
@@ -1489,7 +1457,7 @@ public struct BlueOssSoExtFeature {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoExtFeature_ValidityStart {
+public struct BlueOssSoExtFeature_ValidityStart : Swift.Sendable {
   public var isValid: Swift.Bool {
     get
     set
@@ -1509,7 +1477,7 @@ public struct BlueOssSoExtFeature_ValidityStart {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoFileInfo {
+public struct BlueOssSoFileInfo : Swift.Sendable {
   public var versionMajor: Swift.UInt32 {
     get
     set
@@ -1561,7 +1529,7 @@ public struct BlueOssSoFileInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoFileData {
+public struct BlueOssSoFileData : Swift.Sendable {
   public var validity: BlueIDAccessSDK.BlueLocalTimestamp {
     get
     set
@@ -1607,7 +1575,7 @@ public struct BlueOssSoFileData {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoFileEvent {
+public struct BlueOssSoFileEvent : @unchecked Swift.Sendable {
   public var supportedEventIds: Foundation.Data {
     get
     set
@@ -1620,12 +1588,12 @@ public struct BlueOssSoFileEvent {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoFileBlacklist {
+public struct BlueOssSoFileBlacklist : Swift.Sendable {
   public var entries: [BlueIDAccessSDK.BlueBlacklistEntry]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoFileCustomerExtensions {
+public struct BlueOssSoFileCustomerExtensions : Swift.Sendable {
   public var extFeatures: [BlueIDAccessSDK.BlueOssSoExtFeature]
   public var validityStart: BlueIDAccessSDK.BlueOssSoExtFeature_ValidityStart {
     get
@@ -1638,7 +1606,7 @@ public struct BlueOssSoFileCustomerExtensions {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoConfiguration {
+public struct BlueOssSoConfiguration : @unchecked Swift.Sendable {
   public var info: BlueIDAccessSDK.BlueOssSoFileInfo {
     get
     set
@@ -1682,7 +1650,7 @@ public struct BlueOssSoConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoStorageProfile {
+public struct BlueOssSoStorageProfile : Swift.Sendable {
   public var dataLength: Swift.UInt32 {
     get
     set
@@ -1782,7 +1750,7 @@ public struct BlueOssSoStorageProfile {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoProvisioningConfiguration {
+public struct BlueOssSoProvisioningConfiguration : @unchecked Swift.Sendable {
   public var numberOfDoors: Swift.UInt32 {
     get
     set
@@ -1850,7 +1818,7 @@ public struct BlueOssSoProvisioningConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoProvisioningData {
+public struct BlueOssSoProvisioningData : Swift.Sendable {
   public var configuration: BlueIDAccessSDK.BlueOssSoProvisioningConfiguration {
     get
     set
@@ -1886,7 +1854,7 @@ public struct BlueOssSoProvisioningData {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMobile {
+public struct BlueOssSoMobile : @unchecked Swift.Sendable {
   public var infoFile: Foundation.Data {
     get
     set
@@ -1938,7 +1906,7 @@ public struct BlueOssSoMobile {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMobileProvisioningConfiguration {
+public struct BlueOssSoMobileProvisioningConfiguration : @unchecked Swift.Sendable {
   public var numberOfDoors: Swift.UInt32 {
     get
     set
@@ -2006,7 +1974,7 @@ public struct BlueOssSoMobileProvisioningConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMifareDesfireProvisioningConfiguration {
+public struct BlueOssSoMifareDesfireProvisioningConfiguration : @unchecked Swift.Sendable {
   public var numberOfDoors: Swift.UInt32 {
     get
     set
@@ -2074,7 +2042,7 @@ public struct BlueOssSoMifareDesfireProvisioningConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMifareDesfireConfiguration {
+public struct BlueOssSoMifareDesfireConfiguration : @unchecked Swift.Sendable {
   public var piccMasterKey: Foundation.Data {
     get
     set
@@ -2110,7 +2078,7 @@ public struct BlueOssSoMifareDesfireConfiguration {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoSettings {
+public struct BlueOssSoSettings : Swift.Sendable {
   public var mifareDesfireConfig: BlueIDAccessSDK.BlueOssSoMifareDesfireConfiguration {
     get
     set
@@ -2122,7 +2090,7 @@ public struct BlueOssSoSettings {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct _BlueTestEncodeDecode {
+public struct _BlueTestEncodeDecode : Swift.Sendable {
   public var vendor: Swift.String {
     get
     set
@@ -2157,152 +2125,6 @@ public struct _BlueTestEncodeDecode {
   public mutating func clearApplicationVersion()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
-}
-extension BlueIDAccessSDK.BlueReturnCode : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueTimeUnit : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueWeekday : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueCredentialType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueTransponderType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueHardwareType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueBatteryLevel : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEventId : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEventInfoSystem : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEventInfoAccess : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssCredentialTypeSource : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoDoorGroupId : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoFileId : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSharedDemoData : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueVersionInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueLocalTimestamp : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueLocalTimeperiod : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueLocalTimeSchedule : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueCredentialId : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueBlacklistEntry : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueBleManufacturerInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueBleAdvertisementInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEvent : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSPHandshake : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSPHandshakeReply : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSPTokenCommand : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSPToken : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSPToken.OneOf_Payload : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSPResult : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssAccessResult : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssAccessEventsResult : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidVersion : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidCredentialTypeOss : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidCredentialTypeProprietary : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidCredentialType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidFileInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidStorageProfile : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidProvisioningConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidProvisioningData : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidMobile : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidMobileProvisioningConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidMifareDesfireProvisioningConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidMifareDesfireConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSidSettings : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoVersion : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoCredentialTypeOss : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoCredentialTypeProprietary : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoCredentialType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoDTScheduleDay : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoDTSchedule : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoDoorInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoEvent : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoExtFeature : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoExtFeature_ValidityStart : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoFileInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoFileData : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoFileEvent : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoFileBlacklist : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoFileCustomerExtensions : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoStorageProfile : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoProvisioningConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoProvisioningData : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoMobile : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoMobileProvisioningConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoMifareDesfireProvisioningConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoMifareDesfireConfiguration : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssSoSettings : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK._BlueTestEncodeDecode : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueReturnCode : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
@@ -3188,7 +3010,7 @@ final public class BlueTerminalError : Swift.Error, Foundation.LocalizedError, S
 public struct BlueCheckAccessTypeCommand {
   public func run(deviceID: Swift.String) -> Swift.Int?
 }
-public enum BlueDeviceType : SwiftProtobuf.Enum {
+public enum BlueDeviceType : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case bluetoothDevice
   case uwbdevice
@@ -3197,14 +3019,12 @@ public enum BlueDeviceType : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueDeviceType : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueDeviceType]
   public static var allCases: [BlueIDAccessSDK.BlueDeviceType] {
     get
   }
 }
-public enum BlueRefreshOssSoCredentialStatus : SwiftProtobuf.Enum {
+public enum BlueRefreshOssSoCredentialStatus : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case succeeded
   case failed
@@ -3215,14 +3035,12 @@ public enum BlueRefreshOssSoCredentialStatus : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus]
   public static var allCases: [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus] {
     get
   }
 }
-public struct BlueI18n {
+public struct BlueI18n : @unchecked Swift.Sendable {
   public var nfcWaitMessage: Swift.String {
     get
     set
@@ -3714,7 +3532,7 @@ public struct BlueI18n {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueDeviceDetailsBluetooth {
+public struct BlueDeviceDetailsBluetooth : Swift.Sendable {
   public var rssi: Swift.Int32 {
     get
     set
@@ -3742,7 +3560,7 @@ public struct BlueDeviceDetailsBluetooth {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueDeviceDetailsUWB {
+public struct BlueDeviceDetailsUWB : Swift.Sendable {
   public var notUsed: Swift.Bool {
     get
     set
@@ -3754,7 +3572,7 @@ public struct BlueDeviceDetailsUWB {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueDeviceInfo {
+public struct BlueDeviceInfo : Swift.Sendable {
   public var deviceType: BlueIDAccessSDK.BlueDeviceType {
     get
     set
@@ -3797,14 +3615,14 @@ public struct BlueDeviceInfo {
     set
   }
   public var unknownFields: SwiftProtobuf.UnknownStorage
-  public enum OneOf_Details : Swift.Equatable {
+  public enum OneOf_Details : Swift.Equatable, Swift.Sendable {
     case bluetooth(BlueIDAccessSDK.BlueDeviceDetailsBluetooth)
     case uwb(BlueIDAccessSDK.BlueDeviceDetailsUWB)
     public static func == (a: BlueIDAccessSDK.BlueDeviceInfo.OneOf_Details, b: BlueIDAccessSDK.BlueDeviceInfo.OneOf_Details) -> Swift.Bool
   }
   public init()
 }
-public struct BlueAccessCredential {
+public struct BlueAccessCredential : @unchecked Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
     set
@@ -3912,12 +3730,12 @@ public struct BlueAccessCredential {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessCredentialList {
+public struct BlueAccessCredentialList : Swift.Sendable {
   public var credentials: [BlueIDAccessSDK.BlueAccessCredential]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessDevice {
+public struct BlueAccessDevice : Swift.Sendable {
   public var deviceID: Swift.String {
     get
     set
@@ -3945,12 +3763,12 @@ public struct BlueAccessDevice {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessDeviceList {
+public struct BlueAccessDeviceList : Swift.Sendable {
   public var devices: [BlueIDAccessSDK.BlueAccessDevice]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessObject {
+public struct BlueAccessObject : Swift.Sendable {
   public var id: Swift.String {
     get
     set
@@ -3987,12 +3805,12 @@ public struct BlueAccessObject {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessObjectList {
+public struct BlueAccessObjectList : Swift.Sendable {
   public var objects: [BlueIDAccessSDK.BlueAccessObject]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueRefreshOssSoCredential {
+public struct BlueRefreshOssSoCredential : Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
     set
@@ -4020,12 +3838,12 @@ public struct BlueRefreshOssSoCredential {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueRefreshOssSoCredentials {
+public struct BlueRefreshOssSoCredentials : Swift.Sendable {
   public var credentials: [BlueIDAccessSDK.BlueRefreshOssSoCredential]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSynchronizeAccessCredential {
+public struct BlueSynchronizeAccessCredential : Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
     set
@@ -4053,12 +3871,12 @@ public struct BlueSynchronizeAccessCredential {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSynchronizeAccessCredentials {
+public struct BlueSynchronizeAccessCredentials : Swift.Sendable {
   public var credentials: [BlueIDAccessSDK.BlueSynchronizeAccessCredential]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueHardwareInfo {
+public struct BlueHardwareInfo : Swift.Sendable {
   public var name: Swift.String {
     get
     set
@@ -4102,7 +3920,7 @@ public struct BlueHardwareInfo {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemStatusExt {
+public struct BlueSystemStatusExt : Swift.Sendable {
   public var status: BlueIDAccessSDK.BlueSystemStatus {
     get
     set
@@ -4145,44 +3963,6 @@ public struct BlueSystemStatusExt {
   public mutating func clearHardwareInfo()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
-}
-extension BlueIDAccessSDK.BlueDeviceType : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueI18n : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueDeviceDetailsBluetooth : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueDeviceDetailsUWB : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueDeviceInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueDeviceInfo.OneOf_Details : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessCredential : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessCredentialList : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessDevice : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessDeviceList : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessObject : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessObjectList : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueRefreshOssSoCredential : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueRefreshOssSoCredentials : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSynchronizeAccessCredential : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueHardwareInfo : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemStatusExt : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueDeviceType : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
@@ -4742,7 +4522,7 @@ public struct BlueIsScanningActiveCommand {
 public struct BlueCheckBluetoothPermissionCommand {
   public func run() -> Swift.String
 }
-public enum BlueLockState : SwiftProtobuf.Enum {
+public enum BlueLockState : SwiftProtobuf.Enum, Swift.CaseIterable {
   public typealias RawValue = Swift.Int
   case unknownLockState
   case locked
@@ -4753,14 +4533,12 @@ public enum BlueLockState : SwiftProtobuf.Enum {
   public var rawValue: Swift.Int {
     get
   }
-}
-extension BlueIDAccessSDK.BlueLockState : Swift.CaseIterable {
   public typealias AllCases = [BlueIDAccessSDK.BlueLockState]
   public static var allCases: [BlueIDAccessSDK.BlueLockState] {
     get
   }
 }
-public struct BlueLockConfig {
+public struct BlueLockConfig : Swift.Sendable {
   public var openSchedules: [BlueIDAccessSDK.BlueLocalTimeSchedule]
   public var openScheduleByUser: Swift.Bool {
     get
@@ -4797,7 +4575,7 @@ public struct BlueLockConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueLockStatus {
+public struct BlueLockStatus : Swift.Sendable {
   public var state: BlueIDAccessSDK.BlueLockState {
     get
     set
@@ -4816,12 +4594,6 @@ public struct BlueLockStatus {
   public mutating func clearOpenings()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
-}
-extension BlueIDAccessSDK.BlueLockState : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueLockConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueLockStatus : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueLockState : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
@@ -4852,7 +4624,7 @@ extension BlueIDAccessSDK.BlueLockStatus : SwiftProtobuf.Message, SwiftProtobuf.
     get
   }
 }
-public struct BlueBaseConfig {
+public struct BlueBaseConfig : Swift.Sendable {
   public var isoCountry: Swift.String {
     get
     set
@@ -4888,7 +4660,7 @@ public struct BlueBaseConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueBleConfig {
+public struct BlueBleConfig : Swift.Sendable {
   public var isAdvertising: Swift.Bool {
     get
     set
@@ -4942,7 +4714,7 @@ public struct BlueBleConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOnlineConfig {
+public struct BlueOnlineConfig : Swift.Sendable {
   public var connectSchedules: [BlueIDAccessSDK.BlueLocalTimeSchedule]
   public var wifiSsid: Swift.String {
     get
@@ -4971,7 +4743,7 @@ public struct BlueOnlineConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessConfigGroup {
+public struct BlueAccessConfigGroup : Swift.Sendable {
   public var groupID: Swift.UInt32 {
     get
     set
@@ -4984,7 +4756,7 @@ public struct BlueAccessConfigGroup {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueAccessConfig {
+public struct BlueAccessConfig : Swift.Sendable {
   public var id: Swift.UInt32 {
     get
     set
@@ -5005,7 +4777,7 @@ public struct BlueAccessConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssConfig {
+public struct BlueOssConfig : @unchecked Swift.Sendable {
   public var sidMifareAesKey: Foundation.Data {
     get
     set
@@ -5073,7 +4845,7 @@ public struct BlueOssConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemConfig {
+public struct BlueSystemConfig : @unchecked Swift.Sendable {
   public var configID: Swift.String {
     get
     set
@@ -5133,7 +4905,7 @@ public struct BlueSystemConfig {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemTimeUnix {
+public struct BlueSystemTimeUnix : Swift.Sendable {
   public var epoch: Swift.UInt32 {
     get
     set
@@ -5145,7 +4917,7 @@ public struct BlueSystemTimeUnix {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemUpdate {
+public struct BlueSystemUpdate : Swift.Sendable {
   public var config: BlueIDAccessSDK.BlueSystemConfig {
     get
     set
@@ -5165,7 +4937,7 @@ public struct BlueSystemUpdate {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemSettings {
+public struct BlueSystemSettings : Swift.Sendable {
   public var blacklistMaxEntriesCount: Swift.UInt32 {
     get
     set
@@ -5265,7 +5037,7 @@ public struct BlueSystemSettings {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemProvisioning {
+public struct BlueSystemProvisioning : @unchecked Swift.Sendable {
   public var hardwareType: BlueIDAccessSDK.BlueHardwareType {
     get
     set
@@ -5309,7 +5081,7 @@ public struct BlueSystemProvisioning {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemStatus {
+public struct BlueSystemStatus : @unchecked Swift.Sendable {
   public var configID: Swift.String {
     get
     set
@@ -5393,7 +5165,7 @@ public struct BlueSystemStatus {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemLogQuery {
+public struct BlueSystemLogQuery : Swift.Sendable {
   public var maxCount: Swift.UInt32 {
     get
     set
@@ -5412,14 +5184,14 @@ public struct BlueSystemLogQuery {
     set
   }
   public var unknownFields: SwiftProtobuf.UnknownStorage
-  public enum OneOf_Start : Swift.Equatable {
+  public enum OneOf_Start : Swift.Equatable, Swift.Sendable {
     case sequenceID(Swift.UInt32)
     case fromHead(Swift.Bool)
     public static func == (a: BlueIDAccessSDK.BlueSystemLogQuery.OneOf_Start, b: BlueIDAccessSDK.BlueSystemLogQuery.OneOf_Start) -> Swift.Bool
   }
   public init()
 }
-public struct BlueSystemLogEntry {
+public struct BlueSystemLogEntry : Swift.Sendable {
   public var sequenceID: Swift.UInt32 {
     get
     set
@@ -5471,12 +5243,12 @@ public struct BlueSystemLogEntry {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemLogResult {
+public struct BlueSystemLogResult : Swift.Sendable {
   public var entries: [BlueIDAccessSDK.BlueSystemLogEntry]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueEventLogQuery {
+public struct BlueEventLogQuery : Swift.Sendable {
   public var maxCount: Swift.UInt32 {
     get
     set
@@ -5495,62 +5267,22 @@ public struct BlueEventLogQuery {
     set
   }
   public var unknownFields: SwiftProtobuf.UnknownStorage
-  public enum OneOf_Start : Swift.Equatable {
+  public enum OneOf_Start : Swift.Equatable, Swift.Sendable {
     case sequenceID(Swift.UInt32)
     case fromHead(Swift.Bool)
     public static func == (a: BlueIDAccessSDK.BlueEventLogQuery.OneOf_Start, b: BlueIDAccessSDK.BlueEventLogQuery.OneOf_Start) -> Swift.Bool
   }
   public init()
 }
-public struct BlueEventLogResult {
+public struct BlueEventLogResult : Swift.Sendable {
   public var events: [BlueIDAccessSDK.BlueEvent]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueBlacklistEntries {
+public struct BlueBlacklistEntries : Swift.Sendable {
   public var entries: [BlueIDAccessSDK.BlueBlacklistEntry]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
-}
-extension BlueIDAccessSDK.BlueBaseConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueBleConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOnlineConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessConfigGroup : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueAccessConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueOssConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemConfig : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemTimeUnix : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemUpdate : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemSettings : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemProvisioning : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemStatus : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemLogQuery : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemLogQuery.OneOf_Start : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemLogEntry : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueSystemLogResult : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEventLogQuery : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEventLogQuery.OneOf_Start : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueEventLogResult : @unchecked Swift.Sendable {
-}
-extension BlueIDAccessSDK.BlueBlacklistEntries : @unchecked Swift.Sendable {
 }
 extension BlueIDAccessSDK.BlueBaseConfig : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: Swift.String
