@@ -10,11 +10,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		XFWhaj//v/UeZhApGvgtYroi9Xc=
+		UPovuVpVPSUpENXCnptO6s37W7U=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		c/2WQfwj0DpN6H94RLn2i8Wyt2o=
+		HEA6hxL2mBBIbX/YnU9tgVkijVQ=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		Y/HepmiL5xY/5Ryzi7nFu6DEOm8=
+		hB2AVJmOEG2b9LFGYBNVIKpmT6Q=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		c/2WQfwj0DpN6H94RLn2i8Wyt2o=
+		HEA6hxL2mBBIbX/YnU9tgVkijVQ=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		0IPlnLap8WO4N6yI7ET51/zRZZo=
+		JOJ0IBO5j4mWXqqJWx7m9/LC6+Y=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iiTUq3r3ztB0hrnHktcTSt+9exqUG+SRnydiAmHKp1U=
+			+PqJfLA5wBWhTIN9IZYZWpknhDO+SlSVte/QVMFFCbo=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -94,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			EefRhYF9yOHUTxKPHZBSlr5CEf9nmzEPyknHAnsHMe0=
+			RtQVcOzuloirdUW+XBXBNKdlrDY4mgj2XpobLLksBGA=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			iiTUq3r3ztB0hrnHktcTSt+9exqUG+SRnydiAmHKp1U=
+			+PqJfLA5wBWhTIN9IZYZWpknhDO+SlSVte/QVMFFCbo=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -129,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			3SIxR9q4ZAElR7WW3qlv4gD5qY0RBi8Sc2D6nL46+do=
+			abYMC1RVgssgbLrBDHTPH1+o4qDuiB7VdYV+gDo0Ri8=
 			</data>
 		</dict>
 	</dict>
