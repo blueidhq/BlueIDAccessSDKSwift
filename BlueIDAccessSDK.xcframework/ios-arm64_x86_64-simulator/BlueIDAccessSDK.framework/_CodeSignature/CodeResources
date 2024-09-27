@@ -10,11 +10,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		UPovuVpVPSUpENXCnptO6s37W7U=
+		cr1j0s0ZEk3CgZE2BOz63BcvcJQ=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		HEA6hxL2mBBIbX/YnU9tgVkijVQ=
+		QAMeSWYZgNOJuJo33O6Fbos+mXo=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		hB2AVJmOEG2b9LFGYBNVIKpmT6Q=
+		ONCm7ahTOXUaXahZCKXQlTJhiYA=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		HEA6hxL2mBBIbX/YnU9tgVkijVQ=
+		QAMeSWYZgNOJuJo33O6Fbos+mXo=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		JOJ0IBO5j4mWXqqJWx7m9/LC6+Y=
+		lbiDedwxT5SQaeYJeSgkAfHgHyk=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+PqJfLA5wBWhTIN9IZYZWpknhDO+SlSVte/QVMFFCbo=
+			JQGr/X7HpwZxN35PIyuCqpmPBV2NXuy9YYwcy+KNN7k=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -94,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RtQVcOzuloirdUW+XBXBNKdlrDY4mgj2XpobLLksBGA=
+			WBMRtKLpxje6clQV/5CNIBZoEavtsOXNadHHf7iu3MY=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+PqJfLA5wBWhTIN9IZYZWpknhDO+SlSVte/QVMFFCbo=
+			JQGr/X7HpwZxN35PIyuCqpmPBV2NXuy9YYwcy+KNN7k=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -129,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			abYMC1RVgssgbLrBDHTPH1+o4qDuiB7VdYV+gDo0Ri8=
+			9PoNK7IPWwbR2563ho64FG3kec41GqiAaRY6QmxF6Ro=
 			</data>
 		</dict>
 	</dict>
