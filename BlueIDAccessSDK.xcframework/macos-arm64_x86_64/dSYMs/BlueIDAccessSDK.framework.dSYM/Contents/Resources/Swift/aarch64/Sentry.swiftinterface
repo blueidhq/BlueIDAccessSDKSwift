@@ -94,16 +94,6 @@ extension Swift.FixedWidthInteger {
         return lhs
     }
 }
-@_hasMissingDesignatedInitializers @objc public class SentryMetricsAPI : ObjectiveC.NSObject {
-  @objc public func increment(key: Swift.String, value: Swift.Double = 1.0, unit: Sentry.MeasurementUnit = .none, tags: [Swift.String : Swift.String] = [:])
-  @objc public func gauge(key: Swift.String, value: Swift.Double, unit: Sentry.MeasurementUnit = .none, tags: [Swift.String : Swift.String] = [:])
-  @objc public func distribution(key: Swift.String, value: Swift.Double, unit: Sentry.MeasurementUnit = .none, tags: [Swift.String : Swift.String] = [:])
-  @objc public func set(key: Swift.String, value: Swift.String, unit: Sentry.MeasurementUnit = .none, tags: [Swift.String : Swift.String] = [:])
-  public func timing<T>(key: Swift.String, tags: [Swift.String : Swift.String] = [:], _ closure: () throws -> T) rethrows -> T
-  @objc public func close()
-  @objc public func flush()
-  @objc deinit
-}
 extension Sentry.SentryTransactionNameSource : Swift.Equatable {}
 extension Sentry.SentryTransactionNameSource : Swift.Hashable {}
 extension Sentry.SentryTransactionNameSource : Swift.RawRepresentable {}
