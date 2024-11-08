@@ -1103,7 +1103,7 @@ public struct BlueReadOssSoCredentialCommand {
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueWriteOssSoCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(credentialID: Swift.String, organization: Swift.String, siteID: Swift.Int) async throws -> Swift.Bool
+  public func runAsync(id: Swift.String, organization: Swift.String, siteID: Swift.Int) async throws -> Swift.Bool
   #endif
   @objc deinit
 }
