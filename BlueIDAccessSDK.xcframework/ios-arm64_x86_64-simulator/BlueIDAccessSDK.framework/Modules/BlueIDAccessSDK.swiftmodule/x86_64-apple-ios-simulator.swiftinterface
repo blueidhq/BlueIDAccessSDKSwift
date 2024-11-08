@@ -2310,6 +2310,14 @@ public struct BlueLegacyProvisioningResponse : Swift.Sendable {
     get
   }
   public mutating func clearObjectID()
+  public var objectName: Swift.String {
+    get
+    set
+  }
+  public var hasObjectName: Swift.Bool {
+    get
+  }
+  public mutating func clearObjectName()
   public var provisioning: BlueIDAccessSDK.BlueSystemProvisioning {
     get
     set
