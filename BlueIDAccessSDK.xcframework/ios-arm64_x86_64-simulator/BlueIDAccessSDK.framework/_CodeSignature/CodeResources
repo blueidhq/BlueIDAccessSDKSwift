@@ -10,11 +10,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		cr1j0s0ZEk3CgZE2BOz63BcvcJQ=
+		3DKfUE5xOf+rH7dD1w0Y2/aU9Mw=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		1Khh6MfVvUxC8Gs/loPUFKjoqh0=
+		JShiO9ttn+wqWDZNk9B5fwcBCek=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		QiKQSCitP4F6TjI0HTPt5wJAeZI=
+		TdJD7zMtWEFXEsjSPdacezdMVyI=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		1Khh6MfVvUxC8Gs/loPUFKjoqh0=
+		JShiO9ttn+wqWDZNk9B5fwcBCek=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		u624mzw1DdSzsw/YGyLj7aEUc3c=
+		t+kkXfjXveLf25Q9+LtjyBGT51I=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			67ZLUTQe99U/VIR7eEEA17j/yegvwwI3uGM6fGMFPg8=
+			jkTN9SRfIsnm50n2WiNlCJbwy2RiqCU3sy4qA6Prats=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -94,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			vU5x2gG8CZO1ZVwzocnLJJPG5pP1VAKZ8nqJ/WWpwOQ=
+			OIKPbBj0N+FyiVvESiGpAT9KteHmZaCkLOK8y9+K8L0=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			67ZLUTQe99U/VIR7eEEA17j/yegvwwI3uGM6fGMFPg8=
+			jkTN9SRfIsnm50n2WiNlCJbwy2RiqCU3sy4qA6Prats=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -129,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			MevqyL28J7skwqlZ7IDWkqK9lQ5eEFZo7+ko1AM+mkk=
+			ziipL8PYfkaLRq6NKGRzQRT0+3dvfzak8UeGFe1DQ1k=
 			</data>
 		</dict>
 	</dict>
