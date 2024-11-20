@@ -1993,6 +1993,7 @@ public let blueCommands: BlueIDAccessSDK.BlueCommands
 }
 public func blueEncodeMessage(_ message: (any SwiftProtobuf.Message)!, partial: Swift.Bool = false) throws -> Foundation.Data
 public func blueDecodeMessage<MessageType>(_ data: Foundation.Data) throws -> MessageType where MessageType : SwiftProtobuf.Message
+public func blueDecodeBase64Message<MessageType>(_ base64Encoded: Swift.String) throws -> MessageType where MessageType : SwiftProtobuf.Message
 public struct BlueIsBluetoothActiveCommand {
   public func run() -> Swift.Bool
 }
