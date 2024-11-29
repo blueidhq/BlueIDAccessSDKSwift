@@ -71,7 +71,7 @@ public protocol BlueTaskRunner {
   @objc deinit
 }
 public struct BlueOssSoGetWriteStatusCommand {
-  public func run(identityID: Swift.String) throws -> BlueIDAccessSDK.BlueOssSoWriteStatus
+  public func run(identityID: Swift.String) throws -> Swift.Int
 }
 @_hasMissingDesignatedInitializers public class BlueTryAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
