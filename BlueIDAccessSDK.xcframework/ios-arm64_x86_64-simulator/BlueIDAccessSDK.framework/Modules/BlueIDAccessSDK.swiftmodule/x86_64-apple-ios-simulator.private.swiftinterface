@@ -3262,6 +3262,7 @@ public enum BlueHardwareType : SwiftProtobuf.Enum, Swift.CaseIterable {
   case doorHandleLock
   case wallReader
   case kiosk
+  case cylinderLockCompact
   public init()
   public init?(rawValue: Swift.Int)
   public var rawValue: Swift.Int {
