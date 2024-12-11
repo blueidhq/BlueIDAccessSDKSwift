@@ -17,8 +17,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-      .package(url: "https://github.com/apple/swift-protobuf.git", .upToNextMajor(from: "1.24.0")),
-      .package(url: "https://github.com/NordicSemiconductor/IOS-DFU-Library", .upToNextMajor(from: "4.15.0")),
+      .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.24.0"),
+      .package(url: "https://github.com/NordicSemiconductor/IOS-DFU-Library", from: "4.15.0"),
       .package(url: "https://github.com/getsentry/sentry-cocoa", .upToNextMajor(from: "8.0.0"))
     ],
     targets: [
