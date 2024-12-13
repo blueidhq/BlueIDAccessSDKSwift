@@ -2313,6 +2313,34 @@ public struct BlueSystemAVRUpdate : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
+public struct BlueSystemAVRInfo : Swift.Sendable {
+  public var vermaj: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasVermaj: Swift.Bool {
+    get
+  }
+  public mutating func clearVermaj()
+  public var vermin: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasVermin: Swift.Bool {
+    get
+  }
+  public mutating func clearVermin()
+  public var buildnr: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasBuildnr: Swift.Bool {
+    get
+  }
+  public mutating func clearBuildnr()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
 public struct BlueSystemConfig : @unchecked Swift.Sendable {
   public var configID: Swift.String {
     get
@@ -2839,6 +2867,19 @@ extension BlueIDAccessSDK.BlueSystemAVRUpdate : SwiftProtobuf.Message, SwiftProt
   public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
   public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
   public static func == (lhs: BlueIDAccessSDK.BlueSystemAVRUpdate, rhs: BlueIDAccessSDK.BlueSystemAVRUpdate) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueSystemAVRInfo : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueSystemAVRInfo, rhs: BlueIDAccessSDK.BlueSystemAVRInfo) -> Swift.Bool
   public var hashValue: Swift.Int {
     get
   }
