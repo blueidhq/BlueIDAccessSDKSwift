@@ -202,6 +202,9 @@ extension BlueIDAccessSDK.BlueAccessType : Swift.Identifiable {
   }
   public typealias ID = BlueIDAccessSDK.BlueAccessType
 }
+extension Foundation.Data {
+  public func chunks(of size: Swift.Int) -> [Foundation.Data]
+}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAcccessAddIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identity: BlueIDAccessSDK.BlueIdentity) async throws
@@ -2321,18 +2324,6 @@ public struct BlueOssConfig : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemAVRUpdate : @unchecked Swift.Sendable {
-  public var data: Foundation.Data {
-    get
-    set
-  }
-  public var hasData: Swift.Bool {
-    get
-  }
-  public mutating func clearData()
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
 public struct BlueSystemAVRInfo : Swift.Sendable {
   public var vermaj: Swift.UInt32 {
     get
@@ -2874,19 +2865,6 @@ extension BlueIDAccessSDK.BlueOssConfig : SwiftProtobuf.Message, SwiftProtobuf._
   public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
   public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
   public static func == (lhs: BlueIDAccessSDK.BlueOssConfig, rhs: BlueIDAccessSDK.BlueOssConfig) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueSystemAVRUpdate : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueSystemAVRUpdate, rhs: BlueIDAccessSDK.BlueSystemAVRUpdate) -> Swift.Bool
   public var hashValue: Swift.Int {
     get
   }
@@ -5978,6 +5956,16 @@ public func blueTerminalRun<DataType>(identityID: Swift.String?, deviceID: Swift
 @available(macOS 10.15, *)
 public func blueTerminalRun<DataType, ResultType>(identityID: Swift.String?, deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
 #endif
+public struct BlueTerminalRequest {
+  public let action: Swift.String
+  public let data: Foundation.Data?
+  public init(action: Swift.String, data: Foundation.Data? = nil)
+}
+public struct BlueTerminalResult {
+  public let statusCode: BlueIDAccessSDK.BlueReturnCode
+  public let data: Foundation.Data?
+}
+public func blueTerminalRun(identityID: Swift.String?, deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, requests: [BlueIDAccessSDK.BlueTerminalRequest], completion: @escaping (Swift.Result<[BlueIDAccessSDK.BlueTerminalResult], any Swift.Error>) -> Swift.Void, isTest: Swift.Bool = false, progress: ((Swift.Double) -> Swift.Void)? = nil)
 @_hasMissingDesignatedInitializers @objc(BlueTerminalRequest) final public class ObjC_BlueTerminalRequest : ObjectiveC.NSObject {
   @objc final public let action: Swift.String
   @objc final public let data: Foundation.NSData?
