@@ -1140,6 +1140,14 @@ public struct BlueIdentity : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearPrivateKey()
+  public var status: Swift.String {
+    get
+    set
+  }
+  public var hasStatus: Swift.Bool {
+    get
+  }
+  public mutating func clearStatus()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
