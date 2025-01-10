@@ -2329,6 +2329,14 @@ public struct BlueSystemAVRInfo : Swift.Sendable {
     get
   }
   public mutating func clearBuildnr()
+  public var bytesWritten: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasBytesWritten: Swift.Bool {
+    get
+  }
+  public mutating func clearBytesWritten()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
