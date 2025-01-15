@@ -5950,6 +5950,7 @@ extension BlueIDAccessSDK.BlueAccessObject : Swift.Decodable {
 extension BlueIDAccessSDK.BlueIdentity : Swift.Decodable {
   public init(from decoder: any Swift.Decoder) throws
   public func checkValidityStart(_ now: Foundation.Date? = nil) -> Swift.Bool
+  public static func fromKeyChainEntry(_ entry: Foundation.Data) throws -> BlueIDAccessSDK.BlueIdentity
 }
 extension BlueIDAccessSDK.BlueIdentitiesList {
   public init(identities: [BlueIDAccessSDK.BlueIdentity])
