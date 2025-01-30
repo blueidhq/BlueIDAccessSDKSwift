@@ -24,6 +24,7 @@ import _SwiftConcurrencyShims
   }
 }
 @objc @_inheritsConvenienceInitializers @objcMembers public class SentryExperimentalOptions : ObjectiveC.NSObject {
+  @objc public var enableFileManagerSwizzling: Swift.Bool
   @objc override dynamic public init()
   @objc deinit
 }
@@ -69,6 +70,9 @@ extension Sentry.SentryLevel : Swift.CustomStringConvertible {
   public var description: Swift.String {
     get
   }
+}
+@objc public protocol SentryUIViewControllerDescriptor : ObjectiveC.NSObjectProtocol {
+  @objc var sentryName: Swift.String { get }
 }
 @objc public protocol SentryIntegrationProtocol : ObjectiveC.NSObjectProtocol {
   @objc(installWithOptions:) func install(with options: Sentry.Options) -> Swift.Bool

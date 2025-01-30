@@ -35,6 +35,7 @@ import _SwiftConcurrencyShims
   }
 }
 @objc @_inheritsConvenienceInitializers @objcMembers public class SentryExperimentalOptions : ObjectiveC.NSObject {
+  @objc public var enableFileManagerSwizzling: Swift.Bool
   @objc override dynamic public init()
   @objc deinit
 }
@@ -130,6 +131,9 @@ extension Sentry.SentryLevel : Swift.CustomStringConvertible {
   @objc public var inputBackground: UIKit.UIColor
   @objc override dynamic public init()
   @objc deinit
+}
+@objc public protocol SentryUIViewControllerDescriptor : ObjectiveC.NSObjectProtocol {
+  @objc var sentryName: Swift.String { get }
 }
 @objc @_inheritsConvenienceInitializers @available(iOS 13.0, *)
 @objcMembers public class SentryUserFeedbackWidgetConfiguration : ObjectiveC.NSObject {
