@@ -8,7 +8,6 @@ import Foundation
 import MetricKit
 import ObjectiveC.NSObjCRuntime
 import ObjectiveC
-import PhotosUI
 @_exported import Sentry
 import Swift
 import UIKit
@@ -16,6 +15,47 @@ import WebKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
+extension Sentry.User : Swift.Decodable {
+  @available(*, deprecated, message: "This method is only deprecated to silence the deprecation warning of the property segment. Our Xcode project has deprecations as warnings and warnings as errors configured. Therefore, compilation fails without marking this init method as deprecated. It is safe to use this deprecated init method. Instead of turning off deprecation warnings for the whole project, we accept the tradeoff of marking this init method as deprecated because we don't expect many users to use it. Sadly, Swift doesn't offer a better way of silencing a deprecation warning.")
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+@objc public protocol SentryRedactOptions {
+  @objc var maskAllText: Swift.Bool { get }
+  @objc var maskAllImages: Swift.Bool { get }
+  @objc var maskedViewClasses: [Swift.AnyClass] { get }
+  @objc var unmaskedViewClasses: [Swift.AnyClass] { get }
+}
+@objc @objcMembers public class SentryFeedback : ObjectiveC.NSObject {
+  @objc public enum SentryFeedbackSource : Swift.Int {
+    public var serialize: Swift.String {
+      get
+    }
+    case widget
+    case custom
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  @objc public init(message: Swift.String, name: Swift.String?, email: Swift.String?, source: Sentry.SentryFeedback.SentryFeedbackSource = .widget, associatedEventId: Sentry.SentryId? = nil, attachments: [Foundation.Data]? = nil)
+  @objc deinit
+}
+extension Sentry.SentryFeedback : Sentry.SentrySerializable {
+  @objc dynamic public func serialize() -> [Swift.String : Any]
+}
+extension Sentry.SentryEventDecodable : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.Frame : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.SentryThread : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.Geo : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
 @objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objcMembers public class SentryRedactViewHelper : ObjectiveC.NSObject {
   @objc public static func clipOutView(_ view: UIKit.UIView)
   @objc public static func maskSwiftUI(_ view: UIKit.UIView)
@@ -35,11 +75,21 @@ import _SwiftConcurrencyShims
   }
 }
 @objc @_inheritsConvenienceInitializers @objcMembers public class SentryExperimentalOptions : ObjectiveC.NSObject {
+  @objc public var enableDataSwizzling: Swift.Bool
   @objc public var enableFileManagerSwizzling: Swift.Bool
   @objc override dynamic public init()
   @objc deinit
 }
-@objc @_inheritsConvenienceInitializers @objcMembers public class SentryReplayOptions : ObjectiveC.NSObject {
+extension Sentry.MechanismMeta : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.SentryStacktrace : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.Breadcrumb : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class SentryReplayOptions : ObjectiveC.NSObject, Sentry.SentryRedactOptions {
   @objc public enum SentryReplayQuality : Swift.Int, Swift.CustomStringConvertible {
     case low
     case medium
@@ -64,6 +114,16 @@ import _SwiftConcurrencyShims
   @objc public init(sessionSampleRate: Swift.Float = 0, onErrorSampleRate: Swift.Float = 0, maskAllText: Swift.Bool = true, maskAllImages: Swift.Bool = true)
   @objc deinit
 }
+extension Sentry.Mechanism : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.SentryMessage : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+@objc @_inheritsConvenienceInitializers @objcMembers public class SentryEventDecoder : ObjectiveC.NSObject {
+  @objc override dynamic public init()
+  @objc deinit
+}
 @objc @_inheritsConvenienceInitializers @available(iOS 13.0, *)
 @objcMembers public class SentryUserFeedbackConfiguration : ObjectiveC.NSObject {
   @objc public var animations: Swift.Bool
@@ -72,7 +132,6 @@ import _SwiftConcurrencyShims
   @objc public var showFormForScreenshots: Swift.Bool
   @objc public var configureForm: ((Sentry.SentryUserFeedbackFormConfiguration) -> Swift.Void)?
   @objc public var tags: [Swift.String : Any]?
-  @objc public var useSentryUser: Swift.Bool
   @objc public var onFormOpen: (() -> Swift.Void)?
   @objc public var onFormClose: (() -> Swift.Void)?
   @objc public var onSubmitSuccess: (([Swift.String : Any]) -> Swift.Void)?
@@ -100,6 +159,9 @@ extension Sentry.SentryLevel : Swift.CustomStringConvertible {
     get
   }
 }
+extension Sentry.SentryRequest : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
 @objc @_inheritsConvenienceInitializers @available(iOS 13.0, *)
 @objcMembers public class SentryUserFeedbackThemeConfiguration : ObjectiveC.NSObject {
   @objc public var fontFamily: Swift.String? {
@@ -115,20 +177,20 @@ extension Sentry.SentryLevel : Swift.CustomStringConvertible {
     @objc set
   }
   @objc public var buttonBackground: UIKit.UIColor
-  @objc public var successColor: UIKit.UIColor
   @objc public var errorColor: UIKit.UIColor
-  public struct OutlineStyle : Swift.Equatable {
-    public var outlineColor: UIKit.UIColor
+  @objc public class SentryFormElementOutlineStyle : ObjectiveC.NSObject {
+    public var color: UIKit.UIColor
     public var cornerRadius: CoreFoundation.CGFloat
     public var outlineWidth: CoreFoundation.CGFloat
-    public init(outlineColor: UIKit.UIColor = UIColor(white: 204 / 255, alpha: 1), cornerRadius: CoreFoundation.CGFloat = 5, outlineWidth: CoreFoundation.CGFloat = 0.5)
-    public static func == (a: Sentry.SentryUserFeedbackThemeConfiguration.OutlineStyle, b: Sentry.SentryUserFeedbackThemeConfiguration.OutlineStyle) -> Swift.Bool
+    @objc public init(color: UIKit.UIColor = UIColor(white: 204 / 255, alpha: 1), cornerRadius: CoreFoundation.CGFloat = 5, outlineWidth: CoreFoundation.CGFloat = 0.5)
+    @objc deinit
   }
-  public var outlineStyle: Sentry.SentryUserFeedbackThemeConfiguration.OutlineStyle {
-    get
-    set
+  @objc public var outlineStyle: Sentry.SentryUserFeedbackThemeConfiguration.SentryFormElementOutlineStyle {
+    @objc get
+    @objc set
   }
   @objc public var inputBackground: UIKit.UIColor
+  @objc public var inputForeground: UIKit.UIColor
   @objc override dynamic public init()
   @objc deinit
 }
@@ -153,8 +215,12 @@ extension Sentry.SentryLevel : Swift.CustomStringConvertible {
   @objc override dynamic public init()
   @objc deinit
 }
+extension Sentry.SentryNSError : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
 @objc @_inheritsConvenienceInitializers @available(iOS 13.0, *)
 @objcMembers public class SentryUserFeedbackFormConfiguration : ObjectiveC.NSObject {
+  @objc public var useSentryUser: Swift.Bool
   @objc public var showBranding: Swift.Bool
   @objc public var formTitle: Swift.String
   @objc public var messageLabel: Swift.String
@@ -164,13 +230,6 @@ extension Sentry.SentryLevel : Swift.CustomStringConvertible {
     @objc set
   }
   @objc public var isRequiredLabel: Swift.String
-  @objc public var successMessageText: Swift.String
-  @objc public var enableScreenshot: Swift.Bool
-  @objc public var addScreenshotButtonLabel: Swift.String
-  @objc public var addScreenshotButtonAccessibilityLabel: Swift.String {
-    @objc get
-    @objc set
-  }
   @objc public var removeScreenshotButtonLabel: Swift.String
   @objc public var removeScreenshotButtonAccessibilityLabel: Swift.String {
     @objc get
@@ -230,6 +289,12 @@ extension UIKit.UIView {
   }
   @objc deinit
 }
+extension Sentry.DebugMeta : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Sentry.Exception : Swift.Decodable {
+  required convenience public init(from decoder: any Swift.Decoder) throws
+}
 extension Swift.FixedWidthInteger {
   @discardableResult
   @inlinable postfix internal static func ++ (lhs: inout Self) -> Self {
@@ -237,6 +302,9 @@ extension Swift.FixedWidthInteger {
         return lhs
     }
 }
+extension Sentry.SentryFeedback.SentryFeedbackSource : Swift.Equatable {}
+extension Sentry.SentryFeedback.SentryFeedbackSource : Swift.Hashable {}
+extension Sentry.SentryFeedback.SentryFeedbackSource : Swift.RawRepresentable {}
 extension Sentry.SentryTransactionNameSource : Swift.Equatable {}
 extension Sentry.SentryTransactionNameSource : Swift.Hashable {}
 extension Sentry.SentryTransactionNameSource : Swift.RawRepresentable {}

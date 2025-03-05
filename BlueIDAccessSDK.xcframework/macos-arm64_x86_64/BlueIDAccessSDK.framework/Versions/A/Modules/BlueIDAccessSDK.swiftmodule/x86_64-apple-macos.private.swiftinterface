@@ -5752,7 +5752,7 @@ public struct BlueCommands {
   public let isBluetoothActive: BlueIDAccessSDK.BlueIsBluetoothActiveCommand
   public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
-  public let transponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
+  public let readTransponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
   public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
   public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
   public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand

@@ -5772,7 +5772,7 @@ public struct BlueCommands {
   public let nearByActivate: BlueIDAccessSDK.BlueNearByActivate
   public let nearByDeactivate: BlueIDAccessSDK.BlueNearByDeactivate
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
-  public let transponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
+  public let readTransponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
   public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
   public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
   public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand
