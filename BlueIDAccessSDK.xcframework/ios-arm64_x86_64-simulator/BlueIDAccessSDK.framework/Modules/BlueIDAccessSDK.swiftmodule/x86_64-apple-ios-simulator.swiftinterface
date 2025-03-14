@@ -131,19 +131,19 @@ public protocol BlueEventListener : AnyObject {
 }
 public func blueAddEventListener(event: BlueIDAccessSDK.BlueEventType? = nil, listener: any BlueIDAccessSDK.BlueEventListener)
 public func blueRemoveEventListener(listener: any BlueIDAccessSDK.BlueEventListener)
-public enum BlueLockState : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueLockState : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case unknownLockState
   case locked
   case unlocked
   case jammed
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
+  public typealias AllCases = [BlueIDAccessSDK.BlueLockState]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [BlueIDAccessSDK.BlueLockState] {
     get
   }
-  public typealias AllCases = [BlueIDAccessSDK.BlueLockState]
-  public static var allCases: [BlueIDAccessSDK.BlueLockState] {
+  public var rawValue: Swift.Int {
     get
   }
 }
@@ -344,8 +344,7 @@ public struct BlueReadOssSoCredentialCommand {
 public struct BlueOpenAppSettingsCommand {
   public func run(completionHandler: @escaping (Swift.Bool) -> Swift.Void)
 }
-public enum BlueReturnCode : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueReturnCode : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case ok
   case pending
   case error
@@ -449,16 +448,16 @@ public enum BlueReturnCode : SwiftProtobuf.Enum, Swift.CaseIterable {
   case ossMareturnCodeEnd
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueReturnCode]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueReturnCode] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueTimeUnit : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueTimeUnit : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case seconds
   case minutes
   case hours
@@ -467,16 +466,16 @@ public enum BlueTimeUnit : SwiftProtobuf.Enum, Swift.CaseIterable {
   case years
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueTimeUnit]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueTimeUnit] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueWeekday : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueWeekday : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case monday
   case tuesday
   case wednesday
@@ -486,16 +485,16 @@ public enum BlueWeekday : SwiftProtobuf.Enum, Swift.CaseIterable {
   case sunday
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueWeekday]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueWeekday] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueCredentialType : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueCredentialType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case regular
   case maintenance
   case master
@@ -503,16 +502,16 @@ public enum BlueCredentialType : SwiftProtobuf.Enum, Swift.CaseIterable {
   case emergency
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueCredentialType]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueCredentialType] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueAccessType : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueAccessType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case defaultTime
   case extendedTime
   case customTime
@@ -523,31 +522,31 @@ public enum BlueAccessType : SwiftProtobuf.Enum, Swift.CaseIterable {
   case noAccessBlacklisted
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueAccessType]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueAccessType] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueTransponderType : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueTransponderType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case unknownTransponder
   case mobileTransponder
   case mifareDesfire
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueTransponderType]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueTransponderType] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueHardwareType : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueHardwareType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case unknownHardware
   case testHardware
   case gateway
@@ -559,16 +558,16 @@ public enum BlueHardwareType : SwiftProtobuf.Enum, Swift.CaseIterable {
   case furnitureLock
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueHardwareType]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueHardwareType] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueBatteryLevel : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueBatteryLevel : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case unknownBattery
   case onPower
   case goodPower
@@ -579,16 +578,16 @@ public enum BlueBatteryLevel : SwiftProtobuf.Enum, Swift.CaseIterable {
   case fullyCharged
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueBatteryLevel]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueBatteryLevel] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueEventId : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueEventId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case batteryLow
   case batteryReplaced
   case lockJammed
@@ -606,30 +605,30 @@ public enum BlueEventId : SwiftProtobuf.Enum, Swift.CaseIterable {
   case terminalOss
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueEventId]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueEventId] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueEventInfoSystem : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueEventInfoSystem : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case systemRestart
   case systemConfigured
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoSystem]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueEventInfoSystem] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueEventInfoAccess : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueEventInfoAccess : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case granted
   case grantedDefaultTime
   case grantedExtendedTime
@@ -641,71 +640,71 @@ public enum BlueEventInfoAccess : SwiftProtobuf.Enum, Swift.CaseIterable {
   case deniedDtschedule
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoAccess]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueEventInfoAccess] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueOssCredentialTypeSource : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueOssCredentialTypeSource : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case oss
   case proprietary
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueOssCredentialTypeSource]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueOssCredentialTypeSource] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueOssSoCredentialTypeOssCredential : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueOssSoCredentialTypeOssCredential : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case standard
   case interventionMedia
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential] {
     get
   }
-}
-public enum BlueOssSoDoorGroupId : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
-  case masterGroupID
-  public init()
-  public init?(rawValue: Swift.Int)
   public var rawValue: Swift.Int {
     get
   }
+}
+public enum BlueOssSoDoorGroupId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+  case masterGroupID
+  public init()
+  public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoDoorGroupId]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorGroupId] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueOssSoDoorInfoAccessBy : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueOssSoDoorInfoAccessBy : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case doorGroupID
   case doorID
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueOssSoFileId : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueOssSoFileId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case info
   case data
   case event
@@ -713,26 +712,27 @@ public enum BlueOssSoFileId : SwiftProtobuf.Enum, Swift.CaseIterable {
   case customerExtensions
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoFileId]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueOssSoFileId] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueOssSoWriteStatus : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueOssSoWriteStatus : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case writableByAnyOrg
   case writableBySpecificOrg
   case notWritable
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
+  public typealias AllCases = [BlueIDAccessSDK.BlueOssSoWriteStatus]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [BlueIDAccessSDK.BlueOssSoWriteStatus] {
     get
   }
-  public typealias AllCases = [BlueIDAccessSDK.BlueOssSoWriteStatus]
-  public static var allCases: [BlueIDAccessSDK.BlueOssSoWriteStatus] {
+  public var rawValue: Swift.Int {
     get
   }
 }
@@ -3166,33 +3166,33 @@ extension BlueIDAccessSDK._BlueTestEncodeDecode : SwiftProtobuf.Message, SwiftPr
     get
   }
 }
-public enum BlueDeviceType : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueDeviceType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case bluetoothDevice
   case uwbdevice
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
-    get
-  }
   public typealias AllCases = [BlueIDAccessSDK.BlueDeviceType]
+  public typealias RawValue = Swift.Int
   public static var allCases: [BlueIDAccessSDK.BlueDeviceType] {
     get
   }
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-public enum BlueRefreshOssSoCredentialStatus : SwiftProtobuf.Enum, Swift.CaseIterable {
-  public typealias RawValue = Swift.Int
+public enum BlueRefreshOssSoCredentialStatus : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case succeeded
   case failed
   case notNeeded
   case unsupported
   public init()
   public init?(rawValue: Swift.Int)
-  public var rawValue: Swift.Int {
+  public typealias AllCases = [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus]
+  public typealias RawValue = Swift.Int
+  public static var allCases: [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus] {
     get
   }
-  public typealias AllCases = [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus]
-  public static var allCases: [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus] {
+  public var rawValue: Swift.Int {
     get
   }
 }

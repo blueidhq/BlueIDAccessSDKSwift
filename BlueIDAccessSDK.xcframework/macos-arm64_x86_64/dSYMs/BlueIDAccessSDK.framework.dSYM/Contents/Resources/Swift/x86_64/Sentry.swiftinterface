@@ -100,8 +100,10 @@ extension Sentry.Breadcrumb : Swift.Decodable {
   @objc public var quality: Sentry.SentryReplayOptions.SentryReplayQuality
   @objc public var maskedViewClasses: [Swift.AnyClass]
   @objc public var unmaskedViewClasses: [Swift.AnyClass]
+  @objc public var enableExperimentalViewRenderer: Swift.Bool
+  @objc public var enableFastViewRendering: Swift.Bool
   @objc override dynamic public init()
-  @objc public init(sessionSampleRate: Swift.Float = 0, onErrorSampleRate: Swift.Float = 0, maskAllText: Swift.Bool = true, maskAllImages: Swift.Bool = true)
+  @objc public init(sessionSampleRate: Swift.Float = 0, onErrorSampleRate: Swift.Float = 0, maskAllText: Swift.Bool = true, maskAllImages: Swift.Bool = true, enableExperimentalViewRenderer: Swift.Bool = false, enableFastViewRendering: Swift.Bool = false)
   @objc deinit
 }
 extension Sentry.Mechanism : Swift.Decodable {
@@ -140,6 +142,10 @@ extension Sentry.SentryRequest : Swift.Decodable {
 }
 extension Sentry.SentryNSError : Swift.Decodable {
   required convenience public init(from decoder: any Swift.Decoder) throws
+}
+extension Foundation.Data {
+  public init(contentsOfWithSentryTracing url: Foundation.URL, options: Foundation.Data.ReadingOptions = []) throws
+  public func writeWithSentryTracing(to url: Foundation.URL, options: Foundation.Data.WritingOptions = []) throws
 }
 @objc public protocol SentryIntegrationProtocol : ObjectiveC.NSObjectProtocol {
   @objc(installWithOptions:) func install(with options: Sentry.Options) -> Swift.Bool
