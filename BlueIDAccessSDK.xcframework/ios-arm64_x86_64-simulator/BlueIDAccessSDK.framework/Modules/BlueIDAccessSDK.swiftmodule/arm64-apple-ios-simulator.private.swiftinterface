@@ -638,6 +638,9 @@ public enum BlueEventInfoAccess : Swift.Int, SwiftProtobuf.Enum, Swift.CaseItera
   case deniedBlacklisted
   case deniedValidity
   case deniedDtschedule
+  case deniedInternalError
+  case deniedTransponderError
+  case deniedInvalidTransponderData
   public init()
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoAccess]
