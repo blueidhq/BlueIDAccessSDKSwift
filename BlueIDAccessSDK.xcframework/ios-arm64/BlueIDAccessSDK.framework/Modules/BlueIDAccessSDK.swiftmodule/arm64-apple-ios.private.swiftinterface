@@ -5944,7 +5944,7 @@ public func blueCreateIdentityDemo(id: Swift.String? = nil, validFrom: BlueIDAcc
     }
   }
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false, validateSettings: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
   #endif
   @objc deinit
 }
