@@ -229,22 +229,6 @@ extension Sentry.SentryRequest : Swift.Decodable {
 extension Sentry.SentryNSError : Swift.Decodable {
   required convenience public init(from decoder: any Swift.Decoder) throws
 }
-@objc @_inheritsConvenienceInitializers @objcMembers public class SentryProfileOptions : ObjectiveC.NSObject {
-  @objc public enum SentryProfileLifecycle : Swift.Int {
-    case manual
-    case trace
-    public init?(rawValue: Swift.Int)
-    public typealias RawValue = Swift.Int
-    public var rawValue: Swift.Int {
-      get
-    }
-  }
-  @objc public var lifecycle: Sentry.SentryProfileOptions.SentryProfileLifecycle
-  @objc public var sessionSampleRate: Swift.Float
-  @objc public var profileAppStarts: Swift.Bool
-  @objc override dynamic public init()
-  @objc deinit
-}
 extension Foundation.Data {
   public init(contentsOfWithSentryTracing url: Foundation.URL, options: Foundation.Data.ReadingOptions = []) throws
   public func writeWithSentryTracing(to url: Foundation.URL, options: Foundation.Data.WritingOptions = []) throws
@@ -345,6 +329,3 @@ extension Sentry.SentryReplayOptions.SentryReplayQuality : Swift.RawRepresentabl
 extension Sentry.SentryLevel : Swift.Equatable {}
 extension Sentry.SentryLevel : Swift.Hashable {}
 extension Sentry.SentryLevel : Swift.RawRepresentable {}
-extension Sentry.SentryProfileOptions.SentryProfileLifecycle : Swift.Equatable {}
-extension Sentry.SentryProfileOptions.SentryProfileLifecycle : Swift.Hashable {}
-extension Sentry.SentryProfileOptions.SentryProfileLifecycle : Swift.RawRepresentable {}
