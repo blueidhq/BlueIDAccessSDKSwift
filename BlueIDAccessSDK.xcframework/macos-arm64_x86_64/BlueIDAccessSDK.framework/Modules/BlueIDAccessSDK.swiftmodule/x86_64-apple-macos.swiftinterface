@@ -113,6 +113,7 @@ public enum BlueEventType : Swift.String, Swift.CaseIterable {
   case tokenSyncStarted
   case tokenSyncFinished
   case bluetoothStateChanged
+  case peripheralDiscovered
   public init?(rawValue: Swift.String)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventType]
   public typealias RawValue = Swift.String
@@ -4713,6 +4714,24 @@ extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : SwiftProtobuf.Messa
     get
   }
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessPingDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueVersionInfo
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(identityID: Swift.String, identifier: Swift.String) async throws -> BlueIDAccessSDK.BlueVersionInfo
+  #endif
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessProvisionDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String, provisioning: BlueIDAccessSDK.BlueSystemProvisioning) async throws
+  #endif
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(identityID: Swift.String, identifier: Swift.String, provisioning: BlueIDAccessSDK.BlueSystemProvisioning) async throws
+  #endif
+  @objc deinit
+}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessGetWritableIdentitiesCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String) async throws -> BlueIDAccessSDK.BlueIdentitiesList
@@ -5791,6 +5810,8 @@ public struct BlueCommands {
   public let synchronizeAccessDevice: BlueIDAccessSDK.BlueAccessSynchronizeDeviceCommand
   public let getAccessObjects: BlueIDAccessSDK.BlueAccessGetObjectsCommand
   public let claimAccessDevice: BlueIDAccessSDK.BlueAccessClaimDeviceCommand
+  public let provisionAccessDevice: BlueIDAccessSDK.BlueAccessProvisionDeviceCommand
+  public let pingAccessDevice: BlueIDAccessSDK.BlueAccessPingDeviceCommand
   public let unclaimAccessDevice: BlueIDAccessSDK.BlueUnclaimAccessDeviceCommand
   public let getWritableIdentities: BlueIDAccessSDK.BlueAccessGetWritableIdentitiesCommand
   public let clearBlacklist: BlueIDAccessSDK.BlueClearBlacklistCommand
