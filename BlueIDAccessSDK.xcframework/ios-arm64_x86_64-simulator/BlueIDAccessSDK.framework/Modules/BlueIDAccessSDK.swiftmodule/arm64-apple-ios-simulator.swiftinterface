@@ -4722,7 +4722,7 @@ extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : SwiftProtobuf.Messa
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueVersionInfo
   #endif
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(identityID: Swift.String, identifier: Swift.String) async throws -> BlueIDAccessSDK.BlueVersionInfo
+  public func runAsync(identityID: Swift.String, identifier: Swift.String, isDemo: Swift.Bool = false) async throws -> BlueIDAccessSDK.BlueVersionInfo
   #endif
   @objc deinit
 }
