@@ -260,6 +260,19 @@ public protocol BlueTaskRunner {
   public func getResult<ResultType>(_ id: Swift.AnyHashable) throws -> ResultType
   @objc deinit
 }
+public enum BlueKiosk {
+  public struct WriteTransponderCommand {
+    #if compiler(>=5.3) && $AsyncAwait
+    public func runAsync(identityID: Swift.String) async throws
+    #endif
+  }
+  @_hasMissingDesignatedInitializers public class RefreshTransponderCommand {
+    #if compiler(>=5.3) && $AsyncAwait
+    public func runAsync(syncEvents: Swift.Bool? = false, syncBlacklist: Swift.Bool? = false, minRefreshDays: Swift.Int? = nil) async throws
+    #endif
+    @objc deinit
+  }
+}
 public struct BlueInitializeCommand {
   public func run() throws
 }
@@ -5793,6 +5806,8 @@ public struct BlueCommands {
   public let checkBluetoothPermission: BlueIDAccessSDK.BlueCheckBluetoothPermissionCommand
   public let nearByActivate: BlueIDAccessSDK.BlueNearByActivate
   public let nearByDeactivate: BlueIDAccessSDK.BlueNearByDeactivate
+  public let kioskRefreshTransponder: BlueIDAccessSDK.BlueKiosk.RefreshTransponderCommand
+  public let kioskWriteTransponder: BlueIDAccessSDK.BlueKiosk.WriteTransponderCommand
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
   public let readTransponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
   public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
