@@ -268,6 +268,9 @@ public enum BlueKiosk {
   }
   @_hasMissingDesignatedInitializers public class RefreshTransponderCommand {
     #if compiler(>=5.3) && $AsyncAwait
+    public func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any?
+    #endif
+    #if compiler(>=5.3) && $AsyncAwait
     public func runAsync(syncEvents: Swift.Bool? = false, syncBlacklist: Swift.Bool? = false, minRefreshDays: Swift.Int? = nil) async throws
     #endif
     @objc deinit
