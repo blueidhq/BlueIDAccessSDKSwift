@@ -3294,6 +3294,30 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearNfcTransponderSuccessReadMessage()
+  public var nfcKioskRefreshTransponderNoRefreshNeededMessage: Swift.String {
+    get
+    set
+  }
+  public var hasNfcKioskRefreshTransponderNoRefreshNeededMessage: Swift.Bool {
+    get
+  }
+  public mutating func clearNfcKioskRefreshTransponderNoRefreshNeededMessage()
+  public var nfcKioskRefreshTransponderPartialRefreshMessage: Swift.String {
+    get
+    set
+  }
+  public var hasNfcKioskRefreshTransponderPartialRefreshMessage: Swift.Bool {
+    get
+  }
+  public mutating func clearNfcKioskRefreshTransponderPartialRefreshMessage()
+  public var nfcKioskRefreshTransponderHoldYourCardSteadyMessage: Swift.String {
+    get
+    set
+  }
+  public var hasNfcKioskRefreshTransponderHoldYourCardSteadyMessage: Swift.Bool {
+    get
+  }
+  public mutating func clearNfcKioskRefreshTransponderHoldYourCardSteadyMessage()
   public var openViaOssTitle: Swift.String {
     get
     set
@@ -4217,6 +4241,33 @@ public struct BlueLegacyProvisioningResponse : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
+public struct BlueRefreshTransponderResultItem : Swift.Sendable {
+  public var credentialID: BlueIDAccessSDK.BlueCredentialId {
+    get
+    set
+  }
+  public var hasCredentialID: Swift.Bool {
+    get
+  }
+  public mutating func clearCredentialID()
+  public var error: Swift.String {
+    get
+    set
+  }
+  public var hasError: Swift.Bool {
+    get
+  }
+  public mutating func clearError()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueRefreshTransponderResult : Swift.Sendable {
+  public var updated: [BlueIDAccessSDK.BlueRefreshTransponderResultItem]
+  public var skipped: [BlueIDAccessSDK.BlueRefreshTransponderResultItem]
+  public var failed: [BlueIDAccessSDK.BlueRefreshTransponderResultItem]
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
 public struct BlueAccessCredential : @unchecked Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
@@ -4632,6 +4683,32 @@ extension BlueIDAccessSDK.BlueLegacyProvisioningResponse : SwiftProtobuf.Message
   public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
   public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
   public static func == (lhs: BlueIDAccessSDK.BlueLegacyProvisioningResponse, rhs: BlueIDAccessSDK.BlueLegacyProvisioningResponse) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueRefreshTransponderResultItem : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueRefreshTransponderResultItem, rhs: BlueIDAccessSDK.BlueRefreshTransponderResultItem) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueRefreshTransponderResult : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueRefreshTransponderResult, rhs: BlueIDAccessSDK.BlueRefreshTransponderResult) -> Swift.Bool
   public var hashValue: Swift.Int {
     get
   }
@@ -5881,6 +5958,12 @@ extension BlueIDAccessSDK.BlueLocalTimestamp : Swift.Encodable, Swift.Decodable 
   public func encode(to encoder: any Swift.Encoder) throws
 }
 extension BlueIDAccessSDK.BlueAccessObject : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension BlueIDAccessSDK.BlueRefreshTransponderResult : Swift.Decodable {
+  public init(from decoder: any Swift.Decoder) throws
+}
+extension BlueIDAccessSDK.BlueRefreshTransponderResultItem : Swift.Decodable {
   public init(from decoder: any Swift.Decoder) throws
 }
 extension BlueIDAccessSDK.BlueIdentity : Swift.Decodable {
