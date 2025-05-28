@@ -346,6 +346,10 @@ public struct BlueReadOssSoCredentialCommand {
   public func run() throws -> Swift.String?
   @objc deinit
 }
+@_hasMissingDesignatedInitializers public class BlueControlMultipleNFCInvocationCommand {
+  public func run(_ enableMultNfcSessions: Swift.Bool) throws -> Swift.Bool?
+  @objc deinit
+}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueRefreshOssSoCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
   public func runAsync() async throws -> BlueIDAccessSDK.BlueRefreshOssSoIdentities
@@ -5890,6 +5894,7 @@ public struct BlueCommands {
   public let kioskWriteTransponder: BlueIDAccessSDK.BlueKiosk.WriteTransponderCommand
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
   public let readTransponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
+  public let controlMultipleNFCInvocation: BlueIDAccessSDK.BlueControlMultipleNFCInvocationCommand
   public let ossSoCreateMobile: BlueIDAccessSDK.BlueOssSoCreateMobileCommand
   public let ossSoFormat: BlueIDAccessSDK.BlueOssSoFormatCommand
   public let ossSoGetStorageProfile: BlueIDAccessSDK.BlueOssSoGetStorageProfileCommand
