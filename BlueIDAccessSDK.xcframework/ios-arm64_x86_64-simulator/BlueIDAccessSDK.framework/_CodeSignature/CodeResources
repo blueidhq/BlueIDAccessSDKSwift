@@ -14,7 +14,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		0VkPDBMq/eLCoP9+RZ/VXJN4Ce0=
+		hzmf8SXsTwyOe54AIdDlQ1ZperU=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		twXGVUwzWrbpk8G8FKisuA9ZGwQ=
+		L5U37+z1H99zF8k7OY+3Pk3jlwQ=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		0VkPDBMq/eLCoP9+RZ/VXJN4Ce0=
+		hzmf8SXsTwyOe54AIdDlQ1ZperU=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		0C3YyqE6FBBilmVmZh+7SJN8s0A=
+		e7j1Vw8QlX9D4iGHySUSrXJLp2Q=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			BM/ETzs3exgH4hCVdby0w6Xb5ZP/ai4tqC72E+yl3Ss=
+			O58dPNtHVvdrCl22Sh+rckTftkliYwV+QhKfLikWnUg=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -94,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			otf6mn/cys19UuCWQO6+zZKcVoFHKSTo68HBlnoYmfY=
+			UEVP5u0RPlDiOqBpAFZDljY5eRKsaRrROZ3siCWqPwA=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BM/ETzs3exgH4hCVdby0w6Xb5ZP/ai4tqC72E+yl3Ss=
+			O58dPNtHVvdrCl22Sh+rckTftkliYwV+QhKfLikWnUg=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -129,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			WYQ/arPM47aVxRuKJuvxLsmjHEe6QtAqzbuXnFY9YWY=
+			rNl9J676c7JDyxOCfHnu26r+M3gsIX0cSA+32Iy8ljk=
 			</data>
 		</dict>
 	</dict>
