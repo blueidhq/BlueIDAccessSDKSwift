@@ -117,6 +117,8 @@ public enum BlueEventType : Swift.String, Swift.CaseIterable {
   case tokenSyncFinished
   case bluetoothStateChanged
   case peripheralDiscovered
+  case unclaimDeviceStarted
+  case unclaimDeviceFinished
   public init?(rawValue: Swift.String)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventType]
   public typealias RawValue = Swift.String
@@ -465,6 +467,8 @@ public enum BlueReturnCode : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case sdkUnzipError
   case sdkInvalidFirmwareURL
   case sdkDeviceFactoryStateRequired
+  case sdkClaimDeviceFailedAutoUnclaimSuccess
+  case sdkClaimDeviceAndAutoUnclaimFailed
   case ossMareturnCodeStart
   case ossMareturnCodeEnd
   public init()
@@ -5855,7 +5859,7 @@ public struct BlueNearByDeactivate {
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUnclaimAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> Swift.Bool
   #endif
   @objc deinit
 }
@@ -6071,7 +6075,7 @@ public func blueCreateIdentityDemo(id: Swift.String? = nil, validFrom: BlueIDAcc
     }
   }
   #if compiler(>=5.3) && $AsyncAwait
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false, validateSettings: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false, validateSettings: Swift.Bool? = false, throwWhenFail: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
   #endif
   @objc deinit
 }
