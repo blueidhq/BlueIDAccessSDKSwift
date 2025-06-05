@@ -296,6 +296,12 @@ public struct BlueTestCommand {
   #endif
   @objc deinit
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueNGDeviceProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $AsyncAwait
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
+  #endif
+  @objc deinit
+}
 public struct BlueOssSoCreateMobileCommand {
   public func run(_ provisioningData: BlueIDAccessSDK.BlueOssSoProvisioningData, _ configuration: BlueIDAccessSDK.BlueOssSoConfiguration) throws -> BlueIDAccessSDK.BlueOssSoMobile
 }
@@ -5942,6 +5948,7 @@ public struct BlueCommands {
   public let clearEventLog: BlueIDAccessSDK.BlueClearEventLogCommand
   public let clearSystemLog: BlueIDAccessSDK.BlueClearSystemLogCommand
   public let getSystemStatus: BlueIDAccessSDK.BlueGetSystemStatusCommand
+  public let provisioningNGDevice: BlueIDAccessSDK.BlueNGDeviceProvisioningCommand
   public let createLegacyProvisioning: BlueIDAccessSDK.BlueCreateLegacyProvisioningCommand
   public let openAppSettings: BlueIDAccessSDK.BlueOpenAppSettingsCommand
   public let updateAccessDeviceFirmware: BlueIDAccessSDK.BlueUpdateAccessDeviceFirmwareCommand
