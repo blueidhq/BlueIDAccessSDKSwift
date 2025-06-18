@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9.2 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
-// swift-module-flags: -target x86_64-apple-ios16.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name BlueIDAccessSDK
-// swift-module-flags-ignorable: -enable-bare-slash-regex
+// swift-compiler-version: Apple Swift version 6.1.2 effective-5.10 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)
+// swift-module-flags: -target x86_64-apple-ios16.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name BlueIDAccessSDK
+// swift-module-flags-ignorable:  -interface-compiler-version 6.1.2
 import AVFoundation
 import BackgroundTasks
 import Combine
@@ -22,21 +22,15 @@ import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessClaimIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(activationToken: Swift.String) async throws -> BlueIDAccessSDK.BlueIdentity
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessGetObjectsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String) async throws -> BlueIDAccessSDK.BlueAccessObjectList
-  #endif
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class BlueAsyncTerminalCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
-  #endif
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class BlueClearBlacklistCommand : BlueIDAccessSDK.BlueAsyncTerminalCommand {
@@ -49,15 +43,11 @@ import _SwiftConcurrencyShims
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueGetSystemStatusCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatusExt
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAcccessAddIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identity: BlueIDAccessSDK.BlueIdentity) async throws
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessListDevicesCommand : BlueIDAccessSDK.BlueSdkCommand {
@@ -122,7 +112,7 @@ public enum BlueEventType : Swift.String, Swift.CaseIterable {
   public init?(rawValue: Swift.String)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventType]
   public typealias RawValue = Swift.String
-  public static var allCases: [BlueIDAccessSDK.BlueEventType] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueEventType] {
     get
   }
   public var rawValue: Swift.String {
@@ -143,7 +133,7 @@ public enum BlueLockState : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueLockState]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueLockState] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueLockState] {
     get
   }
   public var rawValue: Swift.Int {
@@ -238,9 +228,7 @@ extension BlueIDAccessSDK.BlueLockStatus : SwiftProtobuf.Message, SwiftProtobuf.
 }
 public protocol BlueTaskRunner {
   func getTasks() -> [BlueIDAccessSDK.BlueTask]
-  #if compiler(>=5.3) && $AsyncAwait
   func execute(_ throwWhenFail: Swift.Bool) async throws
-  #endif
   func cancel() -> Swift.Bool
   func isFailed() -> Swift.Bool
   func isCancelled() -> Swift.Bool
@@ -252,9 +240,7 @@ public protocol BlueTaskRunner {
 }
 @_hasMissingDesignatedInitializers public class BlueSerialTaskRunner : BlueIDAccessSDK.BlueTaskRunner {
   public func getTasks() -> [BlueIDAccessSDK.BlueTask]
-  #if compiler(>=5.3) && $AsyncAwait
   public func execute(_ throwWhenFail: Swift.Bool) async throws
-  #endif
   public func cancel() -> Swift.Bool
   public func isSuccessful() -> Swift.Bool
   public func isFailed() -> Swift.Bool
@@ -264,17 +250,11 @@ public protocol BlueTaskRunner {
 }
 public enum BlueKiosk {
   public struct WriteTransponderCommand {
-    #if compiler(>=5.3) && $AsyncAwait
     public func runAsync(identityID: Swift.String) async throws
-    #endif
   }
   @_hasMissingDesignatedInitializers public class RefreshTransponderCommand {
-    #if compiler(>=5.3) && $AsyncAwait
     public func runAsync(arg0: Any?, arg1: Any?, arg2: Any?) async throws -> Any?
-    #endif
-    #if compiler(>=5.3) && $AsyncAwait
     public func runAsync(syncEvents: Swift.Bool? = false, syncBlacklist: Swift.Bool? = false, minRefreshDays: Swift.Int? = nil) async throws -> BlueIDAccessSDK.BlueRefreshTransponderResult
-    #endif
     @objc deinit
   }
 }
@@ -291,15 +271,11 @@ public struct BlueTestCommand {
   public func run(_ hardwareName: Swift.String, _ hardwareVersion: Swift.Int, _ data: BlueIDAccessSDK._BlueTestEncodeDecode) throws -> BlueIDAccessSDK._BlueTestEncodeDecode
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueCreateLegacyProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, provisioning: BlueIDAccessSDK.BlueLegacyProvisioningRequest) async throws -> BlueIDAccessSDK.BlueLegacyProvisioningResponse
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueNGDeviceProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
-  #endif
   @objc deinit
 }
 public struct BlueOssSoCreateMobileCommand {
@@ -339,15 +315,11 @@ public struct BlueReadOssSoCredentialCommand {
   public func run(identityID: Swift.String) throws -> BlueIDAccessSDK.BlueOssSoConfiguration
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueWriteOssSoCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, offlineID: Swift.String) async throws -> Swift.Bool
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueRefreshOssSoCredentialCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String) async throws -> BlueIDAccessSDK.BlueOssSoConfiguration
-  #endif
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class BlueGetTransponderIdCommand {
@@ -359,15 +331,11 @@ public struct BlueReadOssSoCredentialCommand {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueRefreshOssSoCredentialsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync() async throws -> BlueIDAccessSDK.BlueRefreshOssSoIdentities
-  #endif
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class BlueTryAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueOssAccessResult
-  #endif
   @objc deinit
 }
 public struct BlueOpenAppSettingsCommand {
@@ -481,7 +449,7 @@ public enum BlueReturnCode : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueReturnCode]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueReturnCode] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueReturnCode] {
     get
   }
   public var rawValue: Swift.Int {
@@ -499,7 +467,7 @@ public enum BlueTimeUnit : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueTimeUnit]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueTimeUnit] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueTimeUnit] {
     get
   }
   public var rawValue: Swift.Int {
@@ -518,7 +486,7 @@ public enum BlueWeekday : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueWeekday]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueWeekday] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueWeekday] {
     get
   }
   public var rawValue: Swift.Int {
@@ -535,7 +503,7 @@ public enum BlueCredentialType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterab
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueCredentialType]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueCredentialType] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueCredentialType] {
     get
   }
   public var rawValue: Swift.Int {
@@ -555,7 +523,7 @@ public enum BlueAccessType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueAccessType]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueAccessType] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueAccessType] {
     get
   }
   public var rawValue: Swift.Int {
@@ -570,7 +538,7 @@ public enum BlueTransponderType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseItera
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueTransponderType]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueTransponderType] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueTransponderType] {
     get
   }
   public var rawValue: Swift.Int {
@@ -591,7 +559,7 @@ public enum BlueHardwareType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueHardwareType]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueHardwareType] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueHardwareType] {
     get
   }
   public var rawValue: Swift.Int {
@@ -611,7 +579,7 @@ public enum BlueBatteryLevel : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueBatteryLevel]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueBatteryLevel] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueBatteryLevel] {
     get
   }
   public var rawValue: Swift.Int {
@@ -638,7 +606,7 @@ public enum BlueEventId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventId]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueEventId] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueEventId] {
     get
   }
   public var rawValue: Swift.Int {
@@ -652,7 +620,7 @@ public enum BlueEventInfoSystem : Swift.Int, SwiftProtobuf.Enum, Swift.CaseItera
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoSystem]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueEventInfoSystem] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueEventInfoSystem] {
     get
   }
   public var rawValue: Swift.Int {
@@ -676,7 +644,7 @@ public enum BlueEventInfoAccess : Swift.Int, SwiftProtobuf.Enum, Swift.CaseItera
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoAccess]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueEventInfoAccess] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueEventInfoAccess] {
     get
   }
   public var rawValue: Swift.Int {
@@ -690,7 +658,7 @@ public enum BlueOssCredentialTypeSource : Swift.Int, SwiftProtobuf.Enum, Swift.C
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssCredentialTypeSource]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueOssCredentialTypeSource] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueOssCredentialTypeSource] {
     get
   }
   public var rawValue: Swift.Int {
@@ -704,7 +672,7 @@ public enum BlueOssSoCredentialTypeOssCredential : Swift.Int, SwiftProtobuf.Enum
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueOssSoCredentialTypeOssCredential] {
     get
   }
   public var rawValue: Swift.Int {
@@ -717,7 +685,7 @@ public enum BlueOssSoDoorGroupId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIter
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoDoorGroupId]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorGroupId] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorGroupId] {
     get
   }
   public var rawValue: Swift.Int {
@@ -731,7 +699,7 @@ public enum BlueOssSoDoorInfoAccessBy : Swift.Int, SwiftProtobuf.Enum, Swift.Cas
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueOssSoDoorInfoAccessBy] {
     get
   }
   public var rawValue: Swift.Int {
@@ -748,7 +716,7 @@ public enum BlueOssSoFileId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable 
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoFileId]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueOssSoFileId] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueOssSoFileId] {
     get
   }
   public var rawValue: Swift.Int {
@@ -763,7 +731,7 @@ public enum BlueOssSoWriteStatus : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIter
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueOssSoWriteStatus]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueOssSoWriteStatus] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueOssSoWriteStatus] {
     get
   }
   public var rawValue: Swift.Int {
@@ -3207,7 +3175,7 @@ public enum BlueDeviceType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueDeviceType]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueDeviceType] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueDeviceType] {
     get
   }
   public var rawValue: Swift.Int {
@@ -3223,7 +3191,7 @@ public enum BlueRefreshOssSoCredentialStatus : Swift.Int, SwiftProtobuf.Enum, Sw
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus]
   public typealias RawValue = Swift.Int
-  public static var allCases: [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus] {
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus] {
     get
   }
   public var rawValue: Swift.Int {
@@ -4825,27 +4793,17 @@ extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : SwiftProtobuf.Messa
   }
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessPingDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueVersionInfo
-  #endif
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, identifier: Swift.String, isDemo: Swift.Bool = false) async throws -> BlueIDAccessSDK.BlueVersionInfo
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessProvisionDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, provisioning: BlueIDAccessSDK.BlueSystemProvisioning) async throws
-  #endif
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, identifier: Swift.String, provisioning: BlueIDAccessSDK.BlueSystemProvisioning, isDemo: Swift.Bool = false) async throws
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessGetWritableIdentitiesCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String) async throws -> BlueIDAccessSDK.BlueIdentitiesList
-  #endif
   @objc deinit
 }
 public struct BlueIsNfcActive {
@@ -4858,25 +4816,15 @@ public struct BlueIsNfcActive {
 @_hasMissingDesignatedInitializers public class BlueJwt {
   @objc deinit
 }
-#if compiler(>=5.3) && $AsyncAwait
 public func blueShowAccessDeviceModal(_ lockState: BlueIDAccessSDK.BlueLockState? = nil, _ accessTypes: [BlueIDAccessSDK.BlueAccessType] = [], _ task: @escaping (BlueIDAccessSDK.BlueAccessType?) async throws -> BlueIDAccessSDK.BlueOssAccessResult) async throws -> BlueIDAccessSDK.BlueOssAccessResult
-#endif
-#if compiler(>=5.3) && $AsyncAwait
 public func blueShowSynchronizeAccessDeviceModal(_ runner: any BlueIDAccessSDK.BlueTaskRunner) async throws
-#endif
-#if compiler(>=5.3) && $AsyncAwait
 public func blueShowUpdateAccessDeviceFirmwareModal(_ runner: any BlueIDAccessSDK.BlueTaskRunner) async throws
-#endif
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceFirmwareCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool? = false) async throws
-  #endif
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessSynchronizeIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws
-  #endif
   @objc deinit
 }
 public typealias BluePluginResolve = ([Swift.String : Any]?) -> Swift.Void
@@ -5864,9 +5812,7 @@ public struct BlueNearByDeactivate {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUnclaimAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> Swift.Bool
-  #endif
   @objc deinit
 }
 public func blueEncodeMessage(_ message: (any SwiftProtobuf.Message)!, partial: Swift.Bool = false) throws -> Foundation.Data
@@ -5877,9 +5823,7 @@ public struct BlueFetchConfig {
 public struct BlueFetchResponse<T> where T : Swift.Decodable {
 }
 @_hasMissingDesignatedInitializers public class BlueFetch {
-  #if compiler(>=5.3) && $AsyncAwait
   public static func get<T>(url: Foundation.URL, config: BlueIDAccessSDK.BlueFetchConfig? = nil) async throws -> BlueIDAccessSDK.BlueFetchResponse<T> where T : Swift.Decodable
-  #endif
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class BlueSdkCommand {
@@ -5975,9 +5919,7 @@ public struct BlueVersion {
   public static let current: Swift.String
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessSynchronizeIdentitiesCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync() async throws -> BlueIDAccessSDK.BlueSynchronizeIdentities
-  #endif
   @objc deinit
 }
 public struct BlueOssSidCreateMobileCommand {
@@ -6056,9 +5998,7 @@ extension Foundation.Data {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessClaimDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, objectID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatus?
-  #endif
   @objc deinit
 }
 public func blueCreateIdentityDemo(id: Swift.String? = nil, validFrom: BlueIDAccessSDK.BlueLocalTimestamp? = nil, role: BlueIDAccessSDK.BlueCredentialType? = nil) -> BlueIDAccessSDK.BlueIdentity
@@ -6081,9 +6021,7 @@ public func blueCreateIdentityDemo(id: Swift.String? = nil, validFrom: BlueIDAcc
       get
     }
   }
-  #if compiler(>=5.3) && $AsyncAwait
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, showModal: Swift.Bool? = false, validateSettings: Swift.Bool? = false, throwWhenFail: Swift.Bool? = false) async throws -> BlueIDAccessSDK.BlueSystemStatusExt?
-  #endif
   @objc deinit
 }
 public var defaultTimeoutSec: Swift.Double
@@ -6091,30 +6029,18 @@ public func blueTerminalRequest<DataType>(identityID: Swift.String?, action: Swi
 public func blueTerminalRequest(identityID: Swift.String?, action: Swift.String, data: Foundation.Data? = nil) throws
 public func blueTerminalRequest<DataType, ResultType>(identityID: Swift.String?, action: Swift.String, data: DataType) throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
 public func blueTerminalRequest<ResultType>(identityID: Swift.String?, action: Swift.String, data: Foundation.Data? = nil) throws -> ResultType where ResultType : SwiftProtobuf.Message
-#if compiler(>=5.3) && $AsyncAwait
 public func blueTerminalRunOssSoMobile(identityID: Swift.String, deviceID: Swift.String, accessType: BlueIDAccessSDK.BlueAccessType? = nil) async throws -> BlueIDAccessSDK.BlueOssAccessEventsResult
-#endif
 public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, handler: @escaping () throws -> HandlerResult, completion: @escaping (Swift.Result<HandlerResult, any Swift.Error>) -> Swift.Void, isTest: Swift.Bool = false)
-#if compiler(>=5.3) && $AsyncAwait
 @available(macOS 10.15, *)
 public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, _ handler: @escaping () throws -> HandlerResult) async throws -> HandlerResult
-#endif
-#if compiler(>=5.3) && $AsyncAwait
 @available(macOS 10.15, *)
 public func blueTerminalRun(identityID: Swift.String?, deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, action: Swift.String) async throws
-#endif
-#if compiler(>=5.3) && $AsyncAwait
 @available(macOS 10.15, *)
 public func blueTerminalRun<ResultType>(identityID: Swift.String?, deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String) async throws -> ResultType where ResultType : SwiftProtobuf.Message
-#endif
-#if compiler(>=5.3) && $AsyncAwait
 @available(macOS 10.15, *)
 public func blueTerminalRun<DataType>(identityID: Swift.String?, deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws where DataType : SwiftProtobuf.Message
-#endif
-#if compiler(>=5.3) && $AsyncAwait
 @available(macOS 10.15, *)
 public func blueTerminalRun<DataType, ResultType>(identityID: Swift.String?, deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, action: Swift.String, data: DataType) async throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
-#endif
 public struct BlueTerminalRequest {
   public let action: Swift.String
   public let data: Foundation.Data?
