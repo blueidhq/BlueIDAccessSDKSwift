@@ -4992,6 +4992,14 @@ public struct BlueAccessConfig : Swift.Sendable {
   }
   public mutating func clearSiteID()
   public var groups: [BlueIDAccessSDK.BlueAccessConfigGroup]
+  public var extendedID: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasExtendedID: Swift.Bool {
+    get
+  }
+  public mutating func clearExtendedID()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
