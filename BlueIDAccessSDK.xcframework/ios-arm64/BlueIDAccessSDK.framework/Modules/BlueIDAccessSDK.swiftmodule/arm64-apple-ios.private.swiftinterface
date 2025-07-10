@@ -261,6 +261,9 @@ public enum BlueKiosk {
 public struct BlueInitializeCommand {
   public func run() throws
 }
+public struct BlueEnableLoggingCommand {
+  public func run(enabled: Swift.Bool) -> Swift.Bool
+}
 public struct BlueReleaseCommand {
   public func run() throws
 }
@@ -5842,6 +5845,7 @@ public struct BlueFetchResponse<T> where T : Swift.Decodable {
 }
 public struct BlueCommands {
   public let initialize: BlueIDAccessSDK.BlueInitializeCommand
+  public let enableBlueLogging: BlueIDAccessSDK.BlueEnableLoggingCommand
   public let release: BlueIDAccessSDK.BlueReleaseCommand
   public let test: BlueIDAccessSDK.BlueTestCommand
   public let versionInfo: BlueIDAccessSDK.BlueVersionInfoCommand
