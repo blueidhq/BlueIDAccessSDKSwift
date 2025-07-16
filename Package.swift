@@ -19,13 +19,15 @@ let package = Package(
     dependencies: [
       .package(url: "https://github.com/apple/swift-protobuf.git", .upToNextMajor(from: "1.24.0")),
       .package(url: "https://github.com/NordicSemiconductor/IOS-DFU-Library", .upToNextMajor(from: "4.15.0")),
+      .package(url: "https://github.com/getsentry/sentry-cocoa", .upToNextMajor(from: "8.0.0"))
     ],
     targets: [
         .target(
             name: "BlueIDAccessSDKLib",
             dependencies: [
               .product(name: "SwiftProtobuf", package: "swift-protobuf"),
-              .product(name: "NordicDFU", package: "IOS-DFU-Library")
+              .product(name: "NordicDFU", package: "IOS-DFU-Library"),
+              .product(name: "Sentry", package: "sentry-cocoa")
             ]
         ),
         .binaryTarget(

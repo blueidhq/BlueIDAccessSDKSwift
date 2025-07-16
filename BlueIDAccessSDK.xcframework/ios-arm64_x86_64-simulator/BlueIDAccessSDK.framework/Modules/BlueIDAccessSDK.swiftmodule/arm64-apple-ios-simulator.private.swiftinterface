@@ -15,7 +15,6 @@ import Foundation
 import Network
 import NordicDFU
 import Security
-import Sentry
 import Swift
 import SwiftProtobuf
 import SwiftUI
@@ -263,7 +262,7 @@ public struct BlueInitializeCommand {
   public func run() throws
 }
 public struct BlueEnableLoggingCommand {
-  public func run(enabled: Swift.Bool) throws -> Swift.Bool
+  public func run(enabled: Swift.Bool) -> Swift.Bool
 }
 public struct BlueReleaseCommand {
   public func run() throws
