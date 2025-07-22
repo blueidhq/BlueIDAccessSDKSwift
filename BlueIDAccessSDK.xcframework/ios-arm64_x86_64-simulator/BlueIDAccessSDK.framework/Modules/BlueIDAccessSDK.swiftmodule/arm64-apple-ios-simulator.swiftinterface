@@ -278,7 +278,7 @@ public struct BlueTestCommand {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueNGDeviceProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> Swift.String
   @objc deinit
 }
 public struct BlueOssSoCreateMobileCommand {
@@ -3722,6 +3722,14 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearOpenViaOssSoSelectAccessTypeMessage()
+  public var provisioningDone: Swift.String {
+    get
+    set
+  }
+  public var hasProvisioningDone: Swift.Bool {
+    get
+  }
+  public mutating func clearProvisioningDone()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
