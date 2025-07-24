@@ -433,6 +433,9 @@ public enum BlueReturnCode : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case sdkDeviceFactoryStateRequired
   case sdkClaimDeviceFailedAutoUnclaimSuccess
   case sdkClaimDeviceAndAutoUnclaimFailed
+  case sdkIdentityHasRevoked
+  case sdkIdentityHasDeleted
+  case sdkIdentityHasExpired
   case ossMareturnCodeStart
   case ossMareturnCodeEnd
   public init()
