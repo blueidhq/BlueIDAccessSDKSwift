@@ -4827,6 +4827,10 @@ public struct BlueIsNfcActive {
   public func run(role: BlueIDAccessSDK.BlueCredentialType? = nil, for deviceID: Swift.String? = nil) throws -> BlueIDAccessSDK.BlueIdentitiesList
   @objc deinit
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessGetIdentityCommand : BlueIDAccessSDK.BlueSdkCommand {
+  public func run(identityID: Swift.String) throws -> BlueIDAccessSDK.BlueIdentity
+  @objc deinit
+}
 @_hasMissingDesignatedInitializers public class BlueJwt {
   @objc deinit
 }
@@ -5901,6 +5905,7 @@ public struct BlueCommands {
   public let addIdentity: BlueIDAccessSDK.BlueAcccessAddIdentityCommand
   public let claimIdentity: BlueIDAccessSDK.BlueAccessClaimIdentityCommand
   public let getIdentities: BlueIDAccessSDK.BlueAccessGetIdentitiesCommand
+  public let getIdentity: BlueIDAccessSDK.BlueAccessGetIdentityCommand
   public let synchronizeIdentity: BlueIDAccessSDK.BlueAccessSynchronizeIdentityCommand
   public let synchronizeIdentities: BlueIDAccessSDK.BlueAccessSynchronizeIdentitiesCommand
   public let listAccessDevices: BlueIDAccessSDK.BlueAccessListDevicesCommand
