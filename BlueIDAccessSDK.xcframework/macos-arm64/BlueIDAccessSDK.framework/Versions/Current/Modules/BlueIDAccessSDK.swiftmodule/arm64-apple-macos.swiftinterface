@@ -265,7 +265,7 @@ public struct BlueTestCommand {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueNGDeviceProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> Swift.String
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String, hwType: Swift.String) async throws -> Swift.String
   @objc deinit
 }
 public struct BlueOssSoCreateMobileCommand {
