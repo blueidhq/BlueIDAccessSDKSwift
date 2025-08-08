@@ -227,6 +227,7 @@ public protocol BlueTaskRunner {
   func getTasks() -> [BlueIDAccessSDK.BlueTask]
   func execute(_ throwWhenFail: Swift.Bool) async throws
   func cancel() -> Swift.Bool
+  func skipCancel() -> Swift.Bool
   func isFailed() -> Swift.Bool
   func isCancelled() -> Swift.Bool
   func isSuccessful() -> Swift.Bool
@@ -239,6 +240,7 @@ public protocol BlueTaskRunner {
   public func getTasks() -> [BlueIDAccessSDK.BlueTask]
   public func execute(_ throwWhenFail: Swift.Bool) async throws
   public func cancel() -> Swift.Bool
+  public func skipCancel() -> Swift.Bool
   public func isSuccessful() -> Swift.Bool
   public func isFailed() -> Swift.Bool
   public func isCancelled() -> Swift.Bool
@@ -3592,14 +3594,14 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearDfuCompletedTitle()
-  public var dfuGetAuthenticationTokenTaskLabel: Swift.String {
+  public var getAuthenticationTokenTaskLabel: Swift.String {
     get
     set
   }
-  public var hasDfuGetAuthenticationTokenTaskLabel: Swift.Bool {
+  public var hasGetAuthenticationTokenTaskLabel: Swift.Bool {
     get
   }
-  public mutating func clearDfuGetAuthenticationTokenTaskLabel()
+  public mutating func clearGetAuthenticationTokenTaskLabel()
   public var dfuCheckLatestFwlabel: Swift.String {
     get
     set
@@ -3648,14 +3650,14 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearDfuUpdateFwlabel()
-  public var dfuWaitForDeviceToRestartTaskLabel: Swift.String {
+  public var waitForDeviceToRestartTaskLabel: Swift.String {
     get
     set
   }
-  public var hasDfuWaitForDeviceToRestartTaskLabel: Swift.Bool {
+  public var hasWaitForDeviceToRestartTaskLabel: Swift.Bool {
     get
   }
-  public mutating func clearDfuWaitForDeviceToRestartTaskLabel()
+  public mutating func clearWaitForDeviceToRestartTaskLabel()
   public var accessTypeDefaultTime: Swift.String {
     get
     set
@@ -3720,6 +3722,54 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearProvisioningDone()
+  public var checkCurrentAvr: Swift.String {
+    get
+    set
+  }
+  public var hasCheckCurrentAvr: Swift.Bool {
+    get
+  }
+  public mutating func clearCheckCurrentAvr()
+  public var checkIfAvrupdateNedded: Swift.String {
+    get
+    set
+  }
+  public var hasCheckIfAvrupdateNedded: Swift.Bool {
+    get
+  }
+  public mutating func clearCheckIfAvrupdateNedded()
+  public var downloadAvr: Swift.String {
+    get
+    set
+  }
+  public var hasDownloadAvr: Swift.Bool {
+    get
+  }
+  public mutating func clearDownloadAvr()
+  public var downloadingAvr: Swift.String {
+    get
+    set
+  }
+  public var hasDownloadingAvr: Swift.Bool {
+    get
+  }
+  public mutating func clearDownloadingAvr()
+  public var updateAvr: Swift.String {
+    get
+    set
+  }
+  public var hasUpdateAvr: Swift.Bool {
+    get
+  }
+  public mutating func clearUpdateAvr()
+  public var avrIsAlreadyUpToDate: Swift.String {
+    get
+    set
+  }
+  public var hasAvrIsAlreadyUpToDate: Swift.Bool {
+    get
+  }
+  public mutating func clearAvrIsAlreadyUpToDate()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -4825,6 +4875,14 @@ public struct BlueIsNfcActive {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool? = false) async throws
   @objc deinit
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueCheckIfAVRUpdateAvailableCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  public func runAsync(hwName: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemAVRInfo
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceAVRCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
+  @objc deinit
+}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessSynchronizeIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws
   @objc deinit
@@ -5895,6 +5953,8 @@ public struct BlueCommands {
   public let clearSystemLog: BlueIDAccessSDK.BlueClearSystemLogCommand
   public let getSystemStatus: BlueIDAccessSDK.BlueGetSystemStatusCommand
   public let provisioningNGDevice: BlueIDAccessSDK.BlueNGDeviceProvisioningCommand
+  public let updateAvr: BlueIDAccessSDK.BlueUpdateAccessDeviceAVRCommand
+  public let checkIfAVRUpdateAvailableCommand: BlueIDAccessSDK.BlueCheckIfAVRUpdateAvailableCommand
   public let createLegacyProvisioning: BlueIDAccessSDK.BlueCreateLegacyProvisioningCommand
   public let openAppSettings: BlueIDAccessSDK.BlueOpenAppSettingsCommand
   public let updateAccessDeviceFirmware: BlueIDAccessSDK.BlueUpdateAccessDeviceFirmwareCommand
