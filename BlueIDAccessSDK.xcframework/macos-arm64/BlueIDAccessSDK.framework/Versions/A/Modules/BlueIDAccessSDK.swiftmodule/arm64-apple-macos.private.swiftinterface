@@ -227,7 +227,6 @@ public protocol BlueTaskRunner {
   func getTasks() -> [BlueIDAccessSDK.BlueTask]
   func execute(_ throwWhenFail: Swift.Bool) async throws
   func cancel() -> Swift.Bool
-  func skipCancel() -> Swift.Bool
   func isFailed() -> Swift.Bool
   func isCancelled() -> Swift.Bool
   func isSuccessful() -> Swift.Bool
@@ -240,7 +239,6 @@ public protocol BlueTaskRunner {
   public func getTasks() -> [BlueIDAccessSDK.BlueTask]
   public func execute(_ throwWhenFail: Swift.Bool) async throws
   public func cancel() -> Swift.Bool
-  public func skipCancel() -> Swift.Bool
   public func isSuccessful() -> Swift.Bool
   public func isFailed() -> Swift.Bool
   public func isCancelled() -> Swift.Bool
@@ -356,6 +354,7 @@ public enum BlueReturnCode : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case pointerConversionFailed
   case unavailable
   case aborted
+  case outOfMemory
   case test
   case encodeDataWriteFailed
   case encodeDataWriteNothingWritten
@@ -1210,6 +1209,102 @@ public struct BlueSPResult : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearData()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueWebSPHandshake : @unchecked Swift.Sendable {
+  public var salt: Foundation.Data {
+    get
+    set
+  }
+  public var hasSalt: Swift.Bool {
+    get
+  }
+  public mutating func clearSalt()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueWebSPHandshakeReply : @unchecked Swift.Sendable {
+  public var deviceID: Swift.String {
+    get
+    set
+  }
+  public var hasDeviceID: Swift.Bool {
+    get
+  }
+  public mutating func clearDeviceID()
+  public var signature: Foundation.Data {
+    get
+    set
+  }
+  public var hasSignature: Swift.Bool {
+    get
+  }
+  public mutating func clearSignature()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueWebSPMessage : Swift.Sendable {
+  public var transactionID: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasTransactionID: Swift.Bool {
+    get
+  }
+  public mutating func clearTransactionID()
+  public var payload: BlueIDAccessSDK.BlueSPResult {
+    get
+    set
+  }
+  public var hasPayload: Swift.Bool {
+    get
+  }
+  public mutating func clearPayload()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueWebSPServerMessage : Swift.Sendable {
+  public var payload: BlueIDAccessSDK.BlueWebSPServerMessage.OneOf_Payload?
+  public var handshake: BlueIDAccessSDK.BlueWebSPHandshake {
+    get
+    set
+  }
+  public var command: BlueIDAccessSDK.BlueSPTokenCommand {
+    get
+    set
+  }
+  public var ossSo: BlueIDAccessSDK.BlueOssSoMobile {
+    get
+    set
+  }
+  public var ossSid: BlueIDAccessSDK.BlueOssSidMobile {
+    get
+    set
+  }
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public enum OneOf_Payload : Swift.Equatable, Swift.Sendable {
+    case handshake(BlueIDAccessSDK.BlueWebSPHandshake)
+    case command(BlueIDAccessSDK.BlueSPTokenCommand)
+    case ossSo(BlueIDAccessSDK.BlueOssSoMobile)
+    case ossSid(BlueIDAccessSDK.BlueOssSidMobile)
+    public static func == (a: BlueIDAccessSDK.BlueWebSPServerMessage.OneOf_Payload, b: BlueIDAccessSDK.BlueWebSPServerMessage.OneOf_Payload) -> Swift.Bool
+  }
+  public init()
+}
+public struct BlueWebSPClientMessage : Swift.Sendable {
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  public init()
+}
+public struct BlueWebSPStatusMessage : Swift.Sendable {
+  public var status: BlueIDAccessSDK.BlueReturnCode {
+    get
+    set
+  }
+  public var hasStatus: Swift.Bool {
+    get
+  }
+  public mutating func clearStatus()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -2648,6 +2743,81 @@ extension BlueIDAccessSDK.BlueSPResult : SwiftProtobuf.Message, SwiftProtobuf._M
     get
   }
 }
+extension BlueIDAccessSDK.BlueWebSPHandshake : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueWebSPHandshake, rhs: BlueIDAccessSDK.BlueWebSPHandshake) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueWebSPHandshakeReply : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueWebSPHandshakeReply, rhs: BlueIDAccessSDK.BlueWebSPHandshakeReply) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueWebSPMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueWebSPMessage, rhs: BlueIDAccessSDK.BlueWebSPMessage) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueWebSPServerMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueWebSPServerMessage, rhs: BlueIDAccessSDK.BlueWebSPServerMessage) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueWebSPClientMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueWebSPClientMessage, rhs: BlueIDAccessSDK.BlueWebSPClientMessage) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension BlueIDAccessSDK.BlueWebSPStatusMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  public var isInitialized: Swift.Bool {
+    get
+  }
+  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueWebSPStatusMessage, rhs: BlueIDAccessSDK.BlueWebSPStatusMessage) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+}
 extension BlueIDAccessSDK.BlueOssAccessResult : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: Swift.String
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
@@ -3594,14 +3764,14 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearDfuCompletedTitle()
-  public var getAuthenticationTokenTaskLabel: Swift.String {
+  public var dfuGetAuthenticationTokenTaskLabel: Swift.String {
     get
     set
   }
-  public var hasGetAuthenticationTokenTaskLabel: Swift.Bool {
+  public var hasDfuGetAuthenticationTokenTaskLabel: Swift.Bool {
     get
   }
-  public mutating func clearGetAuthenticationTokenTaskLabel()
+  public mutating func clearDfuGetAuthenticationTokenTaskLabel()
   public var dfuCheckLatestFwlabel: Swift.String {
     get
     set
@@ -3650,14 +3820,14 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearDfuUpdateFwlabel()
-  public var waitForDeviceToRestartTaskLabel: Swift.String {
+  public var dfuWaitForDeviceToRestartTaskLabel: Swift.String {
     get
     set
   }
-  public var hasWaitForDeviceToRestartTaskLabel: Swift.Bool {
+  public var hasDfuWaitForDeviceToRestartTaskLabel: Swift.Bool {
     get
   }
-  public mutating func clearWaitForDeviceToRestartTaskLabel()
+  public mutating func clearDfuWaitForDeviceToRestartTaskLabel()
   public var accessTypeDefaultTime: Swift.String {
     get
     set
@@ -3722,54 +3892,6 @@ public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearProvisioningDone()
-  public var checkCurrentAvr: Swift.String {
-    get
-    set
-  }
-  public var hasCheckCurrentAvr: Swift.Bool {
-    get
-  }
-  public mutating func clearCheckCurrentAvr()
-  public var checkIfAvrupdateNedded: Swift.String {
-    get
-    set
-  }
-  public var hasCheckIfAvrupdateNedded: Swift.Bool {
-    get
-  }
-  public mutating func clearCheckIfAvrupdateNedded()
-  public var downloadAvr: Swift.String {
-    get
-    set
-  }
-  public var hasDownloadAvr: Swift.Bool {
-    get
-  }
-  public mutating func clearDownloadAvr()
-  public var downloadingAvr: Swift.String {
-    get
-    set
-  }
-  public var hasDownloadingAvr: Swift.Bool {
-    get
-  }
-  public mutating func clearDownloadingAvr()
-  public var updateAvr: Swift.String {
-    get
-    set
-  }
-  public var hasUpdateAvr: Swift.Bool {
-    get
-  }
-  public mutating func clearUpdateAvr()
-  public var avrIsAlreadyUpToDate: Swift.String {
-    get
-    set
-  }
-  public var hasAvrIsAlreadyUpToDate: Swift.Bool {
-    get
-  }
-  public mutating func clearAvrIsAlreadyUpToDate()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -4875,14 +4997,6 @@ public struct BlueIsNfcActive {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool? = false) async throws
   @objc deinit
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueCheckIfAVRUpdateAvailableCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  public func runAsync(hwName: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemAVRInfo
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceAVRCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
-  @objc deinit
-}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessSynchronizeIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws
   @objc deinit
@@ -5953,8 +6067,6 @@ public struct BlueCommands {
   public let clearSystemLog: BlueIDAccessSDK.BlueClearSystemLogCommand
   public let getSystemStatus: BlueIDAccessSDK.BlueGetSystemStatusCommand
   public let provisioningNGDevice: BlueIDAccessSDK.BlueNGDeviceProvisioningCommand
-  public let updateAvr: BlueIDAccessSDK.BlueUpdateAccessDeviceAVRCommand
-  public let checkIfAVRUpdateAvailableCommand: BlueIDAccessSDK.BlueCheckIfAVRUpdateAvailableCommand
   public let createLegacyProvisioning: BlueIDAccessSDK.BlueCreateLegacyProvisioningCommand
   public let openAppSettings: BlueIDAccessSDK.BlueOpenAppSettingsCommand
   public let updateAccessDeviceFirmware: BlueIDAccessSDK.BlueUpdateAccessDeviceFirmwareCommand
