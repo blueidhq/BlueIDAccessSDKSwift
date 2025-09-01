@@ -734,7 +734,7 @@ public enum BlueOssSoWriteStatus : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIter
     get
   }
 }
-public struct BlueSharedDemoData : @unchecked Swift.Sendable {
+public struct BlueSharedDemoData : Swift.Sendable {
   public var deviceID: Swift.String {
     get
     set
@@ -1095,7 +1095,7 @@ public struct BlueEvent : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPHandshake : @unchecked Swift.Sendable {
+public struct BlueSPHandshake : Swift.Sendable {
   public var transponderSalt: Foundation.Data {
     get
     set
@@ -1107,7 +1107,7 @@ public struct BlueSPHandshake : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPHandshakeReply : @unchecked Swift.Sendable {
+public struct BlueSPHandshakeReply : Swift.Sendable {
   public var terminalSalt: Foundation.Data {
     get
     set
@@ -1127,7 +1127,7 @@ public struct BlueSPHandshakeReply : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPTokenCommand : @unchecked Swift.Sendable {
+public struct BlueSPTokenCommand : Swift.Sendable {
   public var credentialID: BlueIDAccessSDK.BlueCredentialId {
     get
     set
@@ -1171,7 +1171,7 @@ public struct BlueSPTokenCommand : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSPToken : @unchecked Swift.Sendable {
+public struct BlueSPToken : Swift.Sendable {
   public var signature: Foundation.Data {
     get
     set
@@ -1202,7 +1202,7 @@ public struct BlueSPToken : @unchecked Swift.Sendable {
   }
   public init()
 }
-public struct BlueSPResult : @unchecked Swift.Sendable {
+public struct BlueSPResult : Swift.Sendable {
   public var data: Foundation.Data {
     get
     set
@@ -1214,7 +1214,7 @@ public struct BlueSPResult : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueWebSPHandshake : @unchecked Swift.Sendable {
+public struct BlueWebSPHandshake : Swift.Sendable {
   public var salt: Foundation.Data {
     get
     set
@@ -1226,7 +1226,7 @@ public struct BlueWebSPHandshake : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueWebSPHandshakeReply : @unchecked Swift.Sendable {
+public struct BlueWebSPHandshakeReply : Swift.Sendable {
   public var deviceID: Swift.String {
     get
     set
@@ -1407,7 +1407,7 @@ public struct BlueOssSidCredentialTypeOss : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidCredentialTypeProprietary : @unchecked Swift.Sendable {
+public struct BlueOssSidCredentialTypeProprietary : Swift.Sendable {
   public var mfgCode: Foundation.Data {
     get
     set
@@ -1571,7 +1571,7 @@ public struct BlueOssSidProvisioningData : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidMobile : @unchecked Swift.Sendable {
+public struct BlueOssSidMobile : Swift.Sendable {
   public var infoFile: Foundation.Data {
     get
     set
@@ -1607,7 +1607,7 @@ public struct BlueOssSidMifareDesfireProvisioningConfiguration : Swift.Sendable 
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSidMifareDesfireConfiguration : @unchecked Swift.Sendable {
+public struct BlueOssSidMifareDesfireConfiguration : Swift.Sendable {
   public var piccMasterKey: Foundation.Data {
     get
     set
@@ -1687,7 +1687,7 @@ public struct BlueOssSoCredentialTypeOss : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoCredentialTypeProprietary : @unchecked Swift.Sendable {
+public struct BlueOssSoCredentialTypeProprietary : Swift.Sendable {
   public var mfgCode: Foundation.Data {
     get
     set
@@ -1810,7 +1810,7 @@ public struct BlueOssSoEvent : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoExtFeature : @unchecked Swift.Sendable {
+public struct BlueOssSoExtFeature : Swift.Sendable {
   public var tag: Swift.UInt32 {
     get
     set
@@ -1948,7 +1948,7 @@ public struct BlueOssSoFileData : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoFileEvent : @unchecked Swift.Sendable {
+public struct BlueOssSoFileEvent : Swift.Sendable {
   public var supportedEventIds: Foundation.Data {
     get
     set
@@ -2123,7 +2123,7 @@ public struct BlueOssSoStorageProfile : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoProvisioningConfiguration : @unchecked Swift.Sendable {
+public struct BlueOssSoProvisioningConfiguration : Swift.Sendable {
   public var numberOfDoors: Swift.UInt32 {
     get
     set
@@ -2227,7 +2227,7 @@ public struct BlueOssSoProvisioningData : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMobile : @unchecked Swift.Sendable {
+public struct BlueOssSoMobile : Swift.Sendable {
   public var infoFile: Foundation.Data {
     get
     set
@@ -2279,7 +2279,7 @@ public struct BlueOssSoMobile : @unchecked Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMobileProvisioningConfiguration : @unchecked Swift.Sendable {
+public struct BlueOssSoMobileProvisioningConfiguration : Swift.Sendable {
   public var numberOfDoors: Swift.UInt32 {
     get
     set
@@ -2347,7 +2347,7 @@ public struct BlueOssSoMobileProvisioningConfiguration : @unchecked Swift.Sendab
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMifareDesfireProvisioningConfiguration : @unchecked Swift.Sendable {
+public struct BlueOssSoMifareDesfireProvisioningConfiguration : Swift.Sendable {
   public var numberOfDoors: Swift.UInt32 {
     get
     set
@@ -2415,7 +2415,7 @@ public struct BlueOssSoMifareDesfireProvisioningConfiguration : @unchecked Swift
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssSoMifareDesfireConfiguration : @unchecked Swift.Sendable {
+public struct BlueOssSoMifareDesfireConfiguration : Swift.Sendable {
   public var piccMasterKey: Foundation.Data {
     get
     set
@@ -5251,7 +5251,7 @@ public struct BlueAccessConfig : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueOssConfig : @unchecked Swift.Sendable {
+public struct BlueOssConfig : Swift.Sendable {
   public var sidMifareAesKey: Foundation.Data {
     get
     set
@@ -5547,7 +5547,7 @@ public struct BlueSystemSettings : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
-public struct BlueSystemProvisioning : @unchecked Swift.Sendable {
+public struct BlueSystemProvisioning : Swift.Sendable {
   public var hardwareType: BlueIDAccessSDK.BlueHardwareType {
     get
     set
