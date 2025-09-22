@@ -10,11 +10,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		ggjCle9hxWRlB2rUiXCJ2alR2Xo=
+		uhCl8+nmrHSrkwLdaGlqj5/LYRg=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		yv1VPo2tlCWjMYoaBkyBOlbpo8U=
+		Nq9zvVYvdCC3Lc6fp9c62eb/YIY=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		Itt/cpr9k9BKlZ0Vx1sy8ZLQDhk=
+		6RqSM1X4ZKy74KSWq5TwAnZD6rk=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		yv1VPo2tlCWjMYoaBkyBOlbpo8U=
+		Nq9zvVYvdCC3Lc6fp9c62eb/YIY=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		nn8x+P3MkpQUB+fkvH19QLm6iug=
+		0MUVM8txuSDSJNKInJrVn4x7HAI=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			AeTz6aMh57wuEWHGL4fU9evhTd8wOtc9fJ9pArJwQJ4=
+			jdVuSIAnEKq1YolrVy2RRRaCRfFkKK4mSlnhNiYO7/M=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -94,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2KOQ/W/p3yNE9sbgAk6KoddLZbQbMZy/4SkNsMXxWJA=
+			UTk0GAzVNcrc70Vs+lq4psgFJdMvuI4Q86NG84W2PJM=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			AeTz6aMh57wuEWHGL4fU9evhTd8wOtc9fJ9pArJwQJ4=
+			jdVuSIAnEKq1YolrVy2RRRaCRfFkKK4mSlnhNiYO7/M=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -129,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hx9E+8KEK6oSdPzDkI/kfFlxS7fyVnJIPmf76Jkxlw4=
+			5WrOQLHjpST4zX963ayM+hgxPcXopU7QBJ3EvtFkWAU=
 			</data>
 		</dict>
 	</dict>
