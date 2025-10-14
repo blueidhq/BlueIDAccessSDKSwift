@@ -2188,6 +2188,14 @@ public struct BlueOssSoProvisioningConfiguration : Swift.Sendable {
     get
   }
   public mutating func clearCustomerExtensionsSize()
+  public var hasData_p: Swift.Bool {
+    get
+    set
+  }
+  public var hasHasData_p: Swift.Bool {
+    get
+  }
+  public mutating func clearHasData_p()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -2344,6 +2352,14 @@ public struct BlueOssSoMobileProvisioningConfiguration : Swift.Sendable {
     get
   }
   public mutating func clearCustomerExtensionsSize()
+  public var hasData_p: Swift.Bool {
+    get
+    set
+  }
+  public var hasHasData_p: Swift.Bool {
+    get
+  }
+  public mutating func clearHasData_p()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -2412,6 +2428,14 @@ public struct BlueOssSoMifareDesfireProvisioningConfiguration : Swift.Sendable {
     get
   }
   public mutating func clearCustomerExtensionsSize()
+  public var hasData_p: Swift.Bool {
+    get
+    set
+  }
+  public var hasHasData_p: Swift.Bool {
+    get
+  }
+  public mutating func clearHasData_p()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -4173,6 +4197,14 @@ public struct BlueAccessDevice : Swift.Sendable {
     get
   }
   public mutating func clearObjectID()
+  public var deviceStatus: Swift.String {
+    get
+    set
+  }
+  public var hasDeviceStatus: Swift.Bool {
+    get
+  }
+  public mutating func clearDeviceStatus()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
