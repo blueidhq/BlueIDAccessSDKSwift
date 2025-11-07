@@ -612,6 +612,7 @@ public enum BlueEventId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
 public enum BlueEventInfoSystem : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case systemRestart
   case systemConfigured
+  case unknownTransponderDetected
   public init()
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoSystem]
@@ -1211,102 +1212,6 @@ public struct BlueSPResult : Swift.Sendable {
     get
   }
   public mutating func clearData()
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
-public struct BlueWebSPHandshake : Swift.Sendable {
-  public var salt: Foundation.Data {
-    get
-    set
-  }
-  public var hasSalt: Swift.Bool {
-    get
-  }
-  public mutating func clearSalt()
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
-public struct BlueWebSPHandshakeReply : Swift.Sendable {
-  public var deviceID: Swift.String {
-    get
-    set
-  }
-  public var hasDeviceID: Swift.Bool {
-    get
-  }
-  public mutating func clearDeviceID()
-  public var signature: Foundation.Data {
-    get
-    set
-  }
-  public var hasSignature: Swift.Bool {
-    get
-  }
-  public mutating func clearSignature()
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
-public struct BlueWebSPMessage : Swift.Sendable {
-  public var transactionID: Swift.UInt32 {
-    get
-    set
-  }
-  public var hasTransactionID: Swift.Bool {
-    get
-  }
-  public mutating func clearTransactionID()
-  public var payload: BlueIDAccessSDK.BlueSPResult {
-    get
-    set
-  }
-  public var hasPayload: Swift.Bool {
-    get
-  }
-  public mutating func clearPayload()
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
-public struct BlueWebSPServerMessage : Swift.Sendable {
-  public var payload: BlueIDAccessSDK.BlueWebSPServerMessage.OneOf_Payload?
-  public var handshake: BlueIDAccessSDK.BlueWebSPHandshake {
-    get
-    set
-  }
-  public var command: BlueIDAccessSDK.BlueSPTokenCommand {
-    get
-    set
-  }
-  public var ossSo: BlueIDAccessSDK.BlueOssSoMobile {
-    get
-    set
-  }
-  public var ossSid: BlueIDAccessSDK.BlueOssSidMobile {
-    get
-    set
-  }
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public enum OneOf_Payload : Swift.Equatable, Swift.Sendable {
-    case handshake(BlueIDAccessSDK.BlueWebSPHandshake)
-    case command(BlueIDAccessSDK.BlueSPTokenCommand)
-    case ossSo(BlueIDAccessSDK.BlueOssSoMobile)
-    case ossSid(BlueIDAccessSDK.BlueOssSidMobile)
-    public static func == (a: BlueIDAccessSDK.BlueWebSPServerMessage.OneOf_Payload, b: BlueIDAccessSDK.BlueWebSPServerMessage.OneOf_Payload) -> Swift.Bool
-  }
-  public init()
-}
-public struct BlueWebSPClientMessage : Swift.Sendable {
-  public var unknownFields: SwiftProtobuf.UnknownStorage
-  public init()
-}
-public struct BlueWebSPStatusMessage : Swift.Sendable {
-  public var status: BlueIDAccessSDK.BlueReturnCode {
-    get
-    set
-  }
-  public var hasStatus: Swift.Bool {
-    get
-  }
-  public mutating func clearStatus()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -2765,81 +2670,6 @@ extension BlueIDAccessSDK.BlueSPResult : SwiftProtobuf.Message, SwiftProtobuf._M
   public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
   public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
   public static func == (lhs: BlueIDAccessSDK.BlueSPResult, rhs: BlueIDAccessSDK.BlueSPResult) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueWebSPHandshake : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueWebSPHandshake, rhs: BlueIDAccessSDK.BlueWebSPHandshake) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueWebSPHandshakeReply : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueWebSPHandshakeReply, rhs: BlueIDAccessSDK.BlueWebSPHandshakeReply) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueWebSPMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueWebSPMessage, rhs: BlueIDAccessSDK.BlueWebSPMessage) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueWebSPServerMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueWebSPServerMessage, rhs: BlueIDAccessSDK.BlueWebSPServerMessage) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueWebSPClientMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueWebSPClientMessage, rhs: BlueIDAccessSDK.BlueWebSPClientMessage) -> Swift.Bool
-  public var hashValue: Swift.Int {
-    get
-  }
-}
-extension BlueIDAccessSDK.BlueWebSPStatusMessage : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  public static let protoMessageName: Swift.String
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-  public var isInitialized: Swift.Bool {
-    get
-  }
-  public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
-  public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
-  public static func == (lhs: BlueIDAccessSDK.BlueWebSPStatusMessage, rhs: BlueIDAccessSDK.BlueWebSPStatusMessage) -> Swift.Bool
   public var hashValue: Swift.Int {
     get
   }
