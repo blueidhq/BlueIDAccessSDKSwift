@@ -4952,6 +4952,22 @@ public struct BlueCheckBluetoothPermissionCommand {
 public struct BlueCheckAccessTypeCommand {
   public func run(identityID: Swift.String, deviceID: Swift.String) -> Swift.Int?
 }
+public enum BlueNetworkType : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+  case none
+  case ethernet
+  case wifi
+  case gsm
+  public init()
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [BlueIDAccessSDK.BlueNetworkType]
+  public typealias RawValue = Swift.Int
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueNetworkType] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
 public struct BlueBaseConfig : Swift.Sendable {
   public var isoCountry: Swift.String {
     get
@@ -5178,6 +5194,14 @@ public struct BlueOssConfig : Swift.Sendable {
     get
   }
   public mutating func clearSoMifareAid()
+  public var minRefreshDays: Swift.UInt32 {
+    get
+    set
+  }
+  public var hasMinRefreshDays: Swift.Bool {
+    get
+  }
+  public mutating func clearMinRefreshDays()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
@@ -5655,6 +5679,9 @@ public struct BlueBlacklistEntries : Swift.Sendable {
   public var entries: [BlueIDAccessSDK.BlueBlacklistEntry]
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
+}
+extension BlueIDAccessSDK.BlueNetworkType : SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
 extension BlueIDAccessSDK.BlueBaseConfig : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: Swift.String
