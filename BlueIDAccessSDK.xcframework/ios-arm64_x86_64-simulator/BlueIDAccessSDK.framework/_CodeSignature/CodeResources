@@ -10,11 +10,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		A8PmRBl2EgNxVxlpoqBBe9X+/YQ=
+		fDkQFovrc4ppf258t5Nw9FZ/s1w=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		zBIeFd6adiDBbPxgb3DlvfBHPY8=
+		1lQoT2n2msrFL9B7vThyMCwK6wo=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		YzJmTAI2Ja1Egsv3DjFOszyfOPs=
+		LX/fft637qRMM++BZboCtRQ5fmA=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		zBIeFd6adiDBbPxgb3DlvfBHPY8=
+		1lQoT2n2msrFL9B7vThyMCwK6wo=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		p9tA2RQ98xnCpb/CmcK5G4CU6Gw=
+		nUnE8VUvFMGJkeshoSTE4e/0Bkk=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,7 +66,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			QPnmfNcAptwd53Cj0wiinjckT1XlUM/p319WH4tgn7A=
+			OF3DEq1Dn33p9rQVQLHARoGtdwoM/ZpYRyNq/S7ieFo=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -94,14 +94,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			A4B9jJeT8EWvG1g6Yqlv0AKFXHLiCCSpGPvj7U2NOeA=
+			vgEx/LwXsWgl87gYOag5QPTqme3ZLDEnws1dfPEQRDY=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QPnmfNcAptwd53Cj0wiinjckT1XlUM/p319WH4tgn7A=
+			OF3DEq1Dn33p9rQVQLHARoGtdwoM/ZpYRyNq/S7ieFo=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -129,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			scgqS+E956Qz8Xlro3IQDWzBRF0KdQ2zdEYXuAqo/js=
+			fQS71pjIQOfmbqNSxPcUUStN0MiMgXILFyLAADlqJQ0=
 			</data>
 		</dict>
 	</dict>
