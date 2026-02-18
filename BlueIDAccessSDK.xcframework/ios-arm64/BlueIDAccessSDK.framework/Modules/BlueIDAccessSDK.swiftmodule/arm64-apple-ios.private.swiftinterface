@@ -15,7 +15,6 @@ import Foundation
 import Network
 import NordicDFU
 import Security
-import Sentry
 import Swift
 import SwiftProtobuf
 import SwiftUI
