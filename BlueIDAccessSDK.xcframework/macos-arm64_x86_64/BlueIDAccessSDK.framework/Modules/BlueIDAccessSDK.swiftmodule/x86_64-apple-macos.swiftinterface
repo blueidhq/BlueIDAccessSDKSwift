@@ -5484,6 +5484,14 @@ public struct BlueSystemProvisioning : Swift.Sendable {
     get
   }
   public mutating func clearSignaturePublicKey()
+  public var isDev: Swift.Bool {
+    get
+    set
+  }
+  public var hasIsDev: Swift.Bool {
+    get
+  }
+  public mutating func clearIsDev()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
