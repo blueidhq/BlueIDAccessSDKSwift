@@ -14,43 +14,43 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		fILTmIqzIKZiysvgcu3wB7nlU8M=
+		ELB1EYj6tpIB4y5jkVD0S8iBYac=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		8LFkKKw1slcCoo2o4CWavuqpp4E=
+		TTXmwIA6xkMmWm1ae7HTW0mSngE=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		3TwHgUcSr41Ys8ams0V/zj+LIkc=
+		mj/lxK6owhhDE0ZPIxXwlgMBlkw=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		8LFkKKw1slcCoo2o4CWavuqpp4E=
+		TTXmwIA6xkMmWm1ae7HTW0mSngE=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		0zjTTLPpGGBmLIsE06Ia6pTYH4U=
+		5a7tiko+jIdrdP5DtDcSrB7+sJU=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		fILTmIqzIKZiysvgcu3wB7nlU8M=
+		ELB1EYj6tpIB4y5jkVD0S8iBYac=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		ME8u1QbBf0vNrXM2vbq9BzlaKFs=
+		BqIjrCwoyyVeG/0dnB1Jd07Rw0Y=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		QWxWb93mLXTLtBv6JIH5w5aAZWY=
+		u2X9+VAGpH9VM2rEdaQwXXpxO1A=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		ME8u1QbBf0vNrXM2vbq9BzlaKFs=
+		BqIjrCwoyyVeG/0dnB1Jd07Rw0Y=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		64pswlw6CiF73u7r42fa/Son+bU=
+		4ginyU8c1GR+biS1SaDMaSSlRwg=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -66,70 +66,70 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			yy+wXtCmHecKtDkVeNt4S1wTRRyftxJJccwWNbdAaB0=
+			w9IJ1W3Us9mD7/yD6Bm+wK4PKWMz+tbEyZaC2zuOvUY=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TB5qnnAizq3F5gYh/fVj1MRn9otTE6ggYOnUz0qEOPA=
+			YOUMeaNsY13fppSw1hDwUWpkHck8yU7jaPidwMlGRjA=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dyuwEgbZDrKDK8KeOCOS9oVZPBoeNqtiNgW4NA961vM=
+			ixCR8kgDTOerrxIeXQMqQ2IWA5TiZLNGqtlsVvE7E2o=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TB5qnnAizq3F5gYh/fVj1MRn9otTE6ggYOnUz0qEOPA=
+			YOUMeaNsY13fppSw1hDwUWpkHck8yU7jaPidwMlGRjA=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			i/4Y0T03I3D0gmlPI/gFiIQ+3xmaLW4iIKm3M+ivcMc=
+			QbmaHk25OMUebTNFKhPWzIlyt5ynhoEInIJr1Es5+zU=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			yy+wXtCmHecKtDkVeNt4S1wTRRyftxJJccwWNbdAaB0=
+			w9IJ1W3Us9mD7/yD6Bm+wK4PKWMz+tbEyZaC2zuOvUY=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dDVZWTJzkkc0YOtAs2qTe4S21faDBCpNICDnjma3BxQ=
+			Y+wbZPtDxJ4t2JrHL1+Z0IQR9XYuMojGlxIasQz11+U=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lJjRco+WyupeuYt9q7y8N0sIbKXcpGfFbwYF2s6rJsc=
+			5eVn0BSFoKMu/QCLeREKUfzy3sgZrKYM9cTd22QXhdg=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			dDVZWTJzkkc0YOtAs2qTe4S21faDBCpNICDnjma3BxQ=
+			Y+wbZPtDxJ4t2JrHL1+Z0IQR9XYuMojGlxIasQz11+U=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			pYG+QnHAECcliodRQoyKLF3QycRVwrN8f+eoCw9zgLo=
+			G+NOqBM0i+lNAJ5Mo5ygu+FHkEctnVXuijUQ/wLLlNY=
 			</data>
 		</dict>
 	</dict>

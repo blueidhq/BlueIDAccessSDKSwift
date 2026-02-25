@@ -267,7 +267,7 @@ public struct BlueTestCommand {
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueNGDeviceProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
-  public func runAsync(identityID: Swift.String, deviceID: Swift.String, hwType: Swift.String) async throws -> Swift.String
+  public func runAsync(identityID: Swift.String, deviceID: Swift.String, hwType: Swift.String, hardwareVendor: Swift.String) async throws -> Swift.String
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BluePrepareLegacyDevice : BlueIDAccessSDK.BlueSdkAsyncCommand {
@@ -3224,6 +3224,20 @@ public enum BlueRefreshOssSoCredentialStatus : Swift.Int, SwiftProtobuf.Enum, Sw
     get
   }
 }
+public enum BlueHardwareVendor : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+  case uundzlocks
+  case dlogiclock
+  public init()
+  public init?(rawValue: Swift.Int)
+  public typealias AllCases = [BlueIDAccessSDK.BlueHardwareVendor]
+  public typealias RawValue = Swift.Int
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueHardwareVendor] {
+    get
+  }
+  public var rawValue: Swift.Int {
+    get
+  }
+}
 public struct BlueI18n : @unchecked Swift.Sendable {
   public var nfcWaitMessage: Swift.String {
     get
@@ -4542,6 +4556,9 @@ extension BlueIDAccessSDK.BlueDeviceType : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
 extension BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus : SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+}
+extension BlueIDAccessSDK.BlueHardwareVendor : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
 extension BlueIDAccessSDK.BlueI18n : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
