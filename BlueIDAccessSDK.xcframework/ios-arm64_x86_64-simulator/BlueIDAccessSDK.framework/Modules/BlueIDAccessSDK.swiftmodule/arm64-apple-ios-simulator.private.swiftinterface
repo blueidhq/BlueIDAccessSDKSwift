@@ -630,7 +630,6 @@ public enum BlueEventId : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
 public enum BlueEventInfoSystem : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
   case systemRestart
   case systemConfigured
-  case unknownTransponderDetected
   public init()
   public init?(rawValue: Swift.Int)
   public typealias AllCases = [BlueIDAccessSDK.BlueEventInfoSystem]
@@ -4026,6 +4025,14 @@ public struct BlueIdentity : @unchecked Swift.Sendable {
     get
   }
   public mutating func clearStatus()
+  public var syncedUntil: Swift.UInt64 {
+    get
+    set
+  }
+  public var hasSyncedUntil: Swift.Bool {
+    get
+  }
+  public mutating func clearSyncedUntil()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   public init()
 }
