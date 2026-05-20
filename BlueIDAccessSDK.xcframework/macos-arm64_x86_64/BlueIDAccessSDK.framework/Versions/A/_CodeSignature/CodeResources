@@ -8,6 +8,10 @@
 		<data>
 		sZVdzpNwg3wVCU3ekFkSRDuH6Bs=
 		</data>
+		<key>Resources/PrivacyInfo.xcprivacy</key>
+		<data>
+		vdUtzzroOTMaxYBQqChPQcrc8N4=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -22,14 +26,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lpeKUusJdpecIOlibsgEWbmggZQb956nHjWcCmP7J3I=
+			ZQTTIoBUziDB6UeH1T/aGvNNeQDgkOaz8DBVZVtzL4o=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Nx/ddmy7ALoHLrc3Sht3EP0fRBYPRnMBx+/qLerTFt0=
+			ivz09S2tPprUFDviEKArk6YiSrRZnII5630ySQMsFcU=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.swiftdoc</key>
@@ -43,28 +47,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Nx/ddmy7ALoHLrc3Sht3EP0fRBYPRnMBx+/qLerTFt0=
+			ivz09S2tPprUFDviEKArk6YiSrRZnII5630ySQMsFcU=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			mi0IqeDKeLH7TUKHE6F7kuvvKzbgaLohAzvaFFj9mt0=
+			6n01JidPnuWHRPllqWGIAx77EYi4hVZIuNmNDhKkD9o=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			lpeKUusJdpecIOlibsgEWbmggZQb956nHjWcCmP7J3I=
+			ZQTTIoBUziDB6UeH1T/aGvNNeQDgkOaz8DBVZVtzL4o=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QsU6TFsP//r0PGvZ9+7UE30qVHYnYzxLv2n2hXJ1Pq4=
+			VZtQ5KFeVl7c1E+N4RlVEg+6/fsqukzg8i2gwyVcDJU=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.swiftdoc</key>
@@ -78,14 +82,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			QsU6TFsP//r0PGvZ9+7UE30qVHYnYzxLv2n2hXJ1Pq4=
+			VZtQ5KFeVl7c1E+N4RlVEg+6/fsqukzg8i2gwyVcDJU=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8HHTAqGycJIFXGAEGhl5IqdVLC8gr2WyrfCBPpVkvL8=
+			tFo0JuzGzSn+2DjVWIjhtmTVfN3ctWB0Ud30yCjm9Bs=
 			</data>
 		</dict>
 		<key>Resources/Info.plist</key>
@@ -93,6 +97,13 @@
 			<key>hash2</key>
 			<data>
 			QCsGlN57RQCh6jZnTHQwLt4F90zhAEQa2yXCRmC0Dk4=
+			</data>
+		</dict>
+		<key>Resources/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3AVrmMjqy2zOXCW7eTh3pP/sCtWCLYwv32VSa3o9WbA=
 			</data>
 		</dict>
 	</dict>
