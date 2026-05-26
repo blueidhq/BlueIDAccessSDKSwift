@@ -59,6 +59,7 @@ public struct BlueCommands {
   public let ossSoUpdateConfiguration: BlueIDAccessSDK.BlueOssSoUpdateConfigurationCommand
   public let ossSoGetWriteStatus: BlueIDAccessSDK.BlueOssSoGetWriteStatusCommand
   public let readOssSoCredential: BlueIDAccessSDK.BlueReadOssSoCredentialCommand
+  public let ossCredentialIdentityDetails: BlueIDAccessSDK.BlueOssSoGetCredentialIdentityDetailsCommand
   public let writeOssSoCredential: BlueIDAccessSDK.BlueWriteOssSoCredentialCommand
   public let refreshOssSoCredential: BlueIDAccessSDK.BlueRefreshOssSoCredentialCommand
   public let refreshOssSoCredentials: BlueIDAccessSDK.BlueRefreshOssSoCredentialsCommand
@@ -373,10 +374,11 @@ public struct BlueOssSidReadConfigurationCommand {
 public struct BlueOssSoCreateMobileCommand {
   public func run(_ provisioningData: BlueIDAccessSDK.BlueOssSoProvisioningData, _ configuration: BlueIDAccessSDK.BlueOssSoConfiguration) throws -> BlueIDAccessSDK.BlueOssSoMobile
 }
-public struct BlueOssSoFormatCommand {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueOssSoFormatCommand : BlueIDAccessSDK.BlueSdkCommand {
   #if compiler(>=5.3) && $NonescapableTypes
   public func run(_ settings: BlueIDAccessSDK.BlueOssSoSettings?, _ factoryReset: Swift.Bool = false) throws
   #endif
+  @objc deinit
 }
 public struct BlueOssSoGetStorageProfileCommand {
   #if compiler(>=5.3) && $NonescapableTypes
@@ -418,8 +420,15 @@ public struct BlueOssSoUpdateConfigurationCommand {
   public func run(_ settings: BlueIDAccessSDK.BlueOssSoSettings?, _ newConfiguration: BlueIDAccessSDK.BlueOssSoConfiguration?, _ clearEvents: Swift.Bool) throws
   #endif
 }
-public struct BlueFormatOssSoCredentialCommand {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueFormatOssSoCredentialCommand : BlueIDAccessSDK.BlueSdkCommand {
   public func run(identityID: Swift.String) throws
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueOssSoGetCredentialIdentityDetailsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func runAsync(identityID: Swift.String) async throws -> BlueIDAccessSDK.BlueCredentialIdentityDetails?
+  #endif
+  @objc deinit
 }
 public struct BlueReadOssSoCredentialCommand {
   public func run(identityID: Swift.String) throws -> BlueIDAccessSDK.BlueOssSoConfiguration
@@ -4379,6 +4388,14 @@ nonisolated public struct BlueI18n : @unchecked Swift.Sendable {
     get
   }
   nonisolated public mutating func clearAvrIsAlreadyUpToDate()
+  nonisolated public var noAccessWritten: Swift.String {
+    get
+    set
+  }
+  nonisolated public var hasNoAccessWritten: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func clearNoAccessWritten()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   nonisolated public init()
 }
@@ -5116,6 +5133,31 @@ nonisolated public struct BlueSynchronizeAccessCredentials : Swift.Sendable {
   public var unknownFields: SwiftProtobuf.UnknownStorage
   nonisolated public init()
 }
+nonisolated public struct BlueSiteName : Swift.Sendable {
+  nonisolated public var name: Swift.String {
+    get
+    set
+  }
+  nonisolated public var hasName: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func clearName()
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  nonisolated public init()
+}
+nonisolated public struct BlueCredentialIdentityDetails : Swift.Sendable {
+  nonisolated public var identity: BlueIDAccessSDK.BlueIdentity {
+    get
+    set
+  }
+  nonisolated public var hasIdentity: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func clearIdentity()
+  public var offlineSiteNames: [BlueIDAccessSDK.BlueSiteName]
+  public var unknownFields: SwiftProtobuf.UnknownStorage
+  nonisolated public init()
+}
 nonisolated extension BlueIDAccessSDK.BlueDeviceType : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
@@ -5456,6 +5498,32 @@ nonisolated extension BlueIDAccessSDK.BlueSynchronizeAccessCredentials : SwiftPr
   nonisolated public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
   nonisolated public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
   public static func == (lhs: BlueIDAccessSDK.BlueSynchronizeAccessCredentials, rhs: BlueIDAccessSDK.BlueSynchronizeAccessCredentials) -> Swift.Bool
+  nonisolated public var hashValue: Swift.Int {
+    get
+  }
+}
+nonisolated extension BlueIDAccessSDK.BlueSiteName : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  nonisolated public var isInitialized: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  nonisolated public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueSiteName, rhs: BlueIDAccessSDK.BlueSiteName) -> Swift.Bool
+  nonisolated public var hashValue: Swift.Int {
+    get
+  }
+}
+nonisolated extension BlueIDAccessSDK.BlueCredentialIdentityDetails : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  public static let protoMessageName: Swift.String
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+  nonisolated public var isInitialized: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func decodeMessage<D>(decoder: inout D) throws where D : SwiftProtobuf.Decoder
+  nonisolated public func traverse<V>(visitor: inout V) throws where V : SwiftProtobuf.Visitor
+  public static func == (lhs: BlueIDAccessSDK.BlueCredentialIdentityDetails, rhs: BlueIDAccessSDK.BlueCredentialIdentityDetails) -> Swift.Bool
   nonisolated public var hashValue: Swift.Int {
     get
   }
