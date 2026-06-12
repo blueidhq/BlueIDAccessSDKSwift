@@ -14,7 +14,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		iO0jvpvF45pCEjJFbN9/V5eB8ls=
+		Tame2wrHeQ7Mkt4QP+vwCXxxk94=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		jw07qfoFeu59H98pjL/by8KAPPk=
+		gXdZg51vq7C2fCUM522z72KuDV0=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		iO0jvpvF45pCEjJFbN9/V5eB8ls=
+		Tame2wrHeQ7Mkt4QP+vwCXxxk94=
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		frMgKm+TksXoyNgRcEax/uTCe0E=
+		lnj1AIQxeFDmG3VHX7QtyK8GtWE=
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
@@ -70,7 +70,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			NNKjD6z1/sczlKv174aNC1WPB4jzDUjH/4g1za8ZM5M=
+			Iiz7RR2TxMPebZHN01Z+8OBLfJbvtyLdrsZmkrkoGT0=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -98,14 +98,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			K5ElBXZkxqvdE6FQuo5bAcVGelXjNvV3uX7+/HMKAb0=
+			w6qr4EPAAivEo/VmTvUugY+BpN6zpS1paPjpVZ/AlRE=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			NNKjD6z1/sczlKv174aNC1WPB4jzDUjH/4g1za8ZM5M=
+			Iiz7RR2TxMPebZHN01Z+8OBLfJbvtyLdrsZmkrkoGT0=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -133,7 +133,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			19KykuwFM+CJMO3YSGtrdaH2kPXT6I4KHdLXZ8MAFTU=
+			bLlgZgh9Ee0lXXpeu6omNo+zPx9FonpxN+JtAo1BaLQ=
 			</data>
 		</dict>
 		<key>PrivacyInfo.xcprivacy</key>
