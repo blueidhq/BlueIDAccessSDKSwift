@@ -137,7 +137,7 @@ public func blueTerminalRequest<DataType>(identityID: Swift.String?, action: Swi
 public func blueTerminalRequest(identityID: Swift.String?, action: Swift.String, data: Foundation.Data? = nil) throws
 public func blueTerminalRequest<DataType, ResultType>(identityID: Swift.String?, action: Swift.String, data: DataType) throws -> ResultType where DataType : SwiftProtobuf.Message, ResultType : SwiftProtobuf.Message
 public func blueTerminalRequest<ResultType>(identityID: Swift.String?, action: Swift.String, data: Foundation.Data? = nil) throws -> ResultType where ResultType : SwiftProtobuf.Message
-public func blueTerminalRunOssSoMobile(identityID: Swift.String, deviceID: Swift.String, accessType: BlueIDAccessSDK.BlueAccessType? = nil) async throws -> BlueIDAccessSDK.BlueOssAccessEventsResult
+public func blueTerminalRunOssSoMobile(identityID: Swift.String, deviceID: Swift.String, timeoutSeconds: Swift.Double = 30.0, accessType: BlueIDAccessSDK.BlueAccessType? = nil) async throws -> BlueIDAccessSDK.BlueOssAccessEventsResult
 public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, handler: @escaping () throws -> HandlerResult, completion: @escaping (Swift.Result<HandlerResult, any Swift.Error>) -> Swift.Void, isTest: Swift.Bool = false)
 @available(macOS 10.15, *)
 public func blueTerminalRun<HandlerResult>(deviceID: Swift.String, timeoutSeconds: Swift.Double = defaultTimeoutSec, _ handler: @escaping () throws -> HandlerResult) async throws -> HandlerResult
