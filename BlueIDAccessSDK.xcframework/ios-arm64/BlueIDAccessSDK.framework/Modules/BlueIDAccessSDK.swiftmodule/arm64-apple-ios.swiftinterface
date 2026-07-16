@@ -479,7 +479,7 @@ final public class BlueTerminalError : Swift.Error, Foundation.LocalizedError, S
   final public var helpAnchor: Swift.String? {
     get
   }
-  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode)
+  public init(_ returnCode: BlueIDAccessSDK.BlueReturnCode, cause: (any Swift.Error)? = nil, detail: Swift.String? = nil)
   public static func == (lhs: BlueIDAccessSDK.BlueTerminalError, rhs: BlueIDAccessSDK.BlueTerminalError) -> Swift.Bool
   @objc deinit
 }
