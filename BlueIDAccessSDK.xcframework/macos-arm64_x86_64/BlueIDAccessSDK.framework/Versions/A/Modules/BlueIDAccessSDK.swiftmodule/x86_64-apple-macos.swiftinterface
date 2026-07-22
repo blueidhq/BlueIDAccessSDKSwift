@@ -4477,6 +4477,14 @@ nonisolated public struct BlueAccessDevice : Swift.Sendable {
     get
   }
   nonisolated public mutating func clearDeviceStatus()
+  nonisolated public var isAllowNearByOpen: Swift.Bool {
+    get
+    set
+  }
+  nonisolated public var hasIsAllowNearByOpen: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func clearIsAllowNearByOpen()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   nonisolated public init()
 }

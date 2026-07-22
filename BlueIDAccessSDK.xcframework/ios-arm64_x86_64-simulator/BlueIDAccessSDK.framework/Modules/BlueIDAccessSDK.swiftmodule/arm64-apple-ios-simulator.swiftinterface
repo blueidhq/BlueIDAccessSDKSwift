@@ -19,6 +19,7 @@ import Sentry
 import Swift
 import SwiftProtobuf
 import SwiftUI
+import UIKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
@@ -52,6 +53,9 @@ public struct BlueCommands {
   public let nearByDeactivate: BlueIDAccessSDK.BlueNearByDeactivate
   public let kioskRefreshTransponder: BlueIDAccessSDK.BlueKiosk.RefreshTransponderCommand
   public let kioskWriteTransponder: BlueIDAccessSDK.BlueKiosk.WriteTransponderCommand
+  public let checkNearByPermission: BlueIDAccessSDK.BlueCheckNearByPermissionCommand
+  public let nearByAutoAccessActivate: BlueIDAccessSDK.BlueNearByAutoAccessActivate
+  public let nearByAutoAccessDeactivate: BlueIDAccessSDK.BlueNearByAutoAccessDeactivate
   public let isNfcActive: BlueIDAccessSDK.BlueIsNfcActive
   public let readTransponderId: BlueIDAccessSDK.BlueGetTransponderIdCommand
   public let controlMultipleNFCInvocation: BlueIDAccessSDK.BlueControlMultipleNFCInvocationCommand
@@ -299,6 +303,17 @@ public struct BlueNearByActivate {
 }
 public struct BlueNearByDeactivate {
   public func run() throws
+}
+public struct BlueCheckNearByPermissionCommand {
+  public func run() throws
+}
+public struct BlueNearByAutoAccessActivate {
+  @discardableResult
+  public func run(maxDistanceMeters: Swift.Double = 2.5, cooldownSeconds: Swift.Double = 120, deviceDiscoveryTimeoutSeconds: Swift.Double = 20) throws -> Swift.Bool
+}
+public struct BlueNearByAutoAccessDeactivate {
+  @discardableResult
+  public func run() -> Swift.Bool
 }
 public struct BlueIsNfcActive {
   public func run() -> Swift.String
@@ -4501,6 +4516,14 @@ nonisolated public struct BlueAccessDevice : Swift.Sendable {
     get
   }
   nonisolated public mutating func clearDeviceStatus()
+  nonisolated public var isAllowNearByOpen: Swift.Bool {
+    get
+    set
+  }
+  nonisolated public var hasIsAllowNearByOpen: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func clearIsAllowNearByOpen()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   nonisolated public init()
 }
