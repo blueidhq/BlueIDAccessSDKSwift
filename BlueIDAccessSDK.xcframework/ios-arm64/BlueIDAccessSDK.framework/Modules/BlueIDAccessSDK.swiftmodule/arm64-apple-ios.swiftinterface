@@ -305,6 +305,7 @@ public struct BlueNearByDeactivate {
   public func run() throws
 }
 public struct BlueCheckNearByPermissionCommand {
+  public func runAsync() async throws
   public func run() throws
 }
 public struct BlueNearByAutoAccessActivate {

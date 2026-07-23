@@ -26,7 +26,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			J9AVvRRKy7m2nT7FEOpr2IkeP1+jIqJmQzgCwTE5TVE=
+			tuyLyVIeg271QbtlReaJKBC3TOHpqXg0PiVQSV2YxFk=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.private.swiftinterface</key>
@@ -54,14 +54,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			J95BKhSAvMM223f3KxShp1lVsRQZ+75DGIOaJ8ZKaw8=
+			FHNREz4zMciHrZld76h5ZzoHv2a9UYtAYwT7/AsmdPg=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			J9AVvRRKy7m2nT7FEOpr2IkeP1+jIqJmQzgCwTE5TVE=
+			tuyLyVIeg271QbtlReaJKBC3TOHpqXg0PiVQSV2YxFk=
 			</data>
 		</dict>
 		<key>Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.private.swiftinterface</key>
@@ -89,7 +89,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			f+LbA4er1tc9dwPntluQO81NxQ0CN5x4tvttZUXtqiM=
+			kMZeSWsEUmIC6nB9cV57E+RNzjEB5IPWq8c3VOi/ZMs=
 			</data>
 		</dict>
 		<key>Resources/Info.plist</key>
