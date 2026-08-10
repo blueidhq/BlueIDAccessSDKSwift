@@ -152868,6 +152868,85 @@
         "moduleName": "BlueIDAccessSDK"
       },
       {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BlueIDAccessSDK"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "BlueIDAccessSDK"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "BlueDeviceTimeTokenService",
+        "printedName": "BlueDeviceTimeTokenService",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "setDeviceTimeFromNTP",
+            "printedName": "setDeviceTimeFromNTP(deviceID:identityID:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:15BlueIDAccessSDK0A22DeviceTimeTokenServiceC03setdE7FromNTP8deviceID08identityL0ySS_SStYaF",
+            "mangledName": "$s15BlueIDAccessSDK0A22DeviceTimeTokenServiceC03setdE7FromNTP8deviceID08identityL0ySS_SStYaF",
+            "moduleName": "BlueIDAccessSDK",
+            "declAttributes": [
+              "Final",
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:15BlueIDAccessSDK0A22DeviceTimeTokenServiceC",
+        "mangledName": "$s15BlueIDAccessSDK0A22DeviceTimeTokenServiceC",
+        "moduleName": "BlueIDAccessSDK",
+        "declAttributes": [
+          "Final",
+          "AccessControl"
+        ],
+        "hasMissingDesignatedInitializers": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
         "kind": "TypeDecl",
         "name": "Data",
         "printedName": "Data",
@@ -153490,7 +153569,7 @@
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueCommands.swift",
       "kind": "Dictionary",
-      "offset": 8138,
+      "offset": 8494,
       "length": 3,
       "value": "[]"
     },
@@ -153539,77 +153618,77 @@
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "Array",
-      "offset": 323,
-      "length": 300,
-      "value": "[\"PING\", \"BOOTLD\", \"STATUS\", \"UPDATE\", \"DEFAULTS\", \"RESET\", \"FACTORY\", \"BL_CLEAR\", \"BL_PUSH\", \"SL_CLEAR\", \"SL_QUERY\", \"EV_CLEAR\", \"EV_QUERY\", \"UZ_DMNT\", \"UZ_BTCHG\", \"PROVI\", \"AVR_STRT\", \"AVR_UPD\", \"AVR_FIN\", \"AVR_INF\"]"
+      "offset": 412,
+      "length": 316,
+      "value": "[\"PING\", \"BOOTLD\", \"STATUS\", \"UPDATE\", \"TIME_SET\", \"DEFAULTS\", \"RESET\", \"FACTORY\", \"BL_CLEAR\", \"BL_PUSH\", \"SL_CLEAR\", \"SL_QUERY\", \"EV_CLEAR\", \"EV_QUERY\", \"UZ_DMNT\", \"UZ_BTCHG\", \"PROVI\", \"AVR_STRT\", \"AVR_UPD\", \"AVR_FIN\", \"AVR_INF\"]"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "StringLiteral",
-      "offset": 787,
+      "offset": 892,
       "length": 21,
       "value": "\"blueid.activeDevice\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "FloatLiteral",
-      "offset": 870,
+      "offset": 975,
       "length": 3,
       "value": "0.1"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "IntegerLiteral",
-      "offset": 997,
+      "offset": 1102,
       "length": 2,
       "value": "15"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "FloatLiteral",
-      "offset": 16391,
+      "offset": 16877,
       "length": 4,
       "value": "30.0"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "FloatLiteral",
-      "offset": 17547,
-      "length": 4,
-      "value": "30.0"
-    },
-    {
-      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
-      "kind": "BooleanLiteral",
-      "offset": 19399,
-      "length": 5,
-      "value": "false"
-    },
-    {
-      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
-      "kind": "FloatLiteral",
-      "offset": 23973,
-      "length": 4,
-      "value": "30.0"
-    },
-    {
-      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
-      "kind": "FloatLiteral",
-      "offset": 26169,
+      "offset": 18033,
       "length": 4,
       "value": "30.0"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "BooleanLiteral",
-      "offset": 26300,
+      "offset": 19885,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
       "kind": "FloatLiteral",
-      "offset": 28935,
+      "offset": 24558,
+      "length": 4,
+      "value": "30.0"
+    },
+    {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
+      "kind": "FloatLiteral",
+      "offset": 26754,
+      "length": 4,
+      "value": "30.0"
+    },
+    {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
+      "kind": "BooleanLiteral",
+      "offset": 26885,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/BlueTerminal.swift",
+      "kind": "FloatLiteral",
+      "offset": 29520,
       "length": 4,
       "value": "30.0"
     },
@@ -153618,7 +153697,7 @@
       "kind": "StringLiteral",
       "offset": 116,
       "length": 9,
-      "value": "\"12.50.0\""
+      "value": "\"12.51.0\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueAccess.swift",
@@ -153686,7 +153765,7 @@
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueAccessPingUnclaimedDeviceCommand.swift",
       "kind": "BooleanLiteral",
-      "offset": 1402,
+      "offset": 1891,
       "length": 5,
       "value": "false"
     },
@@ -154153,6 +154232,13 @@
       "value": "false"
     },
     {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/core\/BlueSPTransponder.swift",
+      "kind": "Dictionary",
+      "offset": 1462,
+      "length": 3,
+      "value": "[]"
+    },
+    {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/db\/BlueCoreData.swift",
       "kind": "BooleanLiteral",
       "offset": 146,
@@ -154253,168 +154339,175 @@
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 361,
+      "offset": 350,
       "length": 19,
       "value": "\"\/sdk\/objects\/list\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 443,
+      "offset": 432,
       "length": 20,
       "value": "\"\/sdk\/devices\/claim\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 527,
+      "offset": 516,
       "length": 22,
       "value": "\"\/sdk\/devices\/unclaim\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 630,
+      "offset": 619,
       "length": 49,
       "value": "\"\/sdk\/devices\/generateUnclaimedDeviceAccessToken\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 717,
+      "offset": 710,
+      "length": 44,
+      "value": "\"\/sdk\/devices\/generateDeviceTimeAccessToken\""
+    },
+    {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
+      "kind": "StringLiteral",
+      "offset": 792,
       "length": 28,
       "value": "\"\/sdk\/devices\/configuration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 799,
+      "offset": 874,
       "length": 34,
       "value": "\"\/sdk\/objects\/prepareLegacyObject\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 880,
+      "offset": 955,
       "length": 33,
       "value": "\"\/sdk\/devices\/checkConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 950,
+      "offset": 1025,
       "length": 34,
       "value": "\"\/sdk\/devices\/legacy\/provisioning\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1018,
+      "offset": 1093,
       "length": 18,
       "value": "\"\/sdk\/events\/push\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1104,
+      "offset": 1179,
       "length": 23,
       "value": "\"\/sdk\/devices\/pushLogs\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1192,
+      "offset": 1267,
       "length": 17,
       "value": "\"\/sdk\/access\/nfc\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1278,
+      "offset": 1353,
       "length": 39,
       "value": "\"\/sdk\/devices\/updateDeviceSystemStatus\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1355,
+      "offset": 1430,
       "length": 34,
       "value": "\"\/sdk\/devices\/getblacklistentries\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1432,
+      "offset": 1507,
       "length": 22,
       "value": "\"\/sdk\/identities\/list\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1524,
+      "offset": 1599,
       "length": 21,
       "value": "\"\/sdk\/access\/offline\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1599,
+      "offset": 1674,
       "length": 29,
       "value": "\"\/sdk\/devices\/latestFirmware\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1673,
+      "offset": 1748,
       "length": 18,
       "value": "\"\/sdk\/devices\/get\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1768,
+      "offset": 1843,
       "length": 26,
       "value": "\"\/sdk\/devices\/status\/push\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1830,
+      "offset": 1905,
       "length": 32,
       "value": "\"\/sdk\/devices\/factory-reset-ack\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1903,
+      "offset": 1978,
       "length": 25,
       "value": "\"\/sdk\/access\/offline\/ack\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 1972,
+      "offset": 2047,
       "length": 20,
       "value": "\"\/sdk\/access\/format\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 2030,
+      "offset": 2105,
       "length": 36,
       "value": "\"\/sdk\/identities\/credential-details\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 2093,
+      "offset": 2168,
       "length": 30,
       "value": "\"\/sdk\/devices\/ng\/provisioning\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/network\/BlueAPI.swift",
       "kind": "StringLiteral",
-      "offset": 2143,
+      "offset": 2218,
       "length": 82,
       "value": "\"https:\/\/raw.githubusercontent.com\/blueidhq\/blueid-access-firmware\/main\/avrs.json\""
     },
@@ -158386,6 +158479,20 @@
       "offset": 13856,
       "length": 1,
       "value": "1"
+    },
+    {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/services\/BlueDeviceTimeTokenService.swift",
+      "kind": "IntegerLiteral",
+      "offset": 463,
+      "length": 2,
+      "value": "30"
+    },
+    {
+      "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/services\/BlueDeviceTimeTokenService.swift",
+      "kind": "StringLiteral",
+      "offset": 516,
+      "length": 44,
+      "value": "\"blueid.temporary-main-token.last-sync-day.\""
     }
   ]
 }
