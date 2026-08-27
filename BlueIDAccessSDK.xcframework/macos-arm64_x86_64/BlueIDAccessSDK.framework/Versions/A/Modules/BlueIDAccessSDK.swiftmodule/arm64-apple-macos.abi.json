@@ -149648,7 +149648,7 @@
       "kind": "StringLiteral",
       "offset": 116,
       "length": 9,
-      "value": "\"12.54.0\""
+      "value": "\"12.55.0\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueAccess.swift",
