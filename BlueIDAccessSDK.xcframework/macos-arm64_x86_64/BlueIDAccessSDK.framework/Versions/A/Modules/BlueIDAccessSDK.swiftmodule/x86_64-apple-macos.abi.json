@@ -149928,7 +149928,7 @@
       "kind": "StringLiteral",
       "offset": 116,
       "length": 9,
-      "value": "\"12.56.0\""
+      "value": "\"12.57.0\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueAccess.swift",
@@ -150164,14 +150164,14 @@
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueUpdateESPFirmwareCommand.swift",
       "kind": "BooleanLiteral",
-      "offset": 858,
+      "offset": 859,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueUpdateESPFirmwareCommand.swift",
       "kind": "IntegerLiteral",
-      "offset": 1747,
+      "offset": 1748,
       "length": 5,
       "value": "7950"
     },
