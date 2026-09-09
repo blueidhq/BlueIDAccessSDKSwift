@@ -95,6 +95,7 @@ public struct BlueCommands {
   public let provisioningNGDevice: BlueIDAccessSDK.BlueNGDeviceProvisioningCommand
   public let updateAvr: BlueIDAccessSDK.BlueUpdateAccessDeviceAVRCommand
   public let checkIfAVRUpdateAvailableCommand: BlueIDAccessSDK.BlueCheckIfAVRUpdateAvailableCommand
+  public let espFirmwareUpdate: BlueIDAccessSDK.BlueUpdateESPFirmwareCommand
   public let createLegacyProvisioning: BlueIDAccessSDK.BlueCreateLegacyProvisioningCommand
   public let openAppSettings: BlueIDAccessSDK.BlueOpenAppSettingsCommand
   public let prepareLegacyDevice: BlueIDAccessSDK.BluePrepareLegacyDevice
@@ -406,6 +407,10 @@ public struct BlueOssSoGetWriteStatusCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
   @objc deinit
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueUpdateESPFirmwareCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(identityID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool = false) async throws
+  @objc deinit
+}
 public struct BlueInitializeCommand {
   public func run() throws
 }
@@ -698,6 +703,20 @@ nonisolated public enum BlueTransponderType : Swift.Int, SwiftProtobuf.Enum, Swi
   public typealias AllCases = [BlueIDAccessSDK.BlueTransponderType]
   public typealias RawValue = Swift.Int
   nonisolated public static var allCases: [BlueIDAccessSDK.BlueTransponderType] {
+    get
+  }
+  nonisolated public var rawValue: Swift.Int {
+    get
+  }
+}
+nonisolated public enum BlueHardwareVendor : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
+  case uundzlocks
+  case dlogiclock
+  nonisolated public init()
+  nonisolated public init?(rawValue: Swift.Int)
+  public typealias AllCases = [BlueIDAccessSDK.BlueHardwareVendor]
+  public typealias RawValue = Swift.Int
+  nonisolated public static var allCases: [BlueIDAccessSDK.BlueHardwareVendor] {
     get
   }
   nonisolated public var rawValue: Swift.Int {
@@ -2608,6 +2627,9 @@ nonisolated extension BlueIDAccessSDK.BlueAccessType : SwiftProtobuf._ProtoNameP
 nonisolated extension BlueIDAccessSDK.BlueTransponderType : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
+nonisolated extension BlueIDAccessSDK.BlueHardwareVendor : SwiftProtobuf._ProtoNameProviding {
+  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
+}
 nonisolated extension BlueIDAccessSDK.BlueHardwareType : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
@@ -3477,20 +3499,6 @@ nonisolated public enum BlueRefreshOssSoCredentialStatus : Swift.Int, SwiftProto
   public typealias AllCases = [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus]
   public typealias RawValue = Swift.Int
   nonisolated public static var allCases: [BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus] {
-    get
-  }
-  nonisolated public var rawValue: Swift.Int {
-    get
-  }
-}
-nonisolated public enum BlueHardwareVendor : Swift.Int, SwiftProtobuf.Enum, Swift.CaseIterable {
-  case uundzlocks
-  case dlogiclock
-  nonisolated public init()
-  nonisolated public init?(rawValue: Swift.Int)
-  public typealias AllCases = [BlueIDAccessSDK.BlueHardwareVendor]
-  public typealias RawValue = Swift.Int
-  nonisolated public static var allCases: [BlueIDAccessSDK.BlueHardwareVendor] {
     get
   }
   nonisolated public var rawValue: Swift.Int {
@@ -4866,9 +4874,6 @@ nonisolated extension BlueIDAccessSDK.BlueDeviceType : SwiftProtobuf._ProtoNameP
 nonisolated extension BlueIDAccessSDK.BlueRefreshOssSoCredentialStatus : SwiftProtobuf._ProtoNameProviding {
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
 }
-nonisolated extension BlueIDAccessSDK.BlueHardwareVendor : SwiftProtobuf._ProtoNameProviding {
-  public static let _protobuf_nameMap: SwiftProtobuf._NameMap
-}
 nonisolated extension BlueIDAccessSDK.BlueI18n : SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   public static let protoMessageName: Swift.String
   public static let _protobuf_nameMap: SwiftProtobuf._NameMap
@@ -5847,6 +5852,14 @@ nonisolated public struct BlueSystemStatus : @unchecked Swift.Sendable {
     get
   }
   nonisolated public mutating func clearApplicationVersionTest()
+  nonisolated public var hardwareVendor: BlueIDAccessSDK.BlueHardwareVendor {
+    get
+    set
+  }
+  nonisolated public var hasHardwareVendor: Swift.Bool {
+    get
+  }
+  nonisolated public mutating func clearHardwareVendor()
   public var unknownFields: SwiftProtobuf.UnknownStorage
   nonisolated public init()
 }
