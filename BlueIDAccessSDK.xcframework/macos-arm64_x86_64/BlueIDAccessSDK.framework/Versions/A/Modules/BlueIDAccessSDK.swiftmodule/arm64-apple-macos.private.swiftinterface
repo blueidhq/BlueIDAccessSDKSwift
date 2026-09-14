@@ -57,6 +57,9 @@ public struct BlueCommands {
   public let ossSoReadConfiguration: BlueIDAccessSDK.BlueOssSoReadConfigurationCommand
   public let ossSoUpdateConfiguration: BlueIDAccessSDK.BlueOssSoUpdateConfigurationCommand
   public let ossSoGetWriteStatus: BlueIDAccessSDK.BlueOssSoGetWriteStatusCommand
+  public let inspectPicc: BlueIDAccessSDK.BluePiccInspectionCommand
+  public let cardBoundNfcMutation: BlueIDAccessSDK.BlueCardBoundNfcMutationCommand
+  public let cardBoundNfcApplicationClear: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearCommand
   public let readOssSoCredential: BlueIDAccessSDK.BlueReadOssSoCredentialCommand
   public let ossCredentialIdentityDetails: BlueIDAccessSDK.BlueOssSoGetCredentialIdentityDetailsCommand
   public let writeOssSoCredential: BlueIDAccessSDK.BlueWriteOssSoCredentialCommand
@@ -73,11 +76,17 @@ public struct BlueCommands {
   public let ossSidReadConfiguration: BlueIDAccessSDK.BlueOssSidReadConfigurationCommand
   public let checkAccessType: BlueIDAccessSDK.BlueCheckAccessTypeCommand
   public let tryAccessDevice: BlueIDAccessSDK.BlueTryAccessDeviceCommand
+  public let reportOpeningAttempts: BlueIDAccessSDK.BlueReportOpeningAttemptsCommand
+  public let reportAdvertisingHealth: BlueIDAccessSDK.BlueReportAdvertisingHealthCommand
+  public let getMaintenanceDeviceConfiguration: BlueIDAccessSDK.BlueGetMaintenanceDeviceConfigurationCommand
+  public let overrideMaintenanceDeviceConfiguration: BlueIDAccessSDK.BlueOverrideMaintenanceDeviceConfigurationCommand
+  @available(*, deprecated, message: "Import identities through a secure claim flow when possible. Private keys are retained only inside the SDK after import.")
   public let addIdentity: BlueIDAccessSDK.BlueAcccessAddIdentityCommand
   public let claimIdentity: BlueIDAccessSDK.BlueAccessClaimIdentityCommand
   public let getIdentities: BlueIDAccessSDK.BlueAccessGetIdentitiesCommand
   public let getIdentity: BlueIDAccessSDK.BlueAccessGetIdentityCommand
   public let synchronizeIdentity: BlueIDAccessSDK.BlueAccessSynchronizeIdentityCommand
+  public let getMobileAccessState: BlueIDAccessSDK.BlueAccessGetMobileAccessStateCommand
   public let synchronizeIdentities: BlueIDAccessSDK.BlueAccessSynchronizeIdentitiesCommand
   public let listAccessDevices: BlueIDAccessSDK.BlueAccessListDevicesCommand
   public let synchronizeAccessDevice: BlueIDAccessSDK.BlueAccessSynchronizeDeviceCommand
@@ -92,6 +101,7 @@ public struct BlueCommands {
   public let clearEventLog: BlueIDAccessSDK.BlueClearEventLogCommand
   public let clearSystemLog: BlueIDAccessSDK.BlueClearSystemLogCommand
   public let getSystemStatus: BlueIDAccessSDK.BlueGetSystemStatusCommand
+  public let getFirmwareUpdateCatalog: BlueIDAccessSDK.BlueGetFirmwareUpdateCatalogCommand
   public let provisioningNGDevice: BlueIDAccessSDK.BlueNGDeviceProvisioningCommand
   public let updateAvr: BlueIDAccessSDK.BlueUpdateAccessDeviceAVRCommand
   public let checkIfAVRUpdateAvailableCommand: BlueIDAccessSDK.BlueCheckIfAVRUpdateAvailableCommand
@@ -179,7 +189,8 @@ public func blueTerminalRun(identityID: Swift.String?, deviceID: Swift.String, t
 public struct BlueVersion {
   public static let current: Swift.String
 }
-@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAcccessAddIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @available(*, deprecated, message: "Import identities through a secure claim flow when possible. Private keys are retained only inside the SDK after import.")
+public class BlueAcccessAddIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identity: BlueIDAccessSDK.BlueIdentity) async throws
   @objc deinit
 }
@@ -252,8 +263,42 @@ public struct BlueVersion {
   public func runAsync() async throws -> BlueIDAccessSDK.BlueSynchronizeIdentities
   @objc deinit
 }
+public enum BlueMobileAccessSynchronizationOutcome : Swift.String, Swift.Codable, Swift.Sendable {
+  case updated
+  case alreadyCurrent
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueMobileAccessStateSource : Swift.String, Swift.Codable, Swift.Sendable {
+  case mobileAccessService
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueMobileAccessState : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public static let currentSchemaVersion: Swift.String
+  public let schemaVersion: Swift.String
+  public let identityId: Swift.String
+  public let validityEpochMilliseconds: Swift.Int64?
+  public let lastSuccessfulSynchronizationEpochMilliseconds: Swift.Int64
+  public let outcome: BlueIDAccessSDK.BlueMobileAccessSynchronizationOutcome
+  public let source: BlueIDAccessSDK.BlueMobileAccessStateSource
+  public static func == (a: BlueIDAccessSDK.BlueMobileAccessState, b: BlueIDAccessSDK.BlueMobileAccessState) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessGetMobileAccessStateCommand : BlueIDAccessSDK.BlueSdkCommand {
+  public func run(identityID: Swift.String) throws -> BlueIDAccessSDK.BlueMobileAccessState?
+  @objc deinit
+}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueAccessSynchronizeIdentityCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws
+  public func runWithStateAsync(identityID: Swift.String, forceRefresh: Swift.Bool? = nil) async throws -> BlueIDAccessSDK.BlueMobileAccessState?
   @objc deinit
 }
 public struct BlueOpenAppSettingsCommand {
@@ -270,8 +315,17 @@ public struct BlueCheckAccessTypeCommand {
   public func runAsync(identityID: Swift.String, provisioning: BlueIDAccessSDK.BlueLegacyProvisioningRequest) async throws -> BlueIDAccessSDK.BlueLegacyProvisioningResponse
   @objc deinit
 }
+public struct BlueNGDeviceProvisioningReceipt : Swift.Equatable, Swift.Sendable {
+  public let deviceID: Swift.String
+  public let hardwareType: BlueIDAccessSDK.BlueHardwareType
+  public let hardwareVersion: Swift.Int
+  public let hardwareVendor: BlueIDAccessSDK.BlueHardwareVendor
+  public let serialNumber: Swift.String
+  public static func == (a: BlueIDAccessSDK.BlueNGDeviceProvisioningReceipt, b: BlueIDAccessSDK.BlueNGDeviceProvisioningReceipt) -> Swift.Bool
+}
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueNGDeviceProvisioningCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, hwType: Swift.String, hardwareVendor: Swift.String) async throws -> Swift.String
+  public func runWithReceiptAsync(identityID: Swift.String, deviceID: Swift.String, hwType: Swift.String, hardwareVendor: Swift.String) async throws -> BlueIDAccessSDK.BlueNGDeviceProvisioningReceipt
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BluePrepareLegacyDevice : BlueIDAccessSDK.BlueSdkAsyncCommand {
@@ -370,6 +424,176 @@ public struct BlueReadOssSoCredentialCommand {
 public struct BlueOssSoGetWriteStatusCommand {
   public func run(identityID: Swift.String) throws -> Swift.Int
 }
+public struct BluePiccInspectionResult : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let writeStatus: BlueIDAccessSDK.BlueCardBoundNfcWriteStatus
+  public let physicalApplicationCount: Swift.Int?
+  public static func == (a: BlueIDAccessSDK.BluePiccInspectionResult, b: BlueIDAccessSDK.BluePiccInspectionResult) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BluePiccInspectionCommand {
+  public func run(identityID: Swift.String) throws -> BlueIDAccessSDK.BluePiccInspectionResult
+}
+public enum BlueCardBoundNfcOperation : Swift.String, Swift.Codable, Swift.Sendable {
+  case credentialWrite
+  case credentialRefresh
+  case fullPiccFormat
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueCardBoundNfcOutcome : Swift.String, Swift.Codable, Swift.Sendable {
+  case updated
+  case alreadyCurrent
+  case formattedAndReconciled
+  case cancelledBeforeMutation
+  case targetChangedBeforeMutation
+  case failedBeforeMutation
+  case outcomeUnknownAfterMutation
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueCardBoundNfcWriteStatus : Swift.String, Swift.Codable, Swift.Sendable {
+  case writableByAnyOrganization
+  case writableByWriterOrganization
+  case notWritable
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueCardBoundNfcMediaType : Swift.String, Swift.Codable, Swift.Sendable {
+  case verifiedMifareDesfire
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueCardBoundNfcFailure : Swift.String, Swift.Codable, Swift.Sendable {
+  case nfcUnavailable
+  case userCancelled
+  case sessionTimedOut
+  case sessionBusy
+  case unsupportedMedia
+  case wrongWriterOrganization
+  case targetChanged
+  case deviceAuthenticationCancelled
+  case deviceAuthenticationFailed
+  case invalidCardResponse
+  case backendFailure
+  case invalidRequest
+  case reconciliationRequired
+  case unknown
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueCardBoundNfcMutationRequest : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let writerIdentityID: Swift.String
+  public let operation: BlueIDAccessSDK.BlueCardBoundNfcOperation
+  public let offlineID: Swift.String?
+  public let requestID: Swift.String
+  public init(writerIdentityID: Swift.String, operation: BlueIDAccessSDK.BlueCardBoundNfcOperation, offlineID: Swift.String? = nil, requestID: Swift.String)
+  public static func == (a: BlueIDAccessSDK.BlueCardBoundNfcMutationRequest, b: BlueIDAccessSDK.BlueCardBoundNfcMutationRequest) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueCardBoundNfcInspection : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let requestID: Swift.String
+  public let operation: BlueIDAccessSDK.BlueCardBoundNfcOperation
+  public let cardIdentifier: Swift.String
+  public let mediaType: BlueIDAccessSDK.BlueCardBoundNfcMediaType
+  public let writeStatus: BlueIDAccessSDK.BlueCardBoundNfcWriteStatus
+  public let writerOrganizationID: Swift.String
+  public let writerSiteID: Swift.Int
+  public let plannedApplicationCount: Swift.Int
+  public let physicalApplicationCount: Swift.Int?
+  public static func == (a: BlueIDAccessSDK.BlueCardBoundNfcInspection, b: BlueIDAccessSDK.BlueCardBoundNfcInspection) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueCardBoundNfcMutationResult : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let requestID: Swift.String
+  public let operation: BlueIDAccessSDK.BlueCardBoundNfcOperation
+  public let outcome: BlueIDAccessSDK.BlueCardBoundNfcOutcome
+  public let writerOrganizationID: Swift.String
+  public let writerSiteID: Swift.Int
+  public let plannedApplicationCount: Swift.Int
+  public let physicalApplicationCount: Swift.Int?
+  public let readBackConfirmed: Swift.Bool
+  public let serverReconciliationConfirmed: Swift.Bool
+  public let reconciliationID: Swift.String?
+  public let failure: BlueIDAccessSDK.BlueCardBoundNfcFailure?
+  public static func == (a: BlueIDAccessSDK.BlueCardBoundNfcMutationResult, b: BlueIDAccessSDK.BlueCardBoundNfcMutationResult) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public typealias BlueCardBoundNfcConfirmation = @Sendable (BlueIDAccessSDK.BlueCardBoundNfcInspection) async throws -> Swift.Bool
+@_hasMissingDesignatedInitializers final public class BlueCardBoundNfcMutationCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(request: BlueIDAccessSDK.BlueCardBoundNfcMutationRequest, confirmation: @escaping BlueIDAccessSDK.BlueCardBoundNfcConfirmation) async throws -> BlueIDAccessSDK.BlueCardBoundNfcMutationResult
+  @objc deinit
+}
+public enum BlueCardBoundNfcApplicationClearOutcome : Swift.String, Swift.Codable, Swift.Sendable {
+  case clearedAndReconciled
+  case alreadyAbsent
+  case cancelledBeforeMutation
+  case targetChangedBeforeMutation
+  case failedBeforeMutation
+  case outcomeUnknownAfterMutation
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueCardBoundNfcApplicationClearRequest : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let writerIdentityID: Swift.String
+  public let requestID: Swift.String
+  public init(writerIdentityID: Swift.String, requestID: Swift.String)
+  public static func == (a: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearRequest, b: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearRequest) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueCardBoundNfcApplicationClearInspection : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let requestID: Swift.String
+  public let cardIdentifier: Swift.String
+  public let mediaType: BlueIDAccessSDK.BlueCardBoundNfcMediaType
+  public let writeStatus: BlueIDAccessSDK.BlueCardBoundNfcWriteStatus
+  public let writerOrganizationID: Swift.String
+  public let writerSiteID: Swift.Int
+  public let physicalApplicationCount: Swift.Int?
+  public static func == (a: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearInspection, b: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearInspection) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueCardBoundNfcApplicationClearResult : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let requestID: Swift.String
+  public let outcome: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearOutcome
+  public let writerOrganizationID: Swift.String
+  public let writerSiteID: Swift.Int
+  public let readBackConfirmed: Swift.Bool
+  public let serverReconciliationConfirmed: Swift.Bool
+  public let remainingKnownApplicationCount: Swift.Int?
+  public let reconciliationID: Swift.String?
+  public let failure: BlueIDAccessSDK.BlueCardBoundNfcFailure?
+  public static func == (a: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearResult, b: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearResult) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public typealias BlueCardBoundNfcApplicationClearConfirmation = @Sendable (BlueIDAccessSDK.BlueCardBoundNfcApplicationClearInspection) async throws -> Swift.Bool
+@_hasMissingDesignatedInitializers final public class BlueCardBoundNfcApplicationClearCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(request: BlueIDAccessSDK.BlueCardBoundNfcApplicationClearRequest, confirmation: @escaping BlueIDAccessSDK.BlueCardBoundNfcApplicationClearConfirmation) async throws -> BlueIDAccessSDK.BlueCardBoundNfcApplicationClearResult
+  @objc deinit
+}
 @_hasMissingDesignatedInitializers public class BlueAsyncTerminalCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
   @objc deinit
@@ -387,8 +611,13 @@ public struct BlueOssSoGetWriteStatusCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemStatusExt
   @objc deinit
 }
+public struct BlueTryAccessDeviceReportResult : Swift.Sendable {
+  public let accessResult: BlueIDAccessSDK.BlueOssAccessResult
+  public let openingAttemptReceipt: BlueIDAccessSDK.BlueOpeningAttemptReportReceipt
+}
 @_hasMissingDesignatedInitializers public class BlueTryAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueOssAccessResult
+  public func runWithOpeningAttemptReportAsync(identityID: Swift.String, deviceID: Swift.String, trigger: BlueIDAccessSDK.BlueOpeningAttemptTrigger = .explicit) async throws -> BlueIDAccessSDK.BlueTryAccessDeviceReportResult
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUnclaimAccessDeviceCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
@@ -397,18 +626,154 @@ public struct BlueOssSoGetWriteStatusCommand {
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceFirmwareCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool? = false) async throws
+  public func runVerifiedAsync(identityID: Swift.String, deviceID: Swift.String, expectation: BlueIDAccessSDK.BlueFirmwareReleaseExpectation, showModal: Swift.Bool = false) async throws -> BlueIDAccessSDK.BlueVerifiedFirmwareUpdateResult
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueCheckIfAVRUpdateAvailableCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(hwName: Swift.String) async throws -> BlueIDAccessSDK.BlueSystemAVRInfo
+  public func runCatalogAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueAVRFirmwareUpdateCatalog
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BlueUpdateAccessDeviceAVRCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws
+  public func runVerifiedAsync(identityID: Swift.String, deviceID: Swift.String, expectation: BlueIDAccessSDK.BlueAVRReleaseExpectation, showModal: Swift.Bool = false) async throws -> BlueIDAccessSDK.BlueVerifiedFirmwareUpdateResult
   @objc deinit
 }
 @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueUpdateESPFirmwareCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
   final public func runAsync(identityID: Swift.String, deviceID: Swift.String, testVersion: Swift.Bool = false) async throws
+  @objc deinit
+}
+public enum BlueFirmwareReleaseChannel : Swift.String, Swift.Codable, Swift.Sendable {
+  case production
+  case test
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueFirmwareComponent : Swift.String, Swift.Codable, Swift.Sendable {
+  case application
+  case avr
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueFirmwareDeviceTarget : Swift.Equatable, Swift.Sendable {
+  public let deviceID: Swift.String
+  public let hardwareVendor: BlueIDAccessSDK.BlueHardwareVendor
+  public let hardwareType: BlueIDAccessSDK.BlueHardwareType
+  public let hardwareVersion: Swift.Int
+  public init(deviceID: Swift.String, hardwareVendor: BlueIDAccessSDK.BlueHardwareVendor, hardwareType: BlueIDAccessSDK.BlueHardwareType, hardwareVersion: Swift.Int)
+  public static func == (a: BlueIDAccessSDK.BlueFirmwareDeviceTarget, b: BlueIDAccessSDK.BlueFirmwareDeviceTarget) -> Swift.Bool
+}
+public struct BlueFirmwareCatalogRelease : Swift.Equatable, Swift.Sendable {
+  public let channel: BlueIDAccessSDK.BlueFirmwareReleaseChannel
+  public let version: Swift.Int
+  public let testVersion: Swift.Int?
+  public let sha256: Swift.String?
+  public init(channel: BlueIDAccessSDK.BlueFirmwareReleaseChannel, version: Swift.Int, testVersion: Swift.Int? = nil, sha256: Swift.String?)
+  public var versionDescription: Swift.String {
+    get
+  }
+  public func expectation(for target: BlueIDAccessSDK.BlueFirmwareDeviceTarget) throws -> BlueIDAccessSDK.BlueFirmwareReleaseExpectation
+  public static func == (a: BlueIDAccessSDK.BlueFirmwareCatalogRelease, b: BlueIDAccessSDK.BlueFirmwareCatalogRelease) -> Swift.Bool
+}
+public struct BlueFirmwareUpdateCatalog : Swift.Equatable, Swift.Sendable {
+  public let target: BlueIDAccessSDK.BlueFirmwareDeviceTarget
+  public let hardwareName: Swift.String
+  public let hardwareVendorName: Swift.String
+  public let installedProductionVersion: Swift.Int
+  public let installedTestVersion: Swift.Int?
+  public let observedAtEpochSeconds: Swift.Int
+  public let releases: [BlueIDAccessSDK.BlueFirmwareCatalogRelease]
+  public init(target: BlueIDAccessSDK.BlueFirmwareDeviceTarget, hardwareName: Swift.String, hardwareVendorName: Swift.String, installedProductionVersion: Swift.Int, installedTestVersion: Swift.Int? = nil, observedAtEpochSeconds: Swift.Int, releases: [BlueIDAccessSDK.BlueFirmwareCatalogRelease])
+  public var installedVersionDescription: Swift.String {
+    get
+  }
+  public static func == (a: BlueIDAccessSDK.BlueFirmwareUpdateCatalog, b: BlueIDAccessSDK.BlueFirmwareUpdateCatalog) -> Swift.Bool
+}
+public struct BlueAVRFirmwareCatalogRelease : Swift.Equatable, Swift.Sendable {
+  public let major: Swift.Int
+  public let minor: Swift.Int
+  public let build: Swift.Int
+  public let sha256: Swift.String?
+  public init(major: Swift.Int, minor: Swift.Int, build: Swift.Int, sha256: Swift.String?)
+  public var versionDescription: Swift.String {
+    get
+  }
+  public func expectation(deviceID: Swift.String, hardwareType: BlueIDAccessSDK.BlueHardwareType) throws -> BlueIDAccessSDK.BlueAVRReleaseExpectation
+  public static func == (a: BlueIDAccessSDK.BlueAVRFirmwareCatalogRelease, b: BlueIDAccessSDK.BlueAVRFirmwareCatalogRelease) -> Swift.Bool
+}
+public struct BlueAVRFirmwareUpdateCatalog : Swift.Equatable, Swift.Sendable {
+  public let deviceID: Swift.String
+  public let hardwareType: BlueIDAccessSDK.BlueHardwareType
+  public let installedMajor: Swift.Int
+  public let installedMinor: Swift.Int
+  public let installedBuild: Swift.Int
+  public let observedAtEpochSeconds: Swift.Int
+  public let release: BlueIDAccessSDK.BlueAVRFirmwareCatalogRelease
+  public init(deviceID: Swift.String, hardwareType: BlueIDAccessSDK.BlueHardwareType, installedMajor: Swift.Int, installedMinor: Swift.Int, installedBuild: Swift.Int, observedAtEpochSeconds: Swift.Int, release: BlueIDAccessSDK.BlueAVRFirmwareCatalogRelease)
+  public var installedVersionDescription: Swift.String {
+    get
+  }
+  public static func == (a: BlueIDAccessSDK.BlueAVRFirmwareUpdateCatalog, b: BlueIDAccessSDK.BlueAVRFirmwareUpdateCatalog) -> Swift.Bool
+}
+public struct BlueFirmwareReleaseExpectation : Swift.Equatable, Swift.Sendable {
+  public let target: BlueIDAccessSDK.BlueFirmwareDeviceTarget
+  public let channel: BlueIDAccessSDK.BlueFirmwareReleaseChannel
+  public let version: Swift.Int
+  public let testVersion: Swift.Int?
+  public let sha256: Swift.String
+  public init(target: BlueIDAccessSDK.BlueFirmwareDeviceTarget, channel: BlueIDAccessSDK.BlueFirmwareReleaseChannel, version: Swift.Int, testVersion: Swift.Int? = nil, sha256: Swift.String)
+  public var versionDescription: Swift.String {
+    get
+  }
+  public static func == (a: BlueIDAccessSDK.BlueFirmwareReleaseExpectation, b: BlueIDAccessSDK.BlueFirmwareReleaseExpectation) -> Swift.Bool
+}
+public struct BlueAVRReleaseExpectation : Swift.Equatable, Swift.Sendable {
+  public let deviceID: Swift.String
+  public let hardwareType: BlueIDAccessSDK.BlueHardwareType
+  public let major: Swift.Int
+  public let minor: Swift.Int
+  public let build: Swift.Int
+  public let sha256: Swift.String
+  public init(deviceID: Swift.String, hardwareType: BlueIDAccessSDK.BlueHardwareType, major: Swift.Int, minor: Swift.Int, build: Swift.Int, sha256: Swift.String)
+  public var versionDescription: Swift.String {
+    get
+  }
+  public static func == (a: BlueIDAccessSDK.BlueAVRReleaseExpectation, b: BlueIDAccessSDK.BlueAVRReleaseExpectation) -> Swift.Bool
+}
+public enum BlueVerifiedFirmwareUpdateOutcome : Swift.String, Swift.Codable, Swift.Sendable {
+  case installedAndVerified
+  case alreadyCurrentAndVerified
+  case readBackMismatch
+  case deviceOutcomeUnknownAfterTransfer
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueVerifiedFirmwareUpdateResult : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let component: BlueIDAccessSDK.BlueFirmwareComponent
+  public let deviceID: Swift.String
+  public let outcome: BlueIDAccessSDK.BlueVerifiedFirmwareUpdateOutcome
+  public let expectedVersion: Swift.String
+  public let installedVersion: Swift.String?
+  public let artifactSHA256: Swift.String
+  public let transferMayHaveStarted: Swift.Bool
+  public let readBackConfirmed: Swift.Bool
+  public let errorCode: Swift.Int?
+  public init(component: BlueIDAccessSDK.BlueFirmwareComponent, deviceID: Swift.String, outcome: BlueIDAccessSDK.BlueVerifiedFirmwareUpdateOutcome, expectedVersion: Swift.String, installedVersion: Swift.String?, artifactSHA256: Swift.String, transferMayHaveStarted: Swift.Bool, readBackConfirmed: Swift.Bool, errorCode: Swift.Int? = nil)
+  public static func == (a: BlueIDAccessSDK.BlueVerifiedFirmwareUpdateResult, b: BlueIDAccessSDK.BlueVerifiedFirmwareUpdateResult) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueGetFirmwareUpdateCatalogCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueFirmwareUpdateCatalog
   @objc deinit
 }
 public struct BlueInitializeCommand {
@@ -4272,13 +4637,16 @@ nonisolated public struct BlueIdentity : @unchecked Swift.Sendable {
     get
   }
   nonisolated public mutating func clearSiteName()
+  @available(*, deprecated, message: "Private keys are retained inside the SDK and omitted from SDK-produced public results.")
   nonisolated public var privateKey: Foundation.Data {
     get
     set
   }
+  @available(*, deprecated, message: "Private keys are retained inside the SDK and omitted from SDK-produced public results.")
   nonisolated public var hasPrivateKey: Swift.Bool {
     get
   }
+  @available(*, deprecated, message: "Private keys are retained inside the SDK and omitted from SDK-produced public results.")
   nonisolated public mutating func clearPrivateKey()
   nonisolated public var status: Swift.String {
     get
@@ -4737,13 +5105,16 @@ nonisolated public struct BlueAccessCredential : @unchecked Swift.Sendable {
     get
   }
   nonisolated public mutating func clearValidity()
+  @available(*, deprecated, message: "Private keys are retained inside the SDK and omitted from SDK-produced public results.")
   nonisolated public var privateKey: Foundation.Data {
     get
     set
   }
+  @available(*, deprecated, message: "Private keys are retained inside the SDK and omitted from SDK-produced public results.")
   nonisolated public var hasPrivateKey: Swift.Bool {
     get
   }
+  @available(*, deprecated, message: "Private keys are retained inside the SDK and omitted from SDK-produced public results.")
   nonisolated public mutating func clearPrivateKey()
   nonisolated public var receiverName: Swift.String {
     get
@@ -6332,8 +6703,328 @@ extension Foundation.Data {
   final public func setDeviceTimeFromNTP(deviceID: Swift.String, identityID: Swift.String) async
   @objc deinit
 }
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueReportOpeningAttemptsCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync() async -> [BlueIDAccessSDK.BlueOpeningAttemptReportReceipt]
+  @objc deinit
+}
+public enum BlueOpeningAttemptTrigger : Swift.String, Swift.Codable, Swift.Sendable {
+  case explicit
+  case autoOpen
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueOpeningAttemptReportReceipt : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let clientOperationID: Swift.String
+  public let backendStored: Swift.Bool
+  public let duplicate: Swift.Bool
+  public let storedAt: Swift.String?
+  public static func == (a: BlueIDAccessSDK.BlueOpeningAttemptReportReceipt, b: BlueIDAccessSDK.BlueOpeningAttemptReportReceipt) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueReportAdvertisingHealthCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueAdvertisingHealthReportReceipt
+  final public func flushAsync() async -> [BlueIDAccessSDK.BlueAdvertisingHealthReportReceipt]
+  @objc deinit
+}
+public enum BlueAdvertisingFormat : Swift.String, Swift.Codable, Swift.Sendable {
+  case connectable
+  case iBeacon
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueAdvertisingHealthSuppressionReason : Swift.String, Swift.Codable, Swift.Sendable {
+  case rateLimited
+  case unchanged
+  case stale
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueAdvertisingHealthReportReceipt : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let schemaVersion: Swift.String
+  public let source: Swift.String
+  public let trust: Swift.String
+  public let observationID: Swift.String
+  public let backendStored: Swift.Bool
+  public let duplicate: Swift.Bool
+  public let suppressedReason: BlueIDAccessSDK.BlueAdvertisingHealthSuppressionReason?
+  public let storedAt: Swift.String?
+  public let localMidnightTimeEpoch: Swift.UInt32
+  public let expectedSiteLocalMidnightEpoch: Swift.Int64?
+  public let midnightDeltaSeconds: Swift.Int64?
+  public let clockPrecision: Swift.String
+  public let preciseClockDriftSeconds: Swift.Int64?
+  public static func == (a: BlueIDAccessSDK.BlueAdvertisingHealthReportReceipt, b: BlueIDAccessSDK.BlueAdvertisingHealthReportReceipt) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueGetMaintenanceDeviceConfigurationCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(identityID: Swift.String, deviceID: Swift.String) async throws -> BlueIDAccessSDK.BlueMaintenanceDeviceConfiguration
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers final public class BlueOverrideMaintenanceDeviceConfigurationCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(identityID: Swift.String, deviceID: Swift.String, change: BlueIDAccessSDK.BlueMaintenanceConfigurationChange, showModal: Swift.Bool = false) async throws -> BlueIDAccessSDK.BlueMaintenanceConfigurationApplyResult
+  @objc deinit
+}
+public enum BlueMaintenanceConfigurationAssignment : Swift.String, Swift.Codable, Swift.Sendable {
+  case template
+  case individual
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueMaintenanceTime : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let hours: Swift.Int
+  public let minutes: Swift.Int
+  public init(hours: Swift.Int, minutes: Swift.Int)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceTime, b: BlueIDAccessSDK.BlueMaintenanceTime) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceTimeSchedule : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let monthStart: Swift.Int
+  public let monthEnd: Swift.Int
+  public let dateStart: Swift.Int
+  public let dateEnd: Swift.Int
+  public let timeStart: BlueIDAccessSDK.BlueMaintenanceTime
+  public let timeEnd: BlueIDAccessSDK.BlueMaintenanceTime
+  public let weekdays: [Swift.Bool]
+  public init(monthStart: Swift.Int, monthEnd: Swift.Int, dateStart: Swift.Int, dateEnd: Swift.Int, timeStart: BlueIDAccessSDK.BlueMaintenanceTime, timeEnd: BlueIDAccessSDK.BlueMaintenanceTime, weekdays: [Swift.Bool])
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceTimeSchedule, b: BlueIDAccessSDK.BlueMaintenanceTimeSchedule) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceAdvertisingSchedule : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let schedule: BlueIDAccessSDK.BlueMaintenanceTimeSchedule
+  public let isPowerAdvertisingSchedule: Swift.Bool
+  public init(schedule: BlueIDAccessSDK.BlueMaintenanceTimeSchedule, isPowerAdvertisingSchedule: Swift.Bool)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceAdvertisingSchedule, b: BlueIDAccessSDK.BlueMaintenanceAdvertisingSchedule) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceBLEConfiguration : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let isAdvertising: Swift.Bool
+  public let advertisingSchedules: [BlueIDAccessSDK.BlueMaintenanceAdvertisingSchedule]
+  public let advertisingIntervalMs: Swift.Int
+  public let maxConnectionTimeoutMs: Swift.Int
+  public let txPowerLevel: Swift.Int
+  public let advertisedTxPower1Meter: Swift.Int
+  public let isIBeaconAdvertisement: Swift.Bool
+  public init(isAdvertising: Swift.Bool, advertisingSchedules: [BlueIDAccessSDK.BlueMaintenanceAdvertisingSchedule], advertisingIntervalMs: Swift.Int, maxConnectionTimeoutMs: Swift.Int, txPowerLevel: Swift.Int, advertisedTxPower1Meter: Swift.Int, isIBeaconAdvertisement: Swift.Bool)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceBLEConfiguration, b: BlueIDAccessSDK.BlueMaintenanceBLEConfiguration) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceLockConfiguration : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let openSchedules: [BlueIDAccessSDK.BlueMaintenanceTimeSchedule]
+  public let openScheduleByUser: Swift.Bool
+  public let keepClosedOnHolidays: Swift.Bool
+  public let defaultOpenTimeSec: Swift.Int
+  public let extendedOpenTimeSec: Swift.Int
+  public init(openSchedules: [BlueIDAccessSDK.BlueMaintenanceTimeSchedule], openScheduleByUser: Swift.Bool, keepClosedOnHolidays: Swift.Bool, defaultOpenTimeSec: Swift.Int, extendedOpenTimeSec: Swift.Int)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceLockConfiguration, b: BlueIDAccessSDK.BlueMaintenanceLockConfiguration) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceEditableConfiguration : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let ble: BlueIDAccessSDK.BlueMaintenanceBLEConfiguration
+  public let lock: BlueIDAccessSDK.BlueMaintenanceLockConfiguration
+  public init(ble: BlueIDAccessSDK.BlueMaintenanceBLEConfiguration, lock: BlueIDAccessSDK.BlueMaintenanceLockConfiguration)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceEditableConfiguration, b: BlueIDAccessSDK.BlueMaintenanceEditableConfiguration) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceConfigurationTemplate : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let id: Swift.String
+  public let name: Swift.String
+  public init(id: Swift.String, name: Swift.String)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceConfigurationTemplate, b: BlueIDAccessSDK.BlueMaintenanceConfigurationTemplate) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceDeviceConfiguration : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let schemaVersion: Swift.String
+  public let deviceID: Swift.String
+  public let objectID: Swift.Int
+  public let configurationID: Swift.String
+  public let configID: Swift.String
+  public let appliedConfigID: Swift.String?
+  public let assignment: BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment
+  public let template: BlueIDAccessSDK.BlueMaintenanceConfigurationTemplate?
+  public let configuration: BlueIDAccessSDK.BlueMaintenanceEditableConfiguration
+  public init(schemaVersion: Swift.String = "blueid.maintenance-device-configuration.v1", deviceID: Swift.String, objectID: Swift.Int, configurationID: Swift.String, configID: Swift.String, appliedConfigID: Swift.String?, assignment: BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment, template: BlueIDAccessSDK.BlueMaintenanceConfigurationTemplate?, configuration: BlueIDAccessSDK.BlueMaintenanceEditableConfiguration)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceDeviceConfiguration, b: BlueIDAccessSDK.BlueMaintenanceDeviceConfiguration) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceConfigurationChange : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let clientOperationID: Swift.String
+  public let expectedConfigID: Swift.String
+  public let configuration: BlueIDAccessSDK.BlueMaintenanceEditableConfiguration
+  public init(clientOperationID: Swift.String, expectedConfigID: Swift.String, configuration: BlueIDAccessSDK.BlueMaintenanceEditableConfiguration)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceConfigurationChange, b: BlueIDAccessSDK.BlueMaintenanceConfigurationChange) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct BlueMaintenanceConfigurationOverrideReceipt : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let schemaVersion: Swift.String
+  public let clientOperationID: Swift.String
+  public let deviceID: Swift.String
+  public let objectID: Swift.Int
+  public let previousConfigurationID: Swift.String
+  public let configurationID: Swift.String
+  public let previousConfigID: Swift.String
+  public let configID: Swift.String
+  public let previousAssignment: BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment
+  public let assignment: BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment
+  public let templateDetached: Swift.Bool
+  public let backendStored: Swift.Bool
+  public let duplicate: Swift.Bool
+  public let synchronizationRequired: Swift.Bool
+  public let storedAt: Swift.String
+  public init(schemaVersion: Swift.String = "blueid.maintenance-configuration-override-receipt.v1", clientOperationID: Swift.String, deviceID: Swift.String, objectID: Swift.Int, previousConfigurationID: Swift.String, configurationID: Swift.String, previousConfigID: Swift.String, configID: Swift.String, previousAssignment: BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment, assignment: BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment = .individual, templateDetached: Swift.Bool, backendStored: Swift.Bool, duplicate: Swift.Bool, synchronizationRequired: Swift.Bool, storedAt: Swift.String)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceConfigurationOverrideReceipt, b: BlueIDAccessSDK.BlueMaintenanceConfigurationOverrideReceipt) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public enum BlueMaintenanceConfigurationApplyOutcome : Swift.String, Swift.Codable, Swift.Sendable {
+  case synchronized
+  case backendStoredDeviceOutcomeUnknown
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueMaintenanceConfigurationApplyResult : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let receipt: BlueIDAccessSDK.BlueMaintenanceConfigurationOverrideReceipt
+  public let outcome: BlueIDAccessSDK.BlueMaintenanceConfigurationApplyOutcome
+  public let appliedConfigID: Swift.String?
+  public let synchronizationErrorCode: Swift.Int?
+  public init(receipt: BlueIDAccessSDK.BlueMaintenanceConfigurationOverrideReceipt, outcome: BlueIDAccessSDK.BlueMaintenanceConfigurationApplyOutcome, appliedConfigID: Swift.String?, synchronizationErrorCode: Swift.Int?)
+  public static func == (a: BlueIDAccessSDK.BlueMaintenanceConfigurationApplyResult, b: BlueIDAccessSDK.BlueMaintenanceConfigurationApplyResult) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public enum BlueOwnCardUpdateOutcome : Swift.String, Swift.Codable, Swift.Sendable {
+  case updated
+  case alreadyCurrent
+  case failedBeforeMutation
+  case outcomeUnknownAfterMutation
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum BlueOwnCardUpdateFailure : Swift.String, Swift.Codable, Swift.Sendable {
+  case configurationUnavailable
+  case serverBusy
+  case cardCommunicationFailed
+  case readBackFailed
+  case connectionInterrupted
+  case authorizationRejected
+  case credentialNotFound
+  case secureStateUnavailable
+  case resultRecordingFailed
+  case statusUnavailable
+  case backendUnavailable
+  case invalidServerResponse
+  case unsupportedCard
+  case unknown
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct BlueOwnCardUpdateResult : Swift.Codable, Swift.Equatable, Swift.Sendable {
+  public let clientOperationID: Swift.String
+  public let outcome: BlueIDAccessSDK.BlueOwnCardUpdateOutcome
+  public let readBackConfirmed: Swift.Bool
+  public let serverResultConfirmed: Swift.Bool
+  public let operationID: Swift.String?
+  public let receiptID: Swift.String?
+  public let failure: BlueIDAccessSDK.BlueOwnCardUpdateFailure?
+  public static func == (a: BlueIDAccessSDK.BlueOwnCardUpdateResult, b: BlueIDAccessSDK.BlueOwnCardUpdateResult) -> Swift.Bool
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+@_hasMissingDesignatedInitializers final public class BlueOwnCardUpdateCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(clientOperationID: Swift.String) async throws -> BlueIDAccessSDK.BlueOwnCardUpdateResult
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class BlueOwnCardUpdateStatusCommand : BlueIDAccessSDK.BlueSdkAsyncCommand {
+  final public func runAsync(clientOperationID: Swift.String) async throws -> BlueIDAccessSDK.BlueOwnCardUpdateResult
+  @objc deinit
+}
 extension BlueIDAccessSDK.BlueAccessSynchronizeDeviceCommand.BlueSynchronizeAccessTaskId : Swift.Equatable {}
 extension BlueIDAccessSDK.BlueAccessSynchronizeDeviceCommand.BlueSynchronizeAccessTaskId : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueMobileAccessSynchronizationOutcome : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueMobileAccessSynchronizationOutcome : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueMobileAccessSynchronizationOutcome : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueMobileAccessStateSource : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueMobileAccessStateSource : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueMobileAccessStateSource : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcOperation : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcOperation : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcOperation : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcOutcome : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcOutcome : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcOutcome : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcWriteStatus : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcWriteStatus : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcWriteStatus : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcMediaType : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcMediaType : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcMediaType : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcFailure : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcFailure : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcFailure : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcApplicationClearOutcome : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcApplicationClearOutcome : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueCardBoundNfcApplicationClearOutcome : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueFirmwareReleaseChannel : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueFirmwareReleaseChannel : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueFirmwareReleaseChannel : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueFirmwareComponent : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueFirmwareComponent : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueFirmwareComponent : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueVerifiedFirmwareUpdateOutcome : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueVerifiedFirmwareUpdateOutcome : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueVerifiedFirmwareUpdateOutcome : Swift.RawRepresentable {}
 extension BlueIDAccessSDK.BlueEventType : Swift.Equatable {}
 extension BlueIDAccessSDK.BlueEventType : Swift.Hashable {}
 extension BlueIDAccessSDK.BlueEventType : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueOpeningAttemptTrigger : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueOpeningAttemptTrigger : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueOpeningAttemptTrigger : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueAdvertisingFormat : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueAdvertisingFormat : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueAdvertisingFormat : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueAdvertisingHealthSuppressionReason : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueAdvertisingHealthSuppressionReason : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueAdvertisingHealthSuppressionReason : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueMaintenanceConfigurationAssignment : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueMaintenanceConfigurationApplyOutcome : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueMaintenanceConfigurationApplyOutcome : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueMaintenanceConfigurationApplyOutcome : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueOwnCardUpdateOutcome : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueOwnCardUpdateOutcome : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueOwnCardUpdateOutcome : Swift.RawRepresentable {}
+extension BlueIDAccessSDK.BlueOwnCardUpdateFailure : Swift.Equatable {}
+extension BlueIDAccessSDK.BlueOwnCardUpdateFailure : Swift.Hashable {}
+extension BlueIDAccessSDK.BlueOwnCardUpdateFailure : Swift.RawRepresentable {}
