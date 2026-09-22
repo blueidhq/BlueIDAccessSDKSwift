@@ -6,7 +6,7 @@
 	<dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/BlueIDAccessSDK</key>
 		<data>
-		RMBR84VEwpVQEoQLiANl/o55iZ0=
+		1toFpKb/eHoX/OKS+Ie8KRgmyJQ=
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Headers/BlueIDAccessSDKFramework.h</key>
 		<data>
@@ -14,23 +14,23 @@
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Info.plist</key>
 		<data>
-		lYOL7DxH3IFxBBgngXPZE9pIPFE=
+		GDEaLeOTad/gAwzQrrPXZmkKWz8=
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
-		B+jgHB/cBtSJSSsX3Nbs/IWh914=
+		UFXgCJr4BOoPvBtGYJzK9eU/5yY=
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		Pq762mHj2IUcCMgd+5MfV1pR8BQ=
+		ESGGvEuc8eTAHDU8rSt/rCFrV6s=
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		OtjFps4B9+COEalrRnwckfyzZfg=
+		aaHOsZAss5X1rCpBYic3s9OuplE=
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		Pq762mHj2IUcCMgd+5MfV1pR8BQ=
+		ESGGvEuc8eTAHDU8rSt/rCFrV6s=
 		</data>
 		<key>ios-arm64/BlueIDAccessSDK.framework/PrivacyInfo.xcprivacy</key>
 		<data>
@@ -42,15 +42,15 @@
 		</data>
 		<key>ios-arm64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/DWARF/BlueIDAccessSDK</key>
 		<data>
-		iQh7BhiVHzIbIV9YBBQMceZoWpQ=
+		YfQJ06NAfW6yF7UkFc8BUb0/3Ss=
 		</data>
 		<key>ios-arm64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/aarch64/BlueIDAccessSDK.yml</key>
 		<data>
-		7j1fX2n0UUtP9kxFzC1iG2YTZek=
+		+PwzLYeGqtKAceZOG0PDp4R3E6o=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/BlueIDAccessSDK</key>
 		<data>
-		508Loc91pxhBS9vG7PVfZLaP/IA=
+		L79t0mpR+xa+5XRoUa/Ui8kwdZE=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Headers/BlueIDAccessSDKFramework.h</key>
 		<data>
@@ -58,39 +58,39 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Info.plist</key>
 		<data>
-		IgzFRx+8ZmgQmsnNp2av53JpG8E=
+		+gMjoICBsnsH5/GVDUh4JxZywiU=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		B+jgHB/cBtSJSSsX3Nbs/IWh914=
+		UFXgCJr4BOoPvBtGYJzK9eU/5yY=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		FldnGCpAsquo+R8rDInwXEnCGfk=
+		bN9hLG4EZGIK0ZtO4N8yeTapZk4=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		us2fE/PDAchZLqgCpBt/FB435ZY=
+		oEEIikqrXO5ZftF0wLYT4BK+QZM=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		FldnGCpAsquo+R8rDInwXEnCGfk=
+		bN9hLG4EZGIK0ZtO4N8yeTapZk4=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		B+jgHB/cBtSJSSsX3Nbs/IWh914=
+		UFXgCJr4BOoPvBtGYJzK9eU/5yY=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		+oshYBf6XsfBdNNG1GFidziehiU=
+		2zlXoNXnTYHhMY9IA3JYQuJevgk=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		+hxXHYeAoftCi2znZiWtqtanjLI=
+		m60t6B2ei1UFCXf/CysEzKtLcss=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		+oshYBf6XsfBdNNG1GFidziehiU=
+		2zlXoNXnTYHhMY9IA3JYQuJevgk=
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/PrivacyInfo.xcprivacy</key>
 		<data>
@@ -98,7 +98,7 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/_CodeSignature/CodeResources</key>
 		<data>
-		vr//Af4HOGdrXw72FMZ3ka8xYxs=
+		pxjGHJOhQbP43jH7rAabpokRJxg=
 		</data>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Info.plist</key>
 		<data>
@@ -106,19 +106,19 @@
 		</data>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/DWARF/BlueIDAccessSDK</key>
 		<data>
-		zsE/BIdFFnSh9ethoPFIn6eSu+c=
+		d+eIQndGB0K0iNpbWg7elxJdC34=
 		</data>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/aarch64/BlueIDAccessSDK.yml</key>
 		<data>
-		3wqmzVal9ZuL7yScO+ZWICkSFCM=
+		GvO+O6aKELm4j1hAM3lviiyS92s=
 		</data>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/x86_64/BlueIDAccessSDK.yml</key>
 		<data>
-		+OFlOC2ygCSNfoCqOm0N2nWG37k=
+		q/X60TBJS/Xrlb9VW58B51aMpak=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/BlueIDAccessSDK</key>
 		<data>
-		qaeOh6Y1DN9PXfgzjXPyRfDezUs=
+		/MeMBmhEpLiaYw7ovAkT6HWPBWw=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Headers/BlueIDAccessSDKFramework.h</key>
 		<data>
@@ -126,39 +126,39 @@
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.abi.json</key>
 		<data>
-		YbfNHY/yL3eWEPrdqMPaUBjzews=
+		HWbHR75PGlDaFKPT8x2hDs8jTX4=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.private.swiftinterface</key>
 		<data>
-		EVwmm7YkgXPfJyvx0qmhwSbQnKQ=
+		gBKRUvPkpG91ncT5iRgyn6Xa9uw=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.swiftdoc</key>
 		<data>
-		v9fL6sxIyfRYFdg/1k+qiArw2ts=
+		ZsPZDW+Yn0uop+X8edcReC1BaUk=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.swiftinterface</key>
 		<data>
-		EVwmm7YkgXPfJyvx0qmhwSbQnKQ=
+		gBKRUvPkpG91ncT5iRgyn6Xa9uw=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.abi.json</key>
 		<data>
-		YbfNHY/yL3eWEPrdqMPaUBjzews=
+		HWbHR75PGlDaFKPT8x2hDs8jTX4=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.private.swiftinterface</key>
 		<data>
-		WZoGIV1eG4jLTIOq6dwIgl56ciA=
+		O8XV9C1aw+18NzhXEQOrSpn/cAY=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.swiftdoc</key>
 		<data>
-		JjQg7tnVglTuLATY7b8cupOd0PY=
+		LDhkNLve92/MQpFZu4epaxgT2bk=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.swiftinterface</key>
 		<data>
-		WZoGIV1eG4jLTIOq6dwIgl56ciA=
+		O8XV9C1aw+18NzhXEQOrSpn/cAY=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Resources/Info.plist</key>
 		<data>
-		9AdI76GUzuaMn7w7THdijSP4S5Q=
+		0Lg0YmNscR9/f/ATEuyRtLwgOkg=
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Resources/PrivacyInfo.xcprivacy</key>
 		<data>
@@ -166,7 +166,7 @@
 		</data>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/_CodeSignature/CodeResources</key>
 		<data>
-		lAxjrQPp/4cnAlaJU5j1xcrxqNk=
+		kyOsvAGXopyiUNt4lt42uW3FOoQ=
 		</data>
 		<key>macos-arm64_x86_64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Info.plist</key>
 		<data>
@@ -174,15 +174,15 @@
 		</data>
 		<key>macos-arm64_x86_64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/DWARF/BlueIDAccessSDK</key>
 		<data>
-		VIquQlzY9lYWpJysmXAA7D7RMC4=
+		bPsmE5vxQw4PhbZsS5bZvuUZZ/0=
 		</data>
 		<key>macos-arm64_x86_64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/aarch64/BlueIDAccessSDK.yml</key>
 		<data>
-		c+H/lXSqnKA472ZE9G21ahc+qIA=
+		iDLvVhxaUZS5iUYrVQC7RGGSdyA=
 		</data>
 		<key>macos-arm64_x86_64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/x86_64/BlueIDAccessSDK.yml</key>
 		<data>
-		xS/Alj5Imrmf+bjCif2fiEM3yFY=
+		7M0ndRdwOnsvZxRug4AADOaF3mE=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -191,7 +191,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2u2T021IHEy6n0AFOuf04//2R+CA2f8vD3FounSR0TQ=
+			rZ2DB+sMtwHmuyJG56EpIVRJyvzmrqeORFu2hC5fr6k=
 			</data>
 		</dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Headers/BlueIDAccessSDKFramework.h</key>
@@ -205,35 +205,35 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			p6/MelKcKpyWy9/eqsVQRPw+UlhH9Pc69Gge6iw6+ko=
+			PRpP5VfOvSCewiGU6riW7Ls1qwXCHK9RYwtMl52pink=
 			</data>
 		</dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			411tBnWgehjXT242RXxtAljjSFqYuJJFLoGltR7hRTc=
+			fNd4JVuc3HCSG9v6uL66oABSBcQQL0RdHdLs9usvrfI=
 			</data>
 		</dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ON/n/pd5DrgiF2XhBJ6ijDxgonTGjOQLkzCLx7L/91Q=
+			N/MrA27JJkSfV0DmfYG8JW9SkGzh7zTHXGZRE6mEX0I=
 			</data>
 		</dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			FD33rseEdiDMHnNqkXa6tXdsAsP3x/ofsIryKxXHvWo=
+			30K88r4K5WCmKTUQ7kYLuf4EwAOMluvBNxW4AJCd7Zs=
 			</data>
 		</dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ON/n/pd5DrgiF2XhBJ6ijDxgonTGjOQLkzCLx7L/91Q=
+			N/MrA27JJkSfV0DmfYG8JW9SkGzh7zTHXGZRE6mEX0I=
 			</data>
 		</dict>
 		<key>ios-arm64/BlueIDAccessSDK.framework/PrivacyInfo.xcprivacy</key>
@@ -254,21 +254,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lxQvHfX0FIXWeSA7d339rHPf787V2p4oqjffJWayBPg=
+			RnL13l4ckgLJ+nJZkFRSHZ1aNzuMCwfMST6J5SXHhiE=
 			</data>
 		</dict>
 		<key>ios-arm64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/aarch64/BlueIDAccessSDK.yml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F06ig8xpt/SSWHiDT/LX02tFrBAu+3xl5hpviEScW7g=
+			P/7yC1k+830KzHSb2BBhU0R4Aw1L4jZCyG1QsHdEDC4=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/BlueIDAccessSDK</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			TwR5j5XLJfohCZtq5NyD5Y+3nPjyYBvh5Ph6ENIWiBg=
+			2qL0IYHFZBTg1/bo97G6hx7lGYdusyHkCKNvUeNQw8E=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Headers/BlueIDAccessSDKFramework.h</key>
@@ -282,63 +282,63 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Juge2glChKqM61BMQN/t93x6I1CVXsWLicESvgsrics=
+			tPaXm/kCcjJhapP7hDfxihNToNzY78Nxj79nSEiGjbY=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			411tBnWgehjXT242RXxtAljjSFqYuJJFLoGltR7hRTc=
+			fNd4JVuc3HCSG9v6uL66oABSBcQQL0RdHdLs9usvrfI=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			4WD+meKgzZ0Y7SlOIbUrNi5RBg01tT5uFvbtMEKSHMg=
+			cnPE0IYdLcJP+ap7Wje9aR+P2icVUtszkP41kY6ACMI=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			4w81YqPpRD3BwKSPcK0KvH0ZDRmRwrGNvLYQKCoCoK8=
+			b2/HchaOyLKqwFizsCXimSel91QaZG71NGPxyZ8tL7M=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			4WD+meKgzZ0Y7SlOIbUrNi5RBg01tT5uFvbtMEKSHMg=
+			cnPE0IYdLcJP+ap7Wje9aR+P2icVUtszkP41kY6ACMI=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			411tBnWgehjXT242RXxtAljjSFqYuJJFLoGltR7hRTc=
+			fNd4JVuc3HCSG9v6uL66oABSBcQQL0RdHdLs9usvrfI=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			I2p2Y9n72v7ibnfy5YN+i9fTy6+6E7ApIjiovuq+dLo=
+			kJU9ludCywlhNSfnKysaWhaC7Xzc0tOmpXVCeea+nRc=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			iLOshgQJMJEj+bVjOvvdDIBkCv0UGVZRA3geZxLiA5s=
+			dChNbx6cX+zZUXcMOQO9LKD1SbCWNK6OQ911nkJfY1o=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			I2p2Y9n72v7ibnfy5YN+i9fTy6+6E7ApIjiovuq+dLo=
+			kJU9ludCywlhNSfnKysaWhaC7Xzc0tOmpXVCeea+nRc=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/BlueIDAccessSDK.framework/PrivacyInfo.xcprivacy</key>
@@ -352,7 +352,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pi8jkDUydzEjnAlNaSIgwsVBpYKzwCO60IoCwLPOBko=
+			M/xTSnMMV+4NbzfTWG1uvq//zeAIxt1Un7rMzf4yMnM=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Info.plist</key>
@@ -366,21 +366,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			g91phmIFzha6iZ+oqPH01BtQWmiBe3OFFVuA1zGF7O0=
+			2++v/ia6qG4iiQSrTiRraIYel9kTl9dxJZo6sbzLoAk=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/aarch64/BlueIDAccessSDK.yml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Em5n+xnw1d8db1iQYxQwwdM75xpeXmPfYP2J8YPCL1M=
+			Gh89mBBnjxrUw9YaAk72KAorWfUk3v7y89P/CdIW2es=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/x86_64/BlueIDAccessSDK.yml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			equpUD/tmZMSTS2mUjUf2XFZL7xwtZ02Na+vp+d0HWo=
+			MjrcTdhkLN/VgwkgY70EYgbFWKC8pybQDb9+HGu2EgM=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/BlueIDAccessSDK</key>
@@ -407,7 +407,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			746mYCOllQ+meZjMiIrXpL/WCw3KNPAczYZ1qls6DLU=
+			8QBBINwGLbiJLgYEGUDU+IfdyAZcL9vR+AOqEdu/K7Y=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Headers/BlueIDAccessSDKFramework.h</key>
@@ -421,63 +421,63 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			5IDBFNsMFIckVYF4UW2pLPLEmtImEsy/BZ2ZH6RYPHI=
+			JT68/fpLNswPRnRehMlugKyNtGJwqw/7Ahi8TYGDzGg=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3ehOUgqNAlBgK/dQt5Bf3hu/8oxgEeRDu/xKcc4K4o4=
+			ABtZhGVHOUrfglxv5xTXWChlR773LFqJYTNj6QcCUZc=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			P7SpvIbVSihtWv7nMnp2XaLQhxSfmIAYphJhgr1ghag=
+			uILuYZO22OUWZfzqgtbvKkwByfk/D9FOi0NA3tMhpwQ=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/arm64-apple-macos.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			3ehOUgqNAlBgK/dQt5Bf3hu/8oxgEeRDu/xKcc4K4o4=
+			ABtZhGVHOUrfglxv5xTXWChlR773LFqJYTNj6QcCUZc=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5IDBFNsMFIckVYF4UW2pLPLEmtImEsy/BZ2ZH6RYPHI=
+			JT68/fpLNswPRnRehMlugKyNtGJwqw/7Ahi8TYGDzGg=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Z1UkZU9q0FgmpV7fQulinh4tsrPc1tXyLBSJrPD4Q6k=
+			fMIYfJdixl8R0RsGtTGdKsEt1ll05qrGvEM+i0Cidsw=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			HnPmjFF9QXJxsMhPzIizUqZcajbgYT/nJXbpqXYsRg0=
+			ShDiSpfjXJnJzVoPyErJiP1ui7UqqZSMGjttndMZiH4=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Modules/BlueIDAccessSDK.swiftmodule/x86_64-apple-macos.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Z1UkZU9q0FgmpV7fQulinh4tsrPc1tXyLBSJrPD4Q6k=
+			fMIYfJdixl8R0RsGtTGdKsEt1ll05qrGvEM+i0Cidsw=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Resources/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			j/m2la/BhitKWFQVpbdUEoPxbV4yxOzopaILRJnD7xo=
+			HVTFnohp1xPlxvCeaniQEn5qzkh8wf+BMkpXk4p2VMU=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/A/Resources/PrivacyInfo.xcprivacy</key>
@@ -491,7 +491,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			4i/7xoOv1oO8gSfLRqzOC1/ZWonJUyCEYg4LsFCoLos=
+			KmqKqA4au370/rw1TW86l0hyk85Fx1upKA+X2Nf2ygM=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/BlueIDAccessSDK.framework/Versions/Current</key>
@@ -510,21 +510,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			dmAydAANbGX90cs6VEjyI1RnFsyMd/sn5nK4uEd2cVc=
+			3px3P8f8dTeZd8UIXoMktExDuoH8N9KUrvfHtP2iYYA=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/aarch64/BlueIDAccessSDK.yml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			DnlpSc53sZH2ow38tRmR1qalhpMC5rhUSqGQ9qUUgHA=
+			uYI1XACI8D6C33k6Uexs4On7XCFhxHnizrbBV2f2Djg=
 			</data>
 		</dict>
 		<key>macos-arm64_x86_64/dSYMs/BlueIDAccessSDK.framework.dSYM/Contents/Resources/Relocations/x86_64/BlueIDAccessSDK.yml</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bAnlMCwIvNwng8HeulPnxwoNO3M23G+bxx6YAHC4ndY=
+			57tHjSdBd2eXRaQfZs2Ao2iHVwlflRswGt0fcawQ9u4=
 			</data>
 		</dict>
 	</dict>
