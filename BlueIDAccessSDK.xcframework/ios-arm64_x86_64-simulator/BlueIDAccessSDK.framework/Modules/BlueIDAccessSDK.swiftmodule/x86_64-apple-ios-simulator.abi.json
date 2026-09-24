@@ -152033,7 +152033,7 @@
       "kind": "StringLiteral",
       "offset": 116,
       "length": 9,
-      "value": "\"12.61.0\""
+      "value": "\"12.62.0\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/commands\/BlueAccess.swift",
@@ -154098,14 +154098,14 @@
       "kind": "IntegerLiteral",
       "offset": 9227,
       "length": 2,
-      "value": "17"
+      "value": "33"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "IntegerLiteral",
       "offset": 9341,
       "length": 2,
-      "value": "18"
+      "value": "34"
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
@@ -154475,846 +154475,846 @@
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
       "offset": 126929,
-      "length": 396,
-      "value": "\"\u0000\u0001BatteryLow\u0000\u0001BatteryReplaced\u0000\u0001LockJammed\u0000\u0001SystemEvent\u0000\u0001InternalError\u0000\u0001FailedToUnlock\u0000\u0001TamperingDetected\u0000\u0001BlacklistedCredentialDetected\u0000\u0001BlacklistFull\u0000\u0001AccessGranted\u0000\u0001AccessDenied\u0000\u0001CRCError\u0000\u0001MaxOssSoEventId\u0000\u0001TerminalCommand\u0000\u0001TerminalOss\u0000\u0002\u0002LockerOwnerMatched\u0000\u0001LockerOwnerNotMatched\u0000\u0002\u000ELockerOwned\u0000\""
+      "length": 392,
+      "value": "\"\u0000\u0001BatteryLow\u0000\u0001BatteryReplaced\u0000\u0001LockJammed\u0000\u0001SystemEvent\u0000\u0001InternalError\u0000\u0001FailedToUnlock\u0000\u0001TamperingDetected\u0000\u0001BlacklistedCredentialDetected\u0000\u0001BlacklistFull\u0000\u0001AccessGranted\u0000\u0001AccessDenied\u0000\u0001CRCError\u0000\u0001MaxOssSoEventId\u0000\u0001TerminalCommand\u0000\u0001TerminalOss\u0000\u0002\u0011LockerOwned\u0000\u0001LockerOwnerMatched\u0000\u0001LockerOwnerNotMatched\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 127482,
+      "offset": 127478,
       "length": 102,
       "value": "\"\u0000\u0001SystemRestart\u0000\u0001SystemConfigured\u0000\u0002~\u0001LockerRecovery\u0000\u0002\u0002LockerReconciled\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 127741,
+      "offset": 127737,
       "length": 365,
       "value": "\"\u0000\u0001Granted\u0000\u0001GrantedDefaultTime\u0000\u0001GrantedExtendedTime\u0000\u0001GrantedToggleUnlock\u0000\u0001GrantedToggleLock\u0000\u0002{\u0001Denied\u0000\u0002\u0002DeniedBlacklisted\u0000\u0001DeniedValidity\u0000\u0001DeniedDTSchedule\u0000\u0001DeniedInternalError\u0000\u0001DeniedTransponderError\u0000\u0001DeniedInvalidTransponderData\u0000\u0001DeniedLockerOwnerMismatch\u0000\u0002\u0002DeniedLockerRecovery\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 128271,
+      "offset": 128267,
       "length": 34,
       "value": "\"\u0000\u0002\u0000Oss\u0000\u0001Proprietary\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 128479,
+      "offset": 128475,
       "length": 45,
       "value": "\"\u0000\u0002\u0000Standard\u0000\u0001InterventionMedia\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 128682,
+      "offset": 128678,
       "length": 41,
       "value": "\"\u0000\u0002\u000FMasterGroupId\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 128886,
+      "offset": 128882,
       "length": 37,
       "value": "\"\u0000\u0002\u0000DoorGroupId\u0000\u0001DoorId\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 129076,
+      "offset": 129072,
       "length": 81,
       "value": "\"\u0000\u0002\u0000Info\u0000\u0001Data\u0000\u0001Event\u0000\u0001Blacklist\u0000\u0001CustomerExtensions\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 129315,
+      "offset": 129311,
       "length": 75,
       "value": "\"\u0000\u0002\u0000WritableByAnyOrg\u0000\u0001WritableBySpecificOrg\u0000\u0001NotWritable\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 129585,
+      "offset": 129581,
       "length": 20,
       "value": "\"BlueSharedDemoData\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 129679,
+      "offset": 129675,
       "length": 119,
       "value": "\"\u0000\u0001deviceId\u0000\u0001terminalPrivateKey\u0000\u0001terminalPublicKey\u0000\u0001signaturePrivateKey\u0000\u0001signaturePublicKey\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 132778,
+      "offset": 132774,
       "length": 17,
       "value": "\"BlueVersionInfo\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 132869,
+      "offset": 132865,
       "length": 52,
       "value": "\"\u0000\u0001buildTime\u0000\u0001version\u0000\u0001testVersion\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 135121,
+      "offset": 135117,
       "length": 20,
       "value": "\"BlueLocalTimestamp\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 135215,
+      "offset": 135211,
       "length": 78,
       "value": "\"\u0000\u0001year\u0000\u0001month\u0000\u0001date\u0000\u0001hours\u0000\u0001minutes\u0000\u0001seconds\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 138305,
+      "offset": 138301,
       "length": 21,
       "value": "\"BlueLocalTimeperiod\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 138400,
+      "offset": 138396,
       "length": 68,
       "value": "\"\u0000\u0001hoursFrom\u0000\u0001minutesFrom\u0000\u0001hoursTo\u0000\u0001minutesTo\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 140984,
+      "offset": 140980,
       "length": 23,
       "value": "\"BlueLocalTimeSchedule\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 141081,
+      "offset": 141077,
       "length": 76,
       "value": "\"\u0000\u0001dayOfYearStart\u0000\u0001dayOfYearEnd\u0000\u0001weekdays\u0000\u0001timePeriod\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 143730,
+      "offset": 143726,
       "length": 18,
       "value": "\"BlueCredentialId\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 143822,
+      "offset": 143818,
       "length": 13,
       "value": "\"\u0000\u0001id\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 145392,
+      "offset": 145388,
       "length": 20,
       "value": "\"BlueBlacklistEntry\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 145486,
+      "offset": 145482,
       "length": 39,
       "value": "\"\u0000\u0001credentialId\u0000\u0001expiresAt\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 147581,
+      "offset": 147577,
       "length": 25,
       "value": "\"BlueBleManufacturerInfo\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 147680,
+      "offset": 147676,
       "length": 132,
       "value": "\"\u0000\u0001hardwareType\u0000\u0001batteryLevel\u0000\u0001applicationVersion\u0000\u0001localMidnightTimeEpoch\u0000\u0001isFactory\u0000\u0001hardwareState\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 151097,
+      "offset": 151093,
       "length": 26,
       "value": "\"BlueBleAdvertisementInfo\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 151197,
+      "offset": 151193,
       "length": 68,
       "value": "\"\u0000\u0001deviceId\u0000\u0001txPower1Meter\u0000\u0001isIBeacon\u0000\u0001mfInfo\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 153836,
+      "offset": 153832,
       "length": 11,
       "value": "\"BlueEvent\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 153921,
+      "offset": 153917,
       "length": 100,
       "value": "\"\u0000\u0001sequenceId\u0000\u0001eventTime\u0000\u0001eventId\u0000\u0001eventInfo\u0000\u0001credentialId\u0000\u0001command\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 157159,
+      "offset": 157155,
       "length": 17,
       "value": "\"BlueSPHandshake\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 157250,
+      "offset": 157246,
       "length": 26,
       "value": "\"\u0000\u0001transponderSalt\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 158896,
+      "offset": 158892,
       "length": 22,
       "value": "\"BlueSPHandshakeReply\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 158992,
+      "offset": 158988,
       "length": 47,
       "value": "\"\u0000\u0001terminalSalt\u0000\u0001terminalSignature\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 160995,
+      "offset": 160991,
       "length": 20,
       "value": "\"BlueSPTokenCommand\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 161089,
+      "offset": 161085,
       "length": 86,
       "value": "\"\u0000\u0001credentialId\u0000\u0001validityStart\u0000\u0001validityEnd\u0000\u0001command\u0000\u0001data\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 164199,
+      "offset": 164195,
       "length": 13,
       "value": "\"BlueSPToken\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 164286,
+      "offset": 164282,
       "length": 59,
       "value": "\"\u0000\u0001signature\u0000\u0001command\u0000\u0001ossSo\u0000\u0001ossSid\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 167894,
+      "offset": 167890,
       "length": 14,
       "value": "\"BlueSPResult\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 167982,
+      "offset": 167978,
       "length": 15,
       "value": "\"\u0000\u0001data\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 169555,
+      "offset": 169551,
       "length": 21,
       "value": "\"BlueOssAccessResult\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 169650,
+      "offset": 169646,
       "length": 125,
       "value": "\"\u0000\u0001accessGranted\u0000\u0001accessType\u0000\u0001accessInfo\u0000\u0001scheduleEndTime\u0000\u0001scheduleMissmatch\u0000\u0001accessOpenTime\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 173040,
+      "offset": 173036,
       "length": 27,
       "value": "\"BlueOssAccessEventsResult\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 173141,
+      "offset": 173137,
       "length": 36,
       "value": "\"\u0000\u0001accessResult\u0000\u0001events\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 175194,
+      "offset": 175190,
       "length": 19,
       "value": "\"BlueOssSidVersion\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 175287,
+      "offset": 175283,
       "length": 42,
       "value": "\"\u0000\u0001versionMajor\u0000\u0001versionMinor\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 177115,
+      "offset": 177111,
       "length": 29,
       "value": "\"BlueOssSidCredentialTypeOss\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 177218,
+      "offset": 177214,
       "length": 18,
       "value": "\"\u0000\u0001notUsed\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 178754,
+      "offset": 178750,
       "length": 37,
       "value": "\"BlueOssSidCredentialTypeProprietary\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 178865,
+      "offset": 178861,
       "length": 18,
       "value": "\"\u0000\u0001mfgCode\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 180507,
+      "offset": 180503,
       "length": 26,
       "value": "\"BlueOssSidCredentialType\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 180607,
+      "offset": 180603,
       "length": 49,
       "value": "\"\u0000\u0001typeSource\u0000\u0001oss\u0000\u0001proprietary\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 182839,
+      "offset": 182835,
       "length": 20,
       "value": "\"BlueOssSidFileInfo\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 182933,
+      "offset": 182929,
       "length": 82,
       "value": "\"\u0000\u0001versionMajor\u0000\u0001versionMinor\u0000\u0001credentialType\u0000\u0001credentialId\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 185741,
+      "offset": 185737,
       "length": 25,
       "value": "\"BlueOssSidConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 185840,
+      "offset": 185836,
       "length": 15,
       "value": "\"\u0000\u0001info\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 187503,
+      "offset": 187499,
       "length": 26,
       "value": "\"BlueOssSidStorageProfile\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 187603,
+      "offset": 187599,
       "length": 76,
       "value": "\"\u0000\u0001dataLength\u0000\u0001fileSize\u0000\u0001infoDataLength\u0000\u0001infoFileSize\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 190259,
+      "offset": 190255,
       "length": 37,
       "value": "\"BlueOssSidProvisioningConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 190370,
+      "offset": 190366,
       "length": 18,
       "value": "\"\u0000\u0001notUsed\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 191913,
+      "offset": 191909,
       "length": 28,
       "value": "\"BlueOssSidProvisioningData\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 192015,
+      "offset": 192011,
       "length": 64,
       "value": "\"\u0000\u0001configuration\u0000\u0001credentialType\u0000\u0001credentialId\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 194452,
+      "offset": 194448,
       "length": 18,
       "value": "\"BlueOssSidMobile\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 194544,
+      "offset": 194540,
       "length": 19,
       "value": "\"\u0000\u0001infoFile\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 196171,
+      "offset": 196167,
       "length": 43,
       "value": "\"BlueOssSidMobileProvisioningConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 196288,
+      "offset": 196284,
       "length": 18,
       "value": "\"\u0000\u0001notUsed\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 197865,
+      "offset": 197861,
       "length": 50,
       "value": "\"BlueOssSidMifareDesfireProvisioningConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 197989,
+      "offset": 197985,
       "length": 18,
       "value": "\"\u0000\u0001notUsed\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 199568,
+      "offset": 199564,
       "length": 38,
       "value": "\"BlueOssSidMifareDesfireConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 199680,
+      "offset": 199676,
       "length": 70,
       "value": "\"\u0000\u0001piccMasterKey\u0000\u0001appMasterKey\u0000\u0001projectKey\u0000\u0001aid\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 202301,
+      "offset": 202297,
       "length": 20,
       "value": "\"BlueOssSidSettings\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 202395,
+      "offset": 202391,
       "length": 30,
       "value": "\"\u0000\u0001mifareDesfireConfig\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 204090,
+      "offset": 204086,
       "length": 18,
       "value": "\"BlueOssSoVersion\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 204182,
+      "offset": 204178,
       "length": 42,
       "value": "\"\u0000\u0001versionMajor\u0000\u0001versionMinor\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 206007,
+      "offset": 206003,
       "length": 28,
       "value": "\"BlueOssSoCredentialTypeOss\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 206109,
+      "offset": 206105,
       "length": 21,
       "value": "\"\u0000\u0001credential\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 207759,
+      "offset": 207755,
       "length": 36,
       "value": "\"BlueOssSoCredentialTypeProprietary\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 207869,
+      "offset": 207865,
       "length": 18,
       "value": "\"\u0000\u0001mfgCode\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 209508,
+      "offset": 209504,
       "length": 25,
       "value": "\"BlueOssSoCredentialType\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 209607,
+      "offset": 209603,
       "length": 49,
       "value": "\"\u0000\u0001typeSource\u0000\u0001oss\u0000\u0001proprietary\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 211899,
+      "offset": 211895,
       "length": 24,
       "value": "\"BlueOssSoDTScheduleDay\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 211997,
+      "offset": 211993,
       "length": 47,
       "value": "\"\u0000\u0002\u0003weekdays\u0000\u0002\u0005timePeriods\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 213653,
+      "offset": 213649,
       "length": 21,
       "value": "\"BlueOssSoDTSchedule\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 213748,
+      "offset": 213744,
       "length": 15,
       "value": "\"\u0000\u0001days\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 215071,
+      "offset": 215067,
       "length": 19,
       "value": "\"BlueOssSoDoorInfo\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 215164,
+      "offset": 215160,
       "length": 68,
       "value": "\"\u0000\u0001id\u0000\u0001accessBy\u0000\u0001dtScheduleNumber\u0000\u0001accessType\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 217729,
+      "offset": 217725,
       "length": 16,
       "value": "\"BlueOssSoEvent\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 217819,
+      "offset": 217815,
       "length": 63,
       "value": "\"\u0000\u0001eventTime\u0000\u0001doorId\u0000\u0001eventId\u0000\u0001eventInfo\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 220423,
+      "offset": 220419,
       "length": 21,
       "value": "\"BlueOssSoExtFeature\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 220518,
+      "offset": 220514,
       "length": 26,
       "value": "\"\u0000\u0001tag\u0000\u0001value\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 222410,
+      "offset": 222406,
       "length": 35,
       "value": "\"BlueOssSoExtFeature_ValidityStart\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 222519,
+      "offset": 222515,
       "length": 42,
       "value": "\"\u0000\u0001isValid\u0000\u0001validityStartTime\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 224591,
+      "offset": 224587,
       "length": 19,
       "value": "\"BlueOssSoFileInfo\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 224684,
+      "offset": 224680,
       "length": 130,
       "value": "\"\u0000\u0001versionMajor\u0000\u0001versionMinor\u0000\u0001credentialType\u0000\u0001credentialId\u0000\u0001maxEventEntries\u0000\u0001maxBlacklistEntries\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 228222,
+      "offset": 228218,
       "length": 19,
       "value": "\"BlueOssSoFileData\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 228315,
+      "offset": 228311,
       "length": 160,
       "value": "\"\u0000\u0001validity\u0000\u0001siteId\u0000\u0001numberOfDayIdsPerDTSchedule\u0000\u0001numberOfTimePeriodsPerDayId\u0000\u0001hasExtensions\u0000\u0001doorInfoEntries\u0000\u0001dtSchedules\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 232272,
+      "offset": 232268,
       "length": 20,
       "value": "\"BlueOssSoFileEvent\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 232366,
+      "offset": 232362,
       "length": 41,
       "value": "\"\u0000\u0001supportedEventIds\u0000\u0001events\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 234369,
+      "offset": 234365,
       "length": 24,
       "value": "\"BlueOssSoFileBlacklist\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 234467,
+      "offset": 234463,
       "length": 18,
       "value": "\"\u0000\u0001entries\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 235831,
+      "offset": 235827,
       "length": 33,
       "value": "\"BlueOssSoFileCustomerExtensions\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 235938,
+      "offset": 235934,
       "length": 42,
       "value": "\"\u0000\u0001extFeatures\u0000\u0001validityStart\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 238001,
+      "offset": 237997,
       "length": 24,
       "value": "\"BlueOssSoConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 238099,
+      "offset": 238095,
       "length": 79,
       "value": "\"\u0000\u0001info\u0000\u0001data\u0000\u0001event\u0000\u0001blacklist\u0000\u0001customerExtensions\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 243004,
+      "offset": 243000,
       "length": 25,
       "value": "\"BlueOssSoStorageProfile\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 243103,
+      "offset": 243099,
       "length": 276,
       "value": "\"\u0000\u0001dataLength\u0000\u0001fileSize\u0000\u0001infoDataLength\u0000\u0001infoFileSize\u0000\u0001dataDataLength\u0000\u0001dataFileSize\u0000\u0001eventDataLength\u0000\u0001eventFileSize\u0000\u0001blacklistDataLength\u0000\u0001blacklistFileSize\u0000\u0001customerExtensionsDataLength\u0000\u0001customerExtensionsFileSize\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 248762,
+      "offset": 248758,
       "length": 36,
       "value": "\"BlueOssSoProvisioningConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 248872,
+      "offset": 248868,
       "length": 238,
       "value": "\"\u0000\u0001numberOfDoors\u0000\u0001numberOfDTSchedules\u0000\u0001numberOfDayIdsPerDTSchedule\u0000\u0001numberOfTimePeriodsPerDayId\u0000\u0001numberOfEvents\u0000\u0001supportedEventIds\u0000\u0001numberOfBlacklistEntries\u0000\u0001customerExtensionsSize\u0000\u0003has_data\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 253634,
+      "offset": 253630,
       "length": 27,
       "value": "\"BlueOssSoProvisioningData\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 253735,
+      "offset": 253731,
       "length": 77,
       "value": "\"\u0000\u0001configuration\u0000\u0001credentialType\u0000\u0001credentialId\u0000\u0001siteId\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 256540,
+      "offset": 256536,
       "length": 17,
       "value": "\"BlueOssSoMobile\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 256631,
+      "offset": 256627,
       "length": 133,
       "value": "\"\u0000\u0001infoFile\u0000\u0001dataFile\u0000\u0001blacklistFile\u0000\u0001customerExtensionsFile\u0000\u0001requestedEventCount\u0000\u0001supportedEventIds\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 259948,
+      "offset": 259944,
       "length": 42,
       "value": "\"BlueOssSoMobileProvisioningConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 260064,
+      "offset": 260060,
       "length": 238,
       "value": "\"\u0000\u0001numberOfDoors\u0000\u0001numberOfDTSchedules\u0000\u0001numberOfDayIdsPerDTSchedule\u0000\u0001numberOfTimePeriodsPerDayId\u0000\u0001numberOfEvents\u0000\u0001supportedEventIds\u0000\u0001numberOfBlacklistEntries\u0000\u0001customerExtensionsSize\u0000\u0003has_data\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 264860,
+      "offset": 264856,
       "length": 49,
       "value": "\"BlueOssSoMifareDesfireProvisioningConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 264983,
+      "offset": 264979,
       "length": 238,
       "value": "\"\u0000\u0001numberOfDoors\u0000\u0001numberOfDTSchedules\u0000\u0001numberOfDayIdsPerDTSchedule\u0000\u0001numberOfTimePeriodsPerDayId\u0000\u0001numberOfEvents\u0000\u0001supportedEventIds\u0000\u0001numberOfBlacklistEntries\u0000\u0001customerExtensionsSize\u0000\u0003has_data\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 269781,
+      "offset": 269777,
       "length": 37,
       "value": "\"BlueOssSoMifareDesfireConfiguration\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 269892,
+      "offset": 269888,
       "length": 70,
       "value": "\"\u0000\u0001piccMasterKey\u0000\u0001appMasterKey\u0000\u0001projectKey\u0000\u0001aid\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 272510,
+      "offset": 272506,
       "length": 19,
       "value": "\"BlueOssSoSettings\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 272603,
+      "offset": 272599,
       "length": 30,
       "value": "\"\u0000\u0001mifareDesfireConfig\u0000\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 274301,
+      "offset": 274297,
       "length": 23,
       "value": "\"_BlueTestEncodeDecode\""
     },
     {
       "filePath": "\/Users\/runner\/_work\/blueid-access\/blueid-access\/build\/sdk\/apple\/BlueIDAccessSDKFramework\/BlueIDAccessSDK\/pb\/BlueCore.pb.swift",
       "kind": "StringLiteral",
-      "offset": 274398,
+      "offset": 274394,
       "length": 86,
       "value": "\"\u0000\u0001vendor\u0000\u0003hardware_name\u0000\u0003hardware_version\u0000\u0003application_version\u0000\""
     },
