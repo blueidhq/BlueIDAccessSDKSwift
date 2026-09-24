@@ -821,6 +821,9 @@ nonisolated public enum BlueEventId : Swift::Int, SwiftProtobuf::Enum, Swift::Ca
   case maxOssSoEventID
   case terminalCommand
   case terminalOss
+  case lockerOwned
+  case lockerOwnerMatched
+  case lockerOwnerNotMatched
   nonisolated public init()
   nonisolated public init?(rawValue: Swift::Int)
   public typealias AllCases = [BlueIDAccessSDK::BlueEventId]
@@ -4398,6 +4401,22 @@ nonisolated public struct BlueAccessDevice : Swift::Sendable {
     get
   }
   nonisolated public mutating func clearIsAllowNearByOpen()
+  nonisolated public var isLocker: Swift::Bool {
+    get
+    set
+  }
+  nonisolated public var hasIsLocker: Swift::Bool {
+    get
+  }
+  nonisolated public mutating func clearIsLocker()
+  nonisolated public var lockerOwnedBy: Swift::String {
+    get
+    set
+  }
+  nonisolated public var hasLockerOwnedBy: Swift::Bool {
+    get
+  }
+  nonisolated public mutating func clearLockerOwnedBy()
   public var unknownFields: SwiftProtobuf::UnknownStorage
   nonisolated public init()
 }
