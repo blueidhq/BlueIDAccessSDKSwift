@@ -4377,6 +4377,14 @@ nonisolated public struct BlueAccessDevice : Swift::Sendable {
     get
   }
   nonisolated public mutating func clearLockerOwnedBy()
+  nonisolated public var identityID: Swift::String {
+    get
+    set
+  }
+  nonisolated public var hasIdentityID: Swift::Bool {
+    get
+  }
+  nonisolated public mutating func clearIdentityID()
   public var unknownFields: SwiftProtobuf::UnknownStorage
   nonisolated public init()
 }
