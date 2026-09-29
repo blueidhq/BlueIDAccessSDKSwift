@@ -577,6 +577,7 @@ nonisolated public enum BlueReturnCode : Swift::Int, SwiftProtobuf::Enum, Swift:
   case bleCharacteristicNotFound
   case bleFailSetCharacteristicNotify
   case lockerOwnerMismatch
+  case lockerRecoveryRequired
   case nfcTransponderNoResult
   case nfcTransponderCommandError
   case nfcTransponderStorageFull
